@@ -29,6 +29,7 @@ let historyIndex = -1;
 let fmSelected = null;
 let showHidden = false;
 let zIndexFM = 1000;
+let fileManagerInitialized = false;
 
 // ================= RENDER FILES =================
 function renderFiles() {
@@ -36,10 +37,20 @@ function renderFiles() {
     const pathInput = document.getElementById("fmPath");
     const status = document.getElementById("fmStatus");
 
+    if (!container || !pathInput || !status) {
+        console.warn("⚠️ File Manager elements not found");
+        return;
+    }
+
     container.innerHTML = "";
     pathInput.value = currentPath;
 
-    const folder = fs[currentPath].children;
+    const folder = fs[currentPath]?.children;
+    if (!folder) {
+        console.warn("⚠️ Current path not found:", currentPath);
+        return;
+    }
+
     let count = 0;
 
     for (const name in folder) {
@@ -116,21 +127,25 @@ function goHome() {
 
 // ================= FILE OPERATIONS =================
 function touch(name) {
+    if (!fs[currentPath]) return;
     fs[currentPath].children[name] = { type: "file", content: "" };
     renderFiles();
 }
 
 function mkdir(name) {
+    if (!fs[currentPath]) return;
     fs[currentPath].children[name] = { type: "folder", children: {} };
     renderFiles();
 }
 
 function rm(name) {
+    if (!fs[currentPath]) return;
     delete fs[currentPath].children[name];
     renderFiles();
 }
 
 function rename(oldName, newName) {
+    if (!fs[currentPath]) return;
     fs[currentPath].children[newName] = fs[currentPath].children[oldName];
     delete fs[currentPath].children[oldName];
     fmSelected = null;
@@ -139,6 +154,8 @@ function rename(oldName, newName) {
 
 function openTextWindow(name, content) {
     const win = document.getElementById("textWindow");
+    if (!win) return;
+
     document.getElementById("textTitle").textContent = name;
     document.getElementById("textContent").textContent = content;
     win.style.display = "block";
@@ -175,58 +192,73 @@ const fmMenus = {
         {
             label: "About",
             action: () => {
-                openRetroModal(
-                    "Information",
-                    `<p>Debian With CDE -v1.0.0</p>
-                 <p><a href='https://github.com/victxrlarixs' target='_blank'>https://github.com/victxrlarixs</a></p>`,
-                    [
-                        { label: 'Cerrar', closeOnClick: true },
-                        {
-                            label: 'Ir a GitHub',
-                            onClick: () => window.open('https://github.com/victxrlarixs', '_blank'),
-                            closeOnClick: false
-                        }
-                    ]
-                );
+                // Asegurarse que openRetroModal existe
+                if (typeof openRetroModal === 'function') {
+                    openRetroModal(
+                        "Information",
+                        `<p>Debian With CDE -v1.0.0</p>
+                         <p><a href='https://github.com/victxrlarixs' target='_blank'>https://github.com/victxrlarixs</a></p>`,
+                        [
+                            { label: 'Cerrar', closeOnClick: true },
+                            {
+                                label: 'Ir a GitHub',
+                                onClick: () => window.open('https://github.com/victxrlarixs', '_blank'),
+                                closeOnClick: false
+                            }
+                        ]
+                    );
+                } else {
+                    alert("Debian With CDE -v1.0.0\nhttps://github.com/victxrlarixs");
+                }
             }
         }
     ]
-
-
 };
 
-const fmMenuBar = document.querySelector(".fm-menubar");
 let activeFMMenu = null;
 
-fmMenuBar.querySelectorAll("span").forEach(span => {
-    span.addEventListener("click", (e) => {
-        e.stopPropagation();
-        closeFMMenu();
+function setupMenuBar() {
+    const fmMenuBar = document.querySelector(".fm-menubar");
+    if (!fmMenuBar) return;
 
-        const name = span.textContent.trim();
-        const items = fmMenus[name];
-        if (!items) return;
-
-        const menu = document.createElement("div");
-        menu.className = "fm-dropdown";
-        menu.style.zIndex = ++zIndexFM;
-
-        items.forEach(item => {
-            const opt = document.createElement("div");
-            opt.className = "fm-dropdown-item";
-            opt.textContent = item.label;
-            opt.onclick = () => { item.action(); closeFMMenu(); };
-            menu.appendChild(opt);
-        });
-
-        document.body.appendChild(menu);
-        const rect = span.getBoundingClientRect();
-        menu.style.left = rect.left + "px";
-        menu.style.top = rect.bottom + "px";
-
-        activeFMMenu = menu;
+    // Limpiar event listeners previos
+    fmMenuBar.querySelectorAll("span").forEach(span => {
+        span.onclick = null;
     });
-});
+
+    fmMenuBar.querySelectorAll("span").forEach(span => {
+        span.addEventListener("click", (e) => {
+            e.stopPropagation();
+            closeFMMenu();
+
+            const name = span.textContent.trim();
+            const items = fmMenus[name];
+            if (!items) return;
+
+            const menu = document.createElement("div");
+            menu.className = "fm-dropdown";
+            menu.style.zIndex = ++zIndexFM;
+
+            items.forEach(item => {
+                const opt = document.createElement("div");
+                opt.className = "fm-dropdown-item";
+                opt.textContent = item.label;
+                opt.onclick = () => {
+                    item.action();
+                    closeFMMenu();
+                };
+                menu.appendChild(opt);
+            });
+
+            document.body.appendChild(menu);
+            const rect = span.getBoundingClientRect();
+            menu.style.left = rect.left + "px";
+            menu.style.top = rect.bottom + "px";
+
+            activeFMMenu = menu;
+        });
+    });
+}
 
 function closeFMMenu() {
     if (activeFMMenu) {
@@ -235,57 +267,164 @@ function closeFMMenu() {
     }
 }
 
-document.addEventListener("click", closeFMMenu);
-
 // ================= CONTEXT MENU =================
 let fmContextMenu = null;
 
-document.getElementById("fmFiles").addEventListener("contextmenu", (e) => {
-    e.preventDefault();
-    if (fmContextMenu) fmContextMenu.remove();
+function setupContextMenu() {
+    const fmFiles = document.getElementById("fmFiles");
+    if (!fmFiles) return;
 
-    const fileEl = e.target.closest(".fm-file");
-    if (!fileEl) return;
+    // Remover event listeners previos
+    fmFiles.oncontextmenu = null;
+    fmFiles.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+        if (fmContextMenu) fmContextMenu.remove();
 
-    const name = fileEl.dataset.name;
-    fmSelected = name;
+        const fileEl = e.target.closest(".fm-file");
+        if (!fileEl) return;
 
-    document.querySelectorAll(".fm-file").forEach(el => el.classList.remove("selected"));
-    fileEl.classList.add("selected");
+        const name = fileEl.dataset.name;
+        fmSelected = name;
 
-    const menu = document.createElement("div");
-    menu.className = "fm-contextmenu";
-    menu.style.zIndex = ++zIndexFM;
+        document.querySelectorAll(".fm-file").forEach(el => el.classList.remove("selected"));
+        fileEl.classList.add("selected");
 
-    const items = [
-        { label: "Open", action: () => { const item = fs[currentPath].children[name]; if (item.type === "folder") openPath(currentPath + name + "/"); else openTextWindow(name, item.content); } },
-        { label: "Rename", action: () => { const newName = prompt("Nuevo nombre:", name); if (newName) rename(name, newName); } },
-        { label: "Delete", action: () => { if (confirm(`¿Eliminar ${name}?`)) rm(name); } },
-        { label: "Properties", action: () => { const item = fs[currentPath].children[name]; alert(`Nombre: ${name}\nTipo: ${item.type}\nRuta: ${currentPath}${name}`); } }
-    ];
+        const menu = document.createElement("div");
+        menu.className = "fm-contextmenu";
+        menu.style.zIndex = ++zIndexFM;
 
-    items.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "fm-context-item";
-        div.textContent = item.label;
-        div.onclick = () => { item.action(); if (fmContextMenu) fmContextMenu.remove(); };
-        menu.appendChild(div);
+        const items = [
+            {
+                label: "Open", action: () => {
+                    const item = fs[currentPath].children[name];
+                    if (item.type === "folder") openPath(currentPath + name + "/");
+                    else openTextWindow(name, item.content);
+                }
+            },
+            {
+                label: "Rename", action: () => {
+                    const newName = prompt("Nuevo nombre:", name);
+                    if (newName) rename(name, newName);
+                }
+            },
+            {
+                label: "Delete", action: () => {
+                    if (confirm(`¿Eliminar ${name}?`)) rm(name);
+                }
+            },
+            {
+                label: "Properties", action: () => {
+                    const item = fs[currentPath].children[name];
+                    alert(`Nombre: ${name}\nTipo: ${item.type}\nRuta: ${currentPath}${name}`);
+                }
+            }
+        ];
+
+        items.forEach(item => {
+            const div = document.createElement("div");
+            div.className = "fm-context-item";
+            div.textContent = item.label;
+            div.onclick = () => {
+                item.action();
+                if (fmContextMenu) fmContextMenu.remove();
+            };
+            menu.appendChild(div);
+        });
+
+        menu.style.left = e.pageX + "px";
+        menu.style.top = e.pageY + "px";
+        document.body.appendChild(menu);
+        fmContextMenu = menu;
     });
-
-    menu.style.left = e.pageX + "px";
-    menu.style.top = e.pageY + "px";
-    document.body.appendChild(menu);
-    fmContextMenu = menu;
-});
-
-document.addEventListener("click", () => { if (fmContextMenu) fmContextMenu.remove(); });
+}
 
 // ================= INITIALIZATION =================
-renderFiles();
+function initFileManager() {
+    if (fileManagerInitialized) {
+        console.log("⚠️ File Manager already initialized");
+        return;
+    }
 
-document.querySelectorAll(".fm-item").forEach(item => {
-    item.onclick = () => {
-        const path = item.dataset.path;
-        openPath(path);
-    };
-});
+    console.log("📁 Initializing File Manager...");
+
+    // Reset estado
+    currentPath = "/home/victxrlarixs/";
+    history = [currentPath];
+    historyIndex = 0;
+    fmSelected = null;
+    showHidden = false;
+
+    // Configurar menú bar
+    setupMenuBar();
+
+    // Configurar contexto menu
+    setupContextMenu();
+
+    // Configurar navegación
+    const sidebarItems = document.querySelectorAll(".fm-item");
+    if (sidebarItems.length > 0) {
+        sidebarItems.forEach(item => {
+            item.onclick = () => {
+                const path = item.dataset.path;
+                if (path) openPath(path);
+            };
+        });
+    }
+
+    // Renderizar archivos
+    renderFiles();
+
+    // Event listeners para menús
+    document.addEventListener("click", closeFMMenu);
+    document.addEventListener("click", () => {
+        if (fmContextMenu) fmContextMenu.remove();
+    });
+
+    fileManagerInitialized = true;
+    console.log("✅ File Manager initialized");
+}
+
+// ================= FUNCIONES PÚBLICAS =================
+// Estas funciones pueden ser llamadas desde otras partes del sistema
+
+// Abrir el file manager (cuando se hace clic en el icono)
+function openFileManager() {
+    if (!fileManagerInitialized) {
+        initFileManager();
+    }
+
+    // Asegurarse que la ventana del file manager sea visible
+    const fmWindow = document.querySelector(".fm-window");
+    if (fmWindow) {
+        fmWindow.style.display = "block";
+        // Traer al frente
+        fmWindow.style.zIndex = ++zIndexFM;
+    }
+
+    // Forzar re-render si es necesario
+    renderFiles();
+}
+
+// Cerrar el file manager
+function closeFileManager() {
+    const fmWindow = document.querySelector(".fm-window");
+    if (fmWindow) {
+        fmWindow.style.display = "none";
+    }
+}
+
+// Función para verificar si el file manager está abierto
+function isFileManagerOpen() {
+    const fmWindow = document.querySelector(".fm-window");
+    return fmWindow && fmWindow.style.display !== "none";
+}
+
+// Hacer las funciones disponibles globalmente
+window.initFileManager = initFileManager;
+window.openFileManager = openFileManager;
+window.closeFileManager = closeFileManager;
+window.isFileManagerOpen = isFileManagerOpen;
+window.renderFiles = renderFiles;
+window.openPath = openPath;
+
+console.log("✅ File Manager module loaded (not auto-initialized)");

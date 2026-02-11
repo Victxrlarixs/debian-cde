@@ -1,11 +1,27 @@
 const terminalBody = document.getElementById("terminalBody");
-const terminalInput = document.getElementById("terminalInput");
+// Verificar si terminalInput existe antes de intentar ocultarlo
+let terminalInput = document.getElementById("terminalInput");
 
 currentPath = "/home/victxrlarixs";
-let isTutorialRunning = true;
+let tutorialActive = true;
+let sequenceIndex = 0;
+let stepIndex = 0;
+let typingActive = true;
+
+// Ocultar el input del usuario solo si existe
+if (terminalInput) {
+    terminalInput.style.display = "none";
+} else {
+    console.log("⚠️ terminalInput no encontrado - continuando sin input de usuario");
+}
 
 // Imprime líneas con o sin clase
 function print(text = "", className = "") {
+    if (!terminalBody) {
+        console.error("❌ terminalBody no encontrado");
+        return;
+    }
+
     if (className) terminalBody.innerHTML += `<span class="${className}">${text}</span>\n`;
     else terminalBody.innerHTML += text + "\n";
     terminalBody.scrollTop = terminalBody.scrollHeight;
@@ -13,197 +29,376 @@ function print(text = "", className = "") {
 
 // Simula tipeo de comando
 function typeLine(line, callback, minDelay = 20, maxDelay = 80) {
+    if (!terminalBody) {
+        console.error("❌ terminalBody no encontrado");
+        return;
+    }
+
     let i = 0;
+    typingActive = true;
+
     const interval = setInterval(() => {
+        if (!tutorialActive) {
+            clearInterval(interval);
+            return;
+        }
+
         terminalBody.innerHTML += line[i];
         terminalBody.scrollTop = terminalBody.scrollHeight;
         i++;
+
         if (i >= line.length) {
             clearInterval(interval);
             terminalBody.innerHTML += "\n";
+            typingActive = false;
             if (callback) setTimeout(callback, 300);
         }
     }, Math.random() * (maxDelay - minDelay) + minDelay);
 }
 
-// Tutorial automático con comandos avanzados y explicados
-const tutorialSequence = [
-    {
-        user: "root",
-        command: "apt update",
-        output: `
-Leyendo listas de paquetes... Hecho
-Construyendo árbol de dependencias... Hecho
-Tip: 'apt update' actualiza la lista de paquetes disponibles. :contentReference[oaicite:0]{index=0}
-        `,
-    },
-    {
-        user: "root",
-        command: "apt upgrade",
-        output: `
-Leyendo listas de paquetes... Hecho
-0 actualizados, 0 nuevos se instalarán
-Tip: 'apt upgrade' instala actualizaciones disponibles. :contentReference[oaicite:1]{index=1}
-        `,
-    },
-    {
-        user: "root",
-        command: "apt install mariadb-server",
-        output: `
-Leyendo paquetes... Hecho
-Instalando mariadb-server... Hecho
-Configurando mariadb-server... Hecho
-Tip: 'apt install <paquete>' instala software. :contentReference[oaicite:2]{index=2}
-        `,
-    },
-    {
-        user: "root",
-        command: "systemctl start mariadb",
-        output: `
-Tip: 'systemctl start <servicio>' inicia un servicio. Servicios son demonios en Linux.
-`,
-    },
-    {
-        user: "root",
-        command: "systemctl status mariadb",
-        output: `
-● mariadb.service - MariaDB database server
-   Loaded: loaded (/lib/systemd/system/mariadb.service; enabled)
-   Active: active (running) since Tue Feb 10 12:15:00
-Tip: Usa systemctl para revisar servicios del sistema.
-`,
-    },
-    {
-        user: "victxrlarixs",
-        command: "ls -lha",
-        output: `
-drwxr-xr-x 4 user user 4.0K Feb 10 .
-drwxr-xr-x 8 user user 4.0K Feb 10 ..
--rw-r--r-- 1 user user   12 Feb 10 archivo.txt
-Tip: 'ls -lha' muestra archivos con detalles y ocultos. :contentReference[oaicite:3]{index=3}
-        `,
-    },
-    {
-        user: "victxrlarixs",
-        command: "pwd",
-        output: "/home/victxrlarixs/proyecto\nTip: 'pwd' muestra tu directorio actual. :contentReference[oaicite:4]{index=4}",
-    },
-    {
-        user: "victxrlarixs",
-        command: "cp archivo.txt copia.txt",
-        output: "Archivo copiado a 'copia.txt'.\nTip: 'cp origen destino' copia archivos. :contentReference[oaicite:5]{index=5}",
-    },
-    {
-        user: "victxrlarixs",
-        command: "mv copia.txt viejo.txt",
-        output: "Archivo renombrado a 'viejo.txt'.\nTip: 'mv origen destino' mueve o renombra. :contentReference[oaicite:6]{index=6}",
-    },
-    {
-        user: "victxrlarixs",
-        command: "grep 'Hola' archivo.txt",
-        output: "Hola mundo\nTip: 'grep <patrón> archivo' busca texto dentro de archivos. :contentReference[oaicite:7]{index=7}",
-    },
-    {
-        user: "victxrlarixs",
-        command: "chmod +x script.sh",
-        output: "Permisos actualizados.\nTip: 'chmod' cambia permisos de archivos. :contentReference[oaicite:8]{index=8}",
-    },
-    {
-        user: "victxrlarixs",
-        command: "ps aux",
-        output: `
-USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
-root         1  0.0  0.1 169084  6524 ?        Ss   08:41   0:03 /sbin/init
-mariadb   234  0.1  1.2 345000 20000 ?        Sl   08:42   0:05 /usr/sbin/mysqld
-Tip: 'ps aux' lista procesos con detalles. :contentReference[oaicite:9]{index=9}
-        `,
-    },
-    {
-        user: "victxrlarixs",
-        command: "kill 234",
-        output: "Proceso 234 terminado.\nTip: 'kill <PID>' detiene procesos activos. :contentReference[oaicite:10]{index=10}",
-    },
-    {
-        user: "victxrlarixs",
-        command: "df -h",
-        output: `
-Filesystem      Size  Used Avail Use% Mounted on
-/dev/sda1        50G   10G   37G  22% /
-Tip: 'df -h' muestra uso de disco en forma legible. :contentReference[oaicite:11]{index=11}
-        `,
-    },
-    {
-        user: "victxrlarixs",
-        command: "free -h",
-        output: `
-              total        used        free      shared  buff/cache   available
-Mem:           7.8G        2.0G        4.8G        0.2G        1.0G        5.2G
-Tip: 'free -h' muestra uso de memoria. :contentReference[oaicite:12]{index=12}
-        `,
-    },
-    {
-        user: "victxrlarixs",
-        command: "ping -c 3 example.com",
-        output: `
-PING example.com (93.184.216.34): 56 data bytes
-64 bytes from 93.184.216.34: icmp_seq=0 ttl=56 time=12.3 ms
-Tip: 'ping -c <n> host' comprueba conectividad. :contentReference[oaicite:13]{index=13}
-        `,
-    },
-    {
-        user: "victxrlarixs",
-        command: "wget https://example.com/file.txt",
-        output: "Descargando file.txt... Hecho.\nTip: 'wget <URL>' descarga archivos via HTTP. :contentReference[oaicite:14]{index=14}",
-    },
-    {
-        user: "victxrlarixs",
-        command: "tar -czvf proyecto.tar.gz *",
-        output: `
-proyecto/
-proyecto/archivo.txt
-Tip: 'tar -czvf archivo.tar.gz *' crea un .tar.gz con todo. :contentReference[oaicite:15]{index=15}
-        `,
-    },
+// Tutorial infinito con múltiples secuencias que se repiten
+const tutorialSequences = [
+    // SECUENCIA 1: Comandos básicos del sistema
+    [
+        {
+            user: "victxrlarixs",
+            command: "whoami",
+            output: "victxrlarixs\n📌 Muestra tu usuario actual",
+        },
+        {
+            user: "victxrlarixs",
+            command: "pwd",
+            output: "/home/victxrlarixs\n📌 Muestra el directorio actual",
+        },
+        {
+            user: "victxrlarixs",
+            command: "ls",
+            output: "Desktop  Documentos  Descargas  Música  Imágenes  Vídeos\n📌 Lista archivos y directorios",
+        },
+        {
+            user: "victxrlarixs",
+            command: "ls -la",
+            output: "total 48\ndrwxr-xr-x 18 victxrlarixs victxrlarixs 4096 Feb 11 10:00 .\n📌 Lista con detalles y archivos ocultos",
+        },
+        {
+            user: "victxrlarixs",
+            command: "date",
+            output: "Sat Feb 11 14:30:00 CST 2023\n📌 Muestra fecha y hora del sistema",
+        },
+    ],
+
+    // SECUENCIA 2: Navegación de directorios
+    [
+        {
+            user: "victxrlarixs",
+            command: "cd Documentos",
+            output: "📌 Cambia al directorio Documentos",
+        },
+        {
+            user: "victxrlarixs",
+            command: "pwd",
+            output: "/home/victxrlarixs/Documentos\n📌 Confirmamos ubicación",
+        },
+        {
+            user: "victxrlarixs",
+            command: "mkdir proyecto_web",
+            output: "📌 Crea nuevo directorio",
+        },
+        {
+            user: "victxrlarixs",
+            command: "cd proyecto_web",
+            output: "📌 Entramos al nuevo proyecto",
+        },
+        {
+            user: "victxrlarixs",
+            command: "touch index.html style.css",
+            output: "📌 Crea archivos vacíos",
+        },
+        {
+            user: "victxrlarixs",
+            command: "ls",
+            output: "index.html  style.css\n📌 Verificamos creación",
+        },
+    ],
+
+    // SECUENCIA 3: Manipulación de archivos
+    [
+        {
+            user: "victxrlarixs",
+            command: "echo '<h1>Hola Mundo</h1>' > index.html",
+            output: "📌 Escribe contenido en archivo",
+        },
+        {
+            user: "victxrlarixs",
+            command: "cat index.html",
+            output: "<h1>Hola Mundo</h1>\n📌 Muestra contenido del archivo",
+        },
+        {
+            user: "victxrlarixs",
+            command: "cp index.html index_backup.html",
+            output: "📌 Copia archivo",
+        },
+        {
+            user: "victxrlarixs",
+            command: "mv style.css estilos.css",
+            output: "📌 Renombra archivo",
+        },
+        {
+            user: "victxrlarixs",
+            command: "rm index_backup.html",
+            output: "📌 Elimina archivo",
+        },
+    ],
+
+    // SECUENCIA 4: Permisos y búsqueda
+    [
+        {
+            user: "victxrlarixs",
+            command: "chmod 755 index.html",
+            output: "📌 Cambia permisos del archivo",
+        },
+        {
+            user: "victxrlarixs",
+            command: "ls -l index.html",
+            output: "-rwxr-xr-x 1 victxrlarixs victxrlarixs 20 Feb 11 14:35 index.html\n📌 Verifica permisos",
+        },
+        {
+            user: "victxrlarixs",
+            command: "find . -name '*.html'",
+            output: "./index.html\n📌 Busca archivos por extensión",
+        },
+        {
+            user: "victxrlarixs",
+            command: "grep 'Hola' index.html",
+            output: "<h1>Hola Mundo</h1>\n📌 Busca texto dentro de archivos",
+        },
+    ],
+
+    // SECUENCIA 5: Procesos y sistema
+    [
+        {
+            user: "victxrlarixs",
+            command: "ps aux | head -5",
+            output: "USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND\n📌 Muestra procesos activos",
+        },
+        {
+            user: "victxrlarixs",
+            command: "top -b -n 1 | head -3",
+            output: "top - 14:40:00 up 1 day,  5:48,  1 user,  load average: 0.05, 0.10, 0.15\n📌 Monitor de sistema",
+        },
+        {
+            user: "victxrlarixs",
+            command: "free -h",
+            output: "              total        used        free      shared  buff/cache   available\nMem:           7.8G        2.0G        4.8G        0.2G        1.0G        5.2G\n📌 Uso de memoria",
+        },
+        {
+            user: "victxrlarixs",
+            command: "df -h",
+            output: "Filesystem      Size  Used Avail Use% Mounted on\n/dev/sda1        50G   10G   37G  22% /\n📌 Espacio en disco",
+        },
+    ],
+
+    // SECUENCIA 6: Red y paquetes
+    [
+        {
+            user: "root",
+            command: "apt update",
+            output: "Leyendo listas de paquetes... Hecho\n📌 Actualiza lista de paquetes disponibles",
+        },
+        {
+            user: "root",
+            command: "apt upgrade -y",
+            output: "Actualizando 15 paquetes... Hecho\n📌 Actualiza paquetes instalados",
+        },
+        {
+            user: "victxrlarixs",
+            command: "ping -c 2 google.com",
+            output: "PING google.com (142.250.190.14): 56 data bytes\n64 bytes from 142.250.190.14: icmp_seq=0 ttl=117 time=15.3 ms\n📌 Prueba conectividad de red",
+        },
+        {
+            user: "victxrlarixs",
+            command: "curl -I https://debian.org",
+            output: "HTTP/1.1 200 OK\nServer: nginx\n📌 Obtiene headers HTTP",
+        },
+    ],
+
+    // SECUENCIA 7: Git y control de versiones
+    [
+        {
+            user: "victxrlarixs",
+            command: "git init",
+            output: "Initialized empty Git repository\n📌 Inicializa repositorio Git",
+        },
+        {
+            user: "victxrlarixs",
+            command: "git add .",
+            output: "📌 Agrega archivos al stage",
+        },
+        {
+            user: "victxrlarixs",
+            command: "git commit -m 'Primer commit'",
+            output: "[main (root-commit) abc1234] Primer commit\n📌 Crea commit inicial",
+        },
+        {
+            user: "victxrlarixs",
+            command: "git status",
+            output: "On branch main\nnothing to commit, working tree clean\n📌 Estado del repositorio",
+        },
+        {
+            user: "victxrlarixs",
+            command: "git log --oneline",
+            output: "abc1234 Primer commit\n📌 Historial de commits",
+        },
+    ],
+
+    // SECUENCIA 8: Docker y contenedores
+    [
+        {
+            user: "victxrlarixs",
+            command: "docker ps",
+            output: "CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES\n📌 Lista contenedores activos",
+        },
+        {
+            user: "victxrlarixs",
+            command: "docker images",
+            output: "REPOSITORY   TAG       IMAGE ID       CREATED        SIZE\n📌 Lista imágenes disponibles",
+        },
+        {
+            user: "victxrlarixs",
+            command: "docker run hello-world",
+            output: "Hello from Docker!\n📌 Ejecuta contenedor de prueba",
+        },
+        {
+            user: "victxrlarixs",
+            command: "docker-compose up -d",
+            output: "Creating network... Creating containers... Done\n📌 Levanta servicios con docker-compose",
+        },
+    ],
+
+    // SECUENCIA 9: Atajos y productividad
+    [
+        {
+            user: "victxrlarixs",
+            command: "history | tail -5",
+            output: " 1005  ls\n 1006  cd ..\n 1007  pwd\n📌 Muestra últimos comandos",
+        },
+        {
+            user: "victxrlarixs",
+            command: "alias ll='ls -la'",
+            output: "📌 Crea alias para comando largo",
+        },
+        {
+            user: "victxrlarixs",
+            command: "cd ~",
+            output: "📌 Vuelve al directorio home",
+        },
+        {
+            user: "victxrlarixs",
+            command: "clear",
+            output: "📌 Limpia la terminal",
+        },
+    ],
 ];
 
-// Corre el tutorial automático
-function runAutoTutorial(seq, index = 0) {
-    if (index >= seq.length) {
-        print("Tutorial completado. Escribe comandos tú mismo ahora. Tip: escribe 'help' para ver opciones.");
-        isTutorialRunning = false;
+// Mensajes de transición entre secuencias
+const transitionMessages = [
+    "🔄 Continuando con más comandos útiles...",
+    "📚 Siguiente tema: comandos de administración...",
+    "🚀 Avanzando a operaciones más complejas...",
+    "💡 Aprendiendo nuevas funcionalidades...",
+    "🛠️ Próxima sección: herramientas de desarrollo...",
+    "🌐 Explorando comandos de red...",
+];
+
+// Ejecuta un paso del tutorial
+function runTutorialStep() {
+    if (!tutorialActive) return;
+    if (!terminalBody) {
+        console.error("❌ terminalBody no encontrado - no se puede ejecutar tutorial");
         return;
     }
-    const step = seq[index];
-    typeLine(`${step.user}@Debian:${currentPath.replace("/home/victxrlarixs", "~")}$ ${step.command}`, () => {
+
+    const sequence = tutorialSequences[sequenceIndex];
+    const step = sequence[stepIndex];
+    const prompt = `${step.user}@Debian:${currentPath.replace("/home/victxrlarixs", "~")}$ `;
+
+    typeLine(prompt + step.command, () => {
         setTimeout(() => {
             print(step.output, "tip");
-            runAutoTutorial(seq, index + 1);
-        }, 600);
+
+            // Avanzar al siguiente paso
+            stepIndex++;
+
+            // Si terminamos la secuencia actual
+            if (stepIndex >= sequence.length) {
+                // Mostrar mensaje de transición
+                const transition = transitionMessages[Math.floor(Math.random() * transitionMessages.length)];
+                print("\n" + transition + "\n", "transition");
+
+                // Avanzar a siguiente secuencia (loop)
+                sequenceIndex = (sequenceIndex + 1) % tutorialSequences.length;
+                stepIndex = 0;
+
+                // Pequeña pausa antes de empezar nueva secuencia
+                setTimeout(runTutorialStep, 2000);
+            } else {
+                // Continuar con siguiente paso de la misma secuencia
+                setTimeout(runTutorialStep, 1500);
+            }
+        }, 800);
     });
 }
 
-// Inicia tutorial
-print("Bienvenidos a Debian.com.mx ...");
-print("cargando...\n");
-
-setTimeout(() => runAutoTutorial(tutorialSequence), 1000);
-
-// Permite entrada del usuario
-terminalInput.addEventListener("keydown", function (e) {
-    if (e.key === "Enter") {
-        const input = terminalInput.value.trim();
-        print(`victxrlarixs@Debian:${currentPath.replace("/home/victxrlarixs", "~")}$ ${input}`, "command");
-        if (isTutorialRunning) {
-            isTutorialRunning = false;
-            print("⏹ Tutorial detenido — ahora puedes usar la terminal libremente.", "tip");
-        }
-        // Aquí puedes expandir lógica interactiva (ej: ejecutar comandos, mostrar man, etc.)
-        terminalInput.value = "";
+// Inicia el tutorial infinito
+function startInfiniteTutorial() {
+    if (!terminalBody) {
+        console.error("❌ terminalBody no encontrado - no se puede iniciar tutorial");
+        return;
     }
-});
 
+    print("🚀 Terminal Debian-CDE - Tutorial Automático");
+    print("📚 Ejecutando comandos en bucle infinito...\n");
+    print("⚠️ Modo automático activado (sin interacción del usuario)\n");
 
+    // Pequeño delay antes de empezar
+    setTimeout(() => {
+        runTutorialStep();
+    }, 1000);
+}
 
+// Verificar que los elementos existan antes de iniciar
+if (!terminalBody) {
+    console.error("❌ No se encontró terminalBody - verifica el HTML");
+} else {
+    // Limpiar la terminal periódicamente para evitar sobrecarga
+    setInterval(() => {
+        if (terminalBody.children.length > 100) {
+            // Mantener solo los últimos 50 elementos
+            const lines = terminalBody.innerHTML.split('\n');
+            if (lines.length > 50) {
+                terminalBody.innerHTML = lines.slice(-50).join('\n');
+            }
+        }
+    }, 30000); // Cada 30 segundos
+
+    // Mantener el scroll al final
+    setInterval(() => {
+        terminalBody.scrollTop = terminalBody.scrollHeight;
+    }, 500);
+
+    // Iniciar el tutorial automático
+    startInfiniteTutorial();
+
+    // También ejecutar htop automáticamente cada cierto tiempo
+    setInterval(() => {
+        if (tutorialActive && Math.random() > 0.7) { // 30% de probabilidad
+            print("\n💻 Abriendo monitor de procesos htop...\n", "info");
+            openHtopTerminal("htop - Monitor del Sistema");
+        }
+    }, 30000);
+}
+
+// Función para abrir htop
 function openHtopTerminal(title = "htop") {
     const win = document.createElement("div");
     win.classList.add("window");
@@ -211,7 +406,7 @@ function openHtopTerminal(title = "htop") {
     win.style.left = "600px";
     win.style.width = "500px";
     win.style.height = "350px";
-    win.style.zIndex = ++zIndexFM;
+    win.style.zIndex = 10000;
     win.style.backgroundColor = "#000";
 
     const titlebar = document.createElement("div");
@@ -221,18 +416,20 @@ function openHtopTerminal(title = "htop") {
     const closeBtn = document.createElement("div");
     closeBtn.classList.add("close-btn");
     closeBtn.innerHTML = `<img src="./src/icons/tab_close.png">`;
-    closeBtn.onclick = () => { clearInterval(updateInterval); win.remove(); };
+    closeBtn.onclick = () => {
+        if (updateInterval) clearInterval(updateInterval);
+        if (win.parentNode) win.remove();
+    };
     titlebar.appendChild(closeBtn);
 
     win.appendChild(titlebar);
-    makeDraggable(win, titlebar);
 
     const canvas = document.createElement("canvas");
     canvas.width = 500;
     canvas.height = 320;
     win.appendChild(canvas);
     const ctx = canvas.getContext("2d");
-    ctx.font = "14px 'DejaVu Sans Mono', monospace";
+    ctx.font = "11px 'DejaVu Sans Mono', monospace";
     ctx.textBaseline = "top";
     ctx.fillStyle = "#3b8f9b";
 
@@ -273,21 +470,24 @@ function openHtopTerminal(title = "htop") {
     drawHtop();
 
     const updateInterval = setInterval(() => {
-        // Cambiar CPU y MEM de manera lenta
         processes.forEach(p => {
             p.cpu = Math.max(0, Math.min(100, p.cpu + Math.floor(Math.random() * 5 - 2)));
             p.mem = Math.max(0, Math.min(100, p.mem + Math.floor(Math.random() * 5 - 2)));
         });
 
-        // Reordenar procesos según CPU descendente
         processes.sort((a, b) => b.cpu - a.cpu);
-
         drawHtop();
     }, 500);
 
     document.body.appendChild(win);
+
+    // Cerrar automáticamente después de 10 segundos
+    setTimeout(() => {
+        if (win.parentNode) {
+            clearInterval(updateInterval);
+            win.remove();
+        }
+    }, 10000);
 }
 
-document.getElementById("htopBtn").onclick = () => {
-    openHtopTerminal("htop");
-};
+console.log("✅ Terminal tutorial infinito cargado (modo automático)");

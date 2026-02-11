@@ -35,7 +35,7 @@
     <div id="cde-menu" class="hidden">
         <div class="menu-item">Run Program...</div>
         <div class="menu-item" onclick="terminal.style.display='block'">Terminal Emulator</div>
-        <div class="menu-item" onclick="fm.style.display='block'">File Manager</div>
+        <div class="menu-item" onclick="fm.style.display='none'">File Manager</div>
         <div class="menu-item" href="https://github.com/Victxrlarixs/debian-cde">Web Browser</div>
         <div class="menu-separator"></div>
 
@@ -64,10 +64,7 @@
             </div>
         </div>
         <div class="terminal-body" id="terminalBody"></div>
-        <div class="terminal-line">
-            <span class="prompt">victxrlarixs@Debian:~$</span>
-            <input id="terminalInput">
-        </div>
+
     </div>
 
     <div class="window" id="fm" style="top:100px; left:460px; width:420px; height:320px;">
@@ -162,7 +159,7 @@
             <div class="cde-icon active" onclick="terminal.style.display='block'">
                 <img src="./src/icons/konsole.png">
             </div>
-            <div class="cde-icon active" onclick="fm.style.display='block'">
+            <div class="cde-icon active" onclick="fm.style.display='none'">
                 <img src="./src/icons/filemanager.png">
             </div>
             <div class="cde-icon">
@@ -184,9 +181,6 @@
             <div class="cde-icon" onclick="openStyleManager()">
                 <img src="./src/icons/org.xfce.settings.appearance.png" alt="Style Manager">
             </div>
-            <div class="cde-icon" id="htopBtn">
-                <img src="./src/icons/org.xfce.taskmanager.png">
-            </div>
 
         </div>
 
@@ -200,7 +194,9 @@
 
         <div class="cde-sep"></div>
 
-        <div class="cde-exit-btn">Exit</div>
+        <div class="cde-exit-btn">
+            <img src="./src/icons/application-exit.png" alt="Exit" class="exit-icon">
+        </div>
     </div>
     <div class="cde-retro-modal" id="styleManager">
         <div class="titlebar" id="styleManagerTitlebar">
@@ -418,8 +414,8 @@
     <script src="./src/js/filemanager.js"></script>
     <script src="./src/js/terminal.js"></script>
     <script src="./src/js/ui.js"></script>
-    <script src="./src/js/init.js"></script>
     <script src="./src/js/stylemanager.js"></script>
+    <script src="./src/js/init.js"></script>
 
 </body>
 

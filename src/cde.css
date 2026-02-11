@@ -48,9 +48,9 @@ body {
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-normal);
     line-height: var(--line-height-base);
-    background-image: url("../src/images/motif.png");
-    background-size: cover;
-    background-repeat: no-repeat;
+    background-image: url("../src/images/CircuitBoards-8.png");
+    background-size: contain;
+    background-repeat: repeat;
     background-position: center;
     background-attachment: fixed;
     overflow: hidden;
@@ -1428,4 +1428,25 @@ body,
     border-left-color: var(--border-dark);
     border-right-color: var(--border-light);
     border-bottom-color: var(--border-light);
+}
+
+.cde-exit-btn {
+    padding: 4px 10px;
+    background: var(--button-bg);
+    font-size: var(--font-size);
+    cursor: pointer;
+    border: 2px solid;
+    border-top-color: var(--border-light);
+    border-left-color: var(--border-light);
+    border-right-color: var(--border-dark);
+    border-bottom-color: var(--border-dark);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.exit-icon {
+    width: 32px;
+    height: 16px;
+    image-rendering: pixelated;
 }
