@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Explore Debian</title>
+    <link rel="stylesheet" href="./src/cde.css">
+</head>
+
+<body>
+
+    <div id="topbar">
+        <div class="top-left">
+            <button id="cde-menu-btn">Menu</button>
+        </div>
+        <div class="top-right">
+            <div class="sys-item">
+                <img src="./src/icons/battery-caution.png" class="sys-icon">
+                <span id="sys-battery">6%</span>
+            </div>
+            <div class="sys-item">
+                <img src="./src/icons/audio-volume-low.png" class="sys-icon">
+            </div>
+            <div class="sys-item">
+                <img src="./src/icons/preferences-system-network.png" class="sys-icon">
+            </div>
+            <div class="sys-item">
+                <img src="./src/icons/gtkclocksetup.png" class="sys-icon">
+                <span id="clock"></span>
+            </div>
+        </div>
+    </div>
+
+    <div id="cde-menu" class="hidden">
+        <div class="menu-item">Run Program...</div>
+        <div class="menu-item" onclick="terminal.style.display='block'">Terminal Emulator</div>
+        <div class="menu-item" onclick="fm.style.display='block'">File Manager</div>
+        <div class="menu-item" href="https://github.com/victxrlarixs">Web Browser</div>
+        <div class="menu-separator"></div>
+
+        <div class="menu-item has-submenu">
+            Applications ▸
+            <div class="submenu">
+                <div class="menu-item">Accessories</div>
+                <div class="menu-item">Development</div>
+                <div class="menu-item">Graphics</div>
+                <div class="menu-item">Internet</div>
+                <div class="menu-item">Multimedia</div>
+                <div class="menu-item">Office</div>
+                <div class="menu-item">System</div>
+            </div>
+        </div>
+
+        <div class="menu-separator"></div>
+        <div class="menu-item">Log Out</div>
+    </div>
+
+    <div class="window" id="terminal" style="top:80px; left:40px; width:380px;">
+        <div class="titlebar" onmousedown="drag(event, 'terminal')">
+            Terminal - victxrlarixs@Debian
+            <div class="close-btn" onclick="terminal.style.display='none'">
+                <img src="./src/icons/tab_close.png">
+            </div>
+        </div>
+        <div class="terminal-body" id="terminalBody"></div>
+        <div class="terminal-line">
+            <span class="prompt">victxrlarixs@Debian:~$</span>
+            <input id="terminalInput">
+        </div>
+    </div>
+
+    <div class="window" id="fm" style="top:100px; left:460px; width:420px; height:320px;">
+        <div class="titlebar" onmousedown="drag(event, 'fm')">
+            victxrlarixs
+            <div class="close-btn" onclick="fm.style.display='none'">
+                <img src="./src/icons/tab_close.png">
+            </div>
+        </div>
+
+        <div class="fm-container">
+            <div class="fm-menubar">
+                <span>File</span>
+                <span>Edit</span>
+                <span>View</span>
+                <span>Go</span>
+                <span>Help</span>
+            </div>
+
+            <div class="fm-toolbar">
+                <button class="fm-btn" onclick="goBack()">
+                    <img src="./src/icons/previous.png" alt="Back">
+                </button>
+                <button class="fm-btn" onclick="goForward()">
+                    <img src="./src/icons/right.png" alt="Forward">
+                </button>
+                <button class="fm-btn" onclick="goUp()">
+                    <img src="./src/icons/go-up.png" alt="Up">
+                </button>
+                <button class="fm-btn" onclick="goHome()">
+                    <img src="./src/icons/gohome.png" alt="Home">
+                </button>
+                <input class="fm-path" id="fmPath" />
+            </div>
+
+            <div class="fm-body">
+                <div class="fm-sidebar">
+                    <div class="fm-section">Places</div>
+                    <div class="fm-item" onclick="openPath('/home/victxrlarixs/')">
+                        <img src="./src/icons/gohome.png" class="fm-icon"> victxrlarixs
+                    </div>
+                    <div class="fm-item" onclick="openPath('/home/victxrlarixs/Desktop/')">
+                        <img src="./src/icons/desktop.png" class="fm-icon"> Desktop
+                    </div>
+                    <div class="fm-item">
+                        <img src="./src/icons/user-trash-full.png" class="fm-icon"> Trash
+                    </div>
+
+                    <div class="fm-section">Devices</div>
+                    <div class="fm-item">
+                        <img src="./src/icons/drive-harddisk.png" class="fm-icon"> File System
+                    </div>
+
+                    <div class="fm-section">Network</div>
+                    <div class="fm-item">
+                        <img src="./src/icons/redhat-system-group.png" class="fm-icon"> Browse Network
+                    </div>
+                </div>
+
+                <div class="fm-files" id="fmFiles"></div>
+            </div>
+
+            <div class="fm-status" id="fmStatus"></div>
+        </div>
+    </div>
+
+    <div id="cde-panel">
+        <div class="cde-menu-btn">Menu</div>
+        <div class="cde-sep"></div>
+
+        <div class="cde-pager">
+            <div class="pager-arrow">◀</div>
+            <div class="pager-workspaces">
+                <div class="pager-ws active">One</div>
+                <div class="pager-ws">Two</div>
+                <div class="pager-ws">Three</div>
+                <div class="pager-ws">Four</div>
+            </div>
+            <div class="pager-arrow">▶</div>
+        </div>
+
+        <div class="cde-sep"></div>
+
+        <div class="cde-scroll">
+            <div class="scroll-btn">▲</div>
+            <div class="scroll-btn">▼</div>
+        </div>
+
+        <div class="cde-sep"></div>
+
+        <div class="cde-icons">
+            <div class="cde-icon active" onclick="terminal.style.display='block'">
+                <img src="./src/icons/konsole.png">
+            </div>
+            <div class="cde-icon active" onclick="fm.style.display='block'">
+                <img src="./src/icons/filemanager.png">
+            </div>
+            <div class="cde-icon">
+                <a href="https://github.com/victxrlarixs" target="_blank" rel="noopener noreferrer">
+                    <img src="./src/icons/konqueror.png">
+                </a>
+            </div>
+            <div class="cde-icon" onclick="openRetroModal(
+                'Information',
+                `<p>Súmate al proyecto en GitHub:</p>
+                 <p><a href='https://github.com/victxrlarixs' target='_blank'>https://github.com/victxrlarixs</a></p>`,
+                [
+                    { label: 'Cerrar', closeOnClick: true },
+                    { label: 'Ir a GitHub', onClick: () => window.open('https://github.com/victxrlarixs', '_blank'), closeOnClick: false }
+                ]
+            )">
+                <img src="./src/icons/system-help.png">
+            </div>
+            <div class="cde-icon" onclick="document.getElementById('styleManager').style.display='flex'">
+                <img src="./src/icons/org.xfce.settings.appearance.png">
+            </div>
+
+            <div class="cde-icon" id="htopBtn">
+                <img src="./src/icons/org.xfce.taskmanager.png">
+            </div>
+            <div class="cde-icon" id="screenshotBtn">
+                <img src="./src/icons/org.xfce.screenshooter.png">
+            </div>
+        </div>
+
+        <div class="cde-sep"></div>
+
+        <div class="cde-tray">
+            <div class="tray-box"></div>
+            <div class="tray-box"></div>
+            <div class="tray-box"></div>
+        </div>
+
+        <div class="cde-sep"></div>
+
+        <div class="cde-exit-btn">Exit</div>
+    </div>
+
+    <div class="cde-retro-modal" id="styleManager"
+        style="width: 320px; height: 400px; display: none; top: 80px; left: 80px;">
+        <div class="titlebar">
+            Style Manager
+            <div class="close-btn" id="styleManagerClose">
+                <img src="./src/icons/tab_close.png">
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="style-section">
+                <label>Topbar Color:</label>
+                <div class="color-picker-container">
+                    <input type="color" id="topbarColor" value="#c6bdb3" data-var="--topbar-color">
+                    <span class="color-value">#c6bdb3</span>
+                </div>
+            </div>
+
+            <div class="style-section">
+                <label>Window Color:</label>
+                <div class="color-picker-container">
+                    <input type="color" id="windowColor" value="#dcd6cc" data-var="--window-color">
+                    <span class="color-value">#dcd6cc</span>
+                </div>
+            </div>
+
+            <div class="style-section">
+                <label>Titlebar Color:</label>
+                <div class="color-picker-container">
+                    <input type="color" id="titlebarColor" value="#4a6c7a" data-var="--titlebar-color">
+                    <span class="color-value">#4a6c7a</span>
+                </div>
+            </div>
+
+            <div class="style-section">
+                <label>Terminal Background:</label>
+                <div class="color-picker-container">
+                    <input type="color" id="terminalBgColor" value="#070b0d" data-var="--terminal-bg-color">
+                    <span class="color-value">#070b0d</span>
+                </div>
+            </div>
+
+            <div class="style-section">
+                <label>Terminal Text:</label>
+                <div class="color-picker-container">
+                    <input type="color" id="terminalTextColor" value="#c7fbe3" data-var="--terminal-text-color">
+                    <span class="color-value">#c7fbe3</span>
+                </div>
+            </div>
+
+            <div class="style-section">
+                <label>Dock Color:</label>
+                <div class="color-picker-container">
+                    <input type="color" id="dockColor" value="#e6e1d8" data-var="--dock-color">
+                    <span class="color-value">#e6e1d8</span>
+                </div>
+            </div>
+
+            <div class="style-section">
+                <label>Menu Color:</label>
+                <div class="color-picker-container">
+                    <input type="color" id="menuColor" value="#bfb6aa" data-var="--menu-color">
+                    <span class="color-value">#bfb6aa</span>
+                </div>
+            </div>
+
+            <div class="style-section">
+                <label>Dock Icon Background:</label>
+                <div class="color-picker-container">
+                    <input type="color" id="dockIconBg" value="#bfb9ad" data-var="--dock-icon-bg">
+                    <span class="color-value">#bfb9ad</span>
+                </div>
+            </div>
+
+            <div class="style-section">
+                <label>Reset all to Default:</label>
+                <button class="reset-btn" id="resetAllBtn">Reset All</button>
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="modal-btn" id="saveStylesBtn">Save</button>
+            <button class="modal-btn" id="closeStylesBtn">Close</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="./src/js/wm.js"></script>
+    <script src="./src/js/filemanager.js"></script>
+    <script src="./src/js/terminal.js"></script>
+    <script src="./src/js/ui.js"></script>
+    <script src="./src/js/init.js"></script>
+    <script src="./src/js/screenshot.js"></script>
+    <script src="./src/js/stylemanager.js"></script>
+
+</body>
+
+</html>
