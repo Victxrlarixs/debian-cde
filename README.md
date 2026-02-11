@@ -4,6 +4,8 @@ Una recreación retro del entorno de escritorio clásico de **Debian / CDE (Comm
 Incluye ventanas, terminal con efectos “hacker”, file manager, dock estilo Motif y una estética noventera que revive el look & feel de Unix clásicos.
 ---
 
+![Preview](./demo/custom-theme.png)
+
 ## ✨ Features
 
 - 🪟 Ventanas estilo CDE / Motif (draggables)
