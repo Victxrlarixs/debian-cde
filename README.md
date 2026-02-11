@@ -1,2 +1,31 @@
-# debian.github.io
-Debian with CDE Environment - JS
+# 🖥️ Explore Debian – Web CDE Desktop
+
+Una recreación retro del entorno de escritorio clásico de **Debian / CDE (Common Desktop Environment)** directamente en el navegador.  
+Incluye ventanas, terminal con efectos “hacker”, file manager, dock estilo Motif y una estética noventera que revive el look & feel de Unix clásicos.
+---
+
+## ✨ Features
+
+- 🪟 Ventanas estilo CDE / Motif (draggables)
+- 🧭 Dock y panel inferior retro
+- 📁 File Manager web (simulación)
+- 💻 Terminal con Tool Tips
+- 🎨 Style Manager (los cambios se reflejan en el CSS real)
+- 🖱️ Menús contextuales tipo Unix
+- 🧠 UI completamente hecha en HTML, CSS y JS vanilla  
+
+---
+
+## 🚀 Demo
+
+> [BetaVersion](https://victxrlarixs.github.io/debian-cde/)  
+
+---
+
+## 🛠️ Instalación
+
+Clona el repo:
+
+```bash
+git clone https://github.com/victxrlarixs/debian-cde.git
+cd debian-cde
