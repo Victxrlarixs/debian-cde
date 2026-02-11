@@ -1,6 +1,4 @@
 const terminalBody = document.getElementById("terminalBody");
-// Verificar si terminalInput existe antes de intentar ocultarlo
-let terminalInput = document.getElementById("terminalInput");
 
 currentPath = "/home/victxrlarixs";
 let tutorialActive = true;
@@ -8,12 +6,6 @@ let sequenceIndex = 0;
 let stepIndex = 0;
 let typingActive = true;
 
-// Ocultar el input del usuario solo si existe
-if (terminalInput) {
-    terminalInput.style.display = "none";
-} else {
-    console.log("⚠️ terminalInput no encontrado - continuando sin input de usuario");
-}
 
 // Imprime líneas con o sin clase
 function print(text = "", className = "") {

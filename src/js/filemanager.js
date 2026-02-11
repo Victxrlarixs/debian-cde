@@ -385,46 +385,57 @@ function initFileManager() {
 }
 
 // ================= FUNCIONES PÚBLICAS =================
-// Estas funciones pueden ser llamadas desde otras partes del sistema
-
-// Abrir el file manager (cuando se hace clic en el icono)
 function openFileManager() {
     if (!fileManagerInitialized) {
         initFileManager();
     }
 
-    // Asegurarse que la ventana del file manager sea visible
-    const fmWindow = document.querySelector(".fm-window");
+    const fmWindow = document.getElementById("fm");
     if (fmWindow) {
         fmWindow.style.display = "block";
-        // Traer al frente
         fmWindow.style.zIndex = ++zIndexFM;
     }
 
-    // Forzar re-render si es necesario
     renderFiles();
 }
 
-// Cerrar el file manager
 function closeFileManager() {
-    const fmWindow = document.querySelector(".fm-window");
+    const fmWindow = document.getElementById("fm");
     if (fmWindow) {
         fmWindow.style.display = "none";
     }
 }
 
-// Función para verificar si el file manager está abierto
 function isFileManagerOpen() {
-    const fmWindow = document.querySelector(".fm-window");
+    const fmWindow = document.getElementById("fm");
     return fmWindow && fmWindow.style.display !== "none";
 }
 
-// Hacer las funciones disponibles globalmente
-window.initFileManager = initFileManager;
+// Toggle tipo CDE: abre si está cerrado, si ya está abierto solo lo trae al frente
+function toggleFileManager() {
+    const fmWindow = document.getElementById("fm");
+
+    if (!fileManagerInitialized) {
+        initFileManager();
+    }
+
+    if (!fmWindow) return;
+
+    if (fmWindow.style.display === "none" || fmWindow.style.display === "") {
+        fmWindow.style.display = "block";
+        fmWindow.style.zIndex = ++zIndexFM;
+    } else {
+        fmWindow.style.zIndex = ++zIndexFM; // traer al frente
+    }
+
+    renderFiles();
+}
+
+// Exponer globalmente
 window.openFileManager = openFileManager;
 window.closeFileManager = closeFileManager;
+window.toggleFileManager = toggleFileManager;
 window.isFileManagerOpen = isFileManagerOpen;
-window.renderFiles = renderFiles;
-window.openPath = openPath;
+
 
 console.log("✅ File Manager module loaded (not auto-initialized)");

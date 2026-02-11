@@ -57,3 +57,31 @@ function updateClock() {
 
 setInterval(updateClock, 1000);
 updateClock();
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const dropdownBtn = document.getElementById('utilitiesBtn');
+    const dropdownMenu = document.getElementById('utilitiesDropdown');
+
+    if (dropdownBtn && dropdownMenu) {
+        dropdownBtn.appendChild(dropdownMenu);
+        dropdownBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            this.classList.toggle('open');
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!dropdownBtn.contains(e.target)) {
+                dropdownBtn.classList.remove('open');
+            }
+        });
+
+        dropdownMenu.addEventListener('click', function (e) {
+            e.stopPropagation();
+        });
+    }
+});
+
+function openCalculator() {
+    alert('Calculadora CDE - En desarrollo');
+}

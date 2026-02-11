@@ -107,21 +107,23 @@ body,
     font-size: var(--font-size-small);
 }
 
-/* ================= RESPONSIVE ================= */
+
+/* ================= Responsive ================= */
 @media (max-width: 768px) {
     #cde-panel {
         width: 95%;
         padding: 4px;
-        gap: 4px;
+        gap: 3px;
+        height: 48px;
     }
 
     .cde-icons {
-        gap: 4px;
+        gap: 3px;
     }
 
     .cde-icon {
-        width: 36px;
-        height: 36px;
+        width: 32px;
+        height: 32px;
     }
 
     .cde-icon img {
@@ -188,58 +190,6 @@ body,
     .cde-font-preview {
         max-width: 100%;
     }
-}
-
-/* ================= PRESETS DE FUENTES ================= */
-.cde-font-presets {
-    margin-top: 10px;
-    padding: 12px;
-    background: var(--button-active);
-    border: 1px solid var(--separator-color);
-}
-
-.cde-font-presets h4 {
-    margin-bottom: 8px;
-    font-size: var(--font-size-small);
-    font-family: var(--font-family-base);
-    color: var(--titlebar-color);
-    text-transform: uppercase;
-}
-
-.cde-font-preset-row {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
-
-.cde-font-preset {
-    padding: 4px 6px;
-    background: var(--button-bg);
-    font-size: 9px;
-    font-family: var(--font-family-base);
-    cursor: pointer;
-    flex: 1;
-    min-width: 80px;
-    max-width: 100px;
-    border: 1px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
-    text-align: center;
-}
-
-.cde-font-preset:hover {
-    background: var(--button-active);
-}
-
-.cde-font-preset:active {
-    border: 1px solid;
-    border-top-color: var(--border-dark);
-    border-left-color: var(--border-dark);
-    border-right-color: var(--border-light);
-    border-bottom-color: var(--border-light);
 }
 
 /* Botón de salida con icono */

@@ -1,4 +1,5 @@
 // stylemanager.js - VERSIÓN COMPLETA CON SOPORTE PARA COLORES Y FUENTES
+// AHORA CON MISMA CLASE .cde-preset PARA TODOS LOS BOTONES
 
 class StyleManager {
     constructor() {
@@ -153,28 +154,40 @@ class StyleManager {
                 '--font-family-terminal': '"Courier New", monospace',
                 '--font-size-base': '12px',
                 '--font-size-title': '13px',
-                '--font-weight-normal': '400'
+                '--font-size-small': '11px',
+                '--font-weight-normal': '400',
+                '--font-weight-bold': '700',
+                '--line-height-base': '1.45'
             },
             'modern': {
                 '--font-family-base': 'Arial, sans-serif',
                 '--font-family-terminal': 'Consolas, monospace',
                 '--font-size-base': '14px',
                 '--font-size-title': '15px',
-                '--font-weight-normal': '400'
+                '--font-size-small': '12px',
+                '--font-weight-normal': '400',
+                '--font-weight-bold': '700',
+                '--line-height-base': '1.5'
             },
             'retro': {
                 '--font-family-base': '"MS Sans Serif", sans-serif',
                 '--font-family-terminal': '"Lucida Console", monospace',
                 '--font-size-base': '11px',
                 '--font-size-title': '12px',
-                '--font-weight-normal': '700'
+                '--font-size-small': '10px',
+                '--font-weight-normal': '700',
+                '--font-weight-bold': '900',
+                '--line-height-base': '1.3'
             },
             'terminal': {
                 '--font-family-base': '"Ubuntu Mono", monospace',
                 '--font-family-terminal': '"DejaVu Sans Mono", monospace',
                 '--font-size-base': '13px',
                 '--font-size-title': '14px',
-                '--font-weight-normal': '400'
+                '--font-size-small': '12px',
+                '--font-weight-normal': '400',
+                '--font-weight-bold': '700',
+                '--line-height-base': '1.4'
             }
         };
 
@@ -193,7 +206,8 @@ class StyleManager {
         this.setupColorInputs();
         this.setupFontControls();
         this.updateUI();
-        console.log('Style Manager initialized with color and font support');
+        this.updateFontControls();
+        console.log('Style Manager initialized with unified preset buttons');
     }
 
     bindEvents() {
@@ -209,7 +223,7 @@ class StyleManager {
         }
 
         // Botón de cerrar
-        const closeBtn = document.querySelector('#styleManager .cde-window-btn.close');
+        const closeBtn = document.querySelector('#styleManager .close-btn');
         if (closeBtn) {
             closeBtn.addEventListener('click', () => this.close());
         }
@@ -230,24 +244,52 @@ class StyleManager {
             saveBtn.addEventListener('click', () => this.save());
         }
 
-        // Presets de temas de color
+        // PRESETS DE COLORES - con data-scheme
         document.querySelectorAll('.cde-preset[data-scheme]').forEach(btn => {
+            // Eliminar onclick previo si existe
+            btn.onclick = null;
+
             btn.addEventListener('click', (e) => {
-                const scheme = e.target.dataset.scheme;
+                e.preventDefault();
+                e.stopPropagation();
+                const scheme = e.currentTarget.dataset.scheme;
                 this.applyPreset(scheme);
+                this.highlightActiveColorPreset(e.currentTarget);
             });
         });
 
-        // Presets de fuentes
-        document.querySelectorAll('.cde-font-preset').forEach(btn => {
+        // PRESETS DE FUENTES - con data-preset Y data-type="font"
+        document.querySelectorAll('.cde-preset[data-preset][data-type="font"]').forEach(btn => {
+            // Eliminar onclick previo si existe
+            btn.onclick = null;
+
             btn.addEventListener('click', (e) => {
-                const presetName = e.target.dataset.preset;
+                e.preventDefault();
+                e.stopPropagation();
+                const presetName = e.currentTarget.dataset.preset;
                 this.applyFontPreset(presetName);
+                this.highlightActiveFontPreset(e.currentTarget);
             });
         });
 
-        // Categorías - CORREGIDO: Usar el método de la clase
+        // Alternativa: detectar automáticamente por el nombre del preset
+        // Útil si no quieres usar data-type="font"
+        const fontPresetNames = ['classic-cde', 'modern', 'retro', 'terminal'];
+        document.querySelectorAll('.cde-preset[data-preset]').forEach(btn => {
+            const presetName = btn.dataset.preset;
+            if (fontPresetNames.includes(presetName)) {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.applyFontPreset(presetName);
+                    this.highlightActiveFontPreset(e.currentTarget);
+                });
+            }
+        });
+
+        // Categorías
         document.querySelectorAll('.cde-category').forEach(cat => {
+            cat.onclick = null;
             cat.addEventListener('click', (e) => {
                 const category = e.currentTarget.dataset.category;
                 this.setActiveCategory(category);
@@ -259,106 +301,75 @@ class StyleManager {
         if (titlebar) {
             titlebar.addEventListener('mousedown', (e) => this.startDrag(e));
         }
-
-        // Actualizar eventos para los botones que usan onclick en el HTML
-        this.setupInlineEventHandlers();
     }
 
-    setupInlineEventHandlers() {
-        // Reemplazar onclick en HTML con event listeners
-        document.querySelectorAll('.cde-category').forEach(cat => {
-            const category = cat.dataset.category;
-            cat.onclick = null; // Limpiar onclick anterior
-            cat.addEventListener('click', () => {
-                this.setActiveCategory(category);
-            });
+    // Resaltar preset de color activo
+    highlightActiveColorPreset(activeButton) {
+        // Remover active de todos los presets de color
+        document.querySelectorAll('.cde-preset[data-scheme]').forEach(btn => {
+            btn.classList.remove('active');
         });
 
-        // También manejar botones de presets de fuente
-        document.querySelectorAll('.cde-font-preset').forEach(btn => {
-            const preset = btn.dataset.preset;
-            btn.onclick = null;
-            btn.addEventListener('click', () => {
-                this.applyFontPreset(preset);
-            });
+        // Remover active de todos los presets de fuente
+        document.querySelectorAll('.cde-preset[data-preset][data-type="font"]').forEach(btn => {
+            btn.classList.remove('active');
         });
+
+        // Agregar active al botón clickeado
+        if (activeButton) {
+            activeButton.classList.add('active');
+        }
+    }
+
+    // Resaltar preset de fuente activo
+    highlightActiveFontPreset(activeButton) {
+        // Remover active de todos los presets de fuente
+        document.querySelectorAll('.cde-preset[data-preset][data-type="font"]').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        // Remover active de todos los presets de color
+        document.querySelectorAll('.cde-preset[data-scheme]').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        // Agregar active al botón clickeado
+        if (activeButton) {
+            activeButton.classList.add('active');
+        }
     }
 
     setupColorInputs() {
         // Mapeo de inputs a variables CSS
         const colorMap = {
-            'color-topbar': '--topbar-color',
-            'color-window': '--window-color',
-            'color-titlebar': '--titlebar-color',
-            'color-terminal-bg': '--terminal-bg-color',
-            'color-terminal-text': '--terminal-text-color',
-            'color-dock': '--dock-color',
-            'color-menu': '--menu-color',
-            'color-dock-icon': '--dock-icon-bg',
-            'color-dock-hover': '--dock-icon-hover',
-            'color-dock-active': '--dock-icon-active',
-            'color-button': '--button-bg',
-            'color-button-active': '--button-active',
-            'color-separator': '--separator-color',
-            'color-modal': '--modal-bg',
-            'color-scrollbar': '--scrollbar-color'
+            'color-workspace': '--workspace-color',
+            'color-title-active': '--titlebar-color',
+            'color-background': '--window-color',
+            'color-highlight': '--highlight-color',
+            'color-text': '--text-color'
         };
 
         // Crear inputs dinámicamente o usar los existentes
         Object.entries(colorMap).forEach(([inputId, cssVar]) => {
-            let input = document.getElementById(inputId);
-            if (!input) {
-                // Crear input si no existe
-                input = document.createElement('input');
-                input.type = 'color';
-                input.id = inputId;
-                input.dataset.var = cssVar;
-                input.value = this.styles[cssVar] || '#000000';
+            const input = document.getElementById(inputId);
+            if (input) {
+                // Añadir event listener
+                input.addEventListener('input', (e) => {
+                    const value = e.target.value;
+                    this.applyStyle(cssVar, value);
 
-                // Añadir al panel de colores
-                const colorsPanel = document.getElementById('colors-panel');
-                if (colorsPanel) {
-                    const row = document.createElement('div');
-                    row.className = 'cde-controlrow';
+                    // Actualizar swatch y nombre
+                    const selector = e.target.closest('.cde-colorselector');
+                    if (selector) {
+                        const swatch = selector.querySelector('.cde-colorswatch');
+                        const nameSpan = selector.querySelector('.cde-colorname');
+                        if (swatch) swatch.style.backgroundColor = value;
+                        if (nameSpan) nameSpan.textContent = this.getColorName(value);
+                    }
 
-                    const label = document.createElement('label');
-                    label.className = 'cde-label';
-                    label.textContent = this.getLabelFromId(inputId);
-
-                    const selector = document.createElement('div');
-                    selector.className = 'cde-colorselector';
-
-                    const swatch = document.createElement('div');
-                    swatch.className = 'cde-colorswatch';
-                    swatch.style.backgroundColor = input.value;
-
-                    const name = document.createElement('span');
-                    name.className = 'cde-colorname';
-                    name.textContent = this.getColorName(input.value);
-
-                    selector.appendChild(input);
-                    selector.appendChild(swatch);
-                    selector.appendChild(name);
-                    row.appendChild(label);
-                    row.appendChild(selector);
-                    colorsPanel.appendChild(row);
-                }
+                    this.updateStatus(`Changed: ${cssVar}`);
+                });
             }
-
-            // Añadir event listener
-            input.addEventListener('input', (e) => {
-                const value = e.target.value;
-                const cssVar = e.target.dataset.var;
-                this.applyStyle(cssVar, value);
-
-                // Actualizar swatch y nombre
-                const swatch = e.target.nextElementSibling;
-                const nameSpan = swatch?.nextElementSibling;
-                if (swatch) swatch.style.backgroundColor = value;
-                if (nameSpan) nameSpan.textContent = this.getColorName(value);
-
-                this.updateStatus(`Changed: ${this.getLabelFromId(inputId)}`);
-            });
         });
     }
 
@@ -407,21 +418,11 @@ class StyleManager {
 
     getLabelFromId(id) {
         const labels = {
-            'color-topbar': 'Topbar',
-            'color-window': 'Window',
-            'color-titlebar': 'Titlebar',
-            'color-terminal-bg': 'Terminal BG',
-            'color-terminal-text': 'Terminal Text',
-            'color-dock': 'Dock',
-            'color-menu': 'Menu',
-            'color-dock-icon': 'Dock Icon',
-            'color-dock-hover': 'Dock Hover',
-            'color-dock-active': 'Dock Active',
-            'color-button': 'Button',
-            'color-button-active': 'Button Active',
-            'color-separator': 'Separator',
-            'color-modal': 'Modal',
-            'color-scrollbar': 'Scrollbar'
+            'color-workspace': 'Workspace',
+            'color-title-active': 'Active Title',
+            'color-background': 'Background',
+            'color-highlight': 'Highlight',
+            'color-text': 'Text Color'
         };
         return labels[id] || id.replace('color-', '').replace(/-/g, ' ');
     }
@@ -483,10 +484,13 @@ class StyleManager {
                 const input = document.querySelector(`input[data-var="${cssVar}"]`);
                 if (input) {
                     input.value = value;
-                    const swatch = input.nextElementSibling;
-                    const nameSpan = swatch?.nextElementSibling;
-                    if (swatch) swatch.style.backgroundColor = value;
-                    if (nameSpan) nameSpan.textContent = this.getColorName(value);
+                    const selector = input.closest('.cde-colorselector');
+                    if (selector) {
+                        const swatch = selector.querySelector('.cde-colorswatch');
+                        const nameSpan = selector.querySelector('.cde-colorname');
+                        if (swatch) swatch.style.backgroundColor = value;
+                        if (nameSpan) nameSpan.textContent = this.getColorName(value);
+                    }
                 }
             }
             this.updateStatus(`Applied theme: ${scheme}`);
@@ -496,6 +500,7 @@ class StyleManager {
 
     applyFontPreset(presetName) {
         if (this.fontPresets[presetName]) {
+            console.log(`Applying font preset: ${presetName}`);
             for (const [cssVar, value] of Object.entries(this.fontPresets[presetName])) {
                 this.applyFontStyle(cssVar, value);
             }
@@ -520,6 +525,11 @@ class StyleManager {
         this.updateFontControls();
         this.updateStatus('Reset to default');
         this.showMessage('✓ Reset to default theme and fonts');
+
+        // Remover active de todos los presets
+        document.querySelectorAll('.cde-preset.active').forEach(btn => {
+            btn.classList.remove('active');
+        });
     }
 
     save() {
@@ -570,10 +580,13 @@ class StyleManager {
             const input = document.querySelector(`input[data-var="${cssVar}"]`);
             if (input) {
                 input.value = value;
-                const swatch = input.nextElementSibling;
-                const nameSpan = swatch?.nextElementSibling;
-                if (swatch) swatch.style.backgroundColor = value;
-                if (nameSpan) nameSpan.textContent = this.getColorName(value);
+                const selector = input.closest('.cde-colorselector');
+                if (selector) {
+                    const swatch = selector.querySelector('.cde-colorswatch');
+                    const nameSpan = selector.querySelector('.cde-colorname');
+                    if (swatch) swatch.style.backgroundColor = value;
+                    if (nameSpan) nameSpan.textContent = this.getColorName(value);
+                }
             }
         }
 
@@ -633,18 +646,33 @@ class StyleManager {
         const title = preview.querySelector('.font-preview-title');
         if (title) {
             title.style.fontSize = this.fontStyles['--font-size-title'];
-            title.style.fontWeight = this.fontStyles['--font-weight-normal'];
+            title.style.fontWeight = this.fontStyles['--font-weight-bold'] || '700';
+            title.style.fontFamily = this.fontStyles['--font-family-base'];
+        }
+
+        const text = preview.querySelector('.font-preview-text');
+        if (text) {
+            text.style.fontSize = this.fontStyles['--font-size-base'];
+            text.style.fontWeight = this.fontStyles['--font-weight-normal'] || '400';
+            text.style.fontFamily = this.fontStyles['--font-family-base'];
         }
 
         const terminal = preview.querySelector('.font-preview-terminal');
         if (terminal) {
             terminal.style.fontFamily = this.fontStyles['--font-family-terminal'];
+            terminal.style.fontSize = this.fontStyles['--font-size-base'];
+        }
+
+        const small = preview.querySelector('.font-preview-small');
+        if (small) {
+            small.style.fontSize = this.fontStyles['--font-size-small'] || '11px';
+            small.style.fontFamily = this.fontStyles['--font-family-base'];
         }
     }
 
     testFontPreview() {
-        this.showMessage('✓ Font preview updated');
         this.updateFontPreview();
+        this.showMessage('✓ Font preview updated');
     }
 
     // Este método reemplaza a la función switchStyleTab
@@ -742,16 +770,16 @@ class StyleManager {
 
         document.body.appendChild(msgBox);
 
-        // Auto-remove after 3 seconds
+        // Auto-remove after 2 seconds
         setTimeout(() => {
             if (msgBox.parentNode) {
                 msgBox.parentNode.removeChild(msgBox);
             }
-        }, 1000);
+        }, 2000);
     }
 
     startDrag(e) {
-        if (e.target.classList.contains('cde-window-btn')) return;
+        if (e.target.classList.contains('close-btn')) return;
 
         const modal = document.getElementById('styleManager');
         if (!modal) return;
@@ -763,6 +791,7 @@ class StyleManager {
         const onMouseMove = (moveEvent) => {
             modal.style.left = `${moveEvent.clientX - offsetX}px`;
             modal.style.top = `${moveEvent.clientY - offsetY}px`;
+            modal.style.transform = 'none';
         };
 
         const onMouseUp = () => {
@@ -786,19 +815,22 @@ window.switchStyleTab = function (category) {
 
 // Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
+    // Crear instancia global
     window.styleManager = new StyleManager();
 
+    // Pequeño retraso para asegurar que el DOM esté completamente cargado
     setTimeout(() => {
         window.styleManager.init();
     }, 100);
 
+    // Función global para abrir el Style Manager
     window.openStyleManager = function () {
         if (window.styleManager) {
             window.styleManager.open();
         }
     };
 
-    console.log('CDE Style Manager loaded with color and font support');
+    console.log('CDE Style Manager loaded with unified preset buttons');
 });
 
 // Función para hacer el Style Manager arrastrable
@@ -809,7 +841,7 @@ function makeDraggable(element, handle) {
     let dragOffset = { x: 0, y: 0 };
 
     handle.addEventListener('mousedown', function (e) {
-        if (e.target.classList.contains('cde-window-btn')) return;
+        if (e.target.classList.contains('close-btn')) return;
 
         isDragging = true;
         const rect = element.getBoundingClientRect();
