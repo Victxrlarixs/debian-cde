@@ -1,10 +1,9 @@
 # 🖥️ Explore Debian – Web CDE Desktop
 
 Una recreación retro del entorno de escritorio clásico de **Debian / CDE (Common Desktop Environment)** directamente en el navegador.  
-Incluye ventanas, terminal con efectos “hacker”, file manager, dock estilo Motif y una estética noventera que revive el look & feel de Unix clásicos.
 ---
 
-![Preview](./demo/custom-theme.png)
+![Preview](https://github.com/Victxrlarixs/debian-cde/blob/beta/demo/Custom-Theme.png?raw=true)
 
 ## ✨ Features
 
