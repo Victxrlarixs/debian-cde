@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Explore Debian</title>
+    <meta name="keywords" content="Debian, Linux, CDE, Retro Desktop, Unix" />
+    <title>Debian - CDE</title>
     <link rel="stylesheet" href="./src/cde.css">
 </head>
 
@@ -293,22 +294,104 @@
 
                 </div>
 
-                <!-- Panel de fuentes -->
+                <!-- Actualiza el panel de fuentes en tu HTML -->
                 <div class="cde-controlgroup" id="fonts-panel">
                     <h3 class="cde-subtitle">Font Settings</h3>
+
+                    <!-- Presets de fuentes -->
+                    <div class="cde-font-presets">
+                        <h4>Font Presets</h4>
+                        <div class="cde-font-preset-row">
+                            <button class="cde-font-preset" data-preset="classic-cde">Classic CDE</button>
+                            <button class="cde-font-preset" data-preset="modern">Modern</button>
+                            <button class="cde-font-preset" data-preset="retro">Retro</button>
+                            <button class="cde-font-preset" data-preset="terminal">Terminal</button>
+                        </div>
+                    </div>
+
+                    <!-- Familia de fuente principal -->
                     <div class="cde-controlrow">
-                        <label class="cde-label">Font Family:</label>
-                        <select class="cde-select" id="font-family">
-                            <option>Fixed [6x13]</option>
-                            <option>Clean [8x13]</option>
-                            <option>Terminus [10x20]</option>
-                            <option>Lucida [12x24]</option>
+                        <label class="cde-label">UI Font Family:</label>
+                        <select class="cde-select" id="font-family-base">
+                            <option value='"Fixedsys", "Lucida Console", monospace'>Fixedsys (Default)</option>
+                            <option value='"MS Sans Serif", sans-serif'>MS Sans Serif</option>
+                            <option value='"Times New Roman", serif'>Times New Roman</option>
+                            <option value='Arial, sans-serif'>Arial</option>
+                            <option value='"Courier New", monospace'>Courier New</option>
+                            <option value='"Tahoma", sans-serif'>Tahoma</option>
+                            <option value='"Verdana", sans-serif'>Verdana</option>
+                            <option value='"Ubuntu Mono", monospace'>Ubuntu Mono</option>
+                            <option value='"DejaVu Sans Mono", monospace'>DejaVu Sans Mono</option>
                         </select>
                     </div>
+
+                    <!-- Familia de fuente del terminal -->
                     <div class="cde-controlrow">
-                        <label class="cde-label">Font Size:</label>
-                        <input type="range" class="cde-slider" id="font-size" min="8" max="24" value="12">
-                        <span class="cde-slidervalue">12</span>
+                        <label class="cde-label">Terminal Font:</label>
+                        <select class="cde-select" id="font-family-terminal">
+                            <option value='"Courier New", monospace'>Courier New (Default)</option>
+                            <option value='"Lucida Console", monospace'>Lucida Console</option>
+                            <option value='Consolas, monospace'>Consolas</option>
+                            <option value='"Fixedsys", monospace'>Fixedsys</option>
+                            <option value='"Monaco", monospace'>Monaco</option>
+                            <option value='"Ubuntu Mono", monospace'>Ubuntu Mono</option>
+                            <option value='"DejaVu Sans Mono", monospace'>DejaVu Sans Mono</option>
+                        </select>
+                    </div>
+
+                    <!-- Tamaño de fuente base -->
+                    <div class="cde-controlrow">
+                        <label class="cde-label">Base Font Size:</label>
+                        <input type="range" class="cde-slider" id="font-size-base" min="10" max="18" value="12"
+                            step="1">
+                        <span class="cde-slidervalue" id="font-size-value">12px</span>
+                    </div>
+
+                    <!-- Tamaño de fuente del título -->
+                    <div class="cde-controlrow">
+                        <label class="cde-label">Title Font Size:</label>
+                        <input type="range" class="cde-slider" id="font-size-title" min="11" max="20" value="13"
+                            step="1">
+                        <span class="cde-slidervalue" id="font-size-title-value">13px</span>
+                    </div>
+
+                    <!-- Interlineado -->
+                    <div class="cde-controlrow">
+                        <label class="cde-label">Line Height:</label>
+                        <input type="range" class="cde-slider" id="line-height-base" min="1.0" max="2.0" value="1.45"
+                            step="0.05">
+                        <span class="cde-slidervalue" id="line-height-value">1.45</span>
+                    </div>
+
+                    <!-- Peso de fuente -->
+                    <div class="cde-controlrow">
+                        <label class="cde-label">Font Weight:</label>
+                        <select class="cde-select" id="font-weight">
+                            <option value="300">Light (300)</option>
+                            <option value="400" selected>Normal (400)</option>
+                            <option value="600">Semibold (600)</option>
+                            <option value="700">Bold (700)</option>
+                            <option value="800">Extra Bold (800)</option>
+                        </select>
+                    </div>
+
+                    <!-- Botón de prueba -->
+                    <div class="cde-controlrow">
+                        <div class="cde-label"></div>
+                        <button class="cde-btn" onclick="styleManager.testFontPreview()" style="margin-top: 10px;">
+                            Preview Fonts
+                        </button>
+                    </div>
+
+                    <!-- Área de vista previa -->
+                    <div class="cde-controlrow">
+                        <div class="cde-label">Preview:</div>
+                        <div class="cde-font-preview" id="font-preview">
+                            <div class="font-preview-title">Title Bar Example</div>
+                            <div class="font-preview-text">This is regular text in the selected font.</div>
+                            <div class="font-preview-terminal">Terminal: $ ls -la</div>
+                            <div class="font-preview-small">Small text for status bars</div>
+                        </div>
                     </div>
                 </div>
 

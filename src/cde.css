@@ -23,11 +23,16 @@
     --border-inset-light: #dfdfdf;
     --border-inset-dark: #808080;
 
-    /* Tipografía */
-    --font-family: "Fixed", "Clean", monospace;
-    --font-size: 12px;
+    /* Tipografía - NUEVAS VARIABLES PERSONALIZABLES */
+    --font-family-base: "Fixedsys", "Lucida Console", monospace;
+    --font-family-terminal: "Courier New", monospace;
+    --font-size-base: 12px;
+    --font-size-title: 13px;
     --font-size-small: 11px;
     --font-size-large: 13px;
+    --font-weight-normal: 400;
+    --font-weight-bold: 700;
+    --line-height-base: 1.45;
 
     /* Efectos */
     --shadow-color: rgba(0, 0, 0, 0.3);
@@ -39,7 +44,10 @@ body {
     margin: 0;
     width: 100%;
     height: 100%;
-    font-family: var(--font-family);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-base);
     background-image: url("../src/images/motif.png");
     background-size: cover;
     background-repeat: no-repeat;
@@ -60,7 +68,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 0 10px;
-    font-size: var(--font-size);
+    font-size: var(--font-size-base);
     border-bottom: 2px solid var(--separator-color);
     z-index: 9998;
     /* Borde biselado estilo CDE */
@@ -82,8 +90,8 @@ body {
     gap: 6px;
     background: var(--dock-color);
     padding: 6px 8px;
-    font-family: var(--font-family);
-    font-size: var(--font-size);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
     z-index: 9999;
     /* Borde biselado estilo CDE */
     border: 2px solid;
@@ -108,6 +116,7 @@ body {
     padding: 2px 10px;
     font-size: 12px;
     cursor: pointer;
+    font-family: var(--font-family-base);
 }
 
 #cde-menu-btn:active {
@@ -132,6 +141,8 @@ body {
     padding: 2px 4px;
     background: #b0a89f;
     border: 2px outset #eee;
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-small);
 }
 
 .sys-icon {
@@ -139,7 +150,6 @@ body {
     height: 20px;
     image-rendering: pixelated;
 }
-
 
 /* ====== MOTIF SEPARATOR ====== */
 .cde-sep {
@@ -154,7 +164,8 @@ body {
 .cde-exit-btn {
     padding: 4px 10px;
     background: var(--button-bg);
-    font-size: var(--font-size);
+    font-size: var(--font-size-base);
+    font-family: var(--font-family-base);
     cursor: pointer;
     /* Botón estilo CDE biselado */
     border: 2px solid;
@@ -194,6 +205,7 @@ body {
     height: 18px;
     background: var(--button-active);
     font-size: var(--font-size-small);
+    font-family: var(--font-family-base);
     cursor: pointer;
     border: 2px solid;
     border-top-color: var(--border-light);
@@ -222,6 +234,7 @@ body {
     padding: 2px 6px;
     background: var(--button-active);
     font-size: var(--font-size-small);
+    font-family: var(--font-family-base);
     cursor: pointer;
     border: 2px solid;
     border-top-color: var(--border-light);
@@ -252,6 +265,7 @@ body {
     height: 16px;
     background: var(--button-active);
     font-size: 10px;
+    font-family: var(--font-family-base);
     cursor: pointer;
     border: 2px solid;
     border-top-color: var(--border-light);
@@ -356,8 +370,9 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: var(--font-size-large);
-    font-weight: bold;
+    font-size: var(--font-size-title);
+    font-family: var(--font-family-base);
+    font-weight: var(--font-weight-bold);
     border-bottom: 2px solid var(--border-dark);
 }
 
@@ -365,9 +380,9 @@ body {
 .terminal-body {
     background: var(--terminal-bg-color);
     color: var(--terminal-text-color);
-    font-family: var(--font-family);
-    font-size: var(--font-size-large);
-    line-height: 1.45;
+    font-family: var(--font-family-terminal);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
     padding: 10px;
     height: 240px;
     overflow-y: auto;
@@ -379,8 +394,8 @@ body {
     align-items: center;
     background: black;
     color: var(--terminal-text-color);
-    font-family: var(--font-family);
-    font-size: var(--font-size-large);
+    font-family: var(--font-family-terminal);
+    font-size: var(--font-size-base);
     padding: 0 10px 10px 10px;
 }
 
@@ -394,10 +409,11 @@ body {
     background: transparent;
     border: none;
     color: var(--terminal-text-color);
-    font-family: inherit;
-    font-size: inherit;
+    font-family: var(--font-family-terminal);
+    font-size: var(--font-size-base);
     outline: none;
     caret-color: var(--terminal-text-color);
+    line-height: var(--line-height-base);
 }
 
 /* Scrollbar */
@@ -427,7 +443,8 @@ body {
 .fm-menubar {
     background: var(--button-bg);
     padding: 2px 6px;
-    font-size: var(--font-size);
+    font-size: var(--font-size-base);
+    font-family: var(--font-family-base);
     display: flex;
     gap: 12px;
     border-bottom: 2px solid var(--separator-color);
@@ -475,7 +492,8 @@ body {
 .fm-path {
     flex: 1;
     height: 22px;
-    font-size: var(--font-size);
+    font-size: var(--font-size-base);
+    font-family: var(--font-family-base);
     background: #f0ebe3;
     padding: 2px 6px;
     border: 2px solid;
@@ -498,7 +516,8 @@ body {
     background: #b4ada3;
     border-right: 2px solid var(--separator-color);
     padding: 6px;
-    font-size: var(--font-size);
+    font-size: var(--font-size-base);
+    font-family: var(--font-family-base);
     overflow-y: auto;
 }
 
@@ -540,7 +559,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: var(--font-size);
+    font-size: var(--font-size-base);
+    font-family: var(--font-family-base);
     color: white;
     text-align: center;
     cursor: pointer;
@@ -559,6 +579,7 @@ body {
 .fm-status {
     background: var(--button-bg);
     font-size: var(--font-size-small);
+    font-family: var(--font-family-base);
     padding: 2px 6px;
     border-top: 2px solid var(--separator-color);
 }
@@ -570,7 +591,8 @@ body {
     left: 4px;
     width: 220px;
     background: var(--menu-color);
-    font-size: var(--font-size);
+    font-size: var(--font-size-base);
+    font-family: var(--font-family-base);
     z-index: 9999;
     border: 2px solid;
     border-top-color: var(--border-light);
@@ -587,6 +609,7 @@ body {
     padding: 4px 10px;
     cursor: pointer;
     white-space: nowrap;
+    font-family: var(--font-family-base);
 }
 
 .menu-item:hover {
@@ -634,8 +657,9 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     background: var(--modal-bg);
-    font-family: var(--font-family);
-    font-size: var(--font-size);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
     z-index: 10000;
     border: 2px solid;
     border-top-color: var(--border-light);
@@ -653,8 +677,9 @@ body {
     background: var(--titlebar-color);
     color: white;
     padding: 4px 8px;
-    font-size: var(--font-size-large);
-    font-weight: bold;
+    font-size: var(--font-size-title);
+    font-family: var(--font-family-base);
+    font-weight: var(--font-weight-bold);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -690,6 +715,7 @@ body {
     gap: 8px;
     cursor: pointer;
     font-size: var(--font-size-small);
+    font-family: var(--font-family-base);
     color: #000000;
     border: 1px solid transparent;
 }
@@ -718,6 +744,7 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 10px;
+    font-family: var(--font-family-base);
 }
 
 /* Panel de controles */
@@ -741,10 +768,10 @@ body {
     flex-direction: column;
 }
 
-
 .cde-subtitle {
-    font-size: var(--font-size-large);
-    font-weight: bold;
+    font-size: var(--font-size-title);
+    font-family: var(--font-family-base);
+    font-weight: var(--font-weight-bold);
     margin-bottom: 15px;
     padding-bottom: 4px;
     border-bottom: 1px solid var(--separator-color);
@@ -765,6 +792,7 @@ body {
     width: 140px;
     font-weight: bold;
     font-size: var(--font-size-small);
+    font-family: var(--font-family-base);
     color: #000000;
     flex-shrink: 0;
 }
@@ -806,6 +834,98 @@ body {
     flex-shrink: 0;
 }
 
+/* ================= CONTROLES DE FUENTE ================= */
+.cde-select {
+    flex: 1;
+    height: 24px;
+    padding: 2px 6px;
+    background: var(--button-active);
+    border: 2px solid;
+    border-top-color: var(--border-inset-dark);
+    border-left-color: var(--border-inset-dark);
+    border-right-color: var(--border-inset-light);
+    border-bottom-color: var(--border-inset-light);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    color: #000000;
+    max-width: 300px;
+}
+
+.cde-slider {
+    flex: 1;
+    max-width: 200px;
+    margin: 0 10px;
+    -webkit-appearance: none;
+    height: 8px;
+    background: var(--button-bg);
+    border: 1px solid var(--separator-color);
+}
+
+.cde-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background: var(--titlebar-color);
+    cursor: pointer;
+    border: 1px solid var(--border-dark);
+}
+
+.cde-slidervalue {
+    min-width: 40px;
+    text-align: center;
+    font-family: monospace;
+    font-size: var(--font-size-small);
+    background: white;
+    padding: 2px 6px;
+    border: 1px solid var(--separator-color);
+}
+
+/* Vista previa de fuentes */
+.cde-font-preview {
+    flex: 1;
+    padding: 12px;
+    background: white;
+    border: 2px solid var(--separator-color);
+    margin-top: 10px;
+    max-width: 400px;
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+}
+
+.font-preview-title {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-title);
+    font-weight: var(--font-weight-bold);
+    color: var(--titlebar-color);
+    margin-bottom: 8px;
+    padding: 4px;
+    background: var(--button-active);
+}
+
+.font-preview-text {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+    margin-bottom: 8px;
+}
+
+.font-preview-terminal {
+    font-family: var(--font-family-terminal);
+    font-size: var(--font-size-base);
+    background: var(--terminal-bg-color);
+    color: var(--terminal-text-color);
+    padding: 6px;
+    margin-bottom: 8px;
+    border: 1px solid #000;
+}
+
+.font-preview-small {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-small);
+    color: #666;
+}
+
 /* Presets de colores - TEMAS CDE CLÁSICOS */
 .cde-presets {
     margin-top: 0px;
@@ -817,6 +937,7 @@ body {
 .cde-presets h4 {
     margin-bottom: 8px;
     font-size: var(--font-size-small);
+    font-family: var(--font-family-base);
     color: var(--titlebar-color);
     text-transform: uppercase;
 }
@@ -828,16 +949,15 @@ body {
     justify-content: space-between;
 }
 
-
 .cde-preset {
     padding: 4px 6px;
     background: var(--button-bg);
     font-size: 10px;
+    font-family: var(--font-family-base);
     cursor: pointer;
     flex: 1;
     min-width: 70px;
     max-width: 85px;
-    font-family: var(--font-family);
     border: 1px solid;
     border-top-color: var(--border-light);
     border-left-color: var(--border-light);
@@ -865,7 +985,8 @@ body {
     padding: 3px 8px;
     display: flex;
     justify-content: space-between;
-    font-size: 10px;
+    font-size: var(--font-size-small);
+    font-family: var(--font-family-base);
     color: var(--separator-color);
     height: 20px;
 }
@@ -891,7 +1012,7 @@ body {
 .cde-btn {
     padding: 4px 16px;
     background: var(--button-bg);
-    font-family: var(--font-family);
+    font-family: var(--font-family-base);
     font-size: var(--font-size-small);
     cursor: pointer;
     min-width: 80px;
@@ -925,7 +1046,7 @@ body {
     width: 18px;
     height: 16px;
     background: var(--button-bg);
-    font-family: var(--font-family);
+    font-family: var(--font-family-base);
     font-size: 10px;
     cursor: pointer;
     display: flex;
@@ -1085,6 +1206,16 @@ input:focus {
     transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
+/* Para cambios de fuente, transiciones separadas */
+.cde-font-preview * {
+    transition: font-family 0.2s ease, font-size 0.2s ease, line-height 0.2s ease;
+}
+
+/* Deshabilitar transiciones durante cambios masivos para mejor rendimiento */
+body.fonts-changing * {
+    transition: none !important;
+}
+
 /* ================= EFECTOS ESPECIALES ================= */
 /* Scanlines tipo CRT */
 .window::before {
@@ -1165,20 +1296,7 @@ input:focus {
 }
 
 /* ================= TIPOGRAFÍA ================= */
-body,
-.window,
-#terminalInput,
-.terminal-body,
-#styleManager,
-.cde-btn,
-.cde-preset,
-.cde-label,
-.menu-item,
-.fm-menubar,
-.fm-path,
-.titlebar {
-    font-family: var(--font-family);
-}
+/* Las fuentes ya están aplicadas arriba usando variables CSS */
 
 /* Ajustes de tamaño de fuente */
 body,
@@ -1187,14 +1305,14 @@ body,
 .fm-menubar,
 .fm-path,
 .cde-btn {
-    font-size: var(--font-size);
+    font-size: var(--font-size-base);
 }
 
 .titlebar,
 .cde-subtitle,
 .terminal-body,
 #terminalInput {
-    font-size: var(--font-size-large);
+    font-size: var(--font-size-title);
 }
 
 .cde-label,
@@ -1249,4 +1367,65 @@ body,
         width: 100%;
         margin-bottom: 4px;
     }
+
+    .cde-select,
+    .cde-slider {
+        max-width: 100%;
+    }
+
+    .cde-font-preview {
+        max-width: 100%;
+    }
+}
+
+/* ================= PRESETS DE FUENTES ================= */
+.cde-font-presets {
+    margin-top: 10px;
+    padding: 12px;
+    background: var(--button-active);
+    border: 1px solid var(--separator-color);
+}
+
+.cde-font-presets h4 {
+    margin-bottom: 8px;
+    font-size: var(--font-size-small);
+    font-family: var(--font-family-base);
+    color: var(--titlebar-color);
+    text-transform: uppercase;
+}
+
+.cde-font-preset-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.cde-font-preset {
+    padding: 4px 6px;
+    background: var(--button-bg);
+    font-size: 9px;
+    font-family: var(--font-family-base);
+    cursor: pointer;
+    flex: 1;
+    min-width: 80px;
+    max-width: 100px;
+    border: 1px solid;
+    border-top-color: var(--border-light);
+    border-left-color: var(--border-light);
+    border-right-color: var(--border-dark);
+    border-bottom-color: var(--border-dark);
+    text-align: center;
+}
+
+.cde-font-preset:hover {
+    background: var(--button-active);
+}
+
+.cde-font-preset:active {
+    border: 1px solid;
+    border-top-color: var(--border-dark);
+    border-left-color: var(--border-dark);
+    border-right-color: var(--border-light);
+    border-bottom-color: var(--border-light);
 }

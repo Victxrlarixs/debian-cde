@@ -1,7 +1,8 @@
-// stylemanager.js - VERSIÓN MEJORADA CON TEMAS CDE CLÁSICOS
+// stylemanager.js - VERSIÓN COMPLETA CON SOPORTE PARA COLORES Y FUENTES
 
 class StyleManager {
     constructor() {
+        // Estilos de color por defecto
         this.styles = {
             '--topbar-color': '#c6bdb3',
             '--window-color': '#dcd6cc',
@@ -18,6 +19,18 @@ class StyleManager {
             '--separator-color': '#8f877d',
             '--modal-bg': '#dcd6cc',
             '--scrollbar-color': '#00ff88'
+        };
+
+        // Estilos de fuente por defecto
+        this.fontStyles = {
+            '--font-family-base': '"Fixedsys", "Lucida Console", monospace',
+            '--font-family-terminal': '"Courier New", monospace',
+            '--font-size-base': '12px',
+            '--font-size-title': '13px',
+            '--font-size-small': '11px',
+            '--font-weight-normal': '400',
+            '--font-weight-bold': '700',
+            '--line-height-base': '1.45'
         };
 
         // TEMAS CDE CLÁSICOS - TODOS COLORES SÓLIDOS
@@ -133,14 +146,54 @@ class StyleManager {
             }
         };
 
+        // Presets de fuentes
+        this.fontPresets = {
+            'classic-cde': {
+                '--font-family-base': '"Fixedsys", "Lucida Console", monospace',
+                '--font-family-terminal': '"Courier New", monospace',
+                '--font-size-base': '12px',
+                '--font-size-title': '13px',
+                '--font-weight-normal': '400'
+            },
+            'modern': {
+                '--font-family-base': 'Arial, sans-serif',
+                '--font-family-terminal': 'Consolas, monospace',
+                '--font-size-base': '14px',
+                '--font-size-title': '15px',
+                '--font-weight-normal': '400'
+            },
+            'retro': {
+                '--font-family-base': '"MS Sans Serif", sans-serif',
+                '--font-family-terminal': '"Lucida Console", monospace',
+                '--font-size-base': '11px',
+                '--font-size-title': '12px',
+                '--font-weight-normal': '700'
+            },
+            'terminal': {
+                '--font-family-base': '"Ubuntu Mono", monospace',
+                '--font-family-terminal': '"DejaVu Sans Mono", monospace',
+                '--font-size-base': '13px',
+                '--font-size-title': '14px',
+                '--font-weight-normal': '400'
+            }
+        };
+
+        // Valores por defecto
         this.defaultStyles = { ...this.styles };
+        this.defaultFontStyles = { ...this.fontStyles };
+
+        // Todos los estilos combinados
+        this.allStyles = { ...this.styles, ...this.fontStyles };
+        this.defaultAllStyles = { ...this.defaultStyles, ...this.defaultFontStyles };
     }
 
     init() {
         this.loadSavedStyles();
         this.bindEvents();
+        this.setupColorInputs();
+        this.setupFontControls();
         this.updateUI();
-        console.log('Style Manager initialized with CDE themes');
+        console.log('Style Manager initialized with color and font support');
     }
 
     bindEvents() {
@@ -161,9 +214,6 @@ class StyleManager {
             closeBtn.addEventListener('click', () => this.close());
         }
 
-        // Selectores de color - CONECTADOS A LAS VARIABLES CORRECTAS
-        this.setupColorInputs();
-
         // Botones de acción
         const applyBtn = document.querySelector('#styleManager .cde-btn-default');
         if (applyBtn) {
@@ -180,15 +230,23 @@ class StyleManager {
             saveBtn.addEventListener('click', () => this.save());
         }
 
-        // Presets de temas
-        document.querySelectorAll('.cde-preset').forEach(btn => {
+        // Presets de temas de color
+        document.querySelectorAll('.cde-preset[data-scheme]').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const scheme = e.target.dataset.scheme;
                 this.applyPreset(scheme);
             });
         });
 
-        // Categorías
+        // Presets de fuentes
+        document.querySelectorAll('.cde-font-preset').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const presetName = e.target.dataset.preset;
+                this.applyFontPreset(presetName);
+            });
+        });
+
+        // Categorías - CORREGIDO: Usar el método de la clase
         document.querySelectorAll('.cde-category').forEach(cat => {
             cat.addEventListener('click', (e) => {
                 const category = e.currentTarget.dataset.category;
@@ -201,6 +259,29 @@ class StyleManager {
         if (titlebar) {
             titlebar.addEventListener('mousedown', (e) => this.startDrag(e));
         }
+
+        // Actualizar eventos para los botones que usan onclick en el HTML
+        this.setupInlineEventHandlers();
+    }
+
+    setupInlineEventHandlers() {
+        // Reemplazar onclick en HTML con event listeners
+        document.querySelectorAll('.cde-category').forEach(cat => {
+            const category = cat.dataset.category;
+            cat.onclick = null; // Limpiar onclick anterior
+            cat.addEventListener('click', () => {
+                this.setActiveCategory(category);
+            });
+        });
+
+        // También manejar botones de presets de fuente
+        document.querySelectorAll('.cde-font-preset').forEach(btn => {
+            const preset = btn.dataset.preset;
+            btn.onclick = null;
+            btn.addEventListener('click', () => {
+                this.applyFontPreset(preset);
+            });
+        });
     }
 
     setupColorInputs() {
@@ -281,6 +362,49 @@ class StyleManager {
         });
     }
 
+    setupFontControls() {
+        // Configurar controles de fuente
+        this.setupFontSelect('font-family-base', '--font-family-base');
+        this.setupFontSelect('font-family-terminal', '--font-family-terminal');
+        this.setupSlider('font-size-base', '--font-size-base', 'font-size-value', 'px');
+        this.setupSlider('font-size-title', '--font-size-title', 'font-size-title-value', 'px');
+        this.setupSlider('line-height-base', '--line-height-base', 'line-height-value', '');
+        this.setupFontSelect('font-weight', '--font-weight-normal');
+
+        // Aplicar vista previa automática
+        document.querySelectorAll('.cde-select, .cde-slider').forEach(control => {
+            control.addEventListener('input', () => this.updateFontPreview());
+        });
+
+        // Cargar valores guardados
+        this.updateFontControls();
+    }
+
+    setupFontSelect(elementId, cssVar) {
+        const select = document.getElementById(elementId);
+        if (select) {
+            select.addEventListener('change', (e) => {
+                this.applyFontStyle(cssVar, e.target.value);
+                this.updateFontPreview();
+                this.updateStatus(`Font changed: ${cssVar}`);
+            });
+        }
+    }
+
+    setupSlider(sliderId, cssVar, valueId, suffix = '') {
+        const slider = document.getElementById(sliderId);
+        const valueSpan = document.getElementById(valueId);
+
+        if (slider && valueSpan) {
+            slider.addEventListener('input', (e) => {
+                const value = e.target.value + suffix;
+                this.applyFontStyle(cssVar, value);
+                valueSpan.textContent = e.target.value + suffix;
+                this.updateFontPreview();
+            });
+        }
+    }
+
     getLabelFromId(id) {
         const labels = {
             'color-topbar': 'Topbar',
@@ -324,14 +448,27 @@ class StyleManager {
         this.styles[cssVar] = value;
     }
 
+    applyFontStyle(cssVar, value) {
+        document.documentElement.style.setProperty(cssVar, value);
+        this.fontStyles[cssVar] = value;
+        this.allStyles[cssVar] = value;
+    }
+
     apply() {
         this.applyAllStyles();
+        this.applyAllFontStyles();
         this.updateStatus('All changes applied');
         this.showMessage('✓ Styles applied successfully');
     }
 
     applyAllStyles() {
         for (const [cssVar, value] of Object.entries(this.styles)) {
+            document.documentElement.style.setProperty(cssVar, value);
+        }
+    }
+
+    applyAllFontStyles() {
+        for (const [cssVar, value] of Object.entries(this.fontStyles)) {
             document.documentElement.style.setProperty(cssVar, value);
         }
     }
@@ -357,21 +494,45 @@ class StyleManager {
         }
     }
 
+    applyFontPreset(presetName) {
+        if (this.fontPresets[presetName]) {
+            for (const [cssVar, value] of Object.entries(this.fontPresets[presetName])) {
+                this.applyFontStyle(cssVar, value);
+            }
+            this.updateFontControls();
+            this.updateStatus(`Applied font preset: ${presetName}`);
+            this.showMessage(`✓ ${presetName} font preset applied`);
+        }
+    }
+
     reset() {
+        // Resetear colores
         for (const [cssVar, value] of Object.entries(this.defaultStyles)) {
             this.applyStyle(cssVar, value);
         }
+
+        // Resetear fuentes
+        for (const [cssVar, value] of Object.entries(this.defaultFontStyles)) {
+            this.applyFontStyle(cssVar, value);
+        }
+
         this.updateUI();
+        this.updateFontControls();
         this.updateStatus('Reset to default');
-        this.showMessage('✓ Reset to default theme');
+        this.showMessage('✓ Reset to default theme and fonts');
     }
 
     save() {
         try {
-            localStorage.setItem('cde-styles', JSON.stringify(this.styles));
-            this.updateStatus('Settings saved');
+            // Guardar tanto colores como fuentes
+            const allSettings = {
+                colors: this.styles,
+                fonts: this.fontStyles
+            };
+            localStorage.setItem('cde-styles', JSON.stringify(allSettings));
+            this.updateStatus('All settings saved');
             this.showMessage('✓ Configuration saved');
-            console.log('Styles saved to localStorage');
+            console.log('Styles and fonts saved to localStorage');
         } catch (e) {
             this.showMessage('✗ Error saving configuration');
             console.error('Error saving styles:', e);
@@ -382,10 +543,21 @@ class StyleManager {
         try {
             const saved = localStorage.getItem('cde-styles');
             if (saved) {
-                const savedStyles = JSON.parse(saved);
-                Object.assign(this.styles, savedStyles);
-                this.applyAllStyles();
-                console.log('Loaded saved styles from localStorage');
+                const savedSettings = JSON.parse(saved);
+
+                // Cargar colores
+                if (savedSettings.colors) {
+                    Object.assign(this.styles, savedSettings.colors);
+                    this.applyAllStyles();
+                }
+
+                // Cargar fuentes
+                if (savedSettings.fonts) {
+                    Object.assign(this.fontStyles, savedSettings.fonts);
+                    this.applyAllFontStyles();
+                }
+
+                console.log('Loaded saved styles and fonts from localStorage');
             }
         } catch (e) {
             console.log('No saved styles found');
@@ -393,6 +565,7 @@ class StyleManager {
     }
 
     updateUI() {
+        // Actualizar controles de color
         for (const [cssVar, value] of Object.entries(this.styles)) {
             const input = document.querySelector(`input[data-var="${cssVar}"]`);
             if (input) {
@@ -403,18 +576,90 @@ class StyleManager {
                 if (nameSpan) nameSpan.textContent = this.getColorName(value);
             }
         }
+
         console.log('UI updated with current styles');
     }
 
+    updateFontControls() {
+        // Cargar valores actuales en los controles
+        const baseFont = this.fontStyles['--font-family-base'] || '"Fixedsys", "Lucida Console", monospace';
+        const terminalFont = this.fontStyles['--font-family-terminal'] || '"Courier New", monospace';
+        const fontSize = parseInt(this.fontStyles['--font-size-base'] || '12');
+        const titleSize = parseInt(this.fontStyles['--font-size-title'] || '13');
+        const lineHeight = parseFloat(this.fontStyles['--line-height-base'] || '1.45');
+        const fontWeight = this.fontStyles['--font-weight-normal'] || '400';
+
+        // Actualizar controles
+        this.setSelectValue('font-family-base', baseFont);
+        this.setSelectValue('font-family-terminal', terminalFont);
+        this.setSliderValue('font-size-base', fontSize, 'font-size-value', 'px');
+        this.setSliderValue('font-size-title', titleSize, 'font-size-title-value', 'px');
+        this.setSliderValue('line-height-base', lineHeight, 'line-height-value', '');
+        this.setSelectValue('font-weight', fontWeight);
+
+        this.updateFontPreview();
+    }
+
+    setSelectValue(id, value) {
+        const select = document.getElementById(id);
+        if (select) {
+            for (let i = 0; i < select.options.length; i++) {
+                if (select.options[i].value === value) {
+                    select.selectedIndex = i;
+                    break;
+                }
+            }
+        }
+    }
+
+    setSliderValue(sliderId, value, valueId, suffix) {
+        const slider = document.getElementById(sliderId);
+        const valueSpan = document.getElementById(valueId);
+
+        if (slider) slider.value = value;
+        if (valueSpan) valueSpan.textContent = value + suffix;
+    }
+
+    updateFontPreview() {
+        const preview = document.getElementById('font-preview');
+        if (!preview) return;
+
+        // Aplicar estilos actuales a la vista previa
+        preview.style.fontFamily = this.fontStyles['--font-family-base'];
+        preview.style.fontSize = this.fontStyles['--font-size-base'];
+        preview.style.lineHeight = this.fontStyles['--line-height-base'];
+
+        // Actualizar elementos específicos
+        const title = preview.querySelector('.font-preview-title');
+        if (title) {
+            title.style.fontSize = this.fontStyles['--font-size-title'];
+            title.style.fontWeight = this.fontStyles['--font-weight-normal'];
+        }
+
+        const terminal = preview.querySelector('.font-preview-terminal');
+        if (terminal) {
+            terminal.style.fontFamily = this.fontStyles['--font-family-terminal'];
+        }
+    }
+
+    testFontPreview() {
+        this.showMessage('✓ Font preview updated');
+        this.updateFontPreview();
+    }
+
+    // Este método reemplaza a la función switchStyleTab
     setActiveCategory(category) {
+        // Remover clase active de todas las categorías
         document.querySelectorAll('.cde-category').forEach(cat => {
             cat.classList.remove('active');
         });
 
+        // Ocultar todos los paneles
         document.querySelectorAll('.cde-controlgroup').forEach(panel => {
             panel.classList.remove('active');
         });
 
+        // Activar categoría seleccionada
         const activeCat = document.querySelector(`.cde-category[data-category="${category}"]`);
         const activePanel = document.getElementById(`${category}-panel`);
 
@@ -476,7 +721,7 @@ class StyleManager {
             border-bottom-color: var(--border-dark, #404040);
             padding: 20px;
             z-index: 10001;
-            font-family: var(--font-family, monospace);
+            font-family: var(--font-family-base, monospace);
             font-size: 12px;
             color: #000000;
             box-shadow: 4px 4px 0 var(--shadow-color, #000000);
@@ -532,6 +777,13 @@ class StyleManager {
     }
 }
 
+// Función global para compatibilidad con onclick en HTML
+window.switchStyleTab = function (category) {
+    if (window.styleManager) {
+        window.styleManager.setActiveCategory(category);
+    }
+};
+
 // Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
     window.styleManager = new StyleManager();
@@ -546,347 +798,51 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    console.log('CDE Style Manager loaded with 7 classic themes');
+    console.log('CDE Style Manager loaded with color and font support');
 });
 
-// Hacer que el Style Manager sea arrastrable
-if (document.getElementById('styleManager')) {
-    const styleManager = document.getElementById('styleManager');
-    const styleManagerTitlebar = document.getElementById('styleManagerTitlebar');
+// Función para hacer el Style Manager arrastrable
+function makeDraggable(element, handle) {
+    if (!element || !handle) return;
 
-    makeDraggable(styleManager, styleManagerTitlebar);
-
-    // Función para abrir el Style Manager
-    window.openStyleManager = function () {
-        styleManager.style.display = 'block';
-        // Centrar en pantalla
-        styleManager.style.top = '50%';
-        styleManager.style.left = '50%';
-        styleManager.style.transform = 'translate(-50%, -50%)';
-    };// stylemanager.js - Solo lógica, NO crea HTML
-
-    // Variables globales
-    let currentTab = 'colors';
-    let isDraggingStyleManager = false;
+    let isDragging = false;
     let dragOffset = { x: 0, y: 0 };
 
-    // Función para abrir el Style Manager
-    function openStyleManager() {
-        const styleManager = document.getElementById('styleManager');
-        if (!styleManager) return;
+    handle.addEventListener('mousedown', function (e) {
+        if (e.target.classList.contains('cde-window-btn')) return;
 
-        styleManager.style.display = 'block';
-        // Centrar en pantalla
-        styleManager.style.top = '50%';
-        styleManager.style.left = '50%';
-        styleManager.style.transform = 'translate(-50%, -50%)';
-
-        // Inicializar controles
-        initColorSwatches();
-        initFontControls();
-
-        updateStatus('Style Manager opened');
-    }
-
-    // Función para cerrar el Style Manager
-    function closeStyleManager() {
-        const styleManager = document.getElementById('styleManager');
-        if (styleManager) {
-            styleManager.style.display = 'none';
-        }
-        updateStatus('Style Manager closed');
-    }
-
-    // Cambiar entre pestañas
-    function switchStyleTab(tabName) {
-        currentTab = tabName;
-
-        // Actualizar categorías activas
-        document.querySelectorAll('.cde-category').forEach(cat => {
-            cat.classList.remove('active');
-        });
-
-        document.querySelector(`.cde-category[onclick*="${tabName}"]`).classList.add('active');
-
-        // Mostrar/ocultar paneles
-        document.querySelectorAll('.cde-controlgroup').forEach(panel => {
-            panel.classList.remove('active');
-        });
-
-        document.getElementById(`${tabName}-panel`).classList.add('active');
-
-        updateStatus(`Switched to ${tabName} tab`);
-    }
-
-    // Inicializar muestras de color
-    function initColorSwatches() {
-        const colorIds = ['workspace', 'title-active', 'background', 'highlight', 'text'];
-
-        colorIds.forEach(id => {
-            const input = document.getElementById(`color-${id}`);
-            const swatch = document.getElementById(`${id}-swatch`);
-
-            if (input && swatch) {
-                swatch.style.backgroundColor = input.value;
-
-                // Actualizar al cambiar el color
-                input.addEventListener('input', function () {
-                    swatch.style.backgroundColor = this.value;
-                    updateColorName(id, this.value);
-                });
-            }
-        });
-    }
-
-    // Actualizar nombre del color
-    function updateColorName(id, hexColor) {
-        const colorNames = {
-            '#a0a0a0': 'Gray',
-            '#000080': 'Navy Blue',
-            '#c0c0c0': 'Light Gray',
-            '#0000ff': 'Blue',
-            '#000000': 'Black',
-            '#ffffff': 'White',
-            '#808080': 'Gray',
-            '#008000': 'Green',
-            '#800080': 'Purple',
-            '#ff0000': 'Red',
-            '#ffff00': 'Yellow'
-        };
-
-        const nameSpan = document.querySelector(`#color-${id}`).parentNode.querySelector('.cde-colorname');
-        if (nameSpan) {
-            nameSpan.textContent = colorNames[hexColor.toLowerCase()] || hexColor;
-        }
-    }
-
-    // Inicializar controles de fuente
-    function initFontControls() {
-        const fontSizeSlider = document.getElementById('font-size');
-        const fontSizeValue = document.getElementById('font-size-value');
-
-        if (fontSizeSlider && fontSizeValue) {
-            fontSizeValue.textContent = fontSizeSlider.value;
-
-            fontSizeSlider.addEventListener('input', function () {
-                fontSizeValue.textContent = this.value;
-            });
-        }
-    }
-
-    // Aplicar temas predefinidos
-    function applyTheme(themeName) {
-        const themes = {
-            'platinum': {
-                workspace: '#a0a0a0',
-                titleActive: '#000080',
-                background: '#c0c0c0',
-                highlight: '#0000ff',
-                text: '#000000'
-            },
-            'olive': {
-                workspace: '#808000',
-                titleActive: '#004000',
-                background: '#c0c0a0',
-                highlight: '#008000',
-                text: '#000000'
-            },
-            'marine': {
-                workspace: '#000080',
-                titleActive: '#000040',
-                background: '#a0c0ff',
-                highlight: '#0000ff',
-                text: '#ffffff'
-            },
-            'sand': {
-                workspace: '#c0a060',
-                titleActive: '#804000',
-                background: '#f0e0c0',
-                highlight: '#a06000',
-                text: '#000000'
-            },
-            'graphite': {
-                workspace: '#404040',
-                titleActive: '#000000',
-                background: '#808080',
-                highlight: '#000000',
-                text: '#ffffff'
-            },
-            'midnight': {
-                workspace: '#000040',
-                titleActive: '#000000',
-                background: '#000080',
-                highlight: '#0000ff',
-                text: '#ffffff'
-            },
-            'desert': {
-                workspace: '#a06040',
-                titleActive: '#804000',
-                background: '#f0c0a0',
-                highlight: '#c08000',
-                text: '#000000'
-            }
-        };
-
-        const theme = themes[themeName];
-        if (!theme) return;
-
-        // Aplicar colores a los inputs
-        document.getElementById('color-workspace').value = theme.workspace;
-        document.getElementById('color-title-active').value = theme.titleActive;
-        document.getElementById('color-background').value = theme.background;
-        document.getElementById('color-highlight').value = theme.highlight;
-        document.getElementById('color-text').value = theme.text;
-
-        // Actualizar swatches
-        initColorSwatches();
-
-        updateStatus(`Applied ${themeName} theme`);
-    }
-
-    // Aplicar cambios de estilo
-    function applyStyleChanges() {
-        // Obtener valores
-        const workspaceColor = document.getElementById('color-workspace').value;
-        const titleActiveColor = document.getElementById('color-title-active').value;
-        const backgroundColor = document.getElementById('color-background').value;
-        const highlightColor = document.getElementById('color-highlight').value;
-        const textColor = document.getElementById('color-text').value;
-
-        // Aplicar a las variables CSS
-        const root = document.documentElement;
-        root.style.setProperty('--topbar-color', workspaceColor);
-        root.style.setProperty('--titlebar-color', titleActiveColor);
-        root.style.setProperty('--window-color', backgroundColor);
-        root.style.setProperty('--scrollbar-color', highlightColor);
-        root.style.setProperty('--terminal-text-color', textColor);
-
-        updateStatus('Style changes applied');
-    }
-
-    // Resetear cambios
-    function resetStyleChanges() {
-        // Restaurar valores por defecto
-        const defaultColors = {
-            'color-workspace': '#a0a0a0',
-            'color-title-active': '#000080',
-            'color-background': '#c0c0c0',
-            'color-highlight': '#0000ff',
-            'color-text': '#000000'
-        };
-
-        Object.keys(defaultColors).forEach(id => {
-            const input = document.getElementById(id);
-            if (input) input.value = defaultColors[id];
-        });
-
-        initColorSwatches();
-        updateStatus('Style reset to defaults');
-    }
-
-    // Guardar cambios
-    function saveStyleChanges() {
-        // Aquí iría la lógica para guardar en localStorage o servidor
-        localStorage.setItem('cde-theme', JSON.stringify({
-            workspace: document.getElementById('color-workspace').value,
-            titleActive: document.getElementById('color-title-active').value,
-            background: document.getElementById('color-background').value,
-            highlight: document.getElementById('color-highlight').value,
-            text: document.getElementById('color-text').value
-        }));
-
-        updateStatus('Settings saved');
-    }
-
-    // Actualizar barra de estado
-    function updateStatus(message) {
-        const statusEl = document.getElementById('style-status');
-        if (statusEl) {
-            statusEl.textContent = message;
-        }
-    }
-
-    // Arrastrar ventana
-    function startDrag(e, elementId) {
-        if (e.target.closest('.cde-window-btn')) return;
-
-        const element = document.getElementById(elementId);
-        if (!element) return;
-
-        isDraggingStyleManager = true;
-
+        isDragging = true;
         const rect = element.getBoundingClientRect();
         dragOffset.x = e.clientX - rect.left;
         dragOffset.y = e.clientY - rect.top;
 
-        document.addEventListener('mousemove', dragStyleManager);
-        document.addEventListener('mouseup', stopDragStyleManager);
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
 
         e.preventDefault();
-    }
+    });
 
-    function dragStyleManager(e) {
-        if (!isDraggingStyleManager) return;
-
-        const element = document.getElementById('styleManager');
-        if (!element) return;
+    function onMouseMove(e) {
+        if (!isDragging) return;
 
         element.style.left = (e.clientX - dragOffset.x) + 'px';
         element.style.top = (e.clientY - dragOffset.y) + 'px';
         element.style.transform = 'none';
     }
 
-    function stopDragStyleManager() {
-        isDraggingStyleManager = false;
-        document.removeEventListener('mousemove', dragStyleManager);
-        document.removeEventListener('mouseup', stopDragStyleManager);
+    function onMouseUp() {
+        isDragging = false;
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
     }
-
-    // Inicialización cuando se carga la página
-    document.addEventListener('DOMContentLoaded', function () {
-        // Cargar configuración guardada
-        const savedTheme = localStorage.getItem('cde-theme');
-        if (savedTheme) {
-            try {
-                const theme = JSON.parse(savedTheme);
-                // Aplicar tema guardado
-                if (theme.workspace) document.getElementById('color-workspace').value = theme.workspace;
-                if (theme.titleActive) document.getElementById('color-title-active').value = theme.titleActive;
-                if (theme.background) document.getElementById('color-background').value = theme.background;
-                if (theme.highlight) document.getElementById('color-highlight').value = theme.highlight;
-                if (theme.text) document.getElementById('color-text').value = theme.text;
-            } catch (e) {
-                console.error('Error loading saved theme:', e);
-            }
-        }
-
-        // Hacer que el icono del Style Manager abra el modal
-        const styleIcon = document.querySelector('.cde-icon[onclick*="openStyleManager"]');
-        if (styleIcon) {
-            styleIcon.onclick = openStyleManager;
-        }
-    });
-
-    // Función para cerrar
-    styleManager.close = function () {
-        styleManager.style.display = 'none';
-    };
-
-    // Aplicar cambios
-    styleManager.apply = function () {
-        // Lógica para aplicar cambios de estilo
-        console.log('Aplicando cambios de estilo...');
-    };
-
-    // Resetear
-    styleManager.reset = function () {
-        // Lógica para resetear estilos
-        console.log('Resetando estilos...');
-    };
-
-    // Guardar
-    styleManager.save = function () {
-        // Lógica para guardar configuración
-        console.log('Guardando configuración...');
-    };
 }
+
+// Inicializar arrastre cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', function () {
+    const styleManager = document.getElementById('styleManager');
+    const styleManagerTitlebar = document.getElementById('styleManagerTitlebar');
+
+    if (styleManager && styleManagerTitlebar) {
+        makeDraggable(styleManager, styleManagerTitlebar);
+    }
+});
