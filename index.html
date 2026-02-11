@@ -35,7 +35,7 @@
         <div class="menu-item">Run Program...</div>
         <div class="menu-item" onclick="terminal.style.display='block'">Terminal Emulator</div>
         <div class="menu-item" onclick="fm.style.display='block'">File Manager</div>
-        <div class="menu-item" href="https://github.com/victxrlarixs">Web Browser</div>
+        <div class="menu-item" href="https://github.com/Victxrlarixs/debian-cde">Web Browser</div>
         <div class="menu-separator"></div>
 
         <div class="menu-item has-submenu">
@@ -165,31 +165,28 @@
                 <img src="./src/icons/filemanager.png">
             </div>
             <div class="cde-icon">
-                <a href="https://github.com/victxrlarixs" target="_blank" rel="noopener noreferrer">
+                <a href="https://github.com/Victxrlarixs/debian-cde" target="_blank" rel="noopener noreferrer">
                     <img src="./src/icons/konqueror.png">
                 </a>
             </div>
             <div class="cde-icon" onclick="openRetroModal(
                 'Information',
                 `<p>Súmate al proyecto en GitHub:</p>
-                 <p><a href='https://github.com/victxrlarixs' target='_blank'>https://github.com/victxrlarixs</a></p>`,
+                 <p><a href='https://github.com/Victxrlarixs/debian-cde' target='_blank'>https://github.com/Victxrlarixs/debian-cde</a></p>`,
                 [
                     { label: 'Cerrar', closeOnClick: true },
-                    { label: 'Ir a GitHub', onClick: () => window.open('https://github.com/victxrlarixs', '_blank'), closeOnClick: false }
+                    { label: 'Ir a GitHub', onClick: () => window.open('https://github.com/Victxrlarixs/debian-cde', '_blank'), closeOnClick: false }
                 ]
             )">
                 <img src="./src/icons/system-help.png">
             </div>
-            <div class="cde-icon" onclick="document.getElementById('styleManager').style.display='flex'">
-                <img src="./src/icons/org.xfce.settings.appearance.png">
+            <div class="cde-icon" onclick="openStyleManager()">
+                <img src="./src/icons/org.xfce.settings.appearance.png" alt="Style Manager">
             </div>
-
             <div class="cde-icon" id="htopBtn">
                 <img src="./src/icons/org.xfce.taskmanager.png">
             </div>
-            <div class="cde-icon" id="screenshotBtn">
-                <img src="./src/icons/org.xfce.screenshooter.png">
-            </div>
+
         </div>
 
         <div class="cde-sep"></div>
@@ -204,88 +201,132 @@
 
         <div class="cde-exit-btn">Exit</div>
     </div>
-
-    <div class="cde-retro-modal" id="styleManager"
-        style="width: 320px; height: 400px; display: none; top: 80px; left: 80px;">
-        <div class="titlebar">
-            Style Manager
-            <div class="close-btn" id="styleManagerClose">
+    <div class="cde-retro-modal" id="styleManager">
+        <div class="titlebar" id="styleManagerTitlebar">
+            <span class="titlebar-text">Style Manager</span>
+            <div class="close-btn" onclick="styleManager.close()">
                 <img src="./src/icons/tab_close.png">
             </div>
         </div>
+
         <div class="modal-body">
-            <div class="style-section">
-                <label>Topbar Color:</label>
-                <div class="color-picker-container">
-                    <input type="color" id="topbarColor" value="#c6bdb3" data-var="--topbar-color">
-                    <span class="color-value">#c6bdb3</span>
+            <!-- Panel lateral -->
+            <div class="cde-sidepanel">
+                <div class="cde-category active" data-category="colors" onclick="switchStyleTab('colors')">
+                    <div class="cde-category-icon">
+                        <img src="./src/icons/org.xfce.settings.appearance.png" alt="Colors" width="16" height="16">
+                    </div>
+                    <span>Colors</span>
+                </div>
+
+                <div class="cde-category" data-category="fonts" onclick="switchStyleTab('fonts')">
+                    <div class="cde-category-icon">
+                        <img src="./src/icons/font-x-generic.png" alt="Fonts" width="16" height="16">
+                    </div>
+                    <span>Fonts</span>
                 </div>
             </div>
 
-            <div class="style-section">
-                <label>Window Color:</label>
-                <div class="color-picker-container">
-                    <input type="color" id="windowColor" value="#dcd6cc" data-var="--window-color">
-                    <span class="color-value">#dcd6cc</span>
-                </div>
-            </div>
+            <!-- Panel de controles -->
+            <div class="cde-controlpanel">
+                <!-- Panel de colores -->
+                <div class="cde-controlgroup active" id="colors-panel">
+                    <h3 class="cde-subtitle">Color Settings</h3>
+                    <!-- Presets de colores -->
+                    <div class="cde-presets">
+                        <h4>CDE Classic Themes</h4>
+                        <div class="cde-preset-row">
+                            <button class="cde-preset" data-scheme="platinum">Platinum</button>
+                            <button class="cde-preset" data-scheme="olive">Olive</button>
+                            <button class="cde-preset" data-scheme="marine">Marine</button>
+                            <button class="cde-preset" data-scheme="sand">Sand</button>
+                            <button class="cde-preset" data-scheme="graphite">Graphite</button>
+                            <button class="cde-preset" data-scheme="midnight">Midnight</button>
+                            <button class="cde-preset" data-scheme="desert">Desert</button>
+                        </div>
+                    </div>
+                    <div class="cde-controlrow">
+                        <label class="cde-label">Workspace:</label>
+                        <div class="cde-colorselector">
+                            <input type="color" id="color-workspace" value="#a0a0a0" data-var="--cde-workspace">
+                            <div class="cde-colorswatch" style="background-color: #a0a0a0;"></div>
+                            <span class="cde-colorname">Gray</span>
+                        </div>
+                    </div>
 
-            <div class="style-section">
-                <label>Titlebar Color:</label>
-                <div class="color-picker-container">
-                    <input type="color" id="titlebarColor" value="#4a6c7a" data-var="--titlebar-color">
-                    <span class="color-value">#4a6c7a</span>
-                </div>
-            </div>
+                    <div class="cde-controlrow">
+                        <label class="cde-label">Active Title:</label>
+                        <div class="cde-colorselector">
+                            <input type="color" id="color-title-active" value="#000080" data-var="--cde-title-active">
+                            <div class="cde-colorswatch" style="background-color: #000080;"></div>
+                            <span class="cde-colorname">Navy Blue</span>
+                        </div>
+                    </div>
 
-            <div class="style-section">
-                <label>Terminal Background:</label>
-                <div class="color-picker-container">
-                    <input type="color" id="terminalBgColor" value="#070b0d" data-var="--terminal-bg-color">
-                    <span class="color-value">#070b0d</span>
-                </div>
-            </div>
+                    <div class="cde-controlrow">
+                        <label class="cde-label">Background:</label>
+                        <div class="cde-colorselector">
+                            <input type="color" id="color-background" value="#c0c0c0" data-var="--cde-background">
+                            <div class="cde-colorswatch" style="background-color: #c0c0c0;"></div>
+                            <span class="cde-colorname">Light Gray</span>
+                        </div>
+                    </div>
 
-            <div class="style-section">
-                <label>Terminal Text:</label>
-                <div class="color-picker-container">
-                    <input type="color" id="terminalTextColor" value="#c7fbe3" data-var="--terminal-text-color">
-                    <span class="color-value">#c7fbe3</span>
-                </div>
-            </div>
+                    <div class="cde-controlrow">
+                        <label class="cde-label">Highlight:</label>
+                        <div class="cde-colorselector">
+                            <input type="color" id="color-highlight" value="#0000ff" data-var="--cde-highlight">
+                            <div class="cde-colorswatch" style="background-color: #0000ff;"></div>
+                            <span class="cde-colorname">Blue</span>
+                        </div>
+                    </div>
 
-            <div class="style-section">
-                <label>Dock Color:</label>
-                <div class="color-picker-container">
-                    <input type="color" id="dockColor" value="#e6e1d8" data-var="--dock-color">
-                    <span class="color-value">#e6e1d8</span>
-                </div>
-            </div>
+                    <div class="cde-controlrow">
+                        <label class="cde-label">Text Color:</label>
+                        <div class="cde-colorselector">
+                            <input type="color" id="color-text" value="#000000" data-var="--cde-text-color">
+                            <div class="cde-colorswatch" style="background-color: #000000;"></div>
+                            <span class="cde-colorname">Black</span>
+                        </div>
+                    </div>
 
-            <div class="style-section">
-                <label>Menu Color:</label>
-                <div class="color-picker-container">
-                    <input type="color" id="menuColor" value="#bfb6aa" data-var="--menu-color">
-                    <span class="color-value">#bfb6aa</span>
-                </div>
-            </div>
 
-            <div class="style-section">
-                <label>Dock Icon Background:</label>
-                <div class="color-picker-container">
-                    <input type="color" id="dockIconBg" value="#bfb9ad" data-var="--dock-icon-bg">
-                    <span class="color-value">#bfb9ad</span>
                 </div>
-            </div>
 
-            <div class="style-section">
-                <label>Reset all to Default:</label>
-                <button class="reset-btn" id="resetAllBtn">Reset All</button>
+                <!-- Panel de fuentes -->
+                <div class="cde-controlgroup" id="fonts-panel">
+                    <h3 class="cde-subtitle">Font Settings</h3>
+                    <div class="cde-controlrow">
+                        <label class="cde-label">Font Family:</label>
+                        <select class="cde-select" id="font-family">
+                            <option>Fixed [6x13]</option>
+                            <option>Clean [8x13]</option>
+                            <option>Terminus [10x20]</option>
+                            <option>Lucida [12x24]</option>
+                        </select>
+                    </div>
+                    <div class="cde-controlrow">
+                        <label class="cde-label">Font Size:</label>
+                        <input type="range" class="cde-slider" id="font-size" min="8" max="24" value="12">
+                        <span class="cde-slidervalue">12</span>
+                    </div>
+                </div>
+
             </div>
         </div>
-        <div class="modal-actions">
-            <button class="modal-btn" id="saveStylesBtn">Save</button>
-            <button class="modal-btn" id="closeStylesBtn">Close</button>
+
+        <!-- Barra de estado -->
+        <div class="cde-statusbar">
+            <div class="cde-statusleft">CDE Style Manager</div>
+            <div class="cde-statusright" id="style-status">Ready</div>
+        </div>
+
+        <!-- Barra de acción -->
+        <div class="cde-actionbar">
+            <button class="cde-btn cde-btn-default" onclick="styleManager.apply()">Apply</button>
+            <button class="cde-btn" onclick="styleManager.reset()">Reset</button>
+            <button class="cde-btn" onclick="styleManager.save()">Save</button>
+            <button class="cde-btn" onclick="styleManager.close()">Close</button>
         </div>
     </div>
 
@@ -295,7 +336,6 @@
     <script src="./src/js/terminal.js"></script>
     <script src="./src/js/ui.js"></script>
     <script src="./src/js/init.js"></script>
-    <script src="./src/js/screenshot.js"></script>
     <script src="./src/js/stylemanager.js"></script>
 
 </body>

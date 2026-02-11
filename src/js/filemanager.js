@@ -177,7 +177,7 @@ const fmMenus = {
             action: () => {
                 openRetroModal(
                     "Information",
-                    `<p>Debian With CDE - v1.0.0</p>
+                    `<p>Debian With CDE -v1.0.0</p>
                  <p><a href='https://github.com/victxrlarixs' target='_blank'>https://github.com/victxrlarixs</a></p>`,
                     [
                         { label: 'Cerrar', closeOnClick: true },
