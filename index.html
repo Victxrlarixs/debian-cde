@@ -5,19 +5,26 @@
     <meta charset="UTF-8" />
     <meta name="keywords" content="Debian, Linux, CDE, Retro Desktop, Unix" />
     <title>Debian - CDE</title>
-    <link rel="stylesheet" href="./src/cde.css">
+
+    <head>
+        <link rel="stylesheet" href="src/css/core.css">
+        <link rel="stylesheet" href="src/css/components.css">
+        <link rel="stylesheet" href="src/css/app.css">
+        <link rel="stylesheet" href="src/css/utilities.css">
+        <link rel="stylesheet" href="src/css/cde-theme.css">
+    </head>
 </head>
 
 <body>
 
     <div id="topbar">
         <div class="top-left">
-            <button id="cde-menu-btn">Menu</button>
+            <button id="cde-menu-btn"></button>
         </div>
         <div class="top-right">
             <div class="sys-item">
                 <img src="./src/icons/battery-caution.png" class="sys-icon">
-                <span id="sys-battery">6%</span>
+                <span id="sys-battery"></span>
             </div>
             <div class="sys-item">
                 <img src="./src/icons/audio-volume-low.png" class="sys-icon">
@@ -32,29 +39,6 @@
         </div>
     </div>
 
-    <div id="cde-menu" class="hidden">
-        <div class="menu-item">Run Program...</div>
-        <div class="menu-item" onclick="terminal.style.display='block'">Terminal Emulator</div>
-        <div class="menu-item" onclick="fm.style.display='none'">File Manager</div>
-        <div class="menu-item" href="https://github.com/Victxrlarixs/debian-cde">Web Browser</div>
-        <div class="menu-separator"></div>
-
-        <div class="menu-item has-submenu">
-            Applications ▸
-            <div class="submenu">
-                <div class="menu-item">Accessories</div>
-                <div class="menu-item">Development</div>
-                <div class="menu-item">Graphics</div>
-                <div class="menu-item">Internet</div>
-                <div class="menu-item">Multimedia</div>
-                <div class="menu-item">Office</div>
-                <div class="menu-item">System</div>
-            </div>
-        </div>
-
-        <div class="menu-separator"></div>
-        <div class="menu-item">Log Out</div>
-    </div>
 
     <div class="window" id="terminal" style="top:80px; left:40px; width:380px;">
         <div class="titlebar" onmousedown="drag(event, 'terminal')">
@@ -413,7 +397,6 @@
     <script src="./src/js/wm.js"></script>
     <script src="./src/js/filemanager.js"></script>
     <script src="./src/js/terminal.js"></script>
-    <script src="./src/js/ui.js"></script>
     <script src="./src/js/stylemanager.js"></script>
     <script src="./src/js/init.js"></script>
 

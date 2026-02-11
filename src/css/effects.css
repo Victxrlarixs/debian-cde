@@ -1,0 +1,287 @@
+/* ================= EFECTOS ESPECIALES ================= */
+/* Scanlines tipo CRT */
+.window::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(to bottom,
+            rgba(255, 255, 255, 0.02) 0px,
+            rgba(255, 255, 255, 0.02) 1px,
+            transparent 2px,
+            transparent 4px);
+    mix-blend-mode: overlay;
+}
+
+/* Cursor hacker parpadeante */
+#terminalInput::after {
+    content: "";
+    display: inline-block;
+    width: 7px;
+    height: 14px;
+    background: var(--terminal-text-color);
+    margin-left: 2px;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Glitch effect */
+@keyframes glitch {
+    0% {
+        text-shadow: 0 0 4px rgba(0, 255, 136, 0.3);
+    }
+
+    50% {
+        text-shadow: 2px 0 rgba(0, 255, 136, 0.6), -2px 0 rgba(0, 150, 80, 0.4);
+    }
+
+    100% {
+        text-shadow: 0 0 4px rgba(0, 255, 136, 0.3);
+    }
+}
+
+.prompt,
+.terminal-body {
+    animation: glitch 6s infinite;
+}
+
+/* ================= MESSAGE STYLES ================= */
+.cde-message {
+    animation: fadeInOut 2s ease-in-out;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+
+    10% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    90% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+}
+
+/* ================= TIPOGRAFÍA ================= */
+/* Las fuentes ya están aplicadas arriba usando variables CSS */
+
+/* Ajustes de tamaño de fuente */
+body,
+.window,
+#cde-panel,
+.fm-menubar,
+.fm-path,
+.cde-btn {
+    font-size: var(--font-size-base);
+}
+
+.titlebar,
+.cde-subtitle,
+.terminal-body,
+#terminalInput {
+    font-size: var(--font-size-title);
+}
+
+.cde-label,
+.pager-ws,
+.scroll-btn,
+.cde-statusbar,
+.fm-status,
+.menu-item,
+.cde-preset {
+    font-size: var(--font-size-small);
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+    #cde-panel {
+        width: 95%;
+        padding: 4px;
+        gap: 4px;
+    }
+
+    .cde-icons {
+        gap: 4px;
+    }
+
+    .cde-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .cde-icon img {
+        width: 24px;
+        height: 24px;
+    }
+
+    #styleManager {
+        width: 280px;
+        height: 360px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+/* Ajustes responsivos para el topbar */
+@media (max-width: 900px) {
+    .top-right {
+        gap: 8px;
+    }
+
+    .sys-item {
+        padding: 0 2px;
+    }
+
+    .sys-item span:not(#clock) {
+        display: none;
+        /* Ocultar texto, solo mostrar iconos */
+    }
+}
+
+/* Ajustes para el Style Manager en pantallas pequeñas */
+@media (max-width: 650px) {
+    #styleManager {
+        width: 95vw;
+        height: 85vh;
+        left: 2.5vw;
+        top: 2.5vh;
+        transform: none;
+    }
+
+    .cde-sidepanel {
+        width: 120px;
+    }
+
+    .cde-controlpanel {
+        padding: 10px;
+    }
+
+    .cde-controlrow {
+        flex-wrap: wrap;
+    }
+
+    .cde-label {
+        width: 100%;
+        margin-bottom: 4px;
+    }
+
+    .cde-select,
+    .cde-slider {
+        max-width: 100%;
+    }
+
+    .cde-font-preview {
+        max-width: 100%;
+    }
+}
+
+/* ================= PRESETS DE FUENTES ================= */
+.cde-font-presets {
+    margin-top: 10px;
+    padding: 12px;
+    background: var(--button-active);
+    border: 1px solid var(--separator-color);
+}
+
+.cde-font-presets h4 {
+    margin-bottom: 8px;
+    font-size: var(--font-size-small);
+    font-family: var(--font-family-base);
+    color: var(--titlebar-color);
+    text-transform: uppercase;
+}
+
+.cde-font-preset-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.cde-font-preset {
+    padding: 4px 6px;
+    background: var(--button-bg);
+    font-size: 9px;
+    font-family: var(--font-family-base);
+    cursor: pointer;
+    flex: 1;
+    min-width: 80px;
+    max-width: 100px;
+    border: 1px solid;
+    border-top-color: var(--border-light);
+    border-left-color: var(--border-light);
+    border-right-color: var(--border-dark);
+    border-bottom-color: var(--border-dark);
+    text-align: center;
+}
+
+.cde-font-preset:hover {
+    background: var(--button-active);
+}
+
+.cde-font-preset:active {
+    border: 1px solid;
+    border-top-color: var(--border-dark);
+    border-left-color: var(--border-dark);
+    border-right-color: var(--border-light);
+    border-bottom-color: var(--border-light);
+}
+
+/* Botón de salida con icono */
+.cde-exit-btn {
+    padding: 4px 10px;
+    background: var(--button-bg);
+    font-size: var(--font-size-base);
+    cursor: pointer;
+    border: 2px solid;
+    border-top-color: var(--border-light);
+    border-left-color: var(--border-light);
+    border-right-color: var(--border-dark);
+    border-bottom-color: var(--border-dark);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.exit-icon {
+    width: 16px;
+    height: 16px;
+    image-rendering: pixelated;
+}
+
+/* Mejoras de accesibilidad */
+button:focus,
+input:focus {
+    outline: 2px solid var(--titlebar-color);
+    outline-offset: 2px;
+}
+
+/* Animaciones suaves para cambios de color */
+* {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* Para cambios de fuente, transiciones separadas */
+.cde-font-preview * {
+    transition: font-family 0.2s ease, font-size 0.2s ease, line-height 0.2s ease;
+}
+
+/* Deshabilitar transiciones durante cambios masivos para mejor rendimiento */
+body.fonts-changing * {
+    transition: none !important;
+}
