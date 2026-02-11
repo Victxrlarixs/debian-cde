@@ -108,32 +108,15 @@
         </div>
     </div>
     <div id="cde-panel">
+        <!-- Botón menú (siempre a la izquierda) -->
         <div class="cde-menu-btn">
             <img src="./src/images/debian.png" alt="Menu">
         </div>
         <div class="cde-sep"></div>
 
-        <!-- Pager 2x2 -->
-        <div class="cde-pager">
-            <div class="pager-workspace active">One</div>
-            <div class="pager-workspace">Two</div>
-            <div class="pager-workspace">Three</div>
-            <div class="pager-workspace">Four</div>
-        </div>
-
-        <div class="cde-sep"></div>
-
-        <!-- Scroll Buttons -->
-        <div class="cde-scroll">
-            <div class="scroll-btn">▲</div>
-            <div class="scroll-btn">▼</div>
-        </div>
-
-        <div class="cde-sep"></div>
-
-        <!-- BLOQUE DE ICONOS CON DOBLE FILA -->
+        <!-- BLOQUE DE ICONOS (APP LAUNCHERS) - AHORA A LA IZQUIERDA DEL PAGER -->
         <div class="cde-icon-block">
-            <!-- FILA SUPERIOR: botones decorativos + dropdown -->
+            <!-- Fila superior: botones decorativos + dropdown -->
             <div class="cde-icon-buttons">
                 <div class="cde-icon-btn"></div>
                 <div class="cde-icon-btn"></div>
@@ -141,8 +124,7 @@
                 <div class="cde-icon-btn"></div>
                 <div class="cde-icon-btn dropdown-btn" id="utilitiesBtn">▲</div>
             </div>
-
-            <!-- FILA INFERIOR: iconos -->
+            <!-- Fila inferior: iconos de aplicaciones -->
             <div class="cde-icons">
                 <div class="cde-icon" onclick="terminal.style.display='block'">
                     <img src="./src/icons/konsole.png" alt="Terminal">
@@ -163,7 +145,7 @@
                 </div>
             </div>
         </div>
-
+        <!-- Dropdown asociado al botón Utilities (se mantiene fuera del bloque, pero su posición absoluta no afecta el flujo) -->
         <div class="dropdown-menu" id="utilitiesDropdown">
             <div class="menu-item" onclick="terminal.style.display='block'">
                 <img src="./src/icons/konsole.png" alt=""> Terminal
@@ -172,17 +154,30 @@
 
         <div class="cde-sep"></div>
 
+        <!-- PAGER 2x2 - AHORA EN EL CENTRO -->
+        <div class="cde-pager">
+            <div class="pager-workspace active">One</div>
+            <div class="pager-workspace">Two</div>
+            <div class="pager-workspace">Three</div>
+            <div class="pager-workspace">Four</div>
+        </div>
 
+        <!-- BOTONES DE SCROLL (se mantienen junto al pager) -->
+        <div class="cde-scroll">
+            <div class="scroll-btn">▲</div>
+            <div class="scroll-btn">▼</div>
+        </div>
+
+        <div class="cde-sep"></div>
+
+        <!-- BANDEJA DEL SISTEMA (TRAY ICONS) - AHORA A LA DERECHA DEL PAGER -->
         <div class="cde-icons">
             <div class="tray-icon">
                 <img src="./src/icons/gtkclocksetup.png" alt="Reloj">
             </div>
-            <div class="tray-icon">
-            </div>
-            <div class="tray-icon">
-            </div>
-            <div class="tray-icon">
-            </div>
+            <div class="tray-icon"></div>
+            <div class="tray-icon"></div>
+            <div class="tray-icon"></div>
         </div>
     </div>
 
@@ -396,6 +391,7 @@
             <button class="cde-btn" onclick="styleManager.close()">Close</button>
         </div>
     </div>
+
     <script src="./src/js/init.js"></script>
     <script src="./src/js/wm.js"></script>
     <script src="./src/js/filemanager.js"></script>
