@@ -44,3 +44,44 @@ function stopDrag() {
     document.removeEventListener("mousemove", move);
     document.removeEventListener("mouseup", stopDrag);
 }
+
+
+/* ================= CLOCK ================= */
+
+function updateClock() {
+    const now = new Date();
+    const h = now.getHours().toString().padStart(2, "0");
+    const m = now.getMinutes().toString().padStart(2, "0");
+    document.getElementById("clock").textContent = `${h}:${m}`;
+}
+
+setInterval(updateClock, 1000);
+updateClock();
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const dropdownBtn = document.getElementById('utilitiesBtn');
+    const dropdownMenu = document.getElementById('utilitiesDropdown');
+
+    if (dropdownBtn && dropdownMenu) {
+        dropdownBtn.appendChild(dropdownMenu);
+        dropdownBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            this.classList.toggle('open');
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!dropdownBtn.contains(e.target)) {
+                dropdownBtn.classList.remove('open');
+            }
+        });
+
+        dropdownMenu.addEventListener('click', function (e) {
+            e.stopPropagation();
+        });
+    }
+});
+
+function openCalculator() {
+    alert('Calculadora CDE - En desarrollo');
+}

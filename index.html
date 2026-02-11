@@ -4,57 +4,33 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="keywords" content="Debian, Linux, CDE, Retro Desktop, Unix" />
-    <title>Debian - CDE</title>
-    <link rel="stylesheet" href="./src/cde.css">
+    <title>Debian</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./src/icons/favicon.ico">
+
+    <head>
+        <link rel="stylesheet" href="src/css/core.css">
+        <link rel="stylesheet" href="src/css/components.css">
+        <link rel="stylesheet" href="src/css/app.css">
+        <link rel="stylesheet" href="src/css/utilities.css">
+        <link rel="stylesheet" href="src/css/cde-theme.css">
+    </head>
 </head>
 
 <body>
 
     <div id="topbar">
         <div class="top-left">
-            <button id="cde-menu-btn">Menu</button>
         </div>
         <div class="top-right">
-            <div class="sys-item">
-                <img src="./src/icons/battery-caution.png" class="sys-icon">
-                <span id="sys-battery">6%</span>
-            </div>
             <div class="sys-item">
                 <img src="./src/icons/audio-volume-low.png" class="sys-icon">
             </div>
             <div class="sys-item">
-                <img src="./src/icons/preferences-system-network.png" class="sys-icon">
-            </div>
-            <div class="sys-item">
-                <img src="./src/icons/gtkclocksetup.png" class="sys-icon">
                 <span id="clock"></span>
             </div>
         </div>
     </div>
 
-    <div id="cde-menu" class="hidden">
-        <div class="menu-item">Run Program...</div>
-        <div class="menu-item" onclick="terminal.style.display='block'">Terminal Emulator</div>
-        <div class="menu-item" onclick="fm.style.display='none'">File Manager</div>
-        <div class="menu-item" href="https://github.com/Victxrlarixs/debian-cde">Web Browser</div>
-        <div class="menu-separator"></div>
-
-        <div class="menu-item has-submenu">
-            Applications ▸
-            <div class="submenu">
-                <div class="menu-item">Accessories</div>
-                <div class="menu-item">Development</div>
-                <div class="menu-item">Graphics</div>
-                <div class="menu-item">Internet</div>
-                <div class="menu-item">Multimedia</div>
-                <div class="menu-item">Office</div>
-                <div class="menu-item">System</div>
-            </div>
-        </div>
-
-        <div class="menu-separator"></div>
-        <div class="menu-item">Log Out</div>
-    </div>
 
     <div class="window" id="terminal" style="top:80px; left:40px; width:380px;">
         <div class="titlebar" onmousedown="drag(event, 'terminal')">
@@ -67,10 +43,11 @@
 
     </div>
 
-    <div class="window" id="fm" style="top:100px; left:460px; width:420px; height:320px;">
+
+    <div class="window" id="fm" style="top:100px; left:460px; width:420px; height:320px; display:none;">
         <div class="titlebar" onmousedown="drag(event, 'fm')">
             victxrlarixs
-            <div class="close-btn" onclick="fm.style.display='none'">
+            <div class="close-btn" onclick="closeFileManager()">
                 <img src="./src/icons/tab_close.png">
             </div>
         </div>
@@ -130,24 +107,62 @@
             <div class="fm-status" id="fmStatus"></div>
         </div>
     </div>
-
     <div id="cde-panel">
-        <div class="cde-menu-btn">Menu</div>
+        <!-- Botón menú (siempre a la izquierda) -->
+        <div class="cde-menu-btn">
+            <img src="./src/images/debian.png" alt="Menu">
+        </div>
         <div class="cde-sep"></div>
 
-        <div class="cde-pager">
-            <div class="pager-arrow">◀</div>
-            <div class="pager-workspaces">
-                <div class="pager-ws active">One</div>
-                <div class="pager-ws">Two</div>
-                <div class="pager-ws">Three</div>
-                <div class="pager-ws">Four</div>
+        <!-- BLOQUE DE ICONOS (APP LAUNCHERS) - AHORA A LA IZQUIERDA DEL PAGER -->
+        <div class="cde-icon-block">
+            <!-- Fila superior: botones decorativos + dropdown -->
+            <div class="cde-icon-buttons">
+                <div class="cde-icon-btn"></div>
+                <div class="cde-icon-btn"></div>
+                <div class="cde-icon-btn"></div>
+                <div class="cde-icon-btn"></div>
+                <div class="cde-icon-btn dropdown-btn" id="utilitiesBtn">▲</div>
             </div>
-            <div class="pager-arrow">▶</div>
+            <!-- Fila inferior: iconos de aplicaciones -->
+            <div class="cde-icons">
+                <div class="cde-icon" onclick="terminal.style.display='block'">
+                    <img src="./src/icons/konsole.png" alt="Terminal">
+                </div>
+                <div class="cde-icon" onclick="toggleFileManager()">
+                    <img src="./src/icons/filemanager.png" alt="File Manager">
+                </div>
+                <div class="cde-icon">
+                    <a href="https://github.com/Victxrlarixs/debian-cde" target="_blank">
+                        <img src="./src/icons/konqueror.png" alt="Browser">
+                    </a>
+                </div>
+                <div class="cde-icon" onclick="openStyleManager()">
+                    <img src="./src/icons/org.xfce.settings.appearance.png" alt="Style Manager">
+                </div>
+                <div class="cde-icon" id="utilitiesIcon">
+                    <img src="./src/icons/system-help.png" alt="Utilities">
+                </div>
+            </div>
+        </div>
+        <!-- Dropdown asociado al botón Utilities (se mantiene fuera del bloque, pero su posición absoluta no afecta el flujo) -->
+        <div class="dropdown-menu" id="utilitiesDropdown">
+            <div class="menu-item" onclick="terminal.style.display='block'">
+                <img src="./src/icons/konsole.png" alt=""> Terminal
+            </div>
         </div>
 
         <div class="cde-sep"></div>
 
+        <!-- PAGER 2x2 - AHORA EN EL CENTRO -->
+        <div class="cde-pager">
+            <div class="pager-workspace active">One</div>
+            <div class="pager-workspace">Two</div>
+            <div class="pager-workspace">Three</div>
+            <div class="pager-workspace">Four</div>
+        </div>
+
+        <!-- BOTONES DE SCROLL (se mantienen junto al pager) -->
         <div class="cde-scroll">
             <div class="scroll-btn">▲</div>
             <div class="scroll-btn">▼</div>
@@ -155,48 +170,17 @@
 
         <div class="cde-sep"></div>
 
+        <!-- BANDEJA DEL SISTEMA (TRAY ICONS) - AHORA A LA DERECHA DEL PAGER -->
         <div class="cde-icons">
-            <div class="cde-icon active" onclick="terminal.style.display='block'">
-                <img src="./src/icons/konsole.png">
+            <div class="tray-icon">
+                <img src="./src/icons/gtkclocksetup.png" alt="Reloj">
             </div>
-            <div class="cde-icon active" onclick="fm.style.display='none'">
-                <img src="./src/icons/filemanager.png">
-            </div>
-            <div class="cde-icon">
-                <a href="https://github.com/Victxrlarixs/debian-cde" target="_blank" rel="noopener noreferrer">
-                    <img src="./src/icons/konqueror.png">
-                </a>
-            </div>
-            <div class="cde-icon" onclick="openRetroModal(
-                'Information',
-                `<p>Súmate al proyecto en GitHub:</p>
-                 <p><a href='https://github.com/Victxrlarixs/debian-cde' target='_blank'>https://github.com/Victxrlarixs/debian-cde</a></p>`,
-                [
-                    { label: 'Cerrar', closeOnClick: true },
-                    { label: 'Ir a GitHub', onClick: () => window.open('https://github.com/Victxrlarixs/debian-cde', '_blank'), closeOnClick: false }
-                ]
-            )">
-                <img src="./src/icons/system-help.png">
-            </div>
-            <div class="cde-icon" onclick="openStyleManager()">
-                <img src="./src/icons/org.xfce.settings.appearance.png" alt="Style Manager">
-            </div>
-
+            <div class="tray-icon"></div>
+            <div class="tray-icon"></div>
+            <div class="tray-icon"></div>
         </div>
+    </div>
 
-        <div class="cde-sep"></div>
-
-        <div class="cde-tray">
-            <div class="tray-box"></div>
-            <div class="tray-box"></div>
-            <div class="tray-box"></div>
-        </div>
-
-        <div class="cde-sep"></div>
-
-        <div class="cde-exit-btn">
-            <img src="./src/icons/application-exit.png" alt="Exit" class="exit-icon">
-        </div>
     </div>
     <div class="cde-retro-modal" id="styleManager">
         <div class="titlebar" id="styleManagerTitlebar">
@@ -294,14 +278,13 @@
                 <div class="cde-controlgroup" id="fonts-panel">
                     <h3 class="cde-subtitle">Font Settings</h3>
 
-                    <!-- Presets de fuentes -->
                     <div class="cde-font-presets">
-                        <h4>Font Presets</h4>
-                        <div class="cde-font-preset-row">
-                            <button class="cde-font-preset" data-preset="classic-cde">Classic CDE</button>
-                            <button class="cde-font-preset" data-preset="modern">Modern</button>
-                            <button class="cde-font-preset" data-preset="retro">Retro</button>
-                            <button class="cde-font-preset" data-preset="terminal">Terminal</button>
+                        <h4>Font Theme</h4>
+                        <div class="cde-preset-row">
+                            <button class="cde-preset" data-preset="classic-cde">Classic CDE</button>
+                            <button class="cde-preset" data-preset="modern">Modern</button>
+                            <button class="cde-preset" data-preset="retro">Retro</button>
+                            <button class="cde-preset" data-preset="terminal">Terminal</button>
                         </div>
                     </div>
 
@@ -409,13 +392,11 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="./src/js/init.js"></script>
     <script src="./src/js/wm.js"></script>
     <script src="./src/js/filemanager.js"></script>
     <script src="./src/js/terminal.js"></script>
-    <script src="./src/js/ui.js"></script>
     <script src="./src/js/stylemanager.js"></script>
-    <script src="./src/js/init.js"></script>
 
 </body>
 

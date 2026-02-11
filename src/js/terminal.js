@@ -1,6 +1,4 @@
 const terminalBody = document.getElementById("terminalBody");
-// Verificar si terminalInput existe antes de intentar ocultarlo
-let terminalInput = document.getElementById("terminalInput");
 
 currentPath = "/home/victxrlarixs";
 let tutorialActive = true;
@@ -8,12 +6,6 @@ let sequenceIndex = 0;
 let stepIndex = 0;
 let typingActive = true;
 
-// Ocultar el input del usuario solo si existe
-if (terminalInput) {
-    terminalInput.style.display = "none";
-} else {
-    console.log("⚠️ terminalInput no encontrado - continuando sin input de usuario");
-}
 
 // Imprime líneas con o sin clase
 function print(text = "", className = "") {
@@ -388,106 +380,6 @@ if (!terminalBody) {
 
     // Iniciar el tutorial automático
     startInfiniteTutorial();
-
-    // También ejecutar htop automáticamente cada cierto tiempo
-    setInterval(() => {
-        if (tutorialActive && Math.random() > 0.7) { // 30% de probabilidad
-            print("\n💻 Abriendo monitor de procesos htop...\n", "info");
-            openHtopTerminal("htop - Monitor del Sistema");
-        }
-    }, 30000);
-}
-
-// Función para abrir htop
-function openHtopTerminal(title = "htop") {
-    const win = document.createElement("div");
-    win.classList.add("window");
-    win.style.top = "150px";
-    win.style.left = "600px";
-    win.style.width = "500px";
-    win.style.height = "350px";
-    win.style.zIndex = 10000;
-    win.style.backgroundColor = "#000";
-
-    const titlebar = document.createElement("div");
-    titlebar.classList.add("titlebar");
-    titlebar.textContent = title;
-
-    const closeBtn = document.createElement("div");
-    closeBtn.classList.add("close-btn");
-    closeBtn.innerHTML = `<img src="./src/icons/tab_close.png">`;
-    closeBtn.onclick = () => {
-        if (updateInterval) clearInterval(updateInterval);
-        if (win.parentNode) win.remove();
-    };
-    titlebar.appendChild(closeBtn);
-
-    win.appendChild(titlebar);
-
-    const canvas = document.createElement("canvas");
-    canvas.width = 500;
-    canvas.height = 320;
-    win.appendChild(canvas);
-    const ctx = canvas.getContext("2d");
-    ctx.font = "11px 'DejaVu Sans Mono', monospace";
-    ctx.textBaseline = "top";
-    ctx.fillStyle = "#3b8f9b";
-
-    const maxProcesses = 15;
-    const processes = [];
-
-    function randomProcess(pid) {
-        return {
-            pid,
-            user: ["root", "victxrlarixs", "daemon"][Math.floor(Math.random() * 3)],
-            cpu: Math.floor(Math.random() * 100),
-            mem: Math.floor(Math.random() * 100),
-            command: ["bash", "mysqld", "node", "python", "htop", "nginx", "emacs", "redis", "apache2", "mysql", "php-fpm", "docker"][Math.floor(Math.random() * 12)]
-        };
-    }
-
-    for (let i = 0; i < maxProcesses; i++) {
-        processes.push(randomProcess(1000 + i));
-    }
-
-    function drawHtop() {
-        ctx.fillStyle = "#000";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        ctx.fillStyle = "#3b8f9b";
-        ctx.fillText("PID   USER        CPU%   MEM%   COMMAND", 10, 0);
-
-        processes.forEach((p, i) => {
-            const y = 20 + i * 20;
-            ctx.fillText(
-                `${p.pid.toString().padEnd(5)} ${p.user.padEnd(10)} ${p.cpu.toString().padEnd(6)} ${p.mem.toString().padEnd(6)} ${p.command}`,
-                10,
-                y
-            );
-        });
-    }
-
-    drawHtop();
-
-    const updateInterval = setInterval(() => {
-        processes.forEach(p => {
-            p.cpu = Math.max(0, Math.min(100, p.cpu + Math.floor(Math.random() * 5 - 2)));
-            p.mem = Math.max(0, Math.min(100, p.mem + Math.floor(Math.random() * 5 - 2)));
-        });
-
-        processes.sort((a, b) => b.cpu - a.cpu);
-        drawHtop();
-    }, 500);
-
-    document.body.appendChild(win);
-
-    // Cerrar automáticamente después de 10 segundos
-    setTimeout(() => {
-        if (win.parentNode) {
-            clearInterval(updateInterval);
-            win.remove();
-        }
-    }, 10000);
 }
 
 console.log("✅ Terminal tutorial infinito cargado (modo automático)");
