@@ -1,0 +1,1561 @@
+/* ================= VARIABLES CSS ================= */
+:root {
+    --topbar-color: #c6bdb3;
+    --window-color: #dcd6cc;
+    --titlebar-color: #4a6c7a;
+    --terminal-bg-color: #070b0d;
+    --terminal-text-color: #c7fbe3;
+    --dock-color: #e6e1d8;
+    --menu-color: #bfb6aa;
+    --dock-icon-bg: #bfb9ad;
+    --dock-icon-hover: #e0dad0;
+    --dock-icon-active: #d8d1c6;
+    --button-bg: #bfb6aa;
+    --button-active: #d6cec4;
+    --separator-color: #8f877d;
+    --modal-bg: #dcd6cc;
+    --scrollbar-color: #00ff88;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    font-family: monospace;
+    background-image: url("../src/images/motif.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    overflow: hidden;
+}
+
+/* Topbar */
+#topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 28px;
+    background: var(--topbar-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    box-shadow: inset 0 1px #fff;
+    font-size: 12px;
+    border-bottom: 2px solid #8a837a;
+    z-index: 9998;
+}
+
+/* ================= DOCK ================= */
+#dock {
+    position: fixed;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(var(--dock-color), #cfc8bd);
+    padding: 6px 10px;
+    border: 2px outset #eee;
+    box-shadow: inset 0 1px #fff, 3px 3px 0 #777;
+    z-index: 9999;
+}
+
+/* Separadores estilo CDE */
+.dock-separator {
+    width: 2px;
+    height: 32px;
+    background: var(--separator-color);
+    box-shadow: inset 1px 0 #fff;
+}
+
+/* Item del dock */
+.dock-item {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    background: var(--dock-icon-bg);
+    border: 2px outset #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.12s ease, background 0.15s;
+}
+
+.dock-item img {
+    width: 32px;
+    height: 32px;
+    pointer-events: none;
+}
+
+/* Hover retro */
+.dock-item:hover {
+    background: var(--dock-icon-hover);
+    transform: translateY(-2px);
+}
+
+/* Click estilo botón real */
+.dock-item:active {
+    border: 2px inset #eee;
+    transform: translateY(1px);
+}
+
+/* Ventana activa */
+.dock-item.active {
+    background: var(--dock-icon-active);
+    box-shadow: inset 0 0 0 2px #9c948a;
+}
+
+/* Tooltip estilo Unix */
+.dock-tooltip {
+    position: absolute;
+    bottom: 52px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2f2f2f;
+    color: #00ff88;
+    font-size: 11px;
+    padding: 3px 6px;
+    border: 1px solid #555;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+}
+
+.dock-item:hover .dock-tooltip {
+    opacity: 1;
+}
+
+/* ================= CDE PANEL (REAL MOTIF STYLE) ================= */
+#cde-panel {
+    position: fixed;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(var(--dock-color), #cfc8bd);
+    padding: 6px 8px;
+    border: 2px outset #eee;
+    box-shadow: inset 0 1px #fff, 4px 4px 0 #666;
+    font-family: monospace;
+    font-size: 12px;
+    z-index: 9999;
+}
+
+/* ====== MOTIF SEPARATOR ====== */
+.cde-sep {
+    width: 2px;
+    height: 40px;
+    background: var(--separator-color);
+    box-shadow: inset 1px 0 #fff;
+}
+
+/* ====== MENU BUTTON ====== */
+.cde-menu-btn,
+.cde-exit-btn {
+    padding: 4px 10px;
+    background: var(--button-bg);
+    border: 2px outset #eee;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.cde-menu-btn:active,
+.cde-exit-btn:active {
+    border: 2px inset #eee;
+    background: var(--button-active);
+}
+
+/* ====== WORKSPACE PAGER ====== */
+.cde-pager {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    background: var(--dock-icon-bg);
+    padding: 2px 4px;
+    border: 2px inset #aaa;
+}
+
+.pager-arrow {
+    width: 18px;
+    height: 18px;
+    background: var(--button-active);
+    border: 2px outset #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 11px;
+}
+
+.pager-arrow:active {
+    border: 2px inset #eee;
+}
+
+.pager-workspaces {
+    display: flex;
+    gap: 2px;
+}
+
+.pager-ws {
+    padding: 2px 6px;
+    background: var(--button-active);
+    border: 2px outset #eee;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.pager-ws.active {
+    background: var(--titlebar-color);
+    color: white;
+    border: 2px inset #eee;
+}
+
+/* ====== SCROLL BUTTONS ====== */
+.cde-scroll {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.scroll-btn {
+    width: 20px;
+    height: 16px;
+    background: var(--button-active);
+    border: 2px outset #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+.scroll-btn:active {
+    border: 2px inset #eee;
+}
+
+/* ====== ICON AREA ====== */
+.cde-icons {
+    display: flex;
+    gap: 6px;
+}
+
+.cde-icon {
+    width: 44px;
+    height: 44px;
+    background: var(--dock-icon-bg);
+    border: 2px outset #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.cde-icon img {
+    width: 32px;
+    height: 32px;
+    pointer-events: none;
+}
+
+/* Hover effect like CDE */
+.cde-icon:hover {
+    background: var(--dock-icon-hover);
+}
+
+/* Active (pressed) */
+.cde-icon:active {
+    border: 2px inset #eee;
+}
+
+/* Highlight running apps */
+.cde-icon.active {
+    background: var(--dock-icon-active);
+    box-shadow: inset 0 0 0 2px #9c948a;
+}
+
+/* Empty slots */
+.cde-icon.empty {
+    background: #c8c2b8;
+    border: 2px inset #aaa;
+}
+
+/* ====== TRAY ====== */
+.cde-tray {
+    display: flex;
+    gap: 4px;
+}
+
+.tray-box {
+    width: 18px;
+    height: 18px;
+    background: var(--dock-icon-bg);
+    border: 2px inset #aaa;
+}
+
+/* ================= WINDOWS ================= */
+.window {
+    position: absolute;
+    background: var(--window-color);
+    border: 2px solid #444;
+    box-shadow: 4px 4px 0 #555;
+    z-index: 1000;
+}
+
+.titlebar {
+    background: linear-gradient(var(--titlebar-color), #2f7680);
+    color: white;
+    padding: 4px 8px;
+    cursor: move;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Terminal realista Debian */
+.terminal-body {
+    background: radial-gradient(circle at center, var(--terminal-bg-color) 0%, #020304 70%);
+    color: var(--terminal-text-color);
+    font-family: "DejaVu Sans Mono", Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.45;
+    padding: 10px;
+    height: 240px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    text-shadow: 0 0 4px rgba(0, 255, 136, 0.25);
+}
+
+/* Línea de input integrada */
+.terminal-line {
+    display: flex;
+    align-items: center;
+    background: black;
+    color: var(--terminal-text-color);
+    font-family: "DejaVu Sans Mono", Consolas, monospace;
+    font-size: 13px;
+    padding: 0 10px 10px 10px;
+}
+
+/* Prompt hacker */
+.prompt {
+    color: var(--terminal-text-color);
+    margin-right: 4px;
+    text-shadow: 0 0 6px rgba(0, 255, 136, 0.6);
+}
+
+/* Input real */
+#terminalInput {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--terminal-text-color);
+    font-family: inherit;
+    font-size: inherit;
+    outline: none;
+    caret-color: var(--terminal-text-color);
+    text-shadow: 0 0 6px rgba(0, 255, 136, 0.6);
+}
+
+/* Tip estilo hacker */
+.tip {
+    color: #6bdcff;
+}
+
+/* Comandos */
+.command {
+    color: #ffffff;
+}
+
+/* Scrollbar hacker */
+.terminal-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.terminal-body::-webkit-scrollbar-thumb {
+    background: linear-gradient(var(--scrollbar-color), #00995a);
+}
+
+/* =========================
+   EFECTO HACKER MOVIE
+========================= */
+/* Glow general */
+.window::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    box-shadow: inset 0 0 60px rgba(0, 255, 136, 0.05);
+}
+
+/* Scanlines tipo CRT */
+.window::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(to bottom,
+            rgba(255, 255, 255, 0.02) 0px,
+            rgba(255, 255, 255, 0.02) 1px,
+            transparent 2px,
+            transparent 4px);
+    mix-blend-mode: overlay;
+}
+
+/* Cursor hacker parpadeante */
+#terminalInput::after {
+    content: "";
+    display: inline-block;
+    width: 7px;
+    height: 14px;
+    background: var(--terminal-text-color);
+    margin-left: 2px;
+    animation: blink 1s infinite;
+    box-shadow: 0 0 8px rgba(0, 255, 136, 0.8);
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Animación glitch leve */
+@keyframes glitch {
+    0% {
+        text-shadow: 0 0 4px rgba(0, 255, 136, 0.3);
+    }
+
+    50% {
+        text-shadow: 2px 0 rgba(0, 255, 136, 0.6), -2px 0 rgba(0, 150, 80, 0.4);
+    }
+
+    100% {
+        text-shadow: 0 0 4px rgba(0, 255, 136, 0.3);
+    }
+}
+
+.prompt,
+.terminal-body {
+    animation: glitch 6s infinite;
+}
+
+/* ================= FILE MANAGER ================= */
+#fm {
+    display: flex;
+    flex-direction: column;
+}
+
+.fm-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #cfc8bd;
+    overflow: hidden;
+}
+
+/* Menu bar */
+.fm-menubar {
+    background: var(--button-bg);
+    padding: 2px 6px;
+    font-size: 12px;
+    display: flex;
+    gap: 12px;
+    border-bottom: 2px solid #9a9288;
+}
+
+/* Toolbar */
+.fm-toolbar {
+    background: #b9b1a6;
+    padding: 4px;
+    display: flex;
+    gap: 4px;
+    border-bottom: 2px solid #8f877d;
+}
+
+.fm-btn {
+    width: 24px;
+    height: 22px;
+    background: var(--button-active);
+    border: 2px outset #eee;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.fm-btn img {
+    width: 16px;
+    height: 16px;
+    image-rendering: pixelated;
+}
+
+.fm-btn:active {
+    border: 2px inset #eee;
+}
+
+.fm-path {
+    flex: 1;
+    height: 22px;
+    font-size: 12px;
+    background: #f0ebe3;
+    border: 2px inset #aaa;
+    padding: 2px 6px;
+}
+
+/* Body layout */
+.fm-body {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+/* Sidebar */
+.fm-sidebar {
+    width: 150px;
+    background: #b4ada3;
+    border-right: 2px solid #8f877d;
+    padding: 6px;
+    font-size: 12px;
+    overflow-y: auto;
+}
+
+.fm-section {
+    font-weight: bold;
+    margin-top: 6px;
+}
+
+.fm-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 4px;
+    cursor: pointer;
+}
+
+.fm-item img.fm-icon {
+    width: 16px;
+    height: 16px;
+    image-rendering: pixelated;
+}
+
+.fm-item:hover {
+    background: var(--button-active);
+}
+
+/* Files grid */
+.fm-files {
+    flex: 1;
+    background: #7a808a;
+    padding: 12px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 90px);
+    gap: 16px;
+    overflow-y: auto;
+}
+
+.fm-file {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 12px;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+}
+
+.fm-file img {
+    width: 40px;
+    height: 40px;
+}
+
+.fm-file.selected {
+    background: rgba(0, 80, 160, 0.2);
+    outline: 1px solid #0044aa;
+}
+
+.fm-status {
+    background: var(--button-bg);
+    font-size: 11px;
+    padding: 2px 6px;
+    border-top: 2px solid #8f877d;
+}
+
+/* ================= CDE TOP PANEL ================= */
+.top-left,
+.top-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#cde-menu-btn {
+    background: #b0a89f;
+    border: 2px outset #eee;
+    padding: 2px 10px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+#cde-menu-btn:active {
+    border: 2px inset #eee;
+}
+
+.workspace {
+    font-size: 11px;
+    color: #333;
+}
+
+.top-center {
+    font-weight: bold;
+    color: #333;
+    font-size: 12px;
+}
+
+.sys-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 4px;
+    background: #b0a89f;
+    border: 2px outset #eee;
+}
+
+.sys-icon {
+    width: 20px;
+    height: 20px;
+    image-rendering: pixelated;
+}
+
+/* ================= CDE MENU ================= */
+#cde-menu {
+    position: fixed;
+    top: 26px;
+    left: 4px;
+    width: 220px;
+    background: var(--menu-color);
+    border: 2px outset #eee;
+    font-size: 12px;
+    z-index: 9999;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.menu-item {
+    padding: 4px 10px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.menu-item:hover {
+    background: var(--titlebar-color);
+    color: white;
+}
+
+.menu-separator {
+    height: 1px;
+    background: #8a837a;
+    margin: 4px 0;
+}
+
+/* Submenu estilo CDE */
+.has-submenu {
+    position: relative;
+}
+
+.submenu {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 200px;
+    background: var(--menu-color);
+    border: 2px outset #eee;
+}
+
+.has-submenu:hover .submenu {
+    display: block;
+}
+
+/* Dropdowns y context menus */
+.fm-dropdown,
+.fm-contextmenu {
+    background: var(--menu-color);
+    border: 2px outset #eee;
+    font-size: 12px;
+    min-width: 160px;
+    position: absolute;
+    z-index: 9999;
+}
+
+.fm-dropdown-item,
+.fm-context-item {
+    padding: 4px 10px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.fm-dropdown-item:hover,
+.fm-context-item:hover {
+    background: var(--titlebar-color);
+    color: white;
+}
+
+/* ================= STYLE MANAGER ================= */
+#styleManager {
+    width: 320px;
+    height: 400px;
+    display: none;
+    position: absolute;
+    top: 80px;
+    left: 80px;
+    background: var(--modal-bg);
+    border: 2px solid #444;
+    box-shadow: 4px 4px 0 #555;
+    font-family: monospace;
+    font-size: 12px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+}
+
+#styleManager .titlebar {
+    background: linear-gradient(var(--titlebar-color), #3a5663);
+    color: white;
+    padding: 4px 8px;
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: move;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#styleManager .close-btn {
+    width: 18px;
+    height: 18px;
+    background: var(--button-active);
+    border: 2px outset #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+}
+
+#styleManager .close-btn img {
+    width: 12px;
+    height: 12px;
+    image-rendering: pixelated;
+}
+
+#styleManager .close-btn:active {
+    border: 2px inset #eee;
+}
+
+#styleManager .close-btn:hover {
+    background: #e0dad0;
+}
+
+#styleManager .modal-body {
+    padding: 10px;
+    flex: 1;
+    background: var(--modal-bg);
+    overflow-y: auto;
+    max-height: 300px;
+}
+
+/* Estilos específicos del Style Manager */
+.style-section {
+    margin-bottom: 12px;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+}
+
+.style-section label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: #333;
+    font-size: 12px;
+}
+
+.color-picker-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.color-picker-container input[type="color"] {
+    width: 40px;
+    height: 30px;
+    border: 2px outset #eee;
+    cursor: pointer;
+    padding: 0;
+    background: transparent;
+}
+
+.color-value {
+    font-size: 11px;
+    color: #555;
+    font-family: monospace;
+    background: #f0f0f0;
+    padding: 2px 6px;
+    border: 1px inset #aaa;
+    min-width: 70px;
+    display: inline-block;
+    text-align: center;
+}
+
+.reset-btn {
+    background: var(--button-active);
+    border: 2px outset #eee;
+    padding: 6px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 4px;
+}
+
+.reset-btn:active {
+    border: 2px inset #eee;
+}
+
+#styleManager .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+    padding: 8px;
+    background: #cfc8bd;
+    border-top: 2px outset #eee;
+}
+
+#styleManager .modal-btn {
+    background: var(--button-bg);
+    border: 2px outset #eee;
+    padding: 4px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    min-width: 60px;
+}
+
+#styleManager .modal-btn:active {
+    border: 2px inset #eee;
+}
+
+/* ===== WORKSPACES ===== */
+.ws-switcher {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--dock-icon-bg);
+    padding: 2px 4px;
+    border: 2px inset #aaa;
+}
+
+.ws-btn {
+    width: 18px;
+    height: 18px;
+    background: var(--button-active);
+    border: 2px outset #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 11px;
+}
+
+.ws-btn:active {
+    border: 2px inset #eee;
+}
+
+.ws-list {
+    display: flex;
+    gap: 2px;
+}
+
+.ws {
+    padding: 2px 6px;
+    background: var(--button-active);
+    border: 2px outset #eee;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.ws.active {
+    background: var(--titlebar-color);
+    color: white;
+    border: 2px inset #eee;
+}
+
+/* ===== SEPARATORS ===== */
+.dock-separator {
+    width: 2px;
+    height: 36px;
+    background: var(--separator-color);
+    box-shadow: inset 1px 0 #fff;
+}
+
+/* ===== ARROWS ===== */
+.dock-arrows {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.dock-arrow {
+    width: 20px;
+    height: 16px;
+    background: var(--button-active);
+    border: 2px outset #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+.dock-arrow:active {
+    border: 2px inset #eee;
+}
+
+/* ===== ICON AREA ===== */
+.dock-icons {
+    display: flex;
+    gap: 6px;
+}
+
+/* ===== WINDOW CONTROLS ===== */
+.min-btn,
+.close-btn {
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    margin-left: 4px;
+    background: var(--button-active);
+    border: 2px outset #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.min-btn img,
+.close-btn img {
+    width: 12px;
+    height: 12px;
+    image-rendering: pixelated;
+}
+
+.min-btn:active,
+.close-btn:active {
+    border: 2px inset #eee;
+}
+
+.min-btn:hover,
+.close-btn:hover {
+    background: #e0dad0;
+}
+
+.titlebar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Text window */
+.text-body {
+    background: #2e3440;
+    color: var(--terminal-text-color);
+    padding: 8px;
+    height: calc(100% - 26px);
+    overflow-y: auto;
+    font-size: 12px;
+}
+
+/* ===== CDE Retro Modal ===== */
+.cde-retro-modal {
+    position: absolute;
+    background: var(--modal-bg);
+    border: 2px solid #444;
+    box-shadow: 4px 4px 0 #555;
+    font-family: monospace;
+    font-size: 12px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+}
+
+.cde-retro-modal .titlebar {
+    background: linear-gradient(var(--titlebar-color), #3a5663);
+    color: white;
+    padding: 4px 8px;
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: move;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cde-retro-modal .modal-body {
+    padding: 10px;
+    flex: 1;
+    background: var(--modal-bg);
+    overflow: auto;
+    font-size: 12px;
+}
+
+.cde-retro-modal .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+    padding: 4px 8px;
+    background: #cfc8bd;
+    border-top: 2px solid #8f877d;
+}
+
+.cde-retro-modal .modal-btn {
+    background: var(--button-bg);
+    border: 2px outset #eee;
+    padding: 2px 10px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.cde-retro-modal .modal-btn:active {
+    border: 2px inset #eee;
+}
+
+/* Scrollbar general */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #b9b1a6;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--titlebar-color);
+    border: 1px solid #2f4c58;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #3a5663;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #cde-panel {
+        width: 95%;
+        padding: 4px;
+        gap: 4px;
+    }
+
+    .cde-icons {
+        gap: 4px;
+    }
+
+    .cde-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .cde-icon img {
+        width: 24px;
+        height: 24px;
+    }
+
+    #styleManager {
+        width: 280px;
+        height: 360px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+/* Clases de utilidad */
+.hidden {
+    display: none !important;
+}
+
+.visible {
+    display: flex !important;
+}
+
+.active {
+    background: var(--dock-icon-active) !important;
+}
+
+/* Asegurar que las ventanas sean arrastrables */
+.window {
+    user-select: none;
+}
+
+/* Mejoras de accesibilidad */
+button:focus,
+input:focus {
+    outline: 2px solid var(--titlebar-color);
+    outline-offset: 2px;
+}
+
+/* Animaciones suaves para cambios de color */
+* {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* ================= MESSAGE STYLES ================= */
+.cde-message {
+    animation: fadeInOut 2s ease-in-out;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+
+    10% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    90% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+}
+
+/* Mejoras para el Style Manager */
+#styleManager input[type="color"] {
+    cursor: pointer;
+}
+
+#styleManager input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+#styleManager input[type="color"]::-webkit-color-swatch {
+    border: 2px inset #aaa;
+    border-radius: 2px;
+}
+
+/* ==================== CDE STYLE MANAGER ==================== */
+
+/* Ventana principal estilo CDE */
+.cde-window {
+    background: #c0c0c0;
+    border: 2px solid;
+    border-top-color: #ffffff;
+    border-left-color: #ffffff;
+    border-right-color: #404040;
+    border-bottom-color: #404040;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    font-family: "Fixed", "Clean", monospace;
+    font-size: 12px;
+    color: #000000;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Barra de título CDE auténtica */
+.cde-titlebar {
+    background: linear-gradient(90deg, #000080, #1084d0);
+    color: white;
+    padding: 3px 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    font-size: 11px;
+    cursor: move;
+    border-bottom: 2px solid #404040;
+    height: 20px;
+}
+
+.cde-titlebar-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.cde-titlebar-icon {
+    width: 16px;
+    height: 16px;
+    background: #ffffff;
+    color: #000080;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    border: 1px solid #000000;
+}
+
+.cde-titlebar-text {
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+.cde-titlebar-right {
+    display: flex;
+    gap: 2px;
+}
+
+.cde-titlebtn {
+    width: 18px;
+    height: 16px;
+    background: #c0c0c0;
+    border: 1px solid;
+    border-top-color: #ffffff;
+    border-left-color: #ffffff;
+    border-right-color: #404040;
+    border-bottom-color: #404040;
+    font-family: monospace;
+    font-size: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+}
+
+.cde-titlebtn:active {
+    border-top-color: #404040;
+    border-left-color: #404040;
+    border-right-color: #ffffff;
+    border-bottom-color: #ffffff;
+}
+
+.cde-titlebtn.close {
+    background: #c0c0c0;
+    color: #000000;
+}
+
+/* Barra de menú CDE */
+.cde-menubar {
+    background: #c0c0c0;
+    border-bottom: 1px solid #404040;
+    padding: 2px 0;
+    display: flex;
+    height: 22px;
+    align-items: center;
+}
+
+.cde-menuitem {
+    padding: 2px 10px;
+    margin: 0 1px;
+    cursor: default;
+    position: relative;
+    border: 1px solid transparent;
+}
+
+.cde-menuitem:hover {
+    background: #000080;
+    color: white;
+    border: 1px solid;
+    border-top-color: #ffffff;
+    border-left-color: #ffffff;
+    border-right-color: #404040;
+    border-bottom-color: #404040;
+}
+
+/* Contenido principal */
+.cde-content {
+    display: flex;
+    flex: 1;
+    background: #c0c0c0;
+    overflow: hidden;
+}
+
+/* Panel lateral de categorías */
+.cde-sidepanel {
+    width: 140px;
+    background: #a0a0a0;
+    border-right: 2px solid #404040;
+    padding: 8px 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.cde-category {
+    padding: 6px 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    font-size: 11px;
+}
+
+.cde-category:hover {
+    background: #d0d0d0;
+    border: 1px solid;
+    border-top-color: #ffffff;
+    border-left-color: #ffffff;
+    border-right-color: #808080;
+    border-bottom-color: #808080;
+}
+
+.cde-category.active {
+    background: #000080;
+    color: white;
+    border: 1px solid #000000;
+}
+
+.cde-category-icon {
+    width: 20px;
+    height: 20px;
+    background: #c0c0c0;
+    border: 1px solid #404040;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+/* Panel de controles */
+.cde-controlpanel {
+    flex: 1;
+    padding: 12px;
+    overflow-y: auto;
+}
+
+.cde-controlgroup {
+    display: none;
+}
+
+.cde-controlgroup.active {
+    display: block;
+}
+
+.cde-subtitle {
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 16px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #808080;
+    color: #000080;
+}
+
+.cde-controlrow {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 4px 0;
+}
+
+.cde-label {
+    width: 120px;
+    font-weight: bold;
+    font-size: 11px;
+}
+
+.cde-colorselector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.cde-colorselector input[type="color"] {
+    width: 30px;
+    height: 24px;
+    border: 1px solid #404040;
+    cursor: pointer;
+    padding: 0;
+}
+
+.cde-colorswatch {
+    width: 60px;
+    height: 24px;
+    border: 1px solid #000000;
+    box-shadow: inset 1px 1px 0 #808080;
+}
+
+.cde-colorname {
+    font-size: 11px;
+    font-family: monospace;
+    background: #ffffff;
+    padding: 2px 6px;
+    border: 1px solid #808080;
+    min-width: 80px;
+}
+
+/* Presets de colores */
+.cde-presets {
+    margin-top: 20px;
+    padding: 12px;
+    background: #d0d0d0;
+    border: 1px solid #808080;
+}
+
+.cde-presets h4 {
+    margin-bottom: 8px;
+    font-size: 11px;
+    color: #000080;
+}
+
+.cde-preset-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.cde-preset {
+    padding: 4px 12px;
+    background: #c0c0c0;
+    border: 1px solid;
+    border-top-color: #ffffff;
+    border-left-color: #ffffff;
+    border-right-color: #404040;
+    border-bottom-color: #404040;
+    font-size: 10px;
+    cursor: pointer;
+    flex: 1;
+    min-width: 80px;
+}
+
+.cde-preset:hover {
+    background: #e0e0e0;
+}
+
+.cde-preset:active {
+    border-top-color: #404040;
+    border-left-color: #404040;
+    border-right-color: #ffffff;
+    border-bottom-color: #ffffff;
+}
+
+/* Selectores y sliders */
+.cde-select {
+    background: #ffffff;
+    border: 1px solid #808080;
+    padding: 3px 6px;
+    font-family: monospace;
+    font-size: 11px;
+    flex: 1;
+    max-width: 200px;
+}
+
+.cde-slider {
+    flex: 1;
+    max-width: 150px;
+    height: 6px;
+    background: #a0a0a0;
+    border: 1px solid #404040;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.cde-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #000080;
+    border: 1px solid #000000;
+    cursor: pointer;
+}
+
+.cde-slidervalue {
+    width: 30px;
+    text-align: center;
+    font-family: monospace;
+    font-size: 11px;
+    margin-left: 8px;
+}
+
+/* Barra de estado */
+.cde-statusbar {
+    background: #c0c0c0;
+    border-top: 1px solid #404040;
+    padding: 2px 6px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: #404040;
+    height: 18px;
+}
+
+/* Barra de acción */
+.cde-actionbar {
+    background: #a0a0a0;
+    border-top: 2px solid #404040;
+    padding: 8px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.cde-btn {
+    padding: 4px 16px;
+    background: #c0c0c0;
+    border: 1px solid;
+    border-top-color: #ffffff;
+    border-left-color: #ffffff;
+    border-right-color: #404040;
+    border-bottom-color: #404040;
+    font-family: monospace;
+    font-size: 11px;
+    cursor: pointer;
+    min-width: 70px;
+}
+
+.cde-btn:hover {
+    background: #d0d0d0;
+}
+
+.cde-btn:active {
+    border-top-color: #404040;
+    border-left-color: #404040;
+    border-right-color: #ffffff;
+    border-bottom-color: #ffffff;
+}
+
+.cde-btn-default {
+    background: #000080;
+    color: white;
+    font-weight: bold;
+}
+
+/* Scrollbar estilo CDE */
+.cde-controlpanel::-webkit-scrollbar {
+    width: 14px;
+}
+
+.cde-controlpanel::-webkit-scrollbar-track {
+    background: #a0a0a0;
+    border-left: 1px solid #404040;
+}
+
+.cde-controlpanel::-webkit-scrollbar-thumb {
+    background: #808080;
+    border: 1px solid;
+    border-top-color: #ffffff;
+    border-left-color: #ffffff;
+    border-right-color: #404040;
+    border-bottom-color: #404040;
+}
