@@ -3,17 +3,13 @@
 
 <head>
     <meta charset="UTF-8" />
+    <meta name="description" content="Retro Debian CDE Desktop UI inspirado en Unix y Linux." />
     <meta name="keywords" content="Debian, Linux, CDE, Retro Desktop, Unix" />
     <title>Debian</title>
     <link rel="shortcut icon" type="image/x-icon" href="./src/icons/favicon.ico">
-
-    <head>
-        <link rel="stylesheet" href="src/css/core.css">
-        <link rel="stylesheet" href="src/css/components.css">
-        <link rel="stylesheet" href="src/css/app.css">
-        <link rel="stylesheet" href="src/css/utilities.css">
-        <link rel="stylesheet" href="src/css/cde-theme.css">
-    </head>
+    <link rel="stylesheet" href="src/css/core.css">
+    <link rel="stylesheet" href="src/css/components.css">
+    <link rel="stylesheet" href="src/css/app.css">
 </head>
 
 <body>
@@ -108,23 +104,22 @@
         </div>
     </div>
     <div id="cde-panel">
-        <!-- Botón menú (siempre a la izquierda) -->
         <div class="cde-menu-btn">
             <img src="./src/images/Debian.png" alt="Menu">
         </div>
         <div class="cde-sep"></div>
 
-        <!-- BLOQUE DE ICONOS (APP LAUNCHERS) - AHORA A LA IZQUIERDA DEL PAGER -->
         <div class="cde-icon-block">
-            <!-- Fila superior: botones decorativos + dropdown -->
             <div class="cde-icon-buttons">
                 <div class="cde-icon-btn"></div>
                 <div class="cde-icon-btn"></div>
                 <div class="cde-icon-btn"></div>
                 <div class="cde-icon-btn"></div>
-                <div class="cde-icon-btn dropdown-btn" id="utilitiesBtn">▲</div>
+                <div class="cde-icon-btn dropdown-btn" id="utilitiesBtn">
+                    <img src="./src/icons/go-up.png" alt="arrow" class="arrow-icon">
+                </div>
             </div>
-            <!-- Fila inferior: iconos de aplicaciones -->
+
             <div class="cde-icons">
                 <div class="cde-icon" onclick="terminal.style.display='block'">
                     <img src="./src/icons/konsole.png" alt="Terminal">
@@ -145,7 +140,7 @@
                 </div>
             </div>
         </div>
-        <!-- Dropdown asociado al botón Utilities (se mantiene fuera del bloque, pero su posición absoluta no afecta el flujo) -->
+
         <div class="dropdown-menu" id="utilitiesDropdown">
             <div class="menu-item" onclick="terminal.style.display='block'">
                 <img src="./src/icons/konsole.png" alt=""> Terminal
@@ -154,7 +149,6 @@
 
         <div class="cde-sep"></div>
 
-        <!-- PAGER 2x2 - AHORA EN EL CENTRO -->
         <div class="cde-pager">
             <div class="pager-workspace active">One</div>
             <div class="pager-workspace">Two</div>
@@ -162,7 +156,6 @@
             <div class="pager-workspace">Four</div>
         </div>
 
-        <!-- BOTONES DE SCROLL (se mantienen junto al pager) -->
         <div class="cde-scroll">
             <div class="scroll-btn">▲</div>
             <div class="scroll-btn">▼</div>
@@ -170,14 +163,20 @@
 
         <div class="cde-sep"></div>
 
-        <!-- BANDEJA DEL SISTEMA (TRAY ICONS) - AHORA A LA DERECHA DEL PAGER -->
         <div class="cde-icons">
             <div class="tray-icon">
                 <img src="./src/icons/gtkclocksetup.png" alt="Reloj">
             </div>
-            <div class="tray-icon"></div>
-            <div class="tray-icon"></div>
-            <div class="tray-icon"></div>
+            <div class="tray-icon">
+                <img src="./src/icons/org.xfce.screenshooter.png" alt="Camera">
+            </div>
+            <div class="tray-icon">
+                <img src="./src/icons/printer.png" alt="Printer">
+
+            </div>
+            <div class="tray-icon">
+                <img src="./src/icons/org.xfce.taskmanager.png" alt="TaskManager">
+            </div>
         </div>
     </div>
 
@@ -191,7 +190,6 @@
         </div>
 
         <div class="modal-body">
-            <!-- Panel lateral -->
             <div class="cde-sidepanel">
                 <div class="cde-category active" data-category="colors" onclick="switchStyleTab('colors')">
                     <div class="cde-category-icon">
@@ -208,12 +206,9 @@
                 </div>
             </div>
 
-            <!-- Panel de controles -->
             <div class="cde-controlpanel">
-                <!-- Panel de colores -->
                 <div class="cde-controlgroup active" id="colors-panel">
                     <h3 class="cde-subtitle">Color Settings</h3>
-                    <!-- Presets de colores -->
                     <div class="cde-presets">
                         <h4>CDE Classic Themes</h4>
                         <div class="cde-preset-row">
@@ -274,7 +269,6 @@
 
                 </div>
 
-                <!-- Actualiza el panel de fuentes en tu HTML -->
                 <div class="cde-controlgroup" id="fonts-panel">
                     <h3 class="cde-subtitle">Font Settings</h3>
 
@@ -288,7 +282,6 @@
                         </div>
                     </div>
 
-                    <!-- Familia de fuente principal -->
                     <div class="cde-controlrow">
                         <label class="cde-label">UI Font Family:</label>
                         <select class="cde-select" id="font-family-base">
@@ -304,7 +297,6 @@
                         </select>
                     </div>
 
-                    <!-- Familia de fuente del terminal -->
                     <div class="cde-controlrow">
                         <label class="cde-label">Terminal Font:</label>
                         <select class="cde-select" id="font-family-terminal">
@@ -318,7 +310,6 @@
                         </select>
                     </div>
 
-                    <!-- Tamaño de fuente base -->
                     <div class="cde-controlrow">
                         <label class="cde-label">Base Font Size:</label>
                         <input type="range" class="cde-slider" id="font-size-base" min="10" max="18" value="12"
@@ -326,7 +317,6 @@
                         <span class="cde-slidervalue" id="font-size-value">12px</span>
                     </div>
 
-                    <!-- Tamaño de fuente del título -->
                     <div class="cde-controlrow">
                         <label class="cde-label">Title Font Size:</label>
                         <input type="range" class="cde-slider" id="font-size-title" min="11" max="20" value="13"
@@ -334,7 +324,6 @@
                         <span class="cde-slidervalue" id="font-size-title-value">13px</span>
                     </div>
 
-                    <!-- Interlineado -->
                     <div class="cde-controlrow">
                         <label class="cde-label">Line Height:</label>
                         <input type="range" class="cde-slider" id="line-height-base" min="1.0" max="2.0" value="1.45"
@@ -342,7 +331,6 @@
                         <span class="cde-slidervalue" id="line-height-value">1.45</span>
                     </div>
 
-                    <!-- Peso de fuente -->
                     <div class="cde-controlrow">
                         <label class="cde-label">Font Weight:</label>
                         <select class="cde-select" id="font-weight">
@@ -354,7 +342,6 @@
                         </select>
                     </div>
 
-                    <!-- Botón de prueba -->
                     <div class="cde-controlrow">
                         <div class="cde-label"></div>
                         <button class="cde-btn" onclick="styleManager.testFontPreview()" style="margin-top: 10px;">
@@ -362,7 +349,6 @@
                         </button>
                     </div>
 
-                    <!-- Área de vista previa -->
                     <div class="cde-controlrow">
                         <div class="cde-label">Preview:</div>
                         <div class="cde-font-preview" id="font-preview">
@@ -377,13 +363,11 @@
             </div>
         </div>
 
-        <!-- Barra de estado -->
         <div class="cde-statusbar">
             <div class="cde-statusleft">CDE Style Manager</div>
             <div class="cde-statusright" id="style-status">Ready</div>
         </div>
 
-        <!-- Barra de acción -->
         <div class="cde-actionbar">
             <button class="cde-btn cde-btn-default" onclick="styleManager.apply()">Apply</button>
             <button class="cde-btn" onclick="styleManager.reset()">Reset</button>
