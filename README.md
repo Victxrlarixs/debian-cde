@@ -64,8 +64,8 @@ Consulta el archivo [`LICENSE`](LICENSE) para más información.
 
 ```bash
 # Descarga el código
-git clone https://github.com/tuusuario/cde-simulation.git
-cd cde-simulation
+git clone https://github.com/victxrlarixs/deban-cde.git
+cd debian-cde
 
 # Abre index.html en tu navegador favorito
 open index.html
