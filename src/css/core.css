@@ -266,3 +266,14 @@ body {
     font-size: var(--font-size-base);
     box-sizing: border-box;
 }
+
+/* Logo de Debian en el bootloader */
+.boot-logo {
+    color: #00AA00;
+    font-family: monospace;
+    white-space: pre;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    opacity: 1 !important;
+    /* visible desde el inicio */
+}
