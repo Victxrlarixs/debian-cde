@@ -13,172 +13,177 @@
 </head>
 
 <body>
-
-    <div id="topbar">
-        <div class="top-left">
-        </div>
-        <div class="top-right">
-            <div class="sys-item">
-                <img src="./src/icons/audio-volume-low.png" class="sys-icon">
-            </div>
-            <div class="sys-item">
-                <span id="clock"></span>
-            </div>
-        </div>
+    <div id="debian-boot-screen">
+        <div class="header">Debian GNU/Linux 12 (bookworm)</div>
+        <div id="boot-log-container"></div>
     </div>
 
-
-    <div class="window" id="terminal" style="top:80px; left:40px; width:380px;">
-        <div class="titlebar" onmousedown="drag(event, 'terminal')">
-            Terminal - victxrlarixs@Debian
-            <div class="close-btn" onclick="terminal.style.display='none'">
-                <img src="./src/icons/tab_close.png">
+    <div id="desktop-ui">
+        <div id="topbar">
+            <div class="top-left">
             </div>
-        </div>
-        <div class="terminal-body" id="terminalBody"></div>
-
-    </div>
-
-
-    <div class="window" id="fm" style="top:100px; left:460px; width:420px; height:320px; display:none;">
-        <div class="titlebar" onmousedown="drag(event, 'fm')">
-            victxrlarixs
-            <div class="close-btn" onclick="closeFileManager()">
-                <img src="./src/icons/tab_close.png">
+            <div class="top-right">
+                <div class="sys-item">
+                    <img src="./src/icons/audio-volume-low.png" class="sys-icon">
+                </div>
+                <div class="sys-item">
+                    <span id="clock"></span>
+                </div>
             </div>
         </div>
 
-        <div class="fm-container">
-            <div class="fm-menubar">
-                <span>File</span>
-                <span>Edit</span>
-                <span>View</span>
-                <span>Go</span>
-                <span>Help</span>
+
+        <div class="window" id="terminal" style="top:80px; left:40px; width:380px;">
+            <div class="titlebar" onmousedown="drag(event, 'terminal')">
+                Terminal - victxrlarixs@Debian
+                <div class="close-btn" onclick="terminal.style.display='none'">
+                    <img src="./src/icons/tab_close.png">
+                </div>
+            </div>
+            <div class="terminal-body" id="terminalBody"></div>
+
+        </div>
+
+
+        <div class="window" id="fm" style="top:100px; left:460px; width:420px; height:320px; display:none;">
+            <div class="titlebar" onmousedown="drag(event, 'fm')">
+                victxrlarixs
+                <div class="close-btn" onclick="closeFileManager()">
+                    <img src="./src/icons/tab_close.png">
+                </div>
             </div>
 
-            <div class="fm-toolbar">
-                <button class="fm-btn" onclick="goBack()">
-                    <img src="./src/icons/previous.png" alt="Back">
-                </button>
-                <button class="fm-btn" onclick="goForward()">
-                    <img src="./src/icons/right.png" alt="Forward">
-                </button>
-                <button class="fm-btn" onclick="goUp()">
-                    <img src="./src/icons/go-up.png" alt="Up">
-                </button>
-                <button class="fm-btn" onclick="goHome()">
-                    <img src="./src/icons/gohome.png" alt="Home">
-                </button>
-                <input class="fm-path" id="fmPath" />
+            <div class="fm-container">
+                <div class="fm-menubar">
+                    <span>File</span>
+                    <span>Edit</span>
+                    <span>View</span>
+                    <span>Go</span>
+                    <span>Help</span>
+                </div>
+
+                <div class="fm-toolbar">
+                    <button class="fm-btn" onclick="goBack()">
+                        <img src="./src/icons/previous.png" alt="Back">
+                    </button>
+                    <button class="fm-btn" onclick="goForward()">
+                        <img src="./src/icons/right.png" alt="Forward">
+                    </button>
+                    <button class="fm-btn" onclick="goUp()">
+                        <img src="./src/icons/go-up.png" alt="Up">
+                    </button>
+                    <button class="fm-btn" onclick="goHome()">
+                        <img src="./src/icons/gohome.png" alt="Home">
+                    </button>
+                    <input class="fm-path" id="fmPath" />
+                </div>
+
+                <div class="fm-body">
+                    <div class="fm-sidebar">
+                        <div class="fm-section">Places</div>
+                        <div class="fm-item" onclick="openPath('/home/victxrlarixs/')">
+                            <img src="./src/icons/gohome.png" class="fm-icon"> victxrlarixs
+                        </div>
+                        <div class="fm-item" onclick="openPath('/home/victxrlarixs/Desktop/')">
+                            <img src="./src/icons/desktop.png" class="fm-icon"> Desktop
+                        </div>
+                        <div class="fm-item">
+                            <img src="./src/icons/user-trash-full.png" class="fm-icon"> Trash
+                        </div>
+
+                        <div class="fm-section">Devices</div>
+                        <div class="fm-item">
+                            <img src="./src/icons/drive-harddisk.png" class="fm-icon"> File System
+                        </div>
+
+                        <div class="fm-section">Network</div>
+                        <div class="fm-item">
+                            <img src="./src/icons/redhat-system-group.png" class="fm-icon"> Browse Network
+                        </div>
+                    </div>
+
+                    <div class="fm-files" id="fmFiles"></div>
+                </div>
+
+                <div class="fm-status" id="fmStatus"></div>
             </div>
+        </div>
+        <div id="cde-panel">
+            <div class="cde-menu-btn">
+                <img src="./src/images/Debian.png" alt="Menu">
+            </div>
+            <div class="cde-sep"></div>
 
-            <div class="fm-body">
-                <div class="fm-sidebar">
-                    <div class="fm-section">Places</div>
-                    <div class="fm-item" onclick="openPath('/home/victxrlarixs/')">
-                        <img src="./src/icons/gohome.png" class="fm-icon"> victxrlarixs
-                    </div>
-                    <div class="fm-item" onclick="openPath('/home/victxrlarixs/Desktop/')">
-                        <img src="./src/icons/desktop.png" class="fm-icon"> Desktop
-                    </div>
-                    <div class="fm-item">
-                        <img src="./src/icons/user-trash-full.png" class="fm-icon"> Trash
-                    </div>
-
-                    <div class="fm-section">Devices</div>
-                    <div class="fm-item">
-                        <img src="./src/icons/drive-harddisk.png" class="fm-icon"> File System
-                    </div>
-
-                    <div class="fm-section">Network</div>
-                    <div class="fm-item">
-                        <img src="./src/icons/redhat-system-group.png" class="fm-icon"> Browse Network
+            <div class="cde-icon-block">
+                <div class="cde-icon-buttons">
+                    <div class="cde-icon-btn"></div>
+                    <div class="cde-icon-btn"></div>
+                    <div class="cde-icon-btn"></div>
+                    <div class="cde-icon-btn"></div>
+                    <div class="cde-icon-btn dropdown-btn" id="utilitiesBtn">
+                        <img src="./src/icons/go-up.png" alt="arrow" class="arrow-icon">
                     </div>
                 </div>
 
-                <div class="fm-files" id="fmFiles"></div>
-            </div>
-
-            <div class="fm-status" id="fmStatus"></div>
-        </div>
-    </div>
-    <div id="cde-panel">
-        <div class="cde-menu-btn">
-            <img src="./src/images/Debian.png" alt="Menu">
-        </div>
-        <div class="cde-sep"></div>
-
-        <div class="cde-icon-block">
-            <div class="cde-icon-buttons">
-                <div class="cde-icon-btn"></div>
-                <div class="cde-icon-btn"></div>
-                <div class="cde-icon-btn"></div>
-                <div class="cde-icon-btn"></div>
-                <div class="cde-icon-btn dropdown-btn" id="utilitiesBtn">
-                    <img src="./src/icons/go-up.png" alt="arrow" class="arrow-icon">
+                <div class="cde-icons">
+                    <div class="cde-icon" onclick="terminal.style.display='block'">
+                        <img src="./src/icons/konsole.png" alt="Terminal">
+                    </div>
+                    <div class="cde-icon" onclick="toggleFileManager()">
+                        <img src="./src/icons/filemanager.png" alt="File Manager">
+                    </div>
+                    <div class="cde-icon">
+                        <a href="https://github.com/Victxrlarixs/debian-cde" target="_blank">
+                            <img src="./src/icons/konqueror.png" alt="Browser">
+                        </a>
+                    </div>
+                    <div class="cde-icon" onclick="openStyleManager()">
+                        <img src="./src/icons/org.xfce.settings.appearance.png" alt="Style Manager">
+                    </div>
+                    <div class="cde-icon" id="utilitiesIcon">
+                        <img src="./src/icons/system-help.png" alt="Utilities">
+                    </div>
                 </div>
             </div>
+
+            <div class="dropdown-menu" id="utilitiesDropdown">
+                <div class="menu-item" onclick="terminal.style.display='block'">
+                    <img src="./src/icons/konsole.png" alt=""> Terminal
+                </div>
+            </div>
+
+            <div class="cde-sep"></div>
+
+            <div class="cde-pager">
+                <div class="pager-workspace active">One</div>
+                <div class="pager-workspace">Two</div>
+                <div class="pager-workspace">Three</div>
+                <div class="pager-workspace">Four</div>
+            </div>
+
+            <div class="cde-scroll">
+                <div class="scroll-btn">▲</div>
+                <div class="scroll-btn">▼</div>
+            </div>
+
+            <div class="cde-sep"></div>
 
             <div class="cde-icons">
-                <div class="cde-icon" onclick="terminal.style.display='block'">
-                    <img src="./src/icons/konsole.png" alt="Terminal">
+                <div class="tray-icon">
+                    <img src="./src/icons/gtkclocksetup.png" alt="Reloj">
                 </div>
-                <div class="cde-icon" onclick="toggleFileManager()">
-                    <img src="./src/icons/filemanager.png" alt="File Manager">
+                <div class="tray-icon">
+                    <img src="./src/icons/org.xfce.screenshooter.png" alt="Camera">
                 </div>
-                <div class="cde-icon">
-                    <a href="https://github.com/Victxrlarixs/debian-cde" target="_blank">
-                        <img src="./src/icons/konqueror.png" alt="Browser">
-                    </a>
+                <div class="tray-icon">
+                    <img src="./src/icons/printer.png" alt="Printer">
+
                 </div>
-                <div class="cde-icon" onclick="openStyleManager()">
-                    <img src="./src/icons/org.xfce.settings.appearance.png" alt="Style Manager">
-                </div>
-                <div class="cde-icon" id="utilitiesIcon">
-                    <img src="./src/icons/system-help.png" alt="Utilities">
+                <div class="tray-icon">
+                    <img src="./src/icons/org.xfce.taskmanager.png" alt="TaskManager">
                 </div>
             </div>
         </div>
-
-        <div class="dropdown-menu" id="utilitiesDropdown">
-            <div class="menu-item" onclick="terminal.style.display='block'">
-                <img src="./src/icons/konsole.png" alt=""> Terminal
-            </div>
-        </div>
-
-        <div class="cde-sep"></div>
-
-        <div class="cde-pager">
-            <div class="pager-workspace active">One</div>
-            <div class="pager-workspace">Two</div>
-            <div class="pager-workspace">Three</div>
-            <div class="pager-workspace">Four</div>
-        </div>
-
-        <div class="cde-scroll">
-            <div class="scroll-btn">▲</div>
-            <div class="scroll-btn">▼</div>
-        </div>
-
-        <div class="cde-sep"></div>
-
-        <div class="cde-icons">
-            <div class="tray-icon">
-                <img src="./src/icons/gtkclocksetup.png" alt="Reloj">
-            </div>
-            <div class="tray-icon">
-                <img src="./src/icons/org.xfce.screenshooter.png" alt="Camera">
-            </div>
-            <div class="tray-icon">
-                <img src="./src/icons/printer.png" alt="Printer">
-
-            </div>
-            <div class="tray-icon">
-                <img src="./src/icons/org.xfce.taskmanager.png" alt="TaskManager">
-            </div>
-        </div>
-    </div>
 
     </div>
     <div class="cde-retro-modal" id="styleManager">
@@ -374,6 +379,7 @@
             <button class="cde-btn" onclick="styleManager.save()">Save</button>
             <button class="cde-btn" onclick="styleManager.close()">Close</button>
         </div>
+    </div>
     </div>
 
     <script src="./src/js/init.js"></script>
