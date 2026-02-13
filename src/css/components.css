@@ -1,4 +1,13 @@
-/* ================= TOPBAR ================= */
+/* ------------------------------------------------
+   CDE SIMULATION — TOPBAR, PANEL, VENTANAS Y MENÚS
+   Estilos de la interfaz principal y controles del escritorio
+   Dominio: debian.com.mx
+   ------------------------------------------------ */
+
+/* ------------------------------------------------------------------
+   1. BARRA SUPERIOR (TOPBAR)
+      Fija en la parte superior, contiene indicadores de sistema.
+   ------------------------------------------------------------------ */
 #topbar {
     position: fixed;
     top: 0;
@@ -50,7 +59,11 @@
     image-rendering: pixelated;
 }
 
-/* ================= CDE PANEL (DOCK) - VERSIÓN FINAL CON MENÚ ASSET ================= */
+/* ------------------------------------------------------------------
+   2. PANEL CDE (DOCK)
+      Barra inferior centrada, simula el panel de control clásico.
+      Contiene menú, pager, iconos, bandeja y botón de salida.
+   ------------------------------------------------------------------ */
 #cde-panel {
     position: fixed;
     bottom: 4px;
@@ -73,7 +86,7 @@
     box-shadow: 2px 2px 0 var(--shadow-color);
 }
 
-/* ================= Separadores Motif ================= */
+/* ----- Separadores estilo Motif ----- */
 .cde-sep {
     width: 2px;
     height: 62px;
@@ -84,7 +97,7 @@
         inset -1px 0 0 var(--border-inset-dark);
 }
 
-/* ================= Botón MENU como ASSET (imagen) ================= */
+/* ----- Botón de menú (imagen) ----- */
 .cde-menu-btn {
     width: 40px;
     height: 50px;
@@ -116,7 +129,7 @@
     background: var(--button-active);
 }
 
-/* ================= WORKSPACE PAGER - CUADRÍCULA 2x2 ================= */
+/* ----- Pager de espacios de trabajo (cuadrícula 2x2) ----- */
 .cde-pager {
     display: grid;
     grid-template-columns: 42px 42px;
@@ -161,7 +174,7 @@
     border-bottom-color: var(--border-light);
 }
 
-/* ================= Scroll Buttons ================= */
+/* ----- Botones de desplazamiento (scroll) ----- */
 .cde-scroll {
     display: flex;
     flex-direction: column;
@@ -201,7 +214,7 @@
     border-bottom-color: var(--border-light);
 }
 
-/* ================= BLOQUE DE ICONOS (DOBLE FILA) ================= */
+/* ----- Bloque de iconos (doble fila) ----- */
 .cde-icon-block {
     display: flex;
     flex-direction: column;
@@ -216,7 +229,7 @@
     padding: 2px;
 }
 
-/* FILA SUPERIOR - BOTONES DE ACCIÓN */
+/* Fila superior: botones de acción */
 .cde-icon-buttons {
     display: flex;
     gap: 1px;
@@ -250,12 +263,12 @@
     background: var(--button-active);
 }
 
-/* Botón especial con flecha (Utilities) */
+/* Botón con flecha desplegable (Utilities) */
 .cde-icon-btn.dropdown-btn {
     position: relative;
 }
 
-/* FILA INFERIOR - ICONOS NORMALES */
+/* Fila inferior: iconos de aplicaciones */
 .cde-icons {
     display: flex;
     gap: 1px;
@@ -303,11 +316,7 @@
     height: 100%;
 }
 
-/* ================= DROPDOWN HACIA ARRIBA ================= */
-.cde-icon-btn.dropdown-btn {
-    position: relative;
-}
-
+/* ----- Menú desplegable hacia arriba (dropdown) ----- */
 .cde-icon-btn.dropdown-btn .dropdown-menu {
     position: absolute;
     bottom: 100%;
@@ -357,7 +366,7 @@
     display: block;
 }
 
-/* ================= System Tray (doble fila) ================= */
+/* ----- Bandeja del sistema (doble fila) ----- */
 .cde-tray {
     display: flex;
     gap: 1px;
@@ -417,7 +426,7 @@
     image-rendering: pixelated;
 }
 
-/* ================= Botón EXIT (texto) ================= */
+/* ----- Botón de salida (Exit) ----- */
 .cde-exit-btn {
     padding: 0 10px;
     height: 50px;
@@ -445,7 +454,10 @@
     background: var(--button-active);
 }
 
-/* ================= VENTANAS ================= */
+/* ------------------------------------------------------------------
+   3. VENTANAS CDE
+      Estilo clásico con bisel 3D, sombra y título arrastrable.
+   ------------------------------------------------------------------ */
 .window {
     position: absolute;
     background: var(--window-color);
@@ -473,7 +485,7 @@
     border-bottom: 2px solid var(--border-dark);
 }
 
-/* Botones de ventana */
+/* Botones de ventana (minimizar, cerrar) */
 .min-btn,
 .close-btn,
 .cde-window-btn {
@@ -513,7 +525,10 @@
     background: var(--dock-icon-hover);
 }
 
-/* ================= MENÚS ================= */
+/* ------------------------------------------------------------------
+   4. MENÚS CDE
+      Menú principal, submenús y separadores.
+   ------------------------------------------------------------------ */
 #cde-menu {
     position: fixed;
     top: 26px;
@@ -568,4 +583,177 @@
 
 .has-submenu:hover .submenu {
     display: block;
+}
+
+
+/* ------------------------------------------------------------------
+   FILE MANAGER — MENÚS DESPLEGABLES Y CONTEXTUALES
+   Estilo CDE para barras de menú y clic derecho.
+   ------------------------------------------------------------------ */
+
+/* Menú desplegable de la barra superior (Archivo, Editar, etc.) */
+.fm-dropdown {
+    position: absolute;
+    background: var(--menu-color);
+    border: 2px solid;
+    border-top-color: var(--border-light);
+    border-left-color: var(--border-light);
+    border-right-color: var(--border-dark);
+    border-bottom-color: var(--border-dark);
+    box-shadow: 2px 2px 0 var(--shadow-color);
+    min-width: 180px;
+    padding: 4px 0;
+    z-index: 10000;
+}
+
+.fm-dropdown-item {
+    padding: 6px 12px;
+    font-size: var(--font-size-small);
+    font-family: var(--font-family-base);
+    color: black;
+    cursor: pointer;
+    white-space: nowrap;
+    background: transparent;
+    border: 1px solid transparent;
+}
+
+.fm-dropdown-item:hover {
+    background: var(--titlebar-color);
+    color: white;
+}
+
+/* Menú contextual (clic derecho) */
+.fm-contextmenu {
+    position: absolute;
+    background: var(--menu-color);
+    border: 2px solid;
+    border-top-color: var(--border-light);
+    border-left-color: var(--border-light);
+    border-right-color: var(--border-dark);
+    border-bottom-color: var(--border-dark);
+    box-shadow: 2px 2px 0 var(--shadow-color);
+    min-width: 160px;
+    padding: 4px 0;
+    z-index: 10000;
+}
+
+.fm-context-item {
+    padding: 6px 12px;
+    font-size: var(--font-size-small);
+    font-family: var(--font-family-base);
+    color: black;
+    cursor: pointer;
+    white-space: nowrap;
+    background: transparent;
+    border: 1px solid transparent;
+}
+
+.fm-context-item:hover {
+    background: var(--titlebar-color);
+    color: white;
+}
+
+
+/* ------------------------------------------------------------------
+   MODAL CDE GLOBAL – Posicionamiento fijo y centrado
+   Se aplica a cualquier modal creado por CDEModal
+   ------------------------------------------------------------------ */
+.cde-retro-modal,
+#cde-modal-global {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+    display: none;
+    /* Oculto por defecto */
+    flex-direction: column;
+    z-index: 10000;
+}
+
+/* Asegurar que el #styleManager no herede este posicionamiento forzado */
+#styleManager.cde-retro-modal {
+    position: fixed !important;
+    /* Ya lo tiene, pero reforzamos */
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+}
+
+
+
+
+/* ------------------------------------------------------------------
+   CDE MODAL – Estilos globales para ventanas modales
+   Sin dependencia de Style Manager, completamente independiente.
+   ------------------------------------------------------------------ */
+
+/* Modal base – hereda de .cde-retro-modal pero aseguramos posición fija */
+#cde-modal-global,
+.cde-retro-modal.cde-modal-global {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 400px;
+    max-width: 90vw;
+    background: var(--modal-bg);
+    border: 2px solid;
+    border-top-color: var(--border-light);
+    border-left-color: var(--border-light);
+    border-right-color: var(--border-dark);
+    border-bottom-color: var(--border-dark);
+    box-shadow: 4px 4px 0 var(--shadow-color);
+    display: none;
+    flex-direction: column;
+    z-index: 10000;
+    font-family: var(--font-family-base);
+}
+
+/* Cuerpo del modal */
+#cde-modal-global .modal-body,
+.cde-retro-modal.cde-modal-global .modal-body {
+    padding: 20px;
+    min-height: 80px;
+    background: var(--modal-bg);
+    color: var(--text-color, #000000);
+    border: none;
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+}
+
+/* Barra de acciones (botones) */
+#cde-modal-global .cde-actionbar,
+.cde-retro-modal.cde-modal-global .cde-actionbar {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+    background: var(--button-active);
+    border-top: 2px solid var(--separator-color);
+}
+
+/* Input de prompt */
+#cde-prompt-input {
+    width: 100%;
+    padding: 4px 6px;
+    background: var(--button-active);
+    border: 2px solid;
+    border-top-color: var(--border-inset-dark);
+    border-left-color: var(--border-inset-dark);
+    border-right-color: var(--border-inset-light);
+    border-bottom-color: var(--border-inset-light);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    box-sizing: border-box;
+    margin-top: 8px;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 480px) {
+
+    #cde-modal-global,
+    .cde-retro-modal.cde-modal-global {
+        width: 95vw;
+    }
 }

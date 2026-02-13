@@ -1,6 +1,14 @@
-/* ================= VARIABLES CSS ================= */
+/* ------------------------------------------------
+   Propósito: UI retro del Common Desktop Environment
+   ------------------------------------------------ */
+
+/* ------------------------------------------------------------------
+   1. VARIABLES CSS (Design Tokens)
+      Todas las variables son sólidas y personalizables.
+      Controlan colores, tipografía, bordes y efectos.
+   ------------------------------------------------------------------ */
 :root {
-    /* Colores base personalizables - TODOS SÓLIDOS */
+    /* Colores base de la interfaz */
     --topbar-color: #c6bdb3;
     --window-color: #dcd6cc;
     --titlebar-color: #4a6c7a;
@@ -17,13 +25,13 @@
     --modal-bg: #dcd6cc;
     --scrollbar-color: #00ff88;
 
-    /* Bordes estilo CDE - colores fijos para el efecto bisel */
+    /* Bordes estilo CDE: bisel 3D fijo */
     --border-light: #ffffff;
     --border-dark: #404040;
     --border-inset-light: #dfdfdf;
     --border-inset-dark: #808080;
 
-    /* Tipografía - NUEVAS VARIABLES PERSONALIZABLES */
+    /* Tipografía — completamente ajustable por el usuario */
     --font-family-base: "Fixedsys", "Lucida Console", monospace;
     --font-family-terminal: "Courier New", monospace;
     --font-size-base: 12px;
@@ -34,12 +42,16 @@
     --font-weight-bold: 700;
     --line-height-base: 1.45;
 
-    /* Efectos */
+    /* Efectos visuales */
     --shadow-color: rgba(0, 0, 0, 0.3);
     --glow-color: rgba(0, 255, 136, 0.05);
 }
 
-/* ================= RESET Y BASE ================= */
+/* ------------------------------------------------------------------
+   2. RESET Y ESTILOS BASE
+      Asegura que el contenedor ocupe toda la ventana y define
+      la tipografía global heredada por componentes.
+   ------------------------------------------------------------------ */
 html,
 body {
     margin: 0;
@@ -49,15 +61,22 @@ body {
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-normal);
     line-height: var(--line-height-base);
+
+    /* Fondo tipo circuito retro — se repite en mosaico */
     background-image: url("../images/CircuitBoards-8.png");
     background-size: contain;
     background-repeat: repeat;
     background-position: center;
     background-attachment: fixed;
+
+    /* Evita scroll no deseado en el viewport */
     overflow: hidden;
 }
 
-/* ================= CLASES UTILITARIAS BASE ================= */
+/* ------------------------------------------------------------------
+   3. CLASES UTILITARIAS
+      Control rápido de visibilidad y estados.
+   ------------------------------------------------------------------ */
 .hidden {
     display: none !important;
 }
@@ -70,76 +89,10 @@ body {
     background: var(--dock-icon-active) !important;
 }
 
-/* ================= SCROLLBAR GENERAL ================= */
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: var(--button-bg);
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--titlebar-color);
-    border: 1px solid var(--border-dark);
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: var(--separator-color);
-}
-
-/* ================= BOTONES GENERALES ================= */
-.min-btn,
-.close-btn,
-.cde-window-btn {
-    width: 18px;
-    height: 18px;
-    padding: 0;
-    margin-left: 4px;
-    background: var(--button-active);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
-}
-
-.min-btn img,
-.close-btn img {
-    width: 12px;
-    height: 12px;
-    image-rendering: pixelated;
-}
-
-.min-btn:active,
-.close-btn:active,
-.cde-window-btn:active {
-    border: 2px solid;
-    border-top-color: var(--border-dark);
-    border-left-color: var(--border-dark);
-    border-right-color: var(--border-light);
-    border-bottom-color: var(--border-light);
-}
-
-.min-btn:hover,
-.close-btn:hover {
-    background: var(--dock-icon-hover);
-}
-
-* {
-    cursor: url('../icons/cursor.svg'), auto;
-}
-
-/* Ocultar escritorio hasta que el boot termine */
-#desktop-ui {
-    display: none;
-}
-
-/* Pantalla de boot: visible desde el primer momento */
+/* ------------------------------------------------------------------
+   4. PANTALLA DE ARRANQUE (BOOT LOADER)
+      Visible desde el primer momento, se desvanece al terminar.
+   ------------------------------------------------------------------ */
 #debian-boot-screen {
     position: fixed;
     top: 0;
@@ -158,6 +111,7 @@ body {
     transition: opacity 0.5s ease-out;
 }
 
+/* Cabecera del boot: versión de Debian */
 #debian-boot-screen .header {
     color: #00AA00;
     border-bottom: 1px solid #333333;
@@ -166,18 +120,21 @@ body {
     font-weight: bold;
 }
 
+/* Contenedor donde se escriben las líneas del kernel */
 #boot-log-container {
     height: calc(100% - 30px);
     overflow-y: auto;
     font-family: monospace;
 }
 
+/* Animación de aparición de cada línea */
 @keyframes bootLineAppear {
     to {
         opacity: 1;
     }
 }
 
+/* Clases de color para cada tipo de mensaje de boot */
 .boot-kernel {
     color: #CCCCCC;
 }
@@ -213,4 +170,110 @@ body {
 
 .boot-default {
     color: #AAAAAA;
+}
+
+/* ------------------------------------------------------------------
+   5. ESCRITORIO CDE
+      Inicialmente oculto; se muestra tras completar el boot.
+   ------------------------------------------------------------------ */
+#desktop-ui {
+    display: none;
+}
+
+/* ------------------------------------------------------------------
+   6. COMPONENTES GLOBALES DE LA INTERFAZ
+      Estilos reutilizables en todo el escritorio.
+   ------------------------------------------------------------------ */
+
+/* ----- Barra de desplazamiento (WebKit) ----- */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--button-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--titlebar-color);
+    border: 1px solid var(--border-dark);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--separator-color);
+}
+
+/* ----- Botones de ventana (minimizar, cerrar) ----- */
+.min-btn,
+.close-btn,
+.cde-window-btn {
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    margin-left: 4px;
+    background: var(--button-active);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Bisel 3D estilo CDE */
+    border: 2px solid;
+    border-top-color: var(--border-light);
+    border-left-color: var(--border-light);
+    border-right-color: var(--border-dark);
+    border-bottom-color: var(--border-dark);
+}
+
+.min-btn img,
+.close-btn img {
+    width: 12px;
+    height: 12px;
+    image-rendering: pixelated;
+}
+
+/* Estado presionado: invierte el bisel */
+.min-btn:active,
+.close-btn:active,
+.cde-window-btn:active {
+    border: 2px solid;
+    border-top-color: var(--border-dark);
+    border-left-color: var(--border-dark);
+    border-right-color: var(--border-light);
+    border-bottom-color: var(--border-light);
+}
+
+.min-btn:hover,
+.close-btn:hover {
+    background: var(--dock-icon-hover);
+}
+
+/* ----- Cursor personalizado (SVG) ----- */
+* {
+    cursor: url('../icons/cursor.svg'), auto;
+}
+
+#cde-prompt-input {
+    width: 100%;
+    padding: 4px 6px;
+    background: var(--button-active);
+    border: 2px solid;
+    border-top-color: var(--border-inset-dark);
+    border-left-color: var(--border-inset-dark);
+    border-right-color: var(--border-inset-light);
+    border-bottom-color: var(--border-inset-light);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    box-sizing: border-box;
+}
+
+/* Logo de Debian en el bootloader */
+.boot-logo {
+    color: #00AA00;
+    font-family: monospace;
+    white-space: pre;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    opacity: 1 !important;
+    /* visible desde el inicio */
 }

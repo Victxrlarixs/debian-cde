@@ -1,4 +1,13 @@
-/* ================= TERMINAL ================= */
+/* ------------------------------------------------
+   CDE SIMULATION — COMPONENTES DE INTERFAZ
+   Terminal, File Manager y Style Manager
+   Dominio: debian.com.mx
+   ------------------------------------------------ */
+
+/* ------------------------------------------------------------------
+   1. TERMINAL EMULADOR
+      Estilo fósforo verde, fondo oscuro, tipografía monoespaciada.
+   ------------------------------------------------------------------ */
 .terminal-body {
     background: var(--terminal-bg-color);
     color: var(--terminal-text-color);
@@ -38,7 +47,7 @@
     line-height: var(--line-height-base);
 }
 
-/* Scrollbar terminal */
+/* Scroll personalizado para el área de la terminal */
 .terminal-body::-webkit-scrollbar {
     width: 6px;
 }
@@ -47,7 +56,10 @@
     background: var(--scrollbar-color);
 }
 
-/* ================= FILE MANAGER ================= */
+/* ------------------------------------------------------------------
+   2. GESTOR DE ARCHIVOS (FILE MANAGER)
+      Interfaz clásica CDE con toolbar, sidebar y vista de iconos.
+   ------------------------------------------------------------------ */
 #fm {
     display: flex;
     flex-direction: column;
@@ -61,7 +73,7 @@
     overflow: hidden;
 }
 
-/* Menu bar */
+/* ----- Barra de menú superior ----- */
 .fm-menubar {
     background: var(--button-bg);
     padding: 2px 6px;
@@ -72,7 +84,7 @@
     border-bottom: 2px solid var(--separator-color);
 }
 
-/* Toolbar */
+/* ----- Barra de herramientas ----- */
 .fm-toolbar {
     background: #b9b1a6;
     padding: 4px;
@@ -125,14 +137,14 @@
     border-bottom-color: var(--border-inset-light);
 }
 
-/* Body layout */
+/* ----- Cuerpo: sidebar + vista de archivos ----- */
 .fm-body {
     flex: 1;
     display: flex;
     overflow: hidden;
 }
 
-/* Sidebar */
+/* Barra lateral (lugares y dispositivos) */
 .fm-sidebar {
     width: 150px;
     background: #b4ada3;
@@ -166,7 +178,7 @@
     background: var(--button-active);
 }
 
-/* Files grid */
+/* Área de iconos (grid) */
 .fm-files {
     flex: 1;
     background: #7a808a;
@@ -198,6 +210,7 @@
     outline: 1px solid #0044aa;
 }
 
+/* Barra de estado inferior */
 .fm-status {
     background: var(--button-bg);
     font-size: var(--font-size-small);
@@ -206,13 +219,16 @@
     border-top: 2px solid var(--separator-color);
 }
 
-/* ================= STYLE MANAGER ================= */
+/* ------------------------------------------------------------------
+   3. STYLE MANAGER (ADMINISTRADOR DE ESTILOS)
+      Ventana modal para personalizar colores y tipografía.
+      Diseño fijo, centrado, con paneles y controles estilo CDE.
+   ------------------------------------------------------------------ */
 #styleManager {
     width: 600px;
     height: 480px;
     display: none;
     position: fixed !important;
-    /* Cambiado a fixed */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -227,12 +243,12 @@
     border-right-color: var(--border-dark);
     border-bottom-color: var(--border-dark);
     box-shadow: 4px 4px 0 var(--shadow-color);
-    /* Layout de caja */
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
 }
 
+/* Barra de título (arrastrable) */
 #styleManager .titlebar {
     background: var(--titlebar-color);
     color: white;
@@ -249,6 +265,7 @@
     min-height: 24px;
 }
 
+/* Cuerpo principal: panel lateral + panel de controles */
 #styleManager .modal-body {
     flex: 1;
     display: flex;
@@ -256,7 +273,7 @@
     background: var(--modal-bg);
 }
 
-/* Panel lateral de categorías */
+/* ----- Panel lateral de categorías (Colores / Fuentes) ----- */
 .cde-sidepanel {
     width: 150px;
     background: var(--button-bg);
@@ -307,7 +324,7 @@
     font-family: var(--font-family-base);
 }
 
-/* Panel de controles */
+/* ----- Panel de controles (contenido dinámico) ----- */
 .cde-controlpanel {
     flex: 1;
     padding: 20px;
@@ -338,7 +355,7 @@
     color: var(--titlebar-color);
 }
 
-/* Filas de controles */
+/* ----- Filas de controles (label + input) ----- */
 .cde-controlrow {
     display: flex;
     align-items: center;
@@ -357,14 +374,13 @@
     flex-shrink: 0;
 }
 
-/* Selectores de color */
+/* Selector de color con swatch y nombre */
 .cde-colorselector {
     display: flex;
     align-items: center;
     gap: 10px;
     flex: 1;
     min-width: 0;
-    /* Permite que se reduzca */
 }
 
 .cde-colorselector input[type="color"] {
@@ -394,7 +410,7 @@
     flex-shrink: 0;
 }
 
-/* CONTROLES DE FUENTE */
+/* ----- Controles de fuente ----- */
 .cde-select {
     flex: 1;
     height: 24px;
@@ -440,7 +456,7 @@
     border: 1px solid var(--separator-color);
 }
 
-/* Vista previa de fuentes */
+/* ----- Vista previa de fuentes ----- */
 .cde-font-preview {
     flex: 1;
     padding: 12px;
@@ -486,7 +502,7 @@
     color: #666;
 }
 
-/* Presets de colores - TEMAS CDE CLÁSICOS */
+/* ----- Presets de temas CDE clásicos ----- */
 .cde-presets {
     margin-top: 0px;
     padding: 12px;
@@ -538,7 +554,7 @@
     border-bottom-color: var(--border-light);
 }
 
-/* Barra de estado */
+/* ----- Barra de estado inferior ----- */
 .cde-statusbar {
     background: var(--button-bg);
     border-top: 1px solid var(--separator-color);
@@ -559,6 +575,7 @@
     color: var(--titlebar-color);
 }
 
+/* ----- Barra de acciones (botones) ----- */
 .cde-actionbar {
     background: var(--button-active);
     border-top: 2px solid var(--separator-color);
@@ -601,7 +618,7 @@
     font-weight: bold;
 }
 
-/* Scrollbar style manager */
+/* ----- Scrollbar personalizado para el panel de controles ----- */
 .cde-controlpanel::-webkit-scrollbar {
     width: 16px;
 }

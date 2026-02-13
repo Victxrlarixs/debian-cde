@@ -35,7 +35,9 @@ class StyleManager {
         };
 
         // TEMAS CDE CLÁSICOS - TODOS COLORES SÓLIDOS
+        // TEMAS CDE CLÁSICOS + NUEVOS - TODOS CON BUEN CONTRASTE
         this.presets = {
+            // === EXISTENTES MEJORADOS ===
             'platinum': {
                 '--topbar-color': '#c0c0c0',
                 '--window-color': '#c0c0c0',
@@ -49,12 +51,14 @@ class StyleManager {
                 '--button-active': '#d0d0d0',
                 '--separator-color': '#808080',
                 '--modal-bg': '#c0c0c0',
-                '--scrollbar-color': '#000080'
+                '--scrollbar-color': '#000080',
+                '--terminal-bg-color': '#000000',
+                '--terminal-text-color': '#00ff00'
             },
             'olive': {
                 '--topbar-color': '#c0c0a0',
                 '--window-color': '#c0c0a0',
-                '--titlebar-color': '#006400',
+                '--titlebar-color': '#3c5a3c',
                 '--dock-color': '#a0a080',
                 '--menu-color': '#c0c0a0',
                 '--dock-icon-bg': '#b0b090',
@@ -64,12 +68,14 @@ class StyleManager {
                 '--button-active': '#d0d0b0',
                 '--separator-color': '#808060',
                 '--modal-bg': '#c0c0a0',
-                '--scrollbar-color': '#006400'
+                '--scrollbar-color': '#3c5a3c',
+                '--terminal-bg-color': '#1e2a1e',
+                '--terminal-text-color': '#c0ffc0'
             },
             'marine': {
                 '--topbar-color': '#a0c0e0',
                 '--window-color': '#a0c0e0',
-                '--titlebar-color': '#000060',
+                '--titlebar-color': '#2a4a6a',
                 '--dock-color': '#8090c0',
                 '--menu-color': '#a0c0e0',
                 '--dock-icon-bg': '#90b0d0',
@@ -79,12 +85,14 @@ class StyleManager {
                 '--button-active': '#c0d8f0',
                 '--separator-color': '#6080a0',
                 '--modal-bg': '#a0c0e0',
-                '--scrollbar-color': '#000060'
+                '--scrollbar-color': '#2a4a6a',
+                '--terminal-bg-color': '#0a1a2a',
+                '--terminal-text-color': '#a0d0ff'
             },
             'sand': {
                 '--topbar-color': '#e0d0c0',
                 '--window-color': '#e0d0c0',
-                '--titlebar-color': '#806040',
+                '--titlebar-color': '#8b6b4b',
                 '--dock-color': '#c0b0a0',
                 '--menu-color': '#e0d0c0',
                 '--dock-icon-bg': '#d0c0b0',
@@ -94,56 +102,119 @@ class StyleManager {
                 '--button-active': '#f0e0d0',
                 '--separator-color': '#a09080',
                 '--modal-bg': '#e0d0c0',
-                '--scrollbar-color': '#806040'
-            },
-            'graphite': {
-                '--topbar-color': '#404040',
-                '--window-color': '#505050',
-                '--titlebar-color': '#202020',
-                '--dock-color': '#303030',
-                '--menu-color': '#404040',
-                '--dock-icon-bg': '#303030',
-                '--dock-icon-hover': '#606060',
-                '--dock-icon-active': '#707070',
-                '--button-bg': '#303030',
-                '--button-active': '#505050',
-                '--separator-color': '#202020',
-                '--modal-bg': '#404040',
-                '--scrollbar-color': '#00ff00',
-                '--terminal-bg-color': '#000000',
-                '--terminal-text-color': '#00ff00'
+                '--scrollbar-color': '#8b6b4b',
+                '--terminal-bg-color': '#2a1e14',
+                '--terminal-text-color': '#e0d0a0'
             },
             'midnight': {
-                '--topbar-color': '#000020',
-                '--window-color': '#000030',
-                '--titlebar-color': '#000010',
-                '--dock-color': '#000040',
-                '--menu-color': '#000020',
-                '--dock-icon-bg': '#000030',
-                '--dock-icon-hover': '#000060',
-                '--dock-icon-active': '#000080',
-                '--button-bg': '#000030',
-                '--button-active': '#000050',
-                '--separator-color': '#000010',
-                '--modal-bg': '#000020',
-                '--scrollbar-color': '#0080ff',
-                '--terminal-bg-color': '#000010',
-                '--terminal-text-color': '#0080ff'
+                '--topbar-color': '#1a2b3c',
+                '--window-color': '#1e2f40',
+                '--titlebar-color': '#2c4c6c',
+                '--dock-color': '#1a2b3c',
+                '--menu-color': '#2a3b4c',
+                '--dock-icon-bg': '#2a3b4c',
+                '--dock-icon-hover': '#3a4b5c',
+                '--dock-icon-active': '#4a5b6c',
+                '--button-bg': '#2a3b4c',
+                '--button-active': '#3a4b5c',
+                '--separator-color': '#3a4b5c',
+                '--modal-bg': '#1e2f40',
+                '--scrollbar-color': '#5a9eff',
+                '--terminal-bg-color': '#0a1a2a',
+                '--terminal-text-color': '#5a9eff',
+                '--text-color': '#ffffff',
+                '--button-text': '#ffffff'
             },
-            'desert': {
-                '--topbar-color': '#d8c8a8',
-                '--window-color': '#e8d8b8',
-                '--titlebar-color': '#a08040',
-                '--dock-color': '#c8b898',
-                '--menu-color': '#d8c8a8',
-                '--dock-icon-bg': '#c8b898',
-                '--dock-icon-hover': '#f8e8c8',
-                '--dock-icon-active': '#fff8e8',
-                '--button-bg': '#c8b898',
-                '--button-active': '#e8d8b8',
-                '--separator-color': '#a09070',
-                '--modal-bg': '#d8c8a8',
-                '--scrollbar-color': '#a08040'
+
+            'cobalt': {
+                '--topbar-color': '#003366',
+                '--window-color': '#004080',
+                '--titlebar-color': '#1a5c9e',
+                '--dock-color': '#003366',
+                '--menu-color': '#004080',
+                '--dock-icon-bg': '#004d99',
+                '--dock-icon-hover': '#0066cc',
+                '--dock-icon-active': '#1a8cff',
+                '--button-bg': '#004d99',
+                '--button-active': '#0066cc',
+                '--separator-color': '#002244',
+                '--modal-bg': '#004080',
+                '--scrollbar-color': '#ffaa00',
+                '--terminal-bg-color': '#001a33',
+                '--terminal-text-color': '#ffaa00',
+                '--text-color': '#ffffff'
+            },
+            'forest': {
+                '--topbar-color': '#2a5a2a',
+                '--window-color': '#2e6230',
+                '--titlebar-color': '#4a784a',
+                '--dock-color': '#2a5a2a',
+                '--menu-color': '#3a6a3a',
+                '--dock-icon-bg': '#3a6a3a',
+                '--dock-icon-hover': '#4a7a4a',
+                '--dock-icon-active': '#5a8a5a',
+                '--button-bg': '#3a6a3a',
+                '--button-active': '#4a7a4a',
+                '--separator-color': '#1a3a1a',
+                '--modal-bg': '#2e6230',
+                '--scrollbar-color': '#ffcc66',
+                '--terminal-bg-color': '#0a1a0a',
+                '--terminal-text-color': '#ccff99',
+                '--text-color': '#ffffff'
+            },
+            'sunset': {
+                '--topbar-color': '#b84c4c',
+                '--window-color': '#c45c5c',
+                '--titlebar-color': '#9c3c3c',
+                '--dock-color': '#b84c4c',
+                '--menu-color': '#c45c5c',
+                '--dock-icon-bg': '#b84c4c',
+                '--dock-icon-hover': '#d46c6c',
+                '--dock-icon-active': '#e47c7c',
+                '--button-bg': '#b84c4c',
+                '--button-active': '#c45c5c',
+                '--separator-color': '#8c3c3c',
+                '--modal-bg': '#c45c5c',
+                '--scrollbar-color': '#ffd700',
+                '--terminal-bg-color': '#2a1a1a',
+                '--terminal-text-color': '#ffb347',
+                '--text-color': '#ffffff'
+            },
+            'amber': {
+                '--topbar-color': '#c49a6c',
+                '--window-color': '#d4aa7c',
+                '--titlebar-color': '#a07a4a',
+                '--dock-color': '#c49a6c',
+                '--menu-color': '#d4aa7c',
+                '--dock-icon-bg': '#c49a6c',
+                '--dock-icon-hover': '#e4ba8c',
+                '--dock-icon-active': '#f4ca9c',
+                '--button-bg': '#c49a6c',
+                '--button-active': '#d4aa7c',
+                '--separator-color': '#947a4a',
+                '--modal-bg': '#d4aa7c',
+                '--scrollbar-color': '#6a4a2a',
+                '--terminal-bg-color': '#2a1e0a',
+                '--terminal-text-color': '#ffbf00',
+                '--text-color': '#000000'
+            },
+            'monochrome': {
+                '--topbar-color': '#e0e0e0',
+                '--window-color': '#f0f0f0',
+                '--titlebar-color': '#808080',
+                '--dock-color': '#d0d0d0',
+                '--menu-color': '#e0e0e0',
+                '--dock-icon-bg': '#d0d0d0',
+                '--dock-icon-hover': '#ffffff',
+                '--dock-icon-active': '#c0c0c0',
+                '--button-bg': '#d0d0d0',
+                '--button-active': '#e0e0e0',
+                '--separator-color': '#a0a0a0',
+                '--modal-bg': '#f0f0f0',
+                '--scrollbar-color': '#404040',
+                '--terminal-bg-color': '#000000',
+                '--terminal-text-color': '#00ff00',
+                '--text-color': '#000000'
             }
         };
 
@@ -759,13 +830,6 @@ class StyleManager {
 
         msgBox.innerHTML = `
             <div style="margin-bottom: 10px;">${message}</div>
-            <button onclick="this.parentElement.remove()" 
-                    style="padding: 4px 16px; margin-top: 10px; cursor: pointer;
-                           background: var(--button-bg); border: 1px solid;
-                           border-top-color: var(--border-light); border-left-color: var(--border-light);
-                           border-right-color: var(--border-dark); border-bottom-color: var(--border-dark);">
-                OK
-            </button>
         `;
 
         document.body.appendChild(msgBox);

@@ -1,6 +1,7 @@
 /**
  * @fileoverview Simulación de arranque Debian CDE.
- * Gestiona la secuencia de boot (duración total ~10s) y la inicialización del escritorio.
+ * Muestra el logo de Debian, luego la secuencia de boot (~10s)
+ * y finalmente inicializa el escritorio.
  * @author victxrlarixs
  */
 
@@ -8,20 +9,53 @@ let desktopInitialized = false;
 
 /**
  * Simula el arranque de un sistema Debian con CDE.
- * Muestra mensajes estilo kernel en #boot-log-container y finaliza
- * revelando el escritorio (#desktop-ui).
+ * Muestra primero el logo de Debian, luego mensajes estilo kernel
+ * en #boot-log-container y finaliza revelando el escritorio (#desktop-ui).
  */
 class DebianRealBoot {
     constructor() {
         /** @type {number} Índice del paso actual en la secuencia */
         this.currentStep = 0;
 
+        /** @type {string} Arte ASCII del logo de Debian */
+        this.logo = `
+                                  _,met$$$$$gg.
+                               ,g$$$$$$$$$$$$$$$P.
+                             ,g$$P""       """Y$$.".
+                            ,$$P'              \`$$$.
+                          ',$$P       ,ggs.     \`$$b:
+                          \`d$$'     ,$P"'   .    $$$
+                           $$P      d$'     ,    $$P
+                           $$:      $$.   -    ,d$$'
+                           $$;      Y$b._   _,d$P'
+                           Y$$.    \`. "Y$$$$P"'
+                           \`$$b      "-.__
+                            \`Y$$b
+                             \`Y$$.
+                               \`$$b.
+                                 \`Y$$b.
+                                   \`"Y$b._
+                                       \`""
+
+                       _,           _,      ,'.
+                     \`$$'         \`$$'     \`.  ,'
+                      $$           $$        \`'
+                      $$           $$         _,           _
+                ,d$$$g$$  ,d$$$b.  $$,d$$$b.\`$$' g$$$$$b.\`$$,d$$b.
+               ,$P'  \`$$ ,$P' \`Y$. $$$'  \`$$ $$  "'   \`$$ $$$' \`$$
+               $$'    $$ $$'   \`$$ $$'    $$ $$  ,ggggg$$ $$'   $$
+               $$     $$ $$ggggg$$ $$     $$ $$ ,$P"   $$ $$    $$
+               $$    ,$$ $$.       $$    ,$P $$ $$'   ,$$ $$    $$
+               \`$g. ,$$$ \`$$._ _., $$ _,g$P' $$ \`$b. ,$$$ $$    $$
+                \`Y$$P'$$. \`Y$$$$P',$$$$P"'  ,$$. \`Y$$P'$$.$$.  ,$$.
+        `;
+
         /** @type {Array<{delay: number, text: string, type: string}>} */
         this.bootSequence = [
             { delay: 177, text: "[    0.000000] Iniciando simulación Debian CDE [debian.com.mx]", type: "kernel" },
             { delay: 221, text: "[    0.227156] smpboot: CPU0: Motor Retro de Renderizado (compatibilidad 1995)", type: "cpu" },
             { delay: 310, text: "[    0.789123] Memoria: 64MB de nostalgia noventera disponible", type: "memory" },
-            { delay: 354, text: "[    1.012345] Montando /usr/share/cde/icons ...", type: "fs" },
+            { delay: 354, text: "[    1.012345] Montando /usr/share/cde/iconos ...", type: "fs" },
             { delay: 399, text: "[    1.123456] Cargando temas: Platinum, Olive, Marine...", type: "fs" },
             { delay: 372, text: "[    1.345678] Iniciando Style Manager (esquemas de color)", type: "systemd" },
             { delay: 443, text: "[    1.789012] Iniciando Workspace Manager: pager listo", type: "systemd" },
@@ -46,8 +80,28 @@ class DebianRealBoot {
     }
 
     /**
+     * Inserta el logo de Debian al inicio del contenedor.
+     * @private
+     */
+    insertLogo() {
+        if (!this.container) return;
+
+        const logoDiv = document.createElement('div');
+        logoDiv.className = 'boot-logo';
+        logoDiv.style.whiteSpace = 'pre';
+        logoDiv.style.fontFamily = 'monospace';
+        logoDiv.style.color = '#00AA00'; // Verde Debian
+        logoDiv.style.marginBottom = '20px';
+        logoDiv.style.lineHeight = '1.2';
+        logoDiv.textContent = this.logo;
+
+        this.container.appendChild(logoDiv);
+        this.bootLog.push('[LOGO] Debian ASCII art');
+    }
+
+    /**
      * Inicia la secuencia de arranque.
-     * Limpia el contenedor y ejecuta la reproducción de pasos.
+     * Limpia el contenedor, inserta el logo y ejecuta la reproducción de pasos.
      */
     start() {
         this.currentStep = 0;
@@ -60,6 +114,7 @@ class DebianRealBoot {
         }
 
         this.container.innerHTML = '';
+        this.insertLogo();
         this.startBootSequence();
     }
 
@@ -70,7 +125,7 @@ class DebianRealBoot {
     startBootSequence() {
         const showNextStep = () => {
             if (this.currentStep >= this.bootSequence.length) {
-                setTimeout(() => this.completeBoot(), 443); // ~0.44s para total 10s
+                setTimeout(() => this.completeBoot(), 443);
                 return;
             }
 
@@ -166,4 +221,4 @@ document.addEventListener('DOMContentLoaded', () => {
 window.initDesktop = initDesktop;
 window.DebianRealBoot = DebianRealBoot;
 
-console.log('✅ init.js loaded');
+console.log('✅ init.js loaded (con logo Debian)');
