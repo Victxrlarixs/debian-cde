@@ -3,6 +3,11 @@
 [![Licencia: GPL v3](https://img.shields.io/badge/Licencia-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![PRs Bienvenidos](https://img.shields.io/badge/PRs-bienvenidos-brightgreen.svg)]()
 
+[![Linux](https://img.shields.io/badge/Linux-FCC624?style=flat&logo=linux&logoColor=black)](https://www.kernel.org/)
+[![Debian](https://img.shields.io/badge/Debian-A81D33?style=flat&logo=debian&logoColor=white)](https://www.debian.org/)
+[![GNU](https://img.shields.io/badge/GNU-000000?style=flat&logo=gnu&logoColor=white)](https://www.gnu.org/)
+
+
 > Una simulación web nostálgica del **Common Desktop Environment (CDE)** — el clásico escritorio Unix — reinventado para el navegador moderno.
 
 ---
