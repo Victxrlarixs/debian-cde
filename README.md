@@ -1,32 +1,71 @@
-# 🖥️ Explore Debian – Web CDE Desktop
+# 🖥️ Simulación CDE en Debian
 
-Una recreación retro del entorno de escritorio clásico de **Debian / CDE (Common Desktop Environment)** directamente en el navegador.  
----
+[![Licencia: GPL v3](https://img.shields.io/badge/Licencia-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![PRs Bienvenidos](https://img.shields.io/badge/PRs-bienvenidos-brightgreen.svg)]()
 
-![Preview](https://github.com/Victxrlarixs/debian-cde/blob/beta/demo/Custom-Theme.png?raw=true)
-
-## ✨ Features
-
-- 🪟 Ventanas estilo CDE / Motif (draggables)
-- 🧭 Dock y panel inferior retro
-- 📁 File Manager web (simulación)
-- 💻 Terminal con Tool Tips
-- 🎨 Style Manager (los cambios se reflejan en el CSS real)
-- 🖱️ Menús contextuales tipo Unix
-- 🧠 UI completamente hecha en HTML, CSS y JS vanilla  
+> Una simulación web nostálgica del **Common Desktop Environment (CDE)** — el clásico escritorio Unix — reinventado para el navegador moderno.
 
 ---
 
-## 🚀 Demo
+## 🧠 Sobre el Proyecto
 
-> [BetaVersion](https://victxrlarixs.github.io/debian-cde/)  
+**Simulación CDE en Debian** es un experimento front-end que da vida al icónico **Common Desktop Environment** dentro del navegador. Inspirado en la estética vintage de CDE, este proyecto recrea su inconfundible interfaz, con el **Style Manager**, temas de color clásicos y una terminal con aspecto funcional — todo corriendo bajo una simulación con sabor a Debian.
+
+El proyecto vive en **[debian.com.mx](https://debian.com.mx)** y sirve como homenaje a los primeros entornos de escritorio Unix y como campo de juego para el desarrollo de interfaces retro.
 
 ---
 
-## 🛠️ Instalación
+## ✨ Características
 
-Clona el repo:
+- 🎨 **Temas clásicos CDE** – Platinum, Olive, Marine, Sand, Graphite  
+- 🖱️ **Style Manager interactivo** – Cambia el título activo, fondo y colores del espacio de trabajo al vuelo  
+- 💻 **Emulación de terminal** – Terminal en modo automático con contexto de usuario Debian  
+
+---
+
+## 🚀 Comenzar
+
+Solo visita **[debian.com.mx](https://debian.com.mx)** y empieza a explorar.  
+
+## 🌐 Despliegue
+
+El despliegue es **totalmente automatizado**:
+
+- **Fusión a `alpha`** → despliegue de vista previa (subdominio opcional).
+- **Fusión a `beta`** → despliegue de pruebas para validación final.
+- **Tras aprobación, `beta` se fusiona en `main`** → **en vivo en [debian.com.mx](https://debian.com.mx)**.
+
+Usamos [GitHub Actions](https://github.com/features/actions) para gestionar el proceso de despliegue sin fricciones.
+
+---
+
+## 📄 Licencia
+
+Distribuido bajo la **Licencia Pública General de GNU v3.0**.  
+Consulta el archivo [`LICENSE`](LICENSE) para más información.
+
+---
+
+## 🙏 Agradecimientos
+
+- El equipo de **CDE** por diseñar uno de los entornos de escritorio más memorables.
+- **Debian** – por mantener vivo el espíritu del Unix libre.
+- Todos los **contribuyentes** que ayudan a hacer esta simulación más auténtica y divertida.
+
+---
+
+<p align="center">
+  Hecho con ☕️ y 🖥️ nostalgia<br />
+  <a href="https://debian.com.mx">debian.com.mx</a>
+</p>
+
+
+## 🚀 Si deseas ejecutar el proyecto localmente:
 
 ```bash
-git clone https://github.com/victxrlarixs/debian-cde.git
-cd debian-cde
+# Descarga el código
+git clone https://github.com/tuusuario/cde-simulation.git
+cd cde-simulation
+
+# Abre index.html en tu navegador favorito
+open index.html
