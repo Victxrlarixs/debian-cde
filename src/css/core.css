@@ -133,3 +133,84 @@ body {
 * {
     cursor: url('../icons/cursor.svg'), auto;
 }
+
+/* Ocultar escritorio hasta que el boot termine */
+#desktop-ui {
+    display: none;
+}
+
+/* Pantalla de boot: visible desde el primer momento */
+#debian-boot-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000000;
+    color: #AAAAAA;
+    font-family: 'DejaVu Sans Mono', monospace;
+    font-size: 12px;
+    line-height: 1.1;
+    z-index: 99999;
+    padding: 10px;
+    box-sizing: border-box;
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+}
+
+#debian-boot-screen .header {
+    color: #00AA00;
+    border-bottom: 1px solid #333333;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+#boot-log-container {
+    height: calc(100% - 30px);
+    overflow-y: auto;
+    font-family: monospace;
+}
+
+@keyframes bootLineAppear {
+    to {
+        opacity: 1;
+    }
+}
+
+.boot-kernel {
+    color: #CCCCCC;
+}
+
+.boot-cpu {
+    color: #88AAFF;
+}
+
+.boot-memory {
+    color: #FFAA88;
+}
+
+.boot-fs {
+    color: #FFFF88;
+}
+
+.boot-systemd {
+    color: #88FFFF;
+}
+
+.boot-service {
+    color: #00FF00;
+}
+
+.boot-drm {
+    color: #FF8888;
+}
+
+.boot-desktop {
+    color: #00FFAA;
+    font-weight: bold;
+}
+
+.boot-default {
+    color: #AAAAAA;
+}
