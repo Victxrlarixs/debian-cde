@@ -759,13 +759,6 @@ class StyleManager {
 
         msgBox.innerHTML = `
             <div style="margin-bottom: 10px;">${message}</div>
-            <button onclick="this.parentElement.remove()" 
-                    style="padding: 4px 16px; margin-top: 10px; cursor: pointer;
-                           background: var(--button-bg); border: 1px solid;
-                           border-top-color: var(--border-light); border-left-color: var(--border-light);
-                           border-right-color: var(--border-dark); border-bottom-color: var(--border-dark);">
-                OK
-            </button>
         `;
 
         document.body.appendChild(msgBox);

@@ -1,5 +1,15 @@
-/* ================= EFECTOS ESPECIALES ================= */
-/* Scanlines tipo CRT */
+/* ------------------------------------------------
+   CDE SIMULATION — EFECTOS, TIPOGRAFÍA Y RESPONSIVE
+   Estilos complementarios: animaciones, media queries, utilidades
+   Dominio: debian.com.mx
+   ------------------------------------------------ */
+
+/* ------------------------------------------------------------------
+   1. EFECTOS ESPECIALES (CRT, CURSOR, GLITCH)
+      Añaden atmósfera retro y feedback visual.
+   ------------------------------------------------------------------ */
+
+/* ----- Líneas de barrido estilo CRT sobre ventanas ----- */
 .window::before {
     content: "";
     position: absolute;
@@ -13,7 +23,7 @@
     mix-blend-mode: overlay;
 }
 
-/* Cursor hacker parpadeante */
+/* ----- Cursor de terminal parpadeante (hacker) ----- */
 #terminalInput::after {
     content: "";
     display: inline-block;
@@ -30,7 +40,7 @@
     }
 }
 
-/* Glitch effect */
+/* ----- Efecto glitch para textos de terminal ----- */
 @keyframes glitch {
     0% {
         text-shadow: 0 0 4px rgba(0, 255, 136, 0.3);
@@ -50,7 +60,10 @@
     animation: glitch 6s infinite;
 }
 
-/* ================= MESSAGE STYLES ================= */
+/* ------------------------------------------------------------------
+   2. MENSAJES EMERGENTES (FADE IN/OUT)
+      Animación para notificaciones temporales.
+   ------------------------------------------------------------------ */
 .cde-message {
     animation: fadeInOut 2s ease-in-out;
 }
@@ -77,10 +90,13 @@
     }
 }
 
-/* ================= TIPOGRAFÍA ================= */
-/* Las fuentes ya están aplicadas arriba usando variables CSS */
+/* ------------------------------------------------------------------
+   3. TIPOGRAFÍA — AJUSTES DE TAMAÑO
+      Las fuentes ya están definidas en :root.
+      Aquí se asignan tamaños específicos por componente.
+   ------------------------------------------------------------------ */
 
-/* Ajustes de tamaño de fuente */
+/* Tamaño base */
 body,
 .window,
 #cde-panel,
@@ -90,6 +106,7 @@ body,
     font-size: var(--font-size-base);
 }
 
+/* Tamaño de título (ligeramente mayor) */
 .titlebar,
 .cde-subtitle,
 .terminal-body,
@@ -97,6 +114,7 @@ body,
     font-size: var(--font-size-title);
 }
 
+/* Tamaño pequeño (etiquetas, barras de estado, presets) */
 .cde-label,
 .pager-ws,
 .scroll-btn,
@@ -107,8 +125,12 @@ body,
     font-size: var(--font-size-small);
 }
 
+/* ------------------------------------------------------------------
+   4. DISEÑO RESPONSIVE
+      Adaptaciones para móviles y pantallas estrechas.
+   ------------------------------------------------------------------ */
 
-/* ================= Responsive ================= */
+/* Pantallas medianas/pequeñas (tablets) */
 @media (max-width: 768px) {
     #cde-panel {
         width: 95%;
@@ -139,7 +161,7 @@ body,
     }
 }
 
-/* Ajustes responsivos para el topbar */
+/* Ocultar etiquetas de texto en topbar, solo iconos */
 @media (max-width: 900px) {
     .top-right {
         gap: 8px;
@@ -151,11 +173,10 @@ body,
 
     .sys-item span:not(#clock) {
         display: none;
-        /* Ocultar texto, solo mostrar iconos */
     }
 }
 
-/* Ajustes para el Style Manager en pantallas pequeñas */
+/* Style Manager en móviles pequeños */
 @media (max-width: 650px) {
     #styleManager {
         width: 95vw;
@@ -192,7 +213,12 @@ body,
     }
 }
 
-/* Botón de salida con icono */
+/* ------------------------------------------------------------------
+   5. MEJORAS Y UTILIDADES
+      Botón de salida refinado, accesibilidad, transiciones.
+   ------------------------------------------------------------------ */
+
+/* ----- Botón de salida con icono (versión mejorada) ----- */
 .cde-exit-btn {
     padding: 4px 10px;
     background: var(--button-bg);
@@ -214,24 +240,28 @@ body,
     image-rendering: pixelated;
 }
 
-/* Mejoras de accesibilidad */
+/* ----- Accesibilidad: indicador de foco visible ----- */
 button:focus,
 input:focus {
     outline: 2px solid var(--titlebar-color);
     outline-offset: 2px;
 }
 
-/* Animaciones suaves para cambios de color */
+/* ----- Transiciones suaves para cambios de color y borde ----- */
 * {
-    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.3s ease,
+        border-color 0.3s ease,
+        color 0.3s ease;
 }
 
-/* Para cambios de fuente, transiciones separadas */
+/* Transiciones específicas para fuentes (más rápidas) */
 .cde-font-preview * {
-    transition: font-family 0.2s ease, font-size 0.2s ease, line-height 0.2s ease;
+    transition: font-family 0.2s ease,
+        font-size 0.2s ease,
+        line-height 0.2s ease;
 }
 
-/* Deshabilitar transiciones durante cambios masivos para mejor rendimiento */
+/* Deshabilitar transiciones durante cambios masivos de fuente */
 body.fonts-changing * {
     transition: none !important;
 }
