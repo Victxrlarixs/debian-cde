@@ -172,7 +172,7 @@
                 <div class="tray-icon">
                     <img src="./src/icons/gtkclocksetup.png" alt="Reloj">
                 </div>
-                <div class="tray-icon">
+                <div class="tray-icon" id="screenshot-btn" onclick="captureFullPageScreenshot()">
                     <img src="./src/icons/org.xfce.screenshooter.png" alt="Camera">
                 </div>
                 <div class="tray-icon">
@@ -387,6 +387,7 @@
     </div>
 
     <script src="./src/js/init.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="./src/js/wm.js"></script>
     <script src="./src/js/modals.js"></script>
     <script src="./src/js/filemanager.js"></script>
