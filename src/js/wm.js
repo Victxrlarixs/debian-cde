@@ -166,6 +166,9 @@ window.focusWindow = WindowManager.focusWindow;
 /**
  * Captura profesional con opciones optimizadas para CDE
  */
+/**
+ * Captura profesional con opciones optimizadas para CDE
+ */
 function captureFullPageScreenshot() {
     const btn = document.getElementById('screenshot-btn');
     if (btn) {
@@ -176,24 +179,7 @@ function captureFullPageScreenshot() {
     // Feedback visual: mensaje flotante estilo CDE
     const toast = document.createElement('div');
     toast.textContent = '📸 Capturando escritorio...';
-    toast.style.cssText = `
-        position: fixed;
-        bottom: 100px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: var(--titlebar-color, #4a6c7a);
-        color: white;
-        padding: 8px 20px;
-        border: 2px solid;
-        border-top-color: var(--border-light);
-        border-left-color: var(--border-light);
-        border-right-color: var(--border-dark);
-        border-bottom-color: var(--border-dark);
-        font-family: var(--font-family-base, monospace);
-        font-size: 12px;
-        z-index: 99999;
-        box-shadow: 4px 4px 0 rgba(0,0,0,0.3);
-    `;
+    toast.className = 'screenshot-toast'; // Única línea de estilo
     document.body.appendChild(toast);
 
     const options = {
@@ -205,16 +191,12 @@ function captureFullPageScreenshot() {
         windowWidth: window.innerWidth,
         windowHeight: window.innerHeight,
         onclone: (clonedDoc) => {
-            // Pequeño truco: asegurar que el mensaje "Capturando" NO salga en la foto
-            const clonedToast = clonedDoc.querySelector('div');
-            if (clonedToast?.textContent?.includes('Capturando')) {
-                clonedToast.style.display = 'none';
-            }
+            const clonedToast = clonedDoc.querySelector('.screenshot-toast');
+            if (clonedToast) clonedToast.style.display = 'none';
         }
     };
 
     html2canvas(document.documentElement, options).then(canvas => {
-        // Generar nombre con fecha legible
         const now = new Date();
         const filename = `CDE-${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')} ${now.getHours().toString().padStart(2, '0')}.${now.getMinutes().toString().padStart(2, '0')}.${now.getSeconds().toString().padStart(2, '0')}.png`;
 
@@ -223,7 +205,6 @@ function captureFullPageScreenshot() {
         link.href = canvas.toDataURL('image/png');
         link.click();
 
-        // Limpiar
         document.body.removeChild(toast);
         if (btn) {
             btn.style.opacity = '1';
@@ -236,8 +217,6 @@ function captureFullPageScreenshot() {
             btn.style.cursor = 'pointer';
         }
         console.error('Screenshot error:', error);
-
-        // Modal de error estilo CDE
         if (window.CDEModal) {
             CDEModal.alert('Error al capturar pantalla.');
         } else {
@@ -245,4 +224,3 @@ function captureFullPageScreenshot() {
         }
     });
 }
-

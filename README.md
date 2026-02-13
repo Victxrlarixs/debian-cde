@@ -20,7 +20,7 @@ El proyecto vive en **[debian.com.mx](https://debian.com.mx)** y sirve como home
 - 🎨 **Temas clásicos CDE** – Platinum, Olive, Marine, Sand, Graphite  
 - 🖱️ **Style Manager interactivo** – Cambia el título activo, fondo y colores del espacio de trabajo al vuelo  
 - 💻 **Emulación de terminal** – Terminal en modo automático con contexto de usuario Debian  
-
+- 📸 **Captura tu experiencia** Captura de pantalla integrada – Haz clic en el icono de la cámara y descarga un PNG de todo el escritorio.
 ---
 
 ## 🚀 Comenzar
