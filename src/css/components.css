@@ -679,3 +679,81 @@
     left: 50% !important;
     transform: translate(-50%, -50%) !important;
 }
+
+
+
+
+/* ------------------------------------------------------------------
+   CDE MODAL – Estilos globales para ventanas modales
+   Sin dependencia de Style Manager, completamente independiente.
+   ------------------------------------------------------------------ */
+
+/* Modal base – hereda de .cde-retro-modal pero aseguramos posición fija */
+#cde-modal-global,
+.cde-retro-modal.cde-modal-global {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 400px;
+    max-width: 90vw;
+    background: var(--modal-bg);
+    border: 2px solid;
+    border-top-color: var(--border-light);
+    border-left-color: var(--border-light);
+    border-right-color: var(--border-dark);
+    border-bottom-color: var(--border-dark);
+    box-shadow: 4px 4px 0 var(--shadow-color);
+    display: none;
+    flex-direction: column;
+    z-index: 10000;
+    font-family: var(--font-family-base);
+}
+
+/* Cuerpo del modal */
+#cde-modal-global .modal-body,
+.cde-retro-modal.cde-modal-global .modal-body {
+    padding: 20px;
+    min-height: 80px;
+    background: var(--modal-bg);
+    color: var(--text-color, #000000);
+    border: none;
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+}
+
+/* Barra de acciones (botones) */
+#cde-modal-global .cde-actionbar,
+.cde-retro-modal.cde-modal-global .cde-actionbar {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+    background: var(--button-active);
+    border-top: 2px solid var(--separator-color);
+}
+
+/* Input de prompt */
+#cde-prompt-input {
+    width: 100%;
+    padding: 4px 6px;
+    background: var(--button-active);
+    border: 2px solid;
+    border-top-color: var(--border-inset-dark);
+    border-left-color: var(--border-inset-dark);
+    border-right-color: var(--border-inset-light);
+    border-bottom-color: var(--border-inset-light);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    box-sizing: border-box;
+    margin-top: 8px;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 480px) {
+
+    #cde-modal-global,
+    .cde-retro-modal.cde-modal-global {
+        width: 95vw;
+    }
+}

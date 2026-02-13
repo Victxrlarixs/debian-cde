@@ -23,17 +23,17 @@ const FileManager = (() => {
             type: "folder",
             children: {
                 "Desktop": { type: "folder", children: {} },
-                "bienvenida.txt": { type: "file", content: "Bienvenido a Debian WebCDE." },
-                "tutoriales": {
+                "welcome.txt": { type: "file", content: "Welcome to Debian WebCDE." },
+                "tutorials": {
                     type: "folder",
                     children: {
-                        "primeros-pasos.txt": { type: "file", content: "Usa ls, cd, cat, mkdir, touch." }
+                        "getting-started.txt": { type: "file", content: "Use ls, cd, cat, mkdir, touch." }
                     }
                 },
-                "configuraciones": {
+                "settings": {
                     type: "folder",
                     children: {
-                        "tema.txt": { type: "file", content: "Tema actual: CDE Retro" }
+                        "theme.txt": { type: "file", content: "Current theme: CDE Retro" }
                     }
                 }
             }
@@ -115,7 +115,7 @@ const FileManager = (() => {
             container.appendChild(div);
         });
 
-        status.textContent = `${count} ${count === 1 ? 'elemento' : 'elementos'}`;
+        status.textContent = `${count} ${count === 1 ? 'item' : 'items'}`;
     }
 
     /**
@@ -190,7 +190,7 @@ const FileManager = (() => {
     async function rm(name) {
         const folder = getCurrentFolder();
         if (!folder) return;
-        const confirmed = await CDEModal.confirm(`¿Eliminar ${name}?`);
+        const confirmed = await CDEModal.confirm(`Delete ${name}?`);
         if (confirmed) {
             delete folder[name];
             fmSelected = null;
@@ -237,83 +237,59 @@ const FileManager = (() => {
     }
 
     // ------------------------------------------------------------------
-    // MENÚS
+    // MENÚS (INTERFAZ DE USUARIO EN INGLÉS)
     // ------------------------------------------------------------------
     const fmMenus = {
-        Archivo: [
+        File: [
             {
-                label: "Nuevo archivo",
+                label: "New File",
                 action: async () => {
-                    const name = await CDEModal.prompt("Nombre del archivo:");
+                    const name = await CDEModal.prompt("File name:");
                     if (name) await touch(name);
                 }
             },
             {
-                label: "Nueva carpeta",
+                label: "New Folder",
                 action: async () => {
-                    const name = await CDEModal.prompt("Nombre de la carpeta:");
+                    const name = await CDEModal.prompt("Folder name:");
                     if (name) await mkdir(name);
                 }
             },
             {
-                label: "Eliminar seleccionado",
+                label: "Delete Selected",
                 action: async () => {
                     if (fmSelected) await rm(fmSelected);
                 }
             }
         ],
-        Editar: [
+        Edit: [
             {
-                label: "Renombrar",
+                label: "Rename",
                 action: async () => {
                     if (!fmSelected) return;
-                    const newName = await CDEModal.prompt("Nuevo nombre:", fmSelected);
+                    const newName = await CDEModal.prompt("New name:", fmSelected);
                     if (newName) await rename(fmSelected, newName);
                 }
             }
         ],
-        Ver: [
+        View: [
             {
-                label: "Mostrar archivos ocultos",
+                label: "Show Hidden Files",
                 action: () => {
                     showHidden = !showHidden;
                     renderFiles();
                 }
             },
             {
-                label: "Actualizar",
+                label: "Refresh",
                 action: () => renderFiles()
             }
         ],
-        Ir: [
-            { label: "Atrás", action: goBack },
-            { label: "Adelante", action: goForward },
-            { label: "Subir", action: goUp },
-            { label: "Inicio", action: goHome }
-        ],
-        Ayuda: [
-            {
-                label: "Acerca de",
-                action: () => {
-                    if (typeof openRetroModal === 'function') {
-                        openRetroModal(
-                            "Información",
-                            `<p>Debian con CDE - v1.0.0</p>
-                             <p><a href='https://github.com/victxrlarixs' target='_blank'>GitHub</a></p>`,
-                            [
-                                { label: 'Cerrar', closeOnClick: true },
-                                {
-                                    label: 'Ir a GitHub',
-                                    onClick: () => window.open('https://github.com/victxrlarixs', '_blank'),
-                                    closeOnClick: false
-                                }
-                            ]
-                        );
-                    } else {
-                        CDEModal.alert("Debian con CDE - v1.0.0\nhttps://github.com/victxrlarixs");
-                    }
-                }
-            }
+        Go: [
+            { label: "Back", action: goBack },
+            { label: "Forward", action: goForward },
+            { label: "Up", action: goUp },
+            { label: "Home", action: goHome }
         ]
     };
 
@@ -380,7 +356,7 @@ const FileManager = (() => {
 
         const items = [
             {
-                label: "Abrir",
+                label: "Open",
                 action: () => {
                     const item = getCurrentFolder()?.[name];
                     if (item) {
@@ -390,22 +366,22 @@ const FileManager = (() => {
                 }
             },
             {
-                label: "Renombrar",
+                label: "Rename",
                 action: async () => {
-                    const newName = await CDEModal.prompt("Nuevo nombre:", name);
+                    const newName = await CDEModal.prompt("New name:", name);
                     if (newName) await rename(name, newName);
                 }
             },
             {
-                label: "Eliminar",
+                label: "Delete",
                 action: async () => await rm(name)
             },
             {
-                label: "Propiedades",
+                label: "Properties",
                 action: async () => {
                     const item = getCurrentFolder()?.[name];
                     if (item) {
-                        await CDEModal.alert(`Nombre: ${name}\nTipo: ${item.type}\nRuta: ${currentPath}${name}`);
+                        await CDEModal.alert(`Name: ${name}\nType: ${item.type}\nPath: ${currentPath}${name}`);
                     }
                 }
             }
@@ -460,7 +436,6 @@ const FileManager = (() => {
         sidebarItems.forEach(item => {
             const path = item.dataset.path;
             if (path) {
-                // Remover onclick previo y usar addEventListener
                 item.onclick = null;
                 item.addEventListener("click", () => openPath(path));
             }
@@ -508,7 +483,7 @@ const FileManager = (() => {
     }
 
     // ------------------------------------------------------------------
-    // RETORNO DE API PÚBLICA (incluye funciones de navegación)
+    // RETORNO DE API PÚBLICA
     // ------------------------------------------------------------------
     return {
         init,
@@ -525,7 +500,7 @@ const FileManager = (() => {
 })();
 
 // ------------------------------------------------------------------
-// EXPOSICIÓN GLOBAL PARA COMPATIBILIDAD CON EVENTOS HTML
+// EXPOSICIÓN GLOBAL PARA EVENTOS HTML
 // ------------------------------------------------------------------
 window.openFileManager = FileManager.open;
 window.closeFileManager = FileManager.close;
