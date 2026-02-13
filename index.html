@@ -179,7 +179,7 @@
                     <img src="./src/icons/printer.png" alt="Printer">
 
                 </div>
-                <div class="tray-icon">
+                <div class="tray-icon" id="taskmanager-btn" onclick="TaskManager.open()">
                     <img src="./src/icons/org.xfce.taskmanager.png" alt="TaskManager">
                 </div>
             </div>
@@ -384,16 +384,35 @@
             <button class="cde-btn" onclick="styleManager.close()">Close</button>
         </div>
     </div>
+
+    <div class="window" id="taskmanager" style="top:120px; left:200px; width:450px; height:300px; display:none;">
+        <div class="titlebar" id="taskmanager-titlebar">
+            <span class="titlebar-text">Task Manager</span>
+            <div class="close-btn" onclick="TaskManager.close()">
+                <img src="./src/icons/tab_close.png">
+            </div>
+        </div>
+        <div class="terminal-body" style="background: var(--window-color); color: black; padding: 0;">
+            <div id="taskmanager-content" style="padding: 10px;">
+            </div>
+        </div>
+        <div class="cde-actionbar" style="justify-content: flex-end;">
+            <button class="cde-btn" onclick="TaskManager.killProcess()">Kill Process</button>
+            <button class="cde-btn" onclick="TaskManager.refresh()">Refresh</button>
+        </div>
     </div>
+    </div>
+
+
 
     <script src="./src/js/init.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="./src/js/wm.js"></script>
     <script src="./src/js/modals.js"></script>
     <script src="./src/js/filemanager.js"></script>
+    <script src="./src/js/utilities.js"></script>
     <script src="./src/js/terminal.js"></script>
     <script src="./src/js/stylemanager.js"></script>
-
 </body>
 
 </html>
