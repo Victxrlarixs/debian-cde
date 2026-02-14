@@ -757,3 +757,25 @@
         width: 95vw;
     }
 }
+
+/* ------------------------------------------------------------------
+   SCREENSHOT TOAST
+   ------------------------------------------------------------------ */
+.screenshot-toast {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--titlebar-color, #4a6c7a);
+    color: white;
+    padding: 8px 20px;
+    border: 2px solid;
+    border-top-color: var(--border-light);
+    border-left-color: var(--border-light);
+    border-right-color: var(--border-dark);
+    border-bottom-color: var(--border-dark);
+    font-family: var(--font-family-base, monospace);
+    font-size: 12px;
+    z-index: 99999;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+}
