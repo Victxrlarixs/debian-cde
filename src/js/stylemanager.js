@@ -8,8 +8,10 @@ class StyleManager {
         // Cargar valores por defecto desde CONFIG
         this.styles = { ...CONFIG.DEFAULT_STYLES.COLORS };
         this.fontStyles = { ...CONFIG.DEFAULT_STYLES.FONTS };
-        this.presets = { ...CONFIG.THEMES };
-        this.fontPresets = { ...CONFIG.FONT_PRESETS };
+
+        // Temas y presets de fuentes (cargados desde JSON)
+        this.presets = { ...CONFIG.THEMES } || {};
+        this.fontPresets = { ...CONFIG.FONT_PRESETS } || {};
 
         this.defaultStyles = { ...this.styles };
         this.defaultFontStyles = { ...this.fontStyles };
@@ -190,7 +192,7 @@ class StyleManager {
         const modal = document.getElementById('styleManager');
         if (modal) {
             modal.style.display = 'flex';
-            modal.style.zIndex = '10000'; // Podría venir de CONFIG.STYLEMANAGER.BASE_Z_INDEX
+            modal.style.zIndex = '10000';
             console.log('Style Manager opened');
         }
     }

@@ -18,25 +18,24 @@ const CONFIG = {
         BEEP_GAIN: 0.1,
         BEEP_DURATION: 0.1,
     },
+
     SCREENSHOT: {
         SCALE: 2,
         TOAST_MESSAGE: '📸 Capturando escritorio...',
         FILENAME_PREFIX: 'CDE',
     },
+
     // ==================================================================
     // SISTEMA DE ARCHIVOS VIRTUAL
     // ==================================================================
     FILEMANAGER: {
         BASE_Z_INDEX: 1000,
     },
+
     FS: {
-        /** Ruta base del home del usuario */
         HOME: '/home/victxrlarixs/',
-        /** Ruta del escritorio */
         DESKTOP: '/home/victxrlarixs/Desktop/',
-        /** Ruta de la papelera (carpeta oculta) */
         TRASH: '/home/victxrlarixs/.Trash/',
-        /** Ruta de red simulada */
         NETWORK: '/network/',
     },
 
@@ -44,28 +43,14 @@ const CONFIG = {
     // TERMINAL Y TUTORIAL
     // ==================================================================
     TERMINAL: {
-        /** Ruta base (sin barra final) */
         HOME_PATH: '/home/victxrlarixs',
-
-        /** Delay mínimo entre caracteres (ms) */
         MIN_TYPING_DELAY: 20,
-        /** Delay máximo entre caracteres (ms) */
         MAX_TYPING_DELAY: 80,
-
-        /** Tiempo de espera después de un comando (ms) */
         POST_COMMAND_DELAY: 800,
-        /** Tiempo de espera entre secuencias (ms) */
         POST_SEQUENCE_DELAY: 2000,
-
-        /** Límite de líneas visibles en la terminal */
         MAX_LINES: 50,
-
-        /** Intervalo de limpieza automática (ms) */
         CLEANUP_INTERVAL: 30000,
-        /** Intervalo de scroll automático (ms) */
         SCROLL_INTERVAL: 500,
-
-        /** Mensajes de transición entre secuencias */
         TRANSITION_MESSAGES: [
             '🔄 Continuando con más comandos útiles...',
             '📚 Siguiente tema: comandos de administración...',
@@ -74,16 +59,12 @@ const CONFIG = {
             '🛠️ Próxima sección: herramientas de desarrollo...',
             '🌐 Explorando comandos de red...'
         ],
-
-        // NOTA: Las secuencias completas del tutorial (TUTORIAL_SEQUENCES)
-        // se mantienen en terminal.js por su extensión y porque son específicas de ese módulo.
     },
 
     // ==================================================================
     // ARRANQUE (BOOT)
     // ==================================================================
     BOOT: {
-        /** Arte ASCII del logo de Debian */
         LOGO: `
                                   _,met$$$$$gg.
                                ,g$$$$$$$$$$$$$$$P.
@@ -115,8 +96,6 @@ const CONFIG = {
                \`$g. ,$$$ \`$$._ _., $$ _,g$P' $$ \`$b. ,$$$ $$    $$
                 \`Y$$P'$$. \`Y$$$$P',$$$$P"'  ,$$. \`Y$$P'$$.$$.  ,$$.
         `,
-
-        /** Secuencia de mensajes del kernel (cada paso tiene delay, texto y tipo) */
         SEQUENCE: [
             { delay: 177, text: "[    0.000000] Starting Debian CDE simulation [debian.com.mx]", type: "kernel" },
             { delay: 221, text: "[    0.227156] smpboot: CPU0: Retro Render Engine (1995 compatibility)", type: "cpu" },
@@ -134,18 +113,14 @@ const CONFIG = {
             { delay: 647, text: "[    4.444444] Style Manager: listening for color changes", type: "desktop" },
             { delay: 700, text: "[    5.000000] CDE Desktop ready ....", type: "desktop" },
         ],
-
-        /** Tiempo extra después de la última línea (ms) */
         FINAL_DELAY: 443,
     },
 
     // ==================================================================
-    // VENTANAS (WINDOW MANAGER)
+    // VENTANAS (WINDOW MANAGER) – duplicado, dejamos uno solo
     // ==================================================================
     WINDOW: {
-        /** Mínimo de píxeles visibles al arrastrar una ventana */
         MIN_VISIBLE: 20,
-        /** Valor inicial de z-index (se incrementa dinámicamente) */
         BASE_Z_INDEX: 100,
     },
 
@@ -153,17 +128,13 @@ const CONFIG = {
     // TASK MANAGER
     // ==================================================================
     TASK_MANAGER: {
-        /** ID del botón que abre el Task Manager (en el panel) */
         BUTTON_ID: 'taskmanager-btn',
-        /** ID de la ventana del Task Manager */
         WINDOW_ID: 'taskmanager',
-        /** Z-index base para la ventana */
         BASE_Z_INDEX: 2000,
     },
 
     // ==================================================================
     // ESTILOS POR DEFECTO (colores y fuentes base)
-    // NOTA: Los presets completos de temas y fuentes se encuentran en stylemanager.js
     // ==================================================================
     DEFAULT_STYLES: {
         COLORS: {
@@ -195,239 +166,25 @@ const CONFIG = {
         }
     },
 
-    // ==================================================================
-    // TEMAS CLÁSICOS CDE (presets de color)
-    // Se mantienen aquí para centralizar, pero si prefieres dejarlos en
-    // stylemanager.js por claridad, puedes comentar esta sección.
-    // ==================================================================
-    THEMES: {
-        platinum: {
-            '--topbar-color': '#c0c0c0',
-            '--window-color': '#c0c0c0',
-            '--titlebar-color': '#000080',
-            '--dock-color': '#a0a0a0',
-            '--menu-color': '#c0c0c0',
-            '--dock-icon-bg': '#b0b0b0',
-            '--dock-icon-hover': '#d0d0d0',
-            '--dock-icon-active': '#e0e0e0',
-            '--button-bg': '#b0b0b0',
-            '--button-active': '#d0d0d0',
-            '--separator-color': '#808080',
-            '--modal-bg': '#c0c0c0',
-            '--scrollbar-color': '#000080',
-            '--terminal-bg-color': '#000000',
-            '--terminal-text-color': '#00ff00'
-        },
-        olive: {
-            '--topbar-color': '#c0c0a0',
-            '--window-color': '#c0c0a0',
-            '--titlebar-color': '#3c5a3c',
-            '--dock-color': '#a0a080',
-            '--menu-color': '#c0c0a0',
-            '--dock-icon-bg': '#b0b090',
-            '--dock-icon-hover': '#d0d0b0',
-            '--dock-icon-active': '#e0e0c0',
-            '--button-bg': '#b0b090',
-            '--button-active': '#d0d0b0',
-            '--separator-color': '#808060',
-            '--modal-bg': '#c0c0a0',
-            '--scrollbar-color': '#3c5a3c',
-            '--terminal-bg-color': '#1e2a1e',
-            '--terminal-text-color': '#c0ffc0'
-        },
-        marine: {
-            '--topbar-color': '#a0c0e0',
-            '--window-color': '#a0c0e0',
-            '--titlebar-color': '#2a4a6a',
-            '--dock-color': '#8090c0',
-            '--menu-color': '#a0c0e0',
-            '--dock-icon-bg': '#90b0d0',
-            '--dock-icon-hover': '#c0d8f0',
-            '--dock-icon-active': '#d0e8ff',
-            '--button-bg': '#90b0d0',
-            '--button-active': '#c0d8f0',
-            '--separator-color': '#6080a0',
-            '--modal-bg': '#a0c0e0',
-            '--scrollbar-color': '#2a4a6a',
-            '--terminal-bg-color': '#0a1a2a',
-            '--terminal-text-color': '#a0d0ff'
-        },
-        sand: {
-            '--topbar-color': '#e0d0c0',
-            '--window-color': '#e0d0c0',
-            '--titlebar-color': '#8b6b4b',
-            '--dock-color': '#c0b0a0',
-            '--menu-color': '#e0d0c0',
-            '--dock-icon-bg': '#d0c0b0',
-            '--dock-icon-hover': '#f0e0d0',
-            '--dock-icon-active': '#f8f0e8',
-            '--button-bg': '#d0c0b0',
-            '--button-active': '#f0e0d0',
-            '--separator-color': '#a09080',
-            '--modal-bg': '#e0d0c0',
-            '--scrollbar-color': '#8b6b4b',
-            '--terminal-bg-color': '#2a1e14',
-            '--terminal-text-color': '#e0d0a0'
-        },
-        midnight: {
-            '--topbar-color': '#1a2b3c',
-            '--window-color': '#1e2f40',
-            '--titlebar-color': '#2c4c6c',
-            '--dock-color': '#1a2b3c',
-            '--menu-color': '#2a3b4c',
-            '--dock-icon-bg': '#2a3b4c',
-            '--dock-icon-hover': '#3a4b5c',
-            '--dock-icon-active': '#4a5b6c',
-            '--button-bg': '#2a3b4c',
-            '--button-active': '#3a4b5c',
-            '--separator-color': '#3a4b5c',
-            '--modal-bg': '#1e2f40',
-            '--scrollbar-color': '#5a9eff',
-            '--terminal-bg-color': '#0a1a2a',
-            '--terminal-text-color': '#5a9eff',
-            '--text-color': '#ffffff',
-            '--button-text': '#ffffff'
-        },
-        cobalt: {
-            '--topbar-color': '#003366',
-            '--window-color': '#004080',
-            '--titlebar-color': '#1a5c9e',
-            '--dock-color': '#003366',
-            '--menu-color': '#004080',
-            '--dock-icon-bg': '#004d99',
-            '--dock-icon-hover': '#0066cc',
-            '--dock-icon-active': '#1a8cff',
-            '--button-bg': '#004d99',
-            '--button-active': '#0066cc',
-            '--separator-color': '#002244',
-            '--modal-bg': '#004080',
-            '--scrollbar-color': '#ffaa00',
-            '--terminal-bg-color': '#001a33',
-            '--terminal-text-color': '#ffaa00',
-            '--text-color': '#ffffff'
-        },
-        forest: {
-            '--topbar-color': '#2a5a2a',
-            '--window-color': '#2e6230',
-            '--titlebar-color': '#4a784a',
-            '--dock-color': '#2a5a2a',
-            '--menu-color': '#3a6a3a',
-            '--dock-icon-bg': '#3a6a3a',
-            '--dock-icon-hover': '#4a7a4a',
-            '--dock-icon-active': '#5a8a5a',
-            '--button-bg': '#3a6a3a',
-            '--button-active': '#4a7a4a',
-            '--separator-color': '#1a3a1a',
-            '--modal-bg': '#2e6230',
-            '--scrollbar-color': '#ffcc66',
-            '--terminal-bg-color': '#0a1a0a',
-            '--terminal-text-color': '#ccff99',
-            '--text-color': '#ffffff'
-        },
-        sunset: {
-            '--topbar-color': '#b84c4c',
-            '--window-color': '#c45c5c',
-            '--titlebar-color': '#9c3c3c',
-            '--dock-color': '#b84c4c',
-            '--menu-color': '#c45c5c',
-            '--dock-icon-bg': '#b84c4c',
-            '--dock-icon-hover': '#d46c6c',
-            '--dock-icon-active': '#e47c7c',
-            '--button-bg': '#b84c4c',
-            '--button-active': '#c45c5c',
-            '--separator-color': '#8c3c3c',
-            '--modal-bg': '#c45c5c',
-            '--scrollbar-color': '#ffd700',
-            '--terminal-bg-color': '#2a1a1a',
-            '--terminal-text-color': '#ffb347',
-            '--text-color': '#ffffff'
-        },
-        amber: {
-            '--topbar-color': '#c49a6c',
-            '--window-color': '#d4aa7c',
-            '--titlebar-color': '#a07a4a',
-            '--dock-color': '#c49a6c',
-            '--menu-color': '#d4aa7c',
-            '--dock-icon-bg': '#c49a6c',
-            '--dock-icon-hover': '#e4ba8c',
-            '--dock-icon-active': '#f4ca9c',
-            '--button-bg': '#c49a6c',
-            '--button-active': '#d4aa7c',
-            '--separator-color': '#947a4a',
-            '--modal-bg': '#d4aa7c',
-            '--scrollbar-color': '#6a4a2a',
-            '--terminal-bg-color': '#2a1e0a',
-            '--terminal-text-color': '#ffbf00',
-            '--text-color': '#000000'
-        },
-        monochrome: {
-            '--topbar-color': '#e0e0e0',
-            '--window-color': '#f0f0f0',
-            '--titlebar-color': '#808080',
-            '--dock-color': '#d0d0d0',
-            '--menu-color': '#e0e0e0',
-            '--dock-icon-bg': '#d0d0d0',
-            '--dock-icon-hover': '#ffffff',
-            '--dock-icon-active': '#c0c0c0',
-            '--button-bg': '#d0d0d0',
-            '--button-active': '#e0e0e0',
-            '--separator-color': '#a0a0a0',
-            '--modal-bg': '#f0f0f0',
-            '--scrollbar-color': '#404040',
-            '--terminal-bg-color': '#000000',
-            '--terminal-text-color': '#00ff00',
-            '--text-color': '#000000'
-        }
-    },
+    // Espacios para los datos que vendrán del JSON
+    THEMES: {},
+    FONT_PRESETS: {},
 
-    // ==================================================================
-    // PRESETS DE FUENTES
-    // ==================================================================
-    FONT_PRESETS: {
-        'classic-cde': {
-            '--font-family-base': '"Fixedsys", "Lucida Console", monospace',
-            '--font-family-terminal': '"Courier New", monospace',
-            '--font-size-base': '12px',
-            '--font-size-title': '13px',
-            '--font-size-small': '11px',
-            '--font-weight-normal': '400',
-            '--font-weight-bold': '700',
-            '--line-height-base': '1.45'
-        },
-        modern: {
-            '--font-family-base': 'Arial, sans-serif',
-            '--font-family-terminal': 'Consolas, monospace',
-            '--font-size-base': '14px',
-            '--font-size-title': '15px',
-            '--font-size-small': '12px',
-            '--font-weight-normal': '400',
-            '--font-weight-bold': '700',
-            '--line-height-base': '1.5'
-        },
-        retro: {
-            '--font-family-base': '"MS Sans Serif", sans-serif',
-            '--font-family-terminal': '"Lucida Console", monospace',
-            '--font-size-base': '11px',
-            '--font-size-title': '12px',
-            '--font-size-small': '10px',
-            '--font-weight-normal': '700',
-            '--font-weight-bold': '900',
-            '--line-height-base': '1.3'
-        },
-        terminal: {
-            '--font-family-base': '"Ubuntu Mono", monospace',
-            '--font-family-terminal': '"DejaVu Sans Mono", monospace',
-            '--font-size-base': '13px',
-            '--font-size-title': '14px',
-            '--font-size-small': '12px',
-            '--font-weight-normal': '400',
-            '--font-weight-bold': '700',
-            '--line-height-base': '1.4'
+    // Método para cargar temas desde JSON
+    async loadThemes() {
+        try {
+            const response = await fetch('./src/themes.json');
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+            this.THEMES = data.THEMES;
+            this.FONT_PRESETS = data.FONT_PRESETS;
+            console.log('✅ Temas cargados desde JSON');
+        } catch (e) {
+            console.error('❌ Error cargando temas:', e);
+            // Opcional: asignar fallback con temas vacíos o por defecto
         }
     }
 };
-
-
 
 // Exponer globalmente
 window.CONFIG = CONFIG;
