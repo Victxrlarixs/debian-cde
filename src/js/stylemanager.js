@@ -517,13 +517,8 @@ window.switchStyleTab = function (category) {
     if (window.styleManager) window.styleManager.setActiveCategory(category);
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-    window.styleManager = new StyleManager();
-    setTimeout(() => window.styleManager.init(), 100);
-    window.openStyleManager = () => window.styleManager?.open();
-    console.log('CDE Style Manager loaded');
-
-    // Arrastre de la ventana Style Manager
+// Mantener solo el arrastre (no depende de temas)
+document.addEventListener('DOMContentLoaded', function () {
     const styleManager = document.getElementById('styleManager');
     const styleManagerTitlebar = document.getElementById('styleManagerTitlebar');
     if (styleManager && styleManagerTitlebar) {
@@ -555,3 +550,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
+console.log('✅ StyleManager class loaded (instance created in init.js)');

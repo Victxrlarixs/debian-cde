@@ -109,11 +109,16 @@ function initDesktop() {
     console.log('✅ CDE Desktop initialized successfully!');
 }
 
-// Arranque automático: primero carga temas, luego boot
+// Arranque automático: primero carga temas, luego crea StyleManager y boot
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('📄 DOM Content Loaded');
-    // Cargar temas desde JSON antes de empezar
+    // Cargar temas desde JSON antes de crear StyleManager
     await window.CONFIG.loadThemes();
+    // Crear instancia de StyleManager después de cargar temas
+    window.styleManager = new StyleManager();
+    window.openStyleManager = () => window.styleManager?.open();
+    console.log('✅ StyleManager instance created after theme load');
+    // Iniciar boot
     window.debianBoot = new DebianRealBoot();
     window.debianBoot.start();
 });
