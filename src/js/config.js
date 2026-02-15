@@ -173,7 +173,7 @@ const CONFIG = {
     // Método para cargar temas desde JSON
     async loadThemes() {
         try {
-            const response = await fetch('./src/themes.json');
+            const response = await fetch('./src/catalogs/themes.json')
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             const data = await response.json();
             this.THEMES = data.THEMES;
