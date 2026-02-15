@@ -5,10 +5,11 @@
 
 class StyleManager {
     constructor() {
+        // Cargar valores por defecto desde CONFIG
         this.styles = { ...CONFIG.DEFAULT_STYLES.COLORS };
         this.fontStyles = { ...CONFIG.DEFAULT_STYLES.FONTS };
-        this.presets = { ...CONFIG.THEMES } || {};
-        this.fontPresets = { ...CONFIG.FONT_PRESETS } || {};
+        this.presets = { ...CONFIG.THEMES };
+        this.fontPresets = { ...CONFIG.FONT_PRESETS };
 
         this.defaultStyles = { ...this.styles };
         this.defaultFontStyles = { ...this.fontStyles };
@@ -47,35 +48,41 @@ class StyleManager {
         const saveBtn = document.querySelector('#styleManager .cde-btn:nth-child(3)');
         if (saveBtn) saveBtn.addEventListener('click', () => this.save());
 
-        // ===== PRESETS DE COLOR (delegación) =====
-        const colorsPanel = document.querySelector('#colors-panel .cde-preset-row');
-        if (colorsPanel) {
-            colorsPanel.addEventListener('click', (e) => {
-                const btn = e.target.closest('.cde-preset[data-scheme]');
-                if (!btn) return;
+        document.querySelectorAll('.cde-preset[data-scheme]').forEach(btn => {
+            btn.onclick = null;
+            btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                const scheme = btn.dataset.scheme;
+                const scheme = e.currentTarget.dataset.scheme;
                 this.applyPreset(scheme);
-                this.highlightActiveColorPreset(btn);
+                this.highlightActiveColorPreset(e.currentTarget);
             });
-        }
+        });
 
-        // ===== PRESETS DE FUENTE (delegación) =====
-        const fontsPanel = document.querySelector('#fonts-panel .cde-preset-row');
-        if (fontsPanel) {
-            fontsPanel.addEventListener('click', (e) => {
-                const btn = e.target.closest('.cde-preset[data-preset]');
-                if (!btn) return;
+        document.querySelectorAll('.cde-preset[data-preset][data-type="font"]').forEach(btn => {
+            btn.onclick = null;
+            btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                const presetName = btn.dataset.preset;
+                const presetName = e.currentTarget.dataset.preset;
                 this.applyFontPreset(presetName);
-                this.highlightActiveFontPreset(btn);
+                this.highlightActiveFontPreset(e.currentTarget);
             });
-        }
+        });
 
-        // Categorías
+        const fontPresetNames = ['classic-cde', 'modern', 'retro', 'terminal'];
+        document.querySelectorAll('.cde-preset[data-preset]').forEach(btn => {
+            const presetName = btn.dataset.preset;
+            if (fontPresetNames.includes(presetName)) {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.applyFontPreset(presetName);
+                    this.highlightActiveFontPreset(e.currentTarget);
+                });
+            }
+        });
+
         document.querySelectorAll('.cde-category').forEach(cat => {
             cat.onclick = null;
             cat.addEventListener('click', (e) => {
@@ -90,12 +97,12 @@ class StyleManager {
 
     highlightActiveColorPreset(activeButton) {
         document.querySelectorAll('.cde-preset[data-scheme]').forEach(btn => btn.classList.remove('active'));
-        document.querySelectorAll('.cde-preset[data-preset]').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.cde-preset[data-preset][data-type="font"]').forEach(btn => btn.classList.remove('active'));
         if (activeButton) activeButton.classList.add('active');
     }
 
     highlightActiveFontPreset(activeButton) {
-        document.querySelectorAll('.cde-preset[data-preset]').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.cde-preset[data-preset][data-type="font"]').forEach(btn => btn.classList.remove('active'));
         document.querySelectorAll('.cde-preset[data-scheme]').forEach(btn => btn.classList.remove('active'));
         if (activeButton) activeButton.classList.add('active');
     }
@@ -183,7 +190,7 @@ class StyleManager {
         const modal = document.getElementById('styleManager');
         if (modal) {
             modal.style.display = 'flex';
-            modal.style.zIndex = '10000';
+            modal.style.zIndex = '10000'; // Podría venir de CONFIG.STYLEMANAGER.BASE_Z_INDEX
             console.log('Style Manager opened');
         }
     }
@@ -508,7 +515,13 @@ window.switchStyleTab = function (category) {
     if (window.styleManager) window.styleManager.setActiveCategory(category);
 };
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
+    window.styleManager = new StyleManager();
+    setTimeout(() => window.styleManager.init(), 100);
+    window.openStyleManager = () => window.styleManager?.open();
+    console.log('CDE Style Manager loaded');
+
+    // Arrastre de la ventana Style Manager
     const styleManager = document.getElementById('styleManager');
     const styleManagerTitlebar = document.getElementById('styleManagerTitlebar');
     if (styleManager && styleManagerTitlebar) {
@@ -540,5 +553,3 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 });
-
-console.log('✅ StyleManager class loaded');
