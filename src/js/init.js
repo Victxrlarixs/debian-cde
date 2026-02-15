@@ -17,57 +17,11 @@ class DebianRealBoot {
         /** @type {number} Índice del paso actual en la secuencia */
         this.currentStep = 0;
 
-        /** @type {string} Arte ASCII del logo de Debian */
-        this.logo = `
-                                  _,met$$$$$gg.
-                               ,g$$$$$$$$$$$$$$$P.
-                             ,g$$P""       """Y$$.".
-                            ,$$P'              \`$$$.
-                          ',$$P       ,ggs.     \`$$b:
-                          \`d$$'     ,$P"'   .    $$$
-                           $$P      d$'     ,    $$P
-                           $$:      $$.   -    ,d$$'
-                           $$;      Y$b._   _,d$P'
-                           Y$$.    \`. "Y$$$$P"'
-                           \`$$b      "-.__
-                            \`Y$$b
-                             \`Y$$.
-                               \`$$b.
-                                 \`Y$$b.
-                                   \`"Y$b._
-                                       \`""
-
-                       _,           _,      ,'.
-                     \`$$'         \`$$'     \`.  ,'
-                      $$           $$        \`'
-                      $$           $$         _,           _
-                ,d$$$g$$  ,d$$$b.  $$,d$$$b.\`$$' g$$$$$b.\`$$,d$$b.
-               ,$P'  \`$$ ,$P' \`Y$. $$$'  \`$$ $$  "'   \`$$ $$$' \`$$
-               $$'    $$ $$'   \`$$ $$'    $$ $$  ,ggggg$$ $$'   $$
-               $$     $$ $$ggggg$$ $$     $$ $$ ,$P"   $$ $$    $$
-               $$    ,$$ $$.       $$    ,$P $$ $$'   ,$$ $$    $$
-               \`$g. ,$$$ \`$$._ _., $$ _,g$P' $$ \`$b. ,$$$ $$    $$
-                \`Y$$P'$$. \`Y$$$$P',$$$$P"'  ,$$. \`Y$$P'$$.$$.  ,$$.
-        `;
+        /** @type {string} Arte ASCII del logo de Debian (desde config) */
+        this.logo = CONFIG.BOOT.LOGO;
 
         /** @type {Array<{delay: number, text: string, type: string}>} */
-        this.bootSequence = [
-            { delay: 177, text: "[    0.000000] Iniciando simulación Debian CDE [debian.com.mx]", type: "kernel" },
-            { delay: 221, text: "[    0.227156] smpboot: CPU0: Motor Retro de Renderizado (compatibilidad 1995)", type: "cpu" },
-            { delay: 310, text: "[    0.789123] Memoria: 64MB de nostalgia noventera disponible", type: "memory" },
-            { delay: 354, text: "[    1.012345] Montando /usr/share/cde/iconos ...", type: "fs" },
-            { delay: 399, text: "[    1.123456] Cargando temas: Platinum, Olive, Marine...", type: "fs" },
-            { delay: 372, text: "[    1.345678] Iniciando Style Manager (esquemas de color)", type: "systemd" },
-            { delay: 443, text: "[    1.789012] Iniciando Workspace Manager: pager listo", type: "systemd" },
-            { delay: 337, text: "[    2.112345] i915: Inicializando filtro CRT retro", type: "drm" },
-            { delay: 461, text: "[    2.667890] Iniciando dtlogin: administrador de sesión CDE (auto-login: victxrlarixs)", type: "service" },
-            { delay: 487, text: "[    2.778901] Cargando Panel CDE: selector de espacios, iconos, bandeja", type: "service" },
-            { delay: 461, text: "[    3.123456] Iniciando Gestor de Archivos", type: "service" },
-            { delay: 638, text: "[    4.111111] dtwm: Gestor de ventanas inicializado", type: "desktop" },
-            { delay: 664, text: "[    4.222222] Espacio de trabajo Uno: activo", type: "desktop" },
-            { delay: 647, text: "[    4.444444] Style Manager: escuchando cambios de color", type: "desktop" },
-            { delay: 700, text: "[    5.000000] Escritorio CDE listo ....", type: "desktop" },
-        ];
+        this.bootSequence = CONFIG.BOOT.SEQUENCE;
 
         /** @type {Array<string>} Historial de líneas mostradas */
         this.bootLog = [];
@@ -90,7 +44,7 @@ class DebianRealBoot {
         logoDiv.className = 'boot-logo';
         logoDiv.style.whiteSpace = 'pre';
         logoDiv.style.fontFamily = 'monospace';
-        logoDiv.style.color = '#00AA00'; // Verde Debian
+        logoDiv.style.color = '#00AA00';
         logoDiv.style.marginBottom = '20px';
         logoDiv.style.lineHeight = '1.2';
         logoDiv.textContent = this.logo;
@@ -101,7 +55,6 @@ class DebianRealBoot {
 
     /**
      * Inicia la secuencia de arranque.
-     * Limpia el contenedor, inserta el logo y ejecuta la reproducción de pasos.
      */
     start() {
         this.currentStep = 0;
@@ -125,7 +78,7 @@ class DebianRealBoot {
     startBootSequence() {
         const showNextStep = () => {
             if (this.currentStep >= this.bootSequence.length) {
-                setTimeout(() => this.completeBoot(), 443);
+                setTimeout(() => this.completeBoot(), CONFIG.BOOT.FINAL_DELAY);
                 return;
             }
 
@@ -152,7 +105,7 @@ class DebianRealBoot {
     /**
      * Devuelve el nombre de clase CSS según el tipo de mensaje.
      * @param {string} type
-     * @returns {string} Nombre de clase (ej. 'boot-kernel')
+     * @returns {string}
      */
     getLineClass(type) {
         const map = {
@@ -169,8 +122,7 @@ class DebianRealBoot {
     }
 
     /**
-     * Finaliza el boot: oculta la pantalla negra, muestra el escritorio
-     * e invoca la inicialización de componentes.
+     * Finaliza el boot.
      */
     completeBoot() {
         if (this.bootScreen) {
@@ -191,7 +143,6 @@ class DebianRealBoot {
 
 /**
  * Inicializa todos los módulos del escritorio CDE.
- * Se ejecuta una sola vez tras completar el boot.
  */
 function initDesktop() {
     if (desktopInitialized) return;
@@ -201,7 +152,6 @@ function initDesktop() {
     if (typeof initClock === 'function') initClock();
     if (typeof initTerminal === 'function') initTerminal();
     if (typeof initWindowManager === 'function') initWindowManager();
-    if (typeof initUI === 'function') initUI();
     if (window.styleManager?.init === 'function') window.styleManager.init();
 
     desktopInitialized = true;
@@ -209,7 +159,7 @@ function initDesktop() {
 }
 
 // ---------------------------------------------------------------------
-// Arranque automático al cargar el DOM
+// Arranque automático
 // ---------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
     console.log('📄 DOM Content Loaded');
@@ -217,7 +167,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.debianBoot.start();
 });
 
-// Exposición global para acceso desde consola u otros módulos
 window.initDesktop = initDesktop;
 window.DebianRealBoot = DebianRealBoot;
 

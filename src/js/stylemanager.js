@@ -1,272 +1,18 @@
-// stylemanager.js - VERSIÓN COMPLETA CON SOPORTE PARA COLORES Y FUENTES
-// AHORA CON MISMA CLASE .cde-preset PARA TODOS LOS BOTONES
+/**
+ * @fileoverview Administrador de estilos CDE para personalización de colores y fuentes.
+ * @author victxrlarixs
+ */
 
 class StyleManager {
     constructor() {
-        // Estilos de color por defecto
-        this.styles = {
-            '--topbar-color': '#c6bdb3',
-            '--window-color': '#dcd6cc',
-            '--titlebar-color': '#4a6c7a',
-            '--terminal-bg-color': '#070b0d',
-            '--terminal-text-color': '#c7fbe3',
-            '--dock-color': '#e6e1d8',
-            '--menu-color': '#bfb6aa',
-            '--dock-icon-bg': '#bfb9ad',
-            '--dock-icon-hover': '#e0dad0',
-            '--dock-icon-active': '#d8d1c6',
-            '--button-bg': '#bfb6aa',
-            '--button-active': '#d6cec4',
-            '--separator-color': '#8f877d',
-            '--modal-bg': '#dcd6cc',
-            '--scrollbar-color': '#00ff88'
-        };
+        // Cargar valores por defecto desde CONFIG
+        this.styles = { ...CONFIG.DEFAULT_STYLES.COLORS };
+        this.fontStyles = { ...CONFIG.DEFAULT_STYLES.FONTS };
+        this.presets = { ...CONFIG.THEMES };
+        this.fontPresets = { ...CONFIG.FONT_PRESETS };
 
-        // Estilos de fuente por defecto
-        this.fontStyles = {
-            '--font-family-base': '"Fixedsys", "Lucida Console", monospace',
-            '--font-family-terminal': '"Courier New", monospace',
-            '--font-size-base': '12px',
-            '--font-size-title': '13px',
-            '--font-size-small': '11px',
-            '--font-weight-normal': '400',
-            '--font-weight-bold': '700',
-            '--line-height-base': '1.45'
-        };
-
-        // TEMAS CDE CLÁSICOS - TODOS COLORES SÓLIDOS
-        // TEMAS CDE CLÁSICOS + NUEVOS - TODOS CON BUEN CONTRASTE
-        this.presets = {
-            // === EXISTENTES MEJORADOS ===
-            'platinum': {
-                '--topbar-color': '#c0c0c0',
-                '--window-color': '#c0c0c0',
-                '--titlebar-color': '#000080',
-                '--dock-color': '#a0a0a0',
-                '--menu-color': '#c0c0c0',
-                '--dock-icon-bg': '#b0b0b0',
-                '--dock-icon-hover': '#d0d0d0',
-                '--dock-icon-active': '#e0e0e0',
-                '--button-bg': '#b0b0b0',
-                '--button-active': '#d0d0d0',
-                '--separator-color': '#808080',
-                '--modal-bg': '#c0c0c0',
-                '--scrollbar-color': '#000080',
-                '--terminal-bg-color': '#000000',
-                '--terminal-text-color': '#00ff00'
-            },
-            'olive': {
-                '--topbar-color': '#c0c0a0',
-                '--window-color': '#c0c0a0',
-                '--titlebar-color': '#3c5a3c',
-                '--dock-color': '#a0a080',
-                '--menu-color': '#c0c0a0',
-                '--dock-icon-bg': '#b0b090',
-                '--dock-icon-hover': '#d0d0b0',
-                '--dock-icon-active': '#e0e0c0',
-                '--button-bg': '#b0b090',
-                '--button-active': '#d0d0b0',
-                '--separator-color': '#808060',
-                '--modal-bg': '#c0c0a0',
-                '--scrollbar-color': '#3c5a3c',
-                '--terminal-bg-color': '#1e2a1e',
-                '--terminal-text-color': '#c0ffc0'
-            },
-            'marine': {
-                '--topbar-color': '#a0c0e0',
-                '--window-color': '#a0c0e0',
-                '--titlebar-color': '#2a4a6a',
-                '--dock-color': '#8090c0',
-                '--menu-color': '#a0c0e0',
-                '--dock-icon-bg': '#90b0d0',
-                '--dock-icon-hover': '#c0d8f0',
-                '--dock-icon-active': '#d0e8ff',
-                '--button-bg': '#90b0d0',
-                '--button-active': '#c0d8f0',
-                '--separator-color': '#6080a0',
-                '--modal-bg': '#a0c0e0',
-                '--scrollbar-color': '#2a4a6a',
-                '--terminal-bg-color': '#0a1a2a',
-                '--terminal-text-color': '#a0d0ff'
-            },
-            'sand': {
-                '--topbar-color': '#e0d0c0',
-                '--window-color': '#e0d0c0',
-                '--titlebar-color': '#8b6b4b',
-                '--dock-color': '#c0b0a0',
-                '--menu-color': '#e0d0c0',
-                '--dock-icon-bg': '#d0c0b0',
-                '--dock-icon-hover': '#f0e0d0',
-                '--dock-icon-active': '#f8f0e8',
-                '--button-bg': '#d0c0b0',
-                '--button-active': '#f0e0d0',
-                '--separator-color': '#a09080',
-                '--modal-bg': '#e0d0c0',
-                '--scrollbar-color': '#8b6b4b',
-                '--terminal-bg-color': '#2a1e14',
-                '--terminal-text-color': '#e0d0a0'
-            },
-            'midnight': {
-                '--topbar-color': '#1a2b3c',
-                '--window-color': '#1e2f40',
-                '--titlebar-color': '#2c4c6c',
-                '--dock-color': '#1a2b3c',
-                '--menu-color': '#2a3b4c',
-                '--dock-icon-bg': '#2a3b4c',
-                '--dock-icon-hover': '#3a4b5c',
-                '--dock-icon-active': '#4a5b6c',
-                '--button-bg': '#2a3b4c',
-                '--button-active': '#3a4b5c',
-                '--separator-color': '#3a4b5c',
-                '--modal-bg': '#1e2f40',
-                '--scrollbar-color': '#5a9eff',
-                '--terminal-bg-color': '#0a1a2a',
-                '--terminal-text-color': '#5a9eff',
-                '--text-color': '#ffffff',
-                '--button-text': '#ffffff'
-            },
-
-            'cobalt': {
-                '--topbar-color': '#003366',
-                '--window-color': '#004080',
-                '--titlebar-color': '#1a5c9e',
-                '--dock-color': '#003366',
-                '--menu-color': '#004080',
-                '--dock-icon-bg': '#004d99',
-                '--dock-icon-hover': '#0066cc',
-                '--dock-icon-active': '#1a8cff',
-                '--button-bg': '#004d99',
-                '--button-active': '#0066cc',
-                '--separator-color': '#002244',
-                '--modal-bg': '#004080',
-                '--scrollbar-color': '#ffaa00',
-                '--terminal-bg-color': '#001a33',
-                '--terminal-text-color': '#ffaa00',
-                '--text-color': '#ffffff'
-            },
-            'forest': {
-                '--topbar-color': '#2a5a2a',
-                '--window-color': '#2e6230',
-                '--titlebar-color': '#4a784a',
-                '--dock-color': '#2a5a2a',
-                '--menu-color': '#3a6a3a',
-                '--dock-icon-bg': '#3a6a3a',
-                '--dock-icon-hover': '#4a7a4a',
-                '--dock-icon-active': '#5a8a5a',
-                '--button-bg': '#3a6a3a',
-                '--button-active': '#4a7a4a',
-                '--separator-color': '#1a3a1a',
-                '--modal-bg': '#2e6230',
-                '--scrollbar-color': '#ffcc66',
-                '--terminal-bg-color': '#0a1a0a',
-                '--terminal-text-color': '#ccff99',
-                '--text-color': '#ffffff'
-            },
-            'sunset': {
-                '--topbar-color': '#b84c4c',
-                '--window-color': '#c45c5c',
-                '--titlebar-color': '#9c3c3c',
-                '--dock-color': '#b84c4c',
-                '--menu-color': '#c45c5c',
-                '--dock-icon-bg': '#b84c4c',
-                '--dock-icon-hover': '#d46c6c',
-                '--dock-icon-active': '#e47c7c',
-                '--button-bg': '#b84c4c',
-                '--button-active': '#c45c5c',
-                '--separator-color': '#8c3c3c',
-                '--modal-bg': '#c45c5c',
-                '--scrollbar-color': '#ffd700',
-                '--terminal-bg-color': '#2a1a1a',
-                '--terminal-text-color': '#ffb347',
-                '--text-color': '#ffffff'
-            },
-            'amber': {
-                '--topbar-color': '#c49a6c',
-                '--window-color': '#d4aa7c',
-                '--titlebar-color': '#a07a4a',
-                '--dock-color': '#c49a6c',
-                '--menu-color': '#d4aa7c',
-                '--dock-icon-bg': '#c49a6c',
-                '--dock-icon-hover': '#e4ba8c',
-                '--dock-icon-active': '#f4ca9c',
-                '--button-bg': '#c49a6c',
-                '--button-active': '#d4aa7c',
-                '--separator-color': '#947a4a',
-                '--modal-bg': '#d4aa7c',
-                '--scrollbar-color': '#6a4a2a',
-                '--terminal-bg-color': '#2a1e0a',
-                '--terminal-text-color': '#ffbf00',
-                '--text-color': '#000000'
-            },
-            'monochrome': {
-                '--topbar-color': '#e0e0e0',
-                '--window-color': '#f0f0f0',
-                '--titlebar-color': '#808080',
-                '--dock-color': '#d0d0d0',
-                '--menu-color': '#e0e0e0',
-                '--dock-icon-bg': '#d0d0d0',
-                '--dock-icon-hover': '#ffffff',
-                '--dock-icon-active': '#c0c0c0',
-                '--button-bg': '#d0d0d0',
-                '--button-active': '#e0e0e0',
-                '--separator-color': '#a0a0a0',
-                '--modal-bg': '#f0f0f0',
-                '--scrollbar-color': '#404040',
-                '--terminal-bg-color': '#000000',
-                '--terminal-text-color': '#00ff00',
-                '--text-color': '#000000'
-            }
-        };
-
-        // Presets de fuentes
-        this.fontPresets = {
-            'classic-cde': {
-                '--font-family-base': '"Fixedsys", "Lucida Console", monospace',
-                '--font-family-terminal': '"Courier New", monospace',
-                '--font-size-base': '12px',
-                '--font-size-title': '13px',
-                '--font-size-small': '11px',
-                '--font-weight-normal': '400',
-                '--font-weight-bold': '700',
-                '--line-height-base': '1.45'
-            },
-            'modern': {
-                '--font-family-base': 'Arial, sans-serif',
-                '--font-family-terminal': 'Consolas, monospace',
-                '--font-size-base': '14px',
-                '--font-size-title': '15px',
-                '--font-size-small': '12px',
-                '--font-weight-normal': '400',
-                '--font-weight-bold': '700',
-                '--line-height-base': '1.5'
-            },
-            'retro': {
-                '--font-family-base': '"MS Sans Serif", sans-serif',
-                '--font-family-terminal': '"Lucida Console", monospace',
-                '--font-size-base': '11px',
-                '--font-size-title': '12px',
-                '--font-size-small': '10px',
-                '--font-weight-normal': '700',
-                '--font-weight-bold': '900',
-                '--line-height-base': '1.3'
-            },
-            'terminal': {
-                '--font-family-base': '"Ubuntu Mono", monospace',
-                '--font-family-terminal': '"DejaVu Sans Mono", monospace',
-                '--font-size-base': '13px',
-                '--font-size-title': '14px',
-                '--font-size-small': '12px',
-                '--font-weight-normal': '400',
-                '--font-weight-bold': '700',
-                '--line-height-base': '1.4'
-            }
-        };
-
-        // Valores por defecto
         this.defaultStyles = { ...this.styles };
         this.defaultFontStyles = { ...this.fontStyles };
-
-        // Todos los estilos combinados
         this.allStyles = { ...this.styles, ...this.fontStyles };
         this.defaultAllStyles = { ...this.defaultStyles, ...this.defaultFontStyles };
     }
@@ -278,13 +24,10 @@ class StyleManager {
         this.setupFontControls();
         this.updateUI();
         this.updateFontControls();
-        console.log('Style Manager initialized with unified preset buttons');
+        console.log('Style Manager initialized');
     }
 
     bindEvents() {
-        console.log('Binding events...');
-
-        // Icono para abrir el Style Manager
         const styleManagerIcon = document.querySelector('.cde-icon img[src*="appearance"]')?.parentElement;
         if (styleManagerIcon) {
             styleManagerIcon.addEventListener('click', (e) => {
@@ -293,33 +36,20 @@ class StyleManager {
             });
         }
 
-        // Botón de cerrar
         const closeBtn = document.querySelector('#styleManager .close-btn');
-        if (closeBtn) {
-            closeBtn.addEventListener('click', () => this.close());
-        }
+        if (closeBtn) closeBtn.addEventListener('click', () => this.close());
 
-        // Botones de acción
         const applyBtn = document.querySelector('#styleManager .cde-btn-default');
-        if (applyBtn) {
-            applyBtn.addEventListener('click', () => this.apply());
-        }
+        if (applyBtn) applyBtn.addEventListener('click', () => this.apply());
 
         const resetBtn = document.querySelector('#styleManager .cde-btn:nth-child(2)');
-        if (resetBtn) {
-            resetBtn.addEventListener('click', () => this.reset());
-        }
+        if (resetBtn) resetBtn.addEventListener('click', () => this.reset());
 
         const saveBtn = document.querySelector('#styleManager .cde-btn:nth-child(3)');
-        if (saveBtn) {
-            saveBtn.addEventListener('click', () => this.save());
-        }
+        if (saveBtn) saveBtn.addEventListener('click', () => this.save());
 
-        // PRESETS DE COLORES - con data-scheme
         document.querySelectorAll('.cde-preset[data-scheme]').forEach(btn => {
-            // Eliminar onclick previo si existe
             btn.onclick = null;
-
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -329,11 +59,8 @@ class StyleManager {
             });
         });
 
-        // PRESETS DE FUENTES - con data-preset Y data-type="font"
         document.querySelectorAll('.cde-preset[data-preset][data-type="font"]').forEach(btn => {
-            // Eliminar onclick previo si existe
             btn.onclick = null;
-
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -343,8 +70,6 @@ class StyleManager {
             });
         });
 
-        // Alternativa: detectar automáticamente por el nombre del preset
-        // Útil si no quieres usar data-type="font"
         const fontPresetNames = ['classic-cde', 'modern', 'retro', 'terminal'];
         document.querySelectorAll('.cde-preset[data-preset]').forEach(btn => {
             const presetName = btn.dataset.preset;
@@ -358,7 +83,6 @@ class StyleManager {
             }
         });
 
-        // Categorías
         document.querySelectorAll('.cde-category').forEach(cat => {
             cat.onclick = null;
             cat.addEventListener('click', (e) => {
@@ -367,51 +91,23 @@ class StyleManager {
             });
         });
 
-        // Arrastrar ventana
         const titlebar = document.getElementById('styleManagerTitlebar');
-        if (titlebar) {
-            titlebar.addEventListener('mousedown', (e) => this.startDrag(e));
-        }
+        if (titlebar) titlebar.addEventListener('mousedown', (e) => this.startDrag(e));
     }
 
-    // Resaltar preset de color activo
     highlightActiveColorPreset(activeButton) {
-        // Remover active de todos los presets de color
-        document.querySelectorAll('.cde-preset[data-scheme]').forEach(btn => {
-            btn.classList.remove('active');
-        });
-
-        // Remover active de todos los presets de fuente
-        document.querySelectorAll('.cde-preset[data-preset][data-type="font"]').forEach(btn => {
-            btn.classList.remove('active');
-        });
-
-        // Agregar active al botón clickeado
-        if (activeButton) {
-            activeButton.classList.add('active');
-        }
+        document.querySelectorAll('.cde-preset[data-scheme]').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.cde-preset[data-preset][data-type="font"]').forEach(btn => btn.classList.remove('active'));
+        if (activeButton) activeButton.classList.add('active');
     }
 
-    // Resaltar preset de fuente activo
     highlightActiveFontPreset(activeButton) {
-        // Remover active de todos los presets de fuente
-        document.querySelectorAll('.cde-preset[data-preset][data-type="font"]').forEach(btn => {
-            btn.classList.remove('active');
-        });
-
-        // Remover active de todos los presets de color
-        document.querySelectorAll('.cde-preset[data-scheme]').forEach(btn => {
-            btn.classList.remove('active');
-        });
-
-        // Agregar active al botón clickeado
-        if (activeButton) {
-            activeButton.classList.add('active');
-        }
+        document.querySelectorAll('.cde-preset[data-preset][data-type="font"]').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.cde-preset[data-scheme]').forEach(btn => btn.classList.remove('active'));
+        if (activeButton) activeButton.classList.add('active');
     }
 
     setupColorInputs() {
-        // Mapeo de inputs a variables CSS
         const colorMap = {
             'color-workspace': '--workspace-color',
             'color-title-active': '--titlebar-color',
@@ -420,16 +116,12 @@ class StyleManager {
             'color-text': '--text-color'
         };
 
-        // Crear inputs dinámicamente o usar los existentes
         Object.entries(colorMap).forEach(([inputId, cssVar]) => {
             const input = document.getElementById(inputId);
             if (input) {
-                // Añadir event listener
                 input.addEventListener('input', (e) => {
                     const value = e.target.value;
                     this.applyStyle(cssVar, value);
-
-                    // Actualizar swatch y nombre
                     const selector = e.target.closest('.cde-colorselector');
                     if (selector) {
                         const swatch = selector.querySelector('.cde-colorswatch');
@@ -437,7 +129,6 @@ class StyleManager {
                         if (swatch) swatch.style.backgroundColor = value;
                         if (nameSpan) nameSpan.textContent = this.getColorName(value);
                     }
-
                     this.updateStatus(`Changed: ${cssVar}`);
                 });
             }
@@ -445,7 +136,6 @@ class StyleManager {
     }
 
     setupFontControls() {
-        // Configurar controles de fuente
         this.setupFontSelect('font-family-base', '--font-family-base');
         this.setupFontSelect('font-family-terminal', '--font-family-terminal');
         this.setupSlider('font-size-base', '--font-size-base', 'font-size-value', 'px');
@@ -453,12 +143,10 @@ class StyleManager {
         this.setupSlider('line-height-base', '--line-height-base', 'line-height-value', '');
         this.setupFontSelect('font-weight', '--font-weight-normal');
 
-        // Aplicar vista previa automática
         document.querySelectorAll('.cde-select, .cde-slider').forEach(control => {
             control.addEventListener('input', () => this.updateFontPreview());
         });
 
-        // Cargar valores guardados
         this.updateFontControls();
     }
 
@@ -502,7 +190,7 @@ class StyleManager {
         const modal = document.getElementById('styleManager');
         if (modal) {
             modal.style.display = 'flex';
-            modal.style.zIndex = '10000';
+            modal.style.zIndex = '10000'; // Podría venir de CONFIG.STYLEMANAGER.BASE_Z_INDEX
             console.log('Style Manager opened');
         }
     }
@@ -550,8 +238,6 @@ class StyleManager {
             console.log(`Applying preset: ${scheme}`);
             for (const [cssVar, value] of Object.entries(this.presets[scheme])) {
                 this.applyStyle(cssVar, value);
-
-                // Actualizar UI
                 const input = document.querySelector(`input[data-var="${cssVar}"]`);
                 if (input) {
                     input.value = value;
@@ -582,30 +268,21 @@ class StyleManager {
     }
 
     reset() {
-        // Resetear colores
         for (const [cssVar, value] of Object.entries(this.defaultStyles)) {
             this.applyStyle(cssVar, value);
         }
-
-        // Resetear fuentes
         for (const [cssVar, value] of Object.entries(this.defaultFontStyles)) {
             this.applyFontStyle(cssVar, value);
         }
-
         this.updateUI();
         this.updateFontControls();
         this.updateStatus('Reset to default');
         this.showMessage('✓ Reset to default theme and fonts');
-
-        // Remover active de todos los presets
-        document.querySelectorAll('.cde-preset.active').forEach(btn => {
-            btn.classList.remove('active');
-        });
+        document.querySelectorAll('.cde-preset.active').forEach(btn => btn.classList.remove('active'));
     }
 
     save() {
         try {
-            // Guardar tanto colores como fuentes
             const allSettings = {
                 colors: this.styles,
                 fonts: this.fontStyles
@@ -625,19 +302,14 @@ class StyleManager {
             const saved = localStorage.getItem('cde-styles');
             if (saved) {
                 const savedSettings = JSON.parse(saved);
-
-                // Cargar colores
                 if (savedSettings.colors) {
                     Object.assign(this.styles, savedSettings.colors);
                     this.applyAllStyles();
                 }
-
-                // Cargar fuentes
                 if (savedSettings.fonts) {
                     Object.assign(this.fontStyles, savedSettings.fonts);
                     this.applyAllFontStyles();
                 }
-
                 console.log('Loaded saved styles and fonts from localStorage');
             }
         } catch (e) {
@@ -646,7 +318,6 @@ class StyleManager {
     }
 
     updateUI() {
-        // Actualizar controles de color
         for (const [cssVar, value] of Object.entries(this.styles)) {
             const input = document.querySelector(`input[data-var="${cssVar}"]`);
             if (input) {
@@ -660,20 +331,17 @@ class StyleManager {
                 }
             }
         }
-
         console.log('UI updated with current styles');
     }
 
     updateFontControls() {
-        // Cargar valores actuales en los controles
-        const baseFont = this.fontStyles['--font-family-base'] || '"Fixedsys", "Lucida Console", monospace';
-        const terminalFont = this.fontStyles['--font-family-terminal'] || '"Courier New", monospace';
+        const baseFont = this.fontStyles['--font-family-base'] || CONFIG.DEFAULT_STYLES.FONTS['--font-family-base'];
+        const terminalFont = this.fontStyles['--font-family-terminal'] || CONFIG.DEFAULT_STYLES.FONTS['--font-family-terminal'];
         const fontSize = parseInt(this.fontStyles['--font-size-base'] || '12');
         const titleSize = parseInt(this.fontStyles['--font-size-title'] || '13');
         const lineHeight = parseFloat(this.fontStyles['--line-height-base'] || '1.45');
         const fontWeight = this.fontStyles['--font-weight-normal'] || '400';
 
-        // Actualizar controles
         this.setSelectValue('font-family-base', baseFont);
         this.setSelectValue('font-family-terminal', terminalFont);
         this.setSliderValue('font-size-base', fontSize, 'font-size-value', 'px');
@@ -699,7 +367,6 @@ class StyleManager {
     setSliderValue(sliderId, value, valueId, suffix) {
         const slider = document.getElementById(sliderId);
         const valueSpan = document.getElementById(valueId);
-
         if (slider) slider.value = value;
         if (valueSpan) valueSpan.textContent = value + suffix;
     }
@@ -708,12 +375,10 @@ class StyleManager {
         const preview = document.getElementById('font-preview');
         if (!preview) return;
 
-        // Aplicar estilos actuales a la vista previa
         preview.style.fontFamily = this.fontStyles['--font-family-base'];
         preview.style.fontSize = this.fontStyles['--font-size-base'];
         preview.style.lineHeight = this.fontStyles['--line-height-base'];
 
-        // Actualizar elementos específicos
         const title = preview.querySelector('.font-preview-title');
         if (title) {
             title.style.fontSize = this.fontStyles['--font-size-title'];
@@ -746,19 +411,10 @@ class StyleManager {
         this.showMessage('✓ Font preview updated');
     }
 
-    // Este método reemplaza a la función switchStyleTab
     setActiveCategory(category) {
-        // Remover clase active de todas las categorías
-        document.querySelectorAll('.cde-category').forEach(cat => {
-            cat.classList.remove('active');
-        });
+        document.querySelectorAll('.cde-category').forEach(cat => cat.classList.remove('active'));
+        document.querySelectorAll('.cde-controlgroup').forEach(panel => panel.classList.remove('active'));
 
-        // Ocultar todos los paneles
-        document.querySelectorAll('.cde-controlgroup').forEach(panel => {
-            panel.classList.remove('active');
-        });
-
-        // Activar categoría seleccionada
         const activeCat = document.querySelector(`.cde-category[data-category="${category}"]`);
         const activePanel = document.getElementById(`${category}-panel`);
 
@@ -794,15 +450,12 @@ class StyleManager {
             '#0080ff': 'Azure', '#d8c8a8': 'Desert Sand',
             '#a08040': 'Golden Brown'
         };
-
         return colors[hex.toLowerCase()] || hex.toUpperCase();
     }
 
     updateStatus(message) {
         const statusElement = document.getElementById('style-status');
-        if (statusElement) {
-            statusElement.textContent = message;
-        }
+        if (statusElement) statusElement.textContent = message;
     }
 
     showMessage(message) {
@@ -827,24 +480,13 @@ class StyleManager {
             min-width: 200px;
             text-align: center;
         `;
-
-        msgBox.innerHTML = `
-            <div style="margin-bottom: 10px;">${message}</div>
-        `;
-
+        msgBox.innerHTML = `<div style="margin-bottom: 10px;">${message}</div>`;
         document.body.appendChild(msgBox);
-
-        // Auto-remove after 2 seconds
-        setTimeout(() => {
-            if (msgBox.parentNode) {
-                msgBox.parentNode.removeChild(msgBox);
-            }
-        }, 2000);
+        setTimeout(() => msgBox.parentNode?.removeChild(msgBox), 2000);
     }
 
     startDrag(e) {
         if (e.target.classList.contains('close-btn')) return;
-
         const modal = document.getElementById('styleManager');
         if (!modal) return;
 
@@ -865,80 +507,49 @@ class StyleManager {
 
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', onMouseUp);
-
         e.preventDefault();
     }
 }
 
-// Función global para compatibilidad con onclick en HTML
 window.switchStyleTab = function (category) {
-    if (window.styleManager) {
-        window.styleManager.setActiveCategory(category);
-    }
+    if (window.styleManager) window.styleManager.setActiveCategory(category);
 };
 
-// Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
-    // Crear instancia global
     window.styleManager = new StyleManager();
+    setTimeout(() => window.styleManager.init(), 100);
+    window.openStyleManager = () => window.styleManager?.open();
+    console.log('CDE Style Manager loaded');
 
-    // Pequeño retraso para asegurar que el DOM esté completamente cargado
-    setTimeout(() => {
-        window.styleManager.init();
-    }, 100);
-
-    // Función global para abrir el Style Manager
-    window.openStyleManager = function () {
-        if (window.styleManager) {
-            window.styleManager.open();
-        }
-    };
-
-    console.log('CDE Style Manager loaded with unified preset buttons');
-});
-
-// Función para hacer el Style Manager arrastrable
-function makeDraggable(element, handle) {
-    if (!element || !handle) return;
-
-    let isDragging = false;
-    let dragOffset = { x: 0, y: 0 };
-
-    handle.addEventListener('mousedown', function (e) {
-        if (e.target.classList.contains('close-btn')) return;
-
-        isDragging = true;
-        const rect = element.getBoundingClientRect();
-        dragOffset.x = e.clientX - rect.left;
-        dragOffset.y = e.clientY - rect.top;
-
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp);
-
-        e.preventDefault();
-    });
-
-    function onMouseMove(e) {
-        if (!isDragging) return;
-
-        element.style.left = (e.clientX - dragOffset.x) + 'px';
-        element.style.top = (e.clientY - dragOffset.y) + 'px';
-        element.style.transform = 'none';
-    }
-
-    function onMouseUp() {
-        isDragging = false;
-        document.removeEventListener('mousemove', onMouseMove);
-        document.removeEventListener('mouseup', onMouseUp);
-    }
-}
-
-// Inicializar arrastre cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', function () {
+    // Arrastre de la ventana Style Manager
     const styleManager = document.getElementById('styleManager');
     const styleManagerTitlebar = document.getElementById('styleManagerTitlebar');
-
     if (styleManager && styleManagerTitlebar) {
-        makeDraggable(styleManager, styleManagerTitlebar);
+        let isDragging = false;
+        let dragOffset = { x: 0, y: 0 };
+
+        styleManagerTitlebar.addEventListener('mousedown', function (e) {
+            if (e.target.classList.contains('close-btn')) return;
+            isDragging = true;
+            const rect = styleManager.getBoundingClientRect();
+            dragOffset.x = e.clientX - rect.left;
+            dragOffset.y = e.clientY - rect.top;
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+            e.preventDefault();
+        });
+
+        function onMouseMove(e) {
+            if (!isDragging) return;
+            styleManager.style.left = (e.clientX - dragOffset.x) + 'px';
+            styleManager.style.top = (e.clientY - dragOffset.y) + 'px';
+            styleManager.style.transform = 'none';
+        }
+
+        function onMouseUp() {
+            isDragging = false;
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
     }
 });

@@ -1,5 +1,217 @@
 /**
- * Captura profesional con opciones optimizadas para CDE
+ * @fileoverview Utilidades de ventanas, sonido y captura de pantalla para el escritorio CDE.
+ * @author victxrlarixs
+ */
+
+// ============================================================================
+// WindowManager: control de ventanas (foco, arrastre, reloj, dropdown)
+// ============================================================================
+
+const WindowManager = (() => {
+    /** @type {number} Nivel z-index global para ventanas en foco */
+    let zIndex = CONFIG.WINDOW.BASE_Z_INDEX;
+
+    /** @type {HTMLElement|null} Ventana que se está arrastrando */
+    let currentDrag = null;
+
+    /** @type {number} Desplazamiento X del cursor dentro de la ventana */
+    let offsetX = 0;
+
+    /** @type {number} Desplazamiento Y del cursor dentro de la ventana */
+    let offsetY = 0;
+
+    /** @type {number} Margen mínimo para evitar que la ventana salga de la pantalla */
+    const MIN_VISIBLE = CONFIG.WINDOW.MIN_VISIBLE;
+
+    /**
+     * Eleva una ventana al frente (z-index máximo).
+     * @param {string} id - ID del elemento ventana.
+     */
+    function focusWindow(id) {
+        const win = document.getElementById(id);
+        if (!win) return;
+        zIndex++;
+        win.style.zIndex = zIndex;
+    }
+
+    /**
+     * Inicia el arrastre de una ventana.
+     * @param {Event} e - Evento mousedown.
+     * @param {string} id - ID de la ventana a arrastrar.
+     */
+    function drag(e, id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+
+        focusWindow(id);
+        currentDrag = el;
+
+        const rect = el.getBoundingClientRect();
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+
+        document.addEventListener("mousemove", move);
+        document.addEventListener("mouseup", stopDrag);
+    }
+
+    /**
+     * Mueve la ventana mientras se arrastra, con límites de pantalla.
+     * @param {MouseEvent} e
+     */
+    function move(e) {
+        if (!currentDrag) return;
+
+        let left = e.clientX - offsetX;
+        let top = e.clientY - offsetY;
+
+        const winWidth = currentDrag.offsetWidth;
+        const winHeight = currentDrag.offsetHeight;
+        const maxX = window.innerWidth - MIN_VISIBLE;
+        const maxY = window.innerHeight - MIN_VISIBLE;
+
+        left = Math.min(Math.max(left, MIN_VISIBLE - winWidth), maxX);
+        top = Math.min(Math.max(top, MIN_VISIBLE - winHeight), maxY);
+
+        currentDrag.style.left = left + "px";
+        currentDrag.style.top = top + "px";
+    }
+
+    /** Finaliza el arrastre y limpia los eventos. */
+    function stopDrag() {
+        currentDrag = null;
+        document.removeEventListener("mousemove", move);
+        document.removeEventListener("mouseup", stopDrag);
+    }
+
+    /** Asigna focus a todas las ventanas al hacer clic. */
+    function initWindows() {
+        document.querySelectorAll(".window").forEach(win => {
+            win.addEventListener("mousedown", () => focusWindow(win.id));
+        });
+    }
+
+    /* ------------------------------------------------------------------
+       Reloj del sistema (formato 24h)
+    ------------------------------------------------------------------ */
+
+    /** Actualiza el contenido del elemento #clock con la hora actual. */
+    function updateClock() {
+        const clockEl = document.getElementById("clock");
+        if (!clockEl) return;
+
+        const now = new Date();
+        const h = now.getHours().toString().padStart(2, "0");
+        const m = now.getMinutes().toString().padStart(2, "0");
+        clockEl.textContent = `${h}:${m}`;
+    }
+
+    function initClock() {
+        updateClock();
+        setInterval(updateClock, 1000);
+    }
+
+    /* ------------------------------------------------------------------
+       Menú desplegable de utilidades (dropdown)
+    ------------------------------------------------------------------ */
+
+    function initDropdown() {
+        const dropdownBtn = document.getElementById('utilitiesBtn');
+        const dropdownMenu = document.getElementById('utilitiesDropdown');
+
+        if (!dropdownBtn || !dropdownMenu) return;
+
+        if (dropdownMenu.parentElement !== dropdownBtn) {
+            dropdownBtn.appendChild(dropdownMenu);
+        }
+
+        dropdownBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdownBtn.classList.toggle('open');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!dropdownBtn.contains(e.target)) {
+                dropdownBtn.classList.remove('open');
+            }
+        });
+
+        dropdownMenu.addEventListener('click', (e) => e.stopPropagation());
+    }
+
+    /* ------------------------------------------------------------------
+       Inicialización general
+    ------------------------------------------------------------------ */
+
+    function init() {
+        initWindows();
+        initClock();
+        initDropdown();
+    }
+
+    return {
+        init,
+        drag,
+        focusWindow
+    };
+})();
+
+// Inicializar cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', () => WindowManager.init());
+
+// Exposición global para compatibilidad con atributos onclick
+window.drag = WindowManager.drag;
+window.focusWindow = WindowManager.focusWindow;
+
+// ============================================================================
+// Utilidades de sonido (beep retro)
+// ============================================================================
+
+/**
+ * Reproduce un beep corto estilo retro usando Web Audio API.
+ */
+function retroBeep() {
+    console.log('🔊 Intentando reproducir beep...');
+    try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioCtx = new AudioContext();
+
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume().then(() => playBeep(audioCtx));
+        } else {
+            playBeep(audioCtx);
+        }
+    } catch (e) {
+        console.error('Error al reproducir beep:', e);
+    }
+}
+
+/**
+ * Genera el tono utilizando un contexto de audio ya activo.
+ * @param {AudioContext} audioCtx - Contexto de audio listo para reproducir.
+ */
+function playBeep(audioCtx) {
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+
+    oscillator.type = 'sine';
+    oscillator.frequency.value = CONFIG.AUDIO.BEEP_FREQUENCY;
+    gainNode.gain.value = CONFIG.AUDIO.BEEP_GAIN;
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    oscillator.start();
+    oscillator.stop(audioCtx.currentTime + CONFIG.AUDIO.BEEP_DURATION);
+
+    console.log('✅ Beep reproducido');
+}
+
+// ============================================================================
+// Captura de pantalla
+// ============================================================================
+
+/**
+ * Captura toda la pantalla y descarga la imagen como PNG.
  */
 function captureFullPageScreenshot() {
     const btn = document.getElementById('screenshot-btn');
@@ -9,12 +221,12 @@ function captureFullPageScreenshot() {
     }
 
     const toast = document.createElement('div');
-    toast.textContent = '📸 Capturando escritorio...';
+    toast.textContent = CONFIG.SCREENSHOT.TOAST_MESSAGE;
     toast.className = 'screenshot-toast';
     document.body.appendChild(toast);
 
     const options = {
-        scale: 2,
+        scale: CONFIG.SCREENSHOT.SCALE,
         backgroundColor: null,
         allowTaint: false,
         useCORS: true,
@@ -27,222 +239,35 @@ function captureFullPageScreenshot() {
         }
     };
 
-    html2canvas(document.documentElement, options).then(canvas => {
-        const now = new Date();
-        const filename = `CDE-${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')} ${now.getHours().toString().padStart(2, '0')}.${now.getMinutes().toString().padStart(2, '0')}.${now.getSeconds().toString().padStart(2, '0')}.png`;
+    html2canvas(document.documentElement, options)
+        .then(canvas => {
+            const now = new Date();
+            const filename = `${CONFIG.SCREENSHOT.FILENAME_PREFIX}-${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')} ${now.getHours().toString().padStart(2, '0')}.${now.getMinutes().toString().padStart(2, '0')}.${now.getSeconds().toString().padStart(2, '0')}.png`;
 
-        const link = document.createElement('a');
-        link.download = filename;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
 
-        document.body.removeChild(toast);
-        if (btn) {
-            btn.style.opacity = '1';
-            btn.style.cursor = 'pointer';
-        }
-    }).catch(error => {
-        document.body.removeChild(toast);
-        if (btn) {
-            btn.style.opacity = '1';
-            btn.style.cursor = 'pointer';
-        }
-        console.error('Screenshot error:', error);
-        if (window.CDEModal) {
-            CDEModal.alert('Error al capturar pantalla.');
-        } else {
-            alert('Error al capturar. Revisa la consola.');
-        }
-    });
+            document.body.removeChild(toast);
+            if (btn) {
+                btn.style.opacity = '1';
+                btn.style.cursor = 'pointer';
+            }
+        })
+        .catch(error => {
+            document.body.removeChild(toast);
+            if (btn) {
+                btn.style.opacity = '1';
+                btn.style.cursor = 'pointer';
+            }
+            console.error('Screenshot error:', error);
+            if (window.CDEModal) {
+                CDEModal.alert('Error al capturar pantalla.');
+            } else {
+                alert('Error al capturar. Revisa la consola.');
+            }
+        });
 }
-/**
- * @fileoverview Task Manager estilo CDE.
- * Usa la ventana estática #taskmanager existente en el DOM.
- * @author victxrlarixs
- */
 
-const TaskManager = (() => {
-    // ------------------------------------------------------------------
-    // CONFIGURACIÓN
-    // ------------------------------------------------------------------
-    const BUTTON_ID = 'taskmanager-btn';
-    const WINDOW_ID = 'taskmanager';
-
-    let processList = [];
-    let zIndex = 2000;
-    let initialized = false;
-
-    // ------------------------------------------------------------------
-    // FUNCIONES PRIVADAS
-    // ------------------------------------------------------------------
-
-    function scanProcesses() {
-        const processes = [];
-        const windows = document.querySelectorAll('.window');
-        let pid = 1000;
-
-        windows.forEach(win => {
-            if (win.id === WINDOW_ID) return;
-            const isVisible = win.style.display !== 'none';
-            const titleEl = win.querySelector('.titlebar-text');
-            let name = win.id || 'Window';
-            if (titleEl) name = titleEl.textContent;
-            else if (win.id === 'terminal') name = 'Terminal';
-            else if (win.id === 'fm') name = 'File Manager';
-            else if (win.id === 'styleManager') name = 'Style Manager';
-
-            processes.push({
-                pid: pid++,
-                name: name,
-                cpu: (Math.random() * 5 + 0.1).toFixed(1) + '%',
-                mem: (Math.random() * 10 + 2).toFixed(1) + ' MB',
-                windowId: win.id,
-                visible: isVisible
-            });
-        });
-
-        processes.push(
-            { pid: 1, name: 'init', cpu: '0.3%', mem: '1.2 MB', windowId: null, visible: true },
-            { pid: 2, name: 'kthreadd', cpu: '0.0%', mem: '0.0 MB', windowId: null, visible: true }
-        );
-
-        return processes;
-    }
-
-    function renderProcessTable() {
-        const content = document.getElementById('taskmanager-content');
-        if (!content) return;
-
-        processList = scanProcesses();
-
-        let html = `
-            <table style="width:100%; border-collapse: collapse; font-size: var(--font-size-small);">
-                <thead>
-                    <tr style="background: var(--button-bg); border-bottom: 2px solid var(--separator-color);">
-                        <th style="padding: 6px; text-align: left;">PID</th>
-                        <th style="padding: 6px; text-align: left;">%CPU</th>
-                        <th style="padding: 6px; text-align: left;">%MEM</th>
-                        <th style="padding: 6px; text-align: left;">Command</th>
-                        <th style="padding: 6px; text-align: left;">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-        `;
-
-        processList.forEach(proc => {
-            const status = proc.visible ? '🟢 Running' : '🔴 Stopped';
-            const rowStyle = proc.windowId ? 'cursor: pointer;' : '';
-            const onclick = proc.windowId ? `onclick="TaskManager.selectProcess('${proc.windowId}')"` : '';
-
-            html += `
-                <tr style="border-bottom: 1px solid var(--separator-color); ${rowStyle}" ${onclick}>
-                    <td style="padding: 4px 6px;">${proc.pid}</td>
-                    <td style="padding: 4px 6px;">${proc.cpu}</td>
-                    <td style="padding: 4px 6px;">${proc.mem}</td>
-                    <td style="padding: 4px 6px;">${proc.name}</td>
-                    <td style="padding: 4px 6px;">${status}</td>
-                </tr>
-            `;
-        });
-
-        html += `</tbody></table>`;
-        content.innerHTML = html;
-    }
-
-    // ------------------------------------------------------------------
-    // API PÚBLICA
-    // ------------------------------------------------------------------
-
-    function open() {
-        const win = document.getElementById(WINDOW_ID);
-        if (!win) return;
-        win.style.display = 'block';
-        win.style.zIndex = ++zIndex;
-        renderProcessTable();
-        if (window.focusWindow) window.focusWindow(WINDOW_ID);
-    }
-
-    function close() {
-        const win = document.getElementById(WINDOW_ID);
-        if (win) win.style.display = 'none';
-    }
-
-    function selectProcess(windowId) {
-        if (!windowId) return;
-        const win = document.getElementById(windowId);
-        if (win && win.style.display !== 'none' && window.focusWindow) {
-            window.focusWindow(windowId);
-        }
-    }
-
-    async function killProcess() {
-        const pid = await CDEModal.prompt('Enter PID to kill:');
-        if (!pid) return;
-
-        const proc = processList.find(p => p.pid == pid);
-        if (!proc) {
-            CDEModal.alert(`Process ${pid} not found.`);
-            return;
-        }
-        if (!proc.windowId) {
-            CDEModal.alert('Cannot kill system process.');
-            return;
-        }
-        const win = document.getElementById(proc.windowId);
-        if (!win) {
-            CDEModal.alert('Window not found.');
-            return;
-        }
-        const confirmed = await CDEModal.confirm(`Kill process ${pid} (${proc.name})?`);
-        if (confirmed) {
-            win.style.display = 'none';
-            renderProcessTable();
-            CDEModal.alert(`Process ${pid} terminated.`);
-        }
-    }
-
-    function refresh() {
-        renderProcessTable();
-    }
-
-    // ------------------------------------------------------------------
-    // INICIALIZACIÓN
-    // ------------------------------------------------------------------
-
-    function init() {
-        if (initialized) return;
-        console.log('📊 TaskManager: inicializando...');
-
-        // Asignar evento al botón del panel
-        const btn = document.getElementById(BUTTON_ID);
-        if (btn) {
-            btn.addEventListener('click', open);
-            console.log('✅ TaskManager: botón asignado');
-        } else {
-            console.warn('⚠️ TaskManager: botón no encontrado');
-        }
-
-        // No necesitamos crear ventana, ya existe en el HTML.
-        // Solo aseguramos que los botones tengan los métodos correctos
-        // (ya están con onclick en HTML, así que no es necesario asignar eventos aquí)
-
-        initialized = true;
-        console.log('✅ TaskManager: inicializado');
-    }
-
-    return {
-        init,
-        open,
-        close,
-        refresh,
-        killProcess,
-        selectProcess
-    };
-})();
-
-// Exposición global
-window.TaskManager = TaskManager;
-
-// Inicializar cuando el DOM esté listo
-TaskManager.init();
-console.log('✅ TaskManager module loaded');
+console.log('✅ Utilities module loaded (WindowManager + beep + screenshot)');

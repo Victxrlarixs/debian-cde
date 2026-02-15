@@ -52,7 +52,6 @@ const CDEModal = (() => {
                 actionbar.innerHTML = '';
             }
         } else {
-            // Crear modal desde cero (sin estilos inline)
             modalElement = document.createElement('div');
             modalElement.className = 'cde-retro-modal cde-modal-global';
             modalElement.id = 'cde-modal-global';
@@ -137,7 +136,6 @@ const CDEModal = (() => {
         }
     }
 
-    // API pública – UI en inglés
     async function alert(message) {
         await open('CDE Alert', `<p style="margin:0;">${message}</p>`);
     }
