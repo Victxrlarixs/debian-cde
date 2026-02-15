@@ -23,7 +23,7 @@
             <div class="top-left">
             </div>
             <div class="top-right">
-                <div class="sys-item">
+                <div class="sys-item" id="volume-icon" onclick="retroBeep()">
                     <img src="./src/icons/audio-volume-low.png" class="sys-icon">
                 </div>
                 <div class="sys-item">
@@ -110,7 +110,7 @@
         </div>
         <div id="cde-panel">
             <div class="cde-menu-btn">
-                <img src="./src/images/Debian.png" alt="Menu">
+                <img src="./src/icons/Debian.png" alt="Menu">
             </div>
             <div class="cde-sep"></div>
 
@@ -126,21 +126,21 @@
                 </div>
 
                 <div class="cde-icons">
-                    <div class="cde-icon" onclick="terminal.style.display='block'">
+                    <div class="cde-icon" onclick="terminal.style.display='block'" title="Open Terminal">
                         <img src="./src/icons/konsole.png" alt="Terminal">
                     </div>
-                    <div class="cde-icon" onclick="toggleFileManager()">
+                    <div class="cde-icon" onclick="toggleFileManager()" title="File Manager">
                         <img src="./src/icons/filemanager.png" alt="File Manager">
                     </div>
-                    <div class="cde-icon">
+                    <div class="cde-icon" title="Github Repo">
                         <a href="https://github.com/Victxrlarixs/debian-cde" target="_blank">
                             <img src="./src/icons/konqueror.png" alt="Browser">
                         </a>
                     </div>
-                    <div class="cde-icon" onclick="openStyleManager()">
+                    <div class="cde-icon" onclick="openStyleManager()" title="Style Manager">
                         <img src="./src/icons/org.xfce.settings.appearance.png" alt="Style Manager">
                     </div>
-                    <div class="cde-icon" id="utilitiesIcon">
+                    <div class="cde-icon" id="utilitiesIcon" title="Sub Menu">
                         <img src="./src/icons/system-help.png" alt="Utilities">
                     </div>
                 </div>
@@ -168,20 +168,17 @@
 
             <div class="cde-sep"></div>
 
-            <div class="cde-icons">
-                <div class="tray-icon">
-                    <img src="./src/icons/gtkclocksetup.png" alt="Reloj">
-                </div>
-                <div class="tray-icon" id="screenshot-btn" onclick="captureFullPageScreenshot()">
-                    <img src="./src/icons/org.xfce.screenshooter.png" alt="Camera">
-                </div>
-                <div class="tray-icon">
-                    <img src="./src/icons/printer.png" alt="Printer">
-
-                </div>
-                <div class="tray-icon" id="taskmanager-btn" onclick="TaskManager.open()">
-                    <img src="./src/icons/org.xfce.taskmanager.png" alt="TaskManager">
-                </div>
+            <div class="tray-icon" title="Clock">
+                <img src="./src/icons/gtkclocksetup.png" alt="Reloj">
+            </div>
+            <div class="tray-icon" id="screenshot-btn" onclick="captureFullPageScreenshot()" title="Take Screenshot">
+                <img src="./src/icons/org.xfce.screenshooter.png" alt="Camera">
+            </div>
+            <div class="tray-icon" title="Printer">
+                <img src="./src/icons/printer.png" alt="Printer">
+            </div>
+            <div class="tray-icon" id="taskmanager-btn" onclick="TaskManager.open()" title="Task Manager">
+                <img src="./src/icons/org.xfce.taskmanager.png" alt="TaskManager">
             </div>
         </div>
 
@@ -403,14 +400,12 @@
     </div>
     </div>
 
-
-
     <script src="./src/js/init.js"></script>
+    <script src="./src/js/config.js"></script>
+    <script src="./src/js/utilities.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="./src/js/wm.js"></script>
     <script src="./src/js/modals.js"></script>
     <script src="./src/js/filemanager.js"></script>
-    <script src="./src/js/utilities.js"></script>
     <script src="./src/js/terminal.js"></script>
     <script src="./src/js/stylemanager.js"></script>
 </body>

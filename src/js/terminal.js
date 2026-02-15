@@ -6,38 +6,21 @@
 
 const TerminalTutorial = (() => {
     // ------------------------------------------------------------------
-    // CONSTANTES Y CONFIGURACIÓN
+    // CONSTANTES Y CONFIGURACIÓN (desde CONFIG)
     // ------------------------------------------------------------------
-
-    /** @type {string} Ruta base simulada */
-    const HOME_PATH = '/home/victxrlarixs';
-
-    /** @type {number} Delay entre caracteres (mínimo) */
-    const MIN_TYPING_DELAY = 20;
-
-    /** @type {number} Delay entre caracteres (máximo) */
-    const MAX_TYPING_DELAY = 80;
-
-    /** @type {number} Tiempo de espera tras comando (ms) */
-    const POST_COMMAND_DELAY = 800;
-
-    /** @type {number} Tiempo de espera entre secuencias (ms) */
-    const POST_SEQUENCE_DELAY = 2000;
-
-    /** @type {number} Límite de líneas en terminal (para limpieza) */
-    const MAX_LINES = 50;
-
-    /** @type {number} Intervalo de limpieza (ms) */
-    const CLEANUP_INTERVAL = 30000;
-
-    /** @type {number} Intervalo de scroll automático (ms) */
-    const SCROLL_INTERVAL = 500;
+    const HOME_PATH = CONFIG.TERMINAL.HOME_PATH;
+    const MIN_TYPING_DELAY = CONFIG.TERMINAL.MIN_TYPING_DELAY;
+    const MAX_TYPING_DELAY = CONFIG.TERMINAL.MAX_TYPING_DELAY;
+    const POST_COMMAND_DELAY = CONFIG.TERMINAL.POST_COMMAND_DELAY;
+    const POST_SEQUENCE_DELAY = CONFIG.TERMINAL.POST_SEQUENCE_DELAY;
+    const MAX_LINES = CONFIG.TERMINAL.MAX_LINES;
+    const CLEANUP_INTERVAL = CONFIG.TERMINAL.CLEANUP_INTERVAL;
+    const SCROLL_INTERVAL = CONFIG.TERMINAL.SCROLL_INTERVAL;
+    const TRANSITION_MESSAGES = CONFIG.TERMINAL.TRANSITION_MESSAGES;
 
     // ------------------------------------------------------------------
-    // SECUENCIAS DEL TUTORIAL
+    // SECUENCIAS DEL TUTORIAL (se mantienen aquí por su extensión)
     // ------------------------------------------------------------------
-
-    /** @type {Array<Array<{user: string, command: string, output: string}>>} */
     const TUTORIAL_SEQUENCES = [
         // SECUENCIA 1: Comandos básicos del sistema
         [
@@ -109,92 +92,50 @@ const TerminalTutorial = (() => {
         ]
     ];
 
-    /** @type {Array<string>} Mensajes de transición entre secuencias */
-    const TRANSITION_MESSAGES = [
-        '🔄 Continuando con más comandos útiles...',
-        '📚 Siguiente tema: comandos de administración...',
-        '🚀 Avanzando a operaciones más complejas...',
-        '💡 Aprendiendo nuevas funcionalidades...',
-        '🛠️ Próxima sección: herramientas de desarrollo...',
-        '🌐 Explorando comandos de red...'
-    ];
-
     // ------------------------------------------------------------------
     // ESTADO INTERNO
     // ------------------------------------------------------------------
-
-    /** @type {HTMLElement|null} Elemento contenedor de la terminal */
     let terminalBody = null;
-
-    /** @type {string} Ruta actual simulada */
     let currentPath = HOME_PATH;
-
-    /** @type {boolean} Controla si el tutorial está activo */
     let tutorialActive = true;
-
-    /** @type {number} Índice de la secuencia actual */
     let sequenceIndex = 0;
-
-    /** @type {number} Índice del paso dentro de la secuencia */
     let stepIndex = 0;
-
-    /** @type {boolean} Flag para evitar múltiples tipeos simultáneos */
     let typingActive = false;
-
-    /** @type {Array<number>} IDs de intervalos para limpieza */
     let cleanupInterval = null;
     let scrollInterval = null;
 
     // ------------------------------------------------------------------
     // FUNCIONES PRIVADAS
     // ------------------------------------------------------------------
-
-    /**
-     * Imprime una línea en la terminal.
-     * @param {string} text - Texto a imprimir.
-     * @param {string} [className] - Clase CSS opcional.
-     */
     function print(text = '', className = '') {
         if (!terminalBody) {
             console.error('❌ TerminalTutorial: terminalBody no disponible');
             return;
         }
-
         if (className) {
             terminalBody.innerHTML += `<span class="${className}">${text}</span>\n`;
         } else {
             terminalBody.innerHTML += text + '\n';
         }
-
-        // Auto-scroll
         terminalBody.scrollTop = terminalBody.scrollHeight;
     }
 
-    /**
-     * Simula tipeo de un comando carácter por carácter.
-     * @param {string} line - Línea completa a tipear.
-     * @param {Function} callback - Función a ejecutar al terminar.
-     */
     function typeLine(line, callback) {
         if (!terminalBody) {
             console.error('❌ TerminalTutorial: terminalBody no disponible');
             return;
         }
-
         let i = 0;
         typingActive = true;
-
         const interval = setInterval(() => {
             if (!tutorialActive) {
                 clearInterval(interval);
                 typingActive = false;
                 return;
             }
-
             terminalBody.innerHTML += line[i];
             terminalBody.scrollTop = terminalBody.scrollHeight;
             i++;
-
             if (i >= line.length) {
                 clearInterval(interval);
                 terminalBody.innerHTML += '\n';
@@ -204,51 +145,32 @@ const TerminalTutorial = (() => {
         }, Math.random() * (MAX_TYPING_DELAY - MIN_TYPING_DELAY) + MIN_TYPING_DELAY);
     }
 
-    /**
-     * Ejecuta un paso del tutorial.
-     */
     function runStep() {
         if (!tutorialActive || !terminalBody) return;
-
         const sequence = TUTORIAL_SEQUENCES[sequenceIndex];
         const step = sequence[stepIndex];
-
-        // Prompt estilo Debian: usuario@host:ruta$
         const relativePath = currentPath.replace(HOME_PATH, '~');
         const prompt = `${step.user}@Debian:${relativePath}$ `;
 
         typeLine(prompt + step.command, () => {
             setTimeout(() => {
                 print(step.output, 'tip');
-
                 stepIndex++;
-
-                // Secuencia completada
                 if (stepIndex >= sequence.length) {
-                    // Mensaje de transición aleatorio
                     const randomMsg = TRANSITION_MESSAGES[Math.floor(Math.random() * TRANSITION_MESSAGES.length)];
                     print('\n' + randomMsg + '\n', 'transition');
-
-                    // Avanzar a siguiente secuencia (cíclico)
                     sequenceIndex = (sequenceIndex + 1) % TUTORIAL_SEQUENCES.length;
                     stepIndex = 0;
-
-                    // Pausa antes de nueva secuencia
                     setTimeout(runStep, POST_SEQUENCE_DELAY);
                 } else {
-                    // Continuar con siguiente paso
                     setTimeout(runStep, POST_COMMAND_DELAY);
                 }
             }, POST_COMMAND_DELAY);
         });
     }
 
-    /**
-     * Limpia líneas antiguas de la terminal para evitar sobrecarga.
-     */
     function cleanupTerminal() {
         if (!terminalBody) return;
-
         const lines = terminalBody.innerHTML.split('\n');
         if (lines.length > MAX_LINES) {
             terminalBody.innerHTML = lines.slice(-MAX_LINES).join('\n');
@@ -256,78 +178,52 @@ const TerminalTutorial = (() => {
         }
     }
 
-    /**
-     * Mantiene el scroll al final.
-     */
     function keepScrollBottom() {
-        if (terminalBody) {
-            terminalBody.scrollTop = terminalBody.scrollHeight;
-        }
+        if (terminalBody) terminalBody.scrollTop = terminalBody.scrollHeight;
     }
 
     // ------------------------------------------------------------------
     // API PÚBLICA
     // ------------------------------------------------------------------
-
-    /**
-     * Inicializa el tutorial automático de terminal.
-     * @param {string} [containerId='terminalBody'] - ID del elemento contenedor.
-     */
     function init(containerId = 'terminalBody') {
         console.log('🚀 TerminalTutorial: inicializando...');
-
         terminalBody = document.getElementById(containerId);
-
         if (!terminalBody) {
             console.error('❌ TerminalTutorial: no se encontró #' + containerId);
             return;
         }
 
-        // Resetear estado
         currentPath = HOME_PATH;
         tutorialActive = true;
         sequenceIndex = 0;
         stepIndex = 0;
         typingActive = false;
 
-        // Limpiar intervalos previos si existen
         if (cleanupInterval) clearInterval(cleanupInterval);
         if (scrollInterval) clearInterval(scrollInterval);
 
-        // Configurar limpieza periódica
         cleanupInterval = setInterval(cleanupTerminal, CLEANUP_INTERVAL);
-
-        // Configurar scroll automático
         scrollInterval = setInterval(keepScrollBottom, SCROLL_INTERVAL);
 
-        // Mensajes de bienvenida
         print('🚀 Terminal Debian-CDE - Tutorial Automático');
         print('📚 Ejecutando comandos en bucle infinito...\n');
         print('⚠️ Modo automático activado (sin interacción del usuario)\n');
 
-        // Iniciar secuencia
         setTimeout(runStep, 1000);
-
         console.log('✅ TerminalTutorial: inicializado correctamente');
     }
 
-    /**
-     * Detiene el tutorial y limpia recursos.
-     */
     function stop() {
         console.log('🛑 TerminalTutorial: deteniendo...');
         tutorialActive = false;
-
         if (cleanupInterval) {
             clearInterval(cleanupInterval);
             cleanupInterval = null;
         }
-
         if (scrollInterval) {
             clearInterval(scrollInterval);
             scrollInterval = null;
         }
-
         console.log('✅ TerminalTutorial: detenido');
     }
 
@@ -341,4 +237,4 @@ document.addEventListener('DOMContentLoaded', () => {
     TerminalTutorial.init();
 });
 
-console.log('✅ TerminalTutorial module loaded (llamar a TerminalTutorial.init() para comenzar)');
+console.log('✅ TerminalTutorial module loaded');

@@ -16,10 +16,10 @@ const FileManager = (() => {
     };
 
     // ------------------------------------------------------------------
-    // SISTEMA DE ARCHIVOS VIRTUAL
+    // SISTEMA DE ARCHIVOS VIRTUAL (usando CONFIG)
     // ------------------------------------------------------------------
     const fs = {
-        "/home/victxrlarixs/": {
+        [CONFIG.FS.HOME]: {
             type: "folder",
             children: {
                 "Desktop": { type: "folder", children: {} },
@@ -40,12 +40,12 @@ const FileManager = (() => {
         }
     };
 
-    let currentPath = "/home/victxrlarixs/";
+    let currentPath = CONFIG.FS.HOME;
     let history = [];
     let historyIndex = -1;
     let fmSelected = null;
     let showHidden = false;
-    let zIndex = 1000;
+    let zIndex = CONFIG.FILEMANAGER.BASE_Z_INDEX;
     let initialized = false;
     let activeMenu = null;
     let activeContextMenu = null;
@@ -165,7 +165,7 @@ const FileManager = (() => {
      * Navega al directorio home.
      */
     function goHome() {
-        openPath("/home/victxrlarixs/");
+        openPath(CONFIG.FS.HOME);
     }
 
     // ------------------------------------------------------------------
@@ -402,7 +402,6 @@ const FileManager = (() => {
             menu.appendChild(div);
         });
 
-        // Posicionamiento inteligente
         menu.style.left = e.pageX + "px";
         menu.style.top = e.pageY + "px";
         document.body.appendChild(menu);
@@ -424,7 +423,7 @@ const FileManager = (() => {
             return;
         }
         console.log("📁 File Manager: inicializando...");
-        currentPath = "/home/victxrlarixs/";
+        currentPath = CONFIG.FS.HOME;
         history = [currentPath];
         historyIndex = 0;
         fmSelected = null;
@@ -482,9 +481,6 @@ const FileManager = (() => {
         return win?.style.display !== "none" && win?.style.display !== "";
     }
 
-    // ------------------------------------------------------------------
-    // RETORNO DE API PÚBLICA
-    // ------------------------------------------------------------------
     return {
         init,
         open,
@@ -499,9 +495,6 @@ const FileManager = (() => {
     };
 })();
 
-// ------------------------------------------------------------------
-// EXPOSICIÓN GLOBAL PARA EVENTOS HTML
-// ------------------------------------------------------------------
 window.openFileManager = FileManager.open;
 window.closeFileManager = FileManager.close;
 window.toggleFileManager = FileManager.toggle;
