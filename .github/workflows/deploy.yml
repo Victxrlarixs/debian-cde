@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [astro-implementation]
 
 jobs:
   build-and-deploy:
@@ -22,10 +22,13 @@ jobs:
       - name: Build Astro
         run: npm run build
 
+      - name: Add .nojekyll file
+        run: touch ./dist/.nojekyll
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           publish_branch: gh-pages
-          cname: debian.com.mx
+          cname: debian.com.mx  # si usas dominio personalizado
