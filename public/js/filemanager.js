@@ -95,8 +95,8 @@ const FileManager = (() => {
 
             const img = document.createElement("img");
             img.src = item.type === "folder"
-                ? "./src/icons/filemanager.png"
-                : "./src/icons/gedit.png";
+                ? "/icons/filemanager.png"
+                : "/icons/gedit.png";
 
             const span = document.createElement("span");
             span.textContent = name;
