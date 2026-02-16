@@ -24,7 +24,7 @@ The project lives at **[debian.com.mx](https://debian.com.mx)** and serves as a 
 - 💻 **Auto‑mode terminal** – Infinite tutorial showcasing Unix/Linux commands (ls, cd, mkdir, git, docker, etc.) with typing effect.
 - 📁 **Virtual File Manager** – Navigate, create, rename and delete files/folders. Includes menu bar, toolbar and context menu.
 - 📸 **Integrated screenshot** – One‑click download of the entire desktop as a PNG.
-
+- 📊 **Process Monitor** – Real‑time process list with keyboard navigation (↑/↓, k kill, q quit, ? help) and colored CPU/memory bars.
 ---
 
 ## 🚀 Getting Started

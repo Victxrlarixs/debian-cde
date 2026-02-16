@@ -636,3 +636,29 @@
     border-right-color: var(--border-dark);
     border-bottom-color: var(--border-dark);
 }
+
+
+#terminal {
+    top: 80px;
+    left: 40px;
+    width: 380px;
+    display: none;
+}
+
+#fm {
+    top: 100px;
+    left: 460px;
+    width: 420px;
+    height: 320px;
+    display: none;
+}
+
+#styleManager {
+    display: none;
+    /* pero ya tiene display:flex cuando se abre, cuidado: en CSS podría sobrescribir */
+}
+
+/* Nota: para styleManager, su display se controla con JS, pero el valor por defecto debe ser none */
+#styleManager {
+    display: none;
+}
