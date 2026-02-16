@@ -1,0 +1,17 @@
+---
+// src/components/ProcessMonitor.astro
+import WindowControls from "./WindowControls.astro";
+---
+
+<div class="window" id="top-monitor">
+    <div class="titlebar" id="top-monitor-titlebar">
+        <span class="titlebar-text">Process Monitor</span>
+        <WindowControls
+            windowId="top-monitor"
+            closeFunction="TopMonitor.close"
+        />
+    </div>
+    <div class="terminal-body">
+        <div id="top-monitor-content"></div>
+    </div>
+</div>

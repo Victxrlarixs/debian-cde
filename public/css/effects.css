@@ -1,0 +1,126 @@
+/* ------------------------------------------------
+   CDE SIMULATION — EFECTOS, TIPOGRAFÍA Y RESPONSIVE
+   Estilos complementarios: animaciones, media queries, utilidades
+   Dominio: debian.com.mx
+   ------------------------------------------------ */
+
+/* ------------------------------------------------------------------
+   1. EFECTOS ESPECIALES (CRT, CURSOR, GLITCH)
+      Añaden atmósfera retro y feedback visual.
+   ------------------------------------------------------------------ */
+
+/* ----- Líneas de barrido estilo CRT sobre ventanas ----- */
+.window::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(to bottom,
+            rgba(255, 255, 255, 0.02) 0px,
+            rgba(255, 255, 255, 0.02) 1px,
+            transparent 2px,
+            transparent 4px);
+    mix-blend-mode: overlay;
+}
+
+/* ----- Cursor de terminal parpadeante (hacker) ----- */
+#terminalInput::after {
+    content: "";
+    display: inline-block;
+    width: 7px;
+    height: 14px;
+    background: var(--terminal-text-color);
+    margin-left: 2px;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* ----- Efecto glitch para textos de terminal ----- */
+@keyframes glitch {
+    0% {
+        text-shadow: 0 0 4px rgba(0, 255, 136, 0.3);
+    }
+
+    50% {
+        text-shadow: 2px 0 rgba(0, 255, 136, 0.6), -2px 0 rgba(0, 150, 80, 0.4);
+    }
+
+    100% {
+        text-shadow: 0 0 4px rgba(0, 255, 136, 0.3);
+    }
+}
+
+.prompt,
+.terminal-body {
+    animation: glitch 6s infinite;
+}
+
+/* ------------------------------------------------------------------
+   2. MENSAJES EMERGENTES (FADE IN/OUT)
+      Animación para notificaciones temporales.
+   ------------------------------------------------------------------ */
+.cde-message {
+    animation: fadeInOut 2s ease-in-out;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+
+    10% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    90% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+}
+
+/* ------------------------------------------------------------------
+   3. TIPOGRAFÍA — AJUSTES DE TAMAÑO BASE
+      Las fuentes ya están definidas en :root.
+      Aquí se asignan tamaños específicos por componente.
+   ------------------------------------------------------------------ */
+
+/* Tamaño base */
+body,
+.window,
+#cde-panel,
+.fm-menubar,
+.fm-path,
+.cde-btn {
+    font-size: var(--font-size-base);
+}
+
+/* Tamaño de título (ligeramente mayor) */
+.titlebar,
+.cde-subtitle,
+.terminal-body,
+#terminalInput {
+    font-size: var(--font-size-title);
+}
+
+/* Tamaño pequeño (etiquetas, barras de estado, presets) */
+.cde-label,
+.pager-ws,
+.scroll-btn,
+.cde-statusbar,
+.fm-status,
+.menu-item,
+.cde-preset {
+    font-size: var(--font-size-small);
+}
