@@ -1,6 +1,6 @@
 /**
  * @fileoverview Terminal interactiva con tutorial automático en bucle.
- * Simula comandos Linux/Unix en un entorno CDE, mostrando ejemplos didácticos.
+ * Se inicia solo cuando la ventana está abierta y se detiene al cerrarla.
  * @author victxrlarixs
  */
 
@@ -19,7 +19,7 @@ const TerminalTutorial = (() => {
     const TRANSITION_MESSAGES = CONFIG.TERMINAL.TRANSITION_MESSAGES;
 
     // ------------------------------------------------------------------
-    // SECUENCIAS DEL TUTORIAL (se mantienen aquí por su extensión)
+    // SECUENCIAS DEL TUTORIAL (completas)
     // ------------------------------------------------------------------
     const TUTORIAL_SEQUENCES = [
         // SECUENCIA 1: Comandos básicos del sistema
@@ -97,12 +97,13 @@ const TerminalTutorial = (() => {
     // ------------------------------------------------------------------
     let terminalBody = null;
     let currentPath = HOME_PATH;
-    let tutorialActive = true;
+    let tutorialActive = false;  // ← ahora empieza en false
     let sequenceIndex = 0;
     let stepIndex = 0;
     let typingActive = false;
     let cleanupInterval = null;
     let scrollInterval = null;
+    let pendingTimeout = null;
 
     // ------------------------------------------------------------------
     // FUNCIONES PRIVADAS
@@ -121,8 +122,8 @@ const TerminalTutorial = (() => {
     }
 
     function typeLine(line, callback) {
-        if (!terminalBody) {
-            console.error('❌ TerminalTutorial: terminalBody no disponible');
+        if (!terminalBody || !tutorialActive) {
+            if (callback) setTimeout(callback, 0);
             return;
         }
         let i = 0;
@@ -140,7 +141,7 @@ const TerminalTutorial = (() => {
                 clearInterval(interval);
                 terminalBody.innerHTML += '\n';
                 typingActive = false;
-                if (callback) setTimeout(callback, POST_COMMAND_DELAY);
+                if (callback) callback();
             }
         }, Math.random() * (MAX_TYPING_DELAY - MIN_TYPING_DELAY) + MIN_TYPING_DELAY);
     }
@@ -153,7 +154,9 @@ const TerminalTutorial = (() => {
         const prompt = `${step.user}@Debian:${relativePath}$ `;
 
         typeLine(prompt + step.command, () => {
+            if (!tutorialActive) return;
             setTimeout(() => {
+                if (!tutorialActive) return;
                 print(step.output, 'tip');
                 stepIndex++;
                 if (stepIndex >= sequence.length) {
@@ -161,9 +164,9 @@ const TerminalTutorial = (() => {
                     print('\n' + randomMsg + '\n', 'transition');
                     sequenceIndex = (sequenceIndex + 1) % TUTORIAL_SEQUENCES.length;
                     stepIndex = 0;
-                    setTimeout(runStep, POST_SEQUENCE_DELAY);
+                    pendingTimeout = setTimeout(runStep, POST_SEQUENCE_DELAY);
                 } else {
-                    setTimeout(runStep, POST_COMMAND_DELAY);
+                    pendingTimeout = setTimeout(runStep, POST_COMMAND_DELAY);
                 }
             }, POST_COMMAND_DELAY);
         });
@@ -185,8 +188,9 @@ const TerminalTutorial = (() => {
     // ------------------------------------------------------------------
     // API PÚBLICA
     // ------------------------------------------------------------------
-    function init(containerId = 'terminalBody') {
-        console.log('🚀 TerminalTutorial: inicializando...');
+    function start(containerId = 'terminalBody') {
+        if (tutorialActive) return;
+        console.log('🚀 TerminalTutorial: iniciando...');
         terminalBody = document.getElementById(containerId);
         if (!terminalBody) {
             console.error('❌ TerminalTutorial: no se encontró #' + containerId);
@@ -199,8 +203,10 @@ const TerminalTutorial = (() => {
         stepIndex = 0;
         typingActive = false;
 
+        // Limpiar intervalos previos por si acaso
         if (cleanupInterval) clearInterval(cleanupInterval);
         if (scrollInterval) clearInterval(scrollInterval);
+        if (pendingTimeout) clearTimeout(pendingTimeout);
 
         cleanupInterval = setInterval(cleanupTerminal, CLEANUP_INTERVAL);
         scrollInterval = setInterval(keepScrollBottom, SCROLL_INTERVAL);
@@ -209,8 +215,8 @@ const TerminalTutorial = (() => {
         print('📚 Ejecutando comandos en bucle infinito...\n');
         print('⚠️ Modo automático activado (sin interacción del usuario)\n');
 
-        setTimeout(runStep, 1000);
-        console.log('✅ TerminalTutorial: inicializado correctamente');
+        pendingTimeout = setTimeout(runStep, 1000);
+        console.log('✅ TerminalTutorial: iniciado correctamente');
     }
 
     function stop() {
@@ -224,17 +230,41 @@ const TerminalTutorial = (() => {
             clearInterval(scrollInterval);
             scrollInterval = null;
         }
+        if (pendingTimeout) {
+            clearTimeout(pendingTimeout);
+            pendingTimeout = null;
+        }
         console.log('✅ TerminalTutorial: detenido');
     }
 
-    return { init, stop };
+    return { start, stop };
 })();
 
 // ------------------------------------------------------------------
-// ARRANQUE AUTOMÁTICO
+// Funciones globales para abrir/cerrar la terminal desde el HTML
 // ------------------------------------------------------------------
-document.addEventListener('DOMContentLoaded', () => {
-    TerminalTutorial.init();
-});
+function openTerminal() {
+    const terminal = document.getElementById('terminal');
+    if (!terminal) return;
+    // Si la ventana está oculta, la mostramos e iniciamos el tutorial
+    if (terminal.style.display === 'none' || !terminal.style.display) {
+        terminal.style.display = 'block';
+        TerminalTutorial.start();
+    } else {
+        // Si ya está visible, solo la traemos al frente
+        if (window.focusWindow) window.focusWindow('terminal');
+    }
+}
 
-console.log('✅ TerminalTutorial module loaded');
+function closeTerminal() {
+    const terminal = document.getElementById('terminal');
+    if (terminal) {
+        terminal.style.display = 'none';
+        TerminalTutorial.stop();
+    }
+}
+
+window.openTerminal = openTerminal;
+window.closeTerminal = closeTerminal;
+
+console.log('✅ TerminalTutorial module loaded (no auto-start, controlado por ventana)');

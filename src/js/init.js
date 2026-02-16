@@ -150,9 +150,9 @@ function initDesktop() {
     console.log('🖥️ Initializing CDE Desktop Environment...');
 
     if (typeof initClock === 'function') initClock();
-    if (typeof initTerminal === 'function') initTerminal();
+    // if (typeof initTerminal === 'function') initTerminal();
     if (typeof initWindowManager === 'function') initWindowManager();
-    if (window.styleManager?.init === 'function') window.styleManager.init();
+    //  if (window.styleManager?.init === 'function') window.styleManager.init();
 
     desktopInitialized = true;
     console.log('✅ CDE Desktop initialized successfully!');

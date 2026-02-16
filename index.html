@@ -33,10 +33,10 @@
         </div>
 
 
-        <div class="window" id="terminal" style="top:80px; left:40px; width:380px;">
+        <div class="window" id="terminal">
             <div class="titlebar" onmousedown="drag(event, 'terminal')">
                 Terminal - victxrlarixs@Debian
-                <div class="close-btn" onclick="terminal.style.display='none'">
+                <div class="close-btn" onclick="closeTerminal()">
                     <img src="./src/icons/tab_close.png">
                 </div>
             </div>
@@ -45,7 +45,7 @@
         </div>
 
 
-        <div class="window" id="fm" style="top:100px; left:460px; width:420px; height:320px; display:none;">
+        <div class="window" id="fm">
             <div class="titlebar" onmousedown="drag(event, 'fm')">
                 victxrlarixs
                 <div class="close-btn" onclick="closeFileManager()">
@@ -126,7 +126,7 @@
                 </div>
 
                 <div class="cde-icons">
-                    <div class="cde-icon" onclick="terminal.style.display='block'" title="Open Terminal">
+                    <div class="cde-icon" onclick="openTerminal()" title="Open Terminal" display="none">
                         <img src="./src/icons/konsole.png" alt="Terminal">
                     </div>
                     <div class="cde-icon" onclick="toggleFileManager()" title="File Manager">
@@ -184,7 +184,7 @@
         </div>
 
     </div>
-    <div class="cde-retro-modal" id="styleManager" style="display: none;">
+    <div class="cde-retro-modal" id="styleManager">
         <div class="titlebar" id="styleManagerTitlebar">
             <span class="titlebar-text">Style Manager</span>
             <div class="close-btn" onclick="styleManager.close()">
