@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]  # se activa cuando se fusiona un PR a main
+    branches: [main]
 
 permissions:
   contents: write
@@ -11,7 +11,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout código fuente (rama main)
+      - name: Checkout main branch
         uses: actions/checkout@v4
         with:
           ref: main
