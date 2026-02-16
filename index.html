@@ -20,8 +20,7 @@
 
     <div id="desktop-ui">
         <div id="topbar">
-            <div class="top-left">
-            </div>
+            <div class="top-left"></div>
             <div class="top-right">
                 <div class="sys-item" id="volume-icon" onclick="retroBeep()">
                     <img src="./src/icons/audio-volume-low.png" class="sys-icon">
@@ -32,36 +31,49 @@
             </div>
         </div>
 
-
+        <!-- Terminal -->
         <div class="window" id="terminal">
             <div class="titlebar" onmousedown="drag(event, 'terminal')">
-                Terminal - victxrlarixs@Debian
-                <div class="close-btn" onclick="closeTerminal()">
-                    <img src="./src/icons/tab_close.png">
+                <span class="titlebar-text">Terminal - victxrlarixs@Debian</span>
+                <div class="window-controls">
+                    <div class="min-btn" onclick="minimizeWindow('terminal')">
+                        <img src="./src/icons/shade-inactive.png" alt="Minimize">
+                    </div>
+                    <div class="max-btn" onclick="maximizeWindow('terminal')">
+                        <img src="./src/icons/maximize-inactive.png" alt="Maximize">
+                    </div>
+                    <div class="close-btn" onclick="closeTerminal()">
+                        <img src="./src/icons/close-inactive.png">
+                    </div>
                 </div>
             </div>
             <div class="terminal-body" id="terminalBody"></div>
-
         </div>
 
-
+        <!-- File Manager -->
         <div class="window" id="fm">
             <div class="titlebar" onmousedown="drag(event, 'fm')">
-                victxrlarixs
-                <div class="close-btn" onclick="closeFileManager()">
-                    <img src="./src/icons/tab_close.png">
+                <span class="titlebar-text">victxrlarixs</span>
+                <div class="window-controls">
+                    <div class="min-btn" onclick="minimizeWindow('fm')">
+                        <img src="./src/icons/shade-inactive.png" alt="Minimize">
+                    </div>
+                    <div class="max-btn" onclick="maximizeWindow('fm')">
+                        <img src="./src/icons/maximize-inactive.png" alt="Maximize">
+                    </div>
+                    <div class="close-btn" onclick="closeFileManager()">
+                        <img src="./src/icons/close-inactive.png">
+                    </div>
                 </div>
             </div>
-
             <div class="fm-container">
                 <div class="fm-menubar">
                     <span>File</span>
                     <span>Edit</span>
                     <span>View</span>
                     <span>Go</span>
-                    <a href="https://github.com/Victxrlarixs/debian-cde/issues" target="_blank"> <span>Help</span></a>
+                    <a href="https://github.com/Victxrlarixs/debian-cde/issues" target="_blank"><span>Help</span></a>
                 </div>
-
                 <div class="fm-toolbar">
                     <button class="fm-btn" onclick="goBack()">
                         <img src="./src/icons/previous.png" alt="Back">
@@ -77,7 +89,6 @@
                     </button>
                     <input class="fm-path" id="fmPath" />
                 </div>
-
                 <div class="fm-body">
                     <div class="fm-sidebar">
                         <div class="fm-section">Places</div>
@@ -90,24 +101,22 @@
                         <div class="fm-item">
                             <img src="./src/icons/user-trash-full.png" class="fm-icon"> Trash
                         </div>
-
                         <div class="fm-section">Devices</div>
                         <div class="fm-item">
                             <img src="./src/icons/drive-harddisk.png" class="fm-icon"> File System
                         </div>
-
                         <div class="fm-section">Network</div>
                         <div class="fm-item">
                             <img src="./src/icons/redhat-system-group.png" class="fm-icon"> Browse Network
                         </div>
                     </div>
-
                     <div class="fm-files" id="fmFiles"></div>
                 </div>
-
                 <div class="fm-status" id="fmStatus"></div>
             </div>
         </div>
+
+        <!-- CDE Panel -->
         <div id="cde-panel">
             <div class="cde-menu-btn">
                 <img src="./src/icons/Debian.png" alt="Menu">
@@ -126,7 +135,7 @@
                 </div>
 
                 <div class="cde-icons">
-                    <div class="cde-icon" onclick="openTerminal()" title="Open Terminal" display="none">
+                    <div class="cde-icon" onclick="openTerminal()" title="Open Terminal">
                         <img src="./src/icons/konsole.png" alt="Terminal">
                     </div>
                     <div class="cde-icon" onclick="toggleFileManager()" title="File Manager">
@@ -183,218 +192,234 @@
             </div>
         </div>
 
-    </div>
-    <div class="cde-retro-modal" id="styleManager">
-        <div class="titlebar" id="styleManagerTitlebar">
-            <span class="titlebar-text">Style Manager</span>
-            <div class="close-btn" onclick="styleManager.close()">
-                <img src="./src/icons/tab_close.png">
-            </div>
-        </div>
-
-        <div class="modal-body">
-            <div class="cde-sidepanel">
-                <div class="cde-category active" data-category="colors" onclick="switchStyleTab('colors')">
-                    <div class="cde-category-icon">
-                        <img src="./src/icons/org.xfce.settings.appearance.png" alt="Colors" width="16" height="16">
+        <!-- Style Manager (completo) -->
+        <div class="cde-retro-modal" id="styleManager">
+            <div class="titlebar" id="styleManagerTitlebar">
+                <span class="titlebar-text">Style Manager</span>
+                <div class="window-controls">
+                    <div class="min-btn" onclick="minimizeWindow('styleManager')">
+                        <img src="./src/icons/shade-inactive.png" alt="Minimize">
                     </div>
-                    <span>Colors</span>
-                </div>
-
-                <div class="cde-category" data-category="fonts" onclick="switchStyleTab('fonts')">
-                    <div class="cde-category-icon">
-                        <img src="./src/icons/font-x-generic.png" alt="Fonts" width="16" height="16">
+                    <div class="max-btn" onclick="maximizeWindow('styleManager')">
+                        <img src="./src/icons/maximize-inactive.png" alt="Maximize">
                     </div>
-                    <span>Fonts</span>
+                    <div class="close-btn" onclick="styleManager.close()">
+                        <img src="./src/icons/close-inactive.png">
+                    </div>
                 </div>
             </div>
 
-            <div class="cde-controlpanel">
-                <div class="cde-controlgroup active" id="colors-panel">
-                    <h3 class="cde-subtitle">Color Settings</h3>
-                    <div class="cde-presets">
-                        <h4>CDE Classic Themes</h4>
-                        <div class="cde-preset-row">
-                            <button class="cde-preset" data-scheme="platinum">Platinum</button>
-                            <button class="cde-preset" data-scheme="olive">Olive</button>
-                            <button class="cde-preset" data-scheme="marine">Marine</button>
-                            <button class="cde-preset" data-scheme="sand">Sand</button>
-                            <button class="cde-preset" data-scheme="midnight">Midnight</button>
-                            <button class="cde-preset" data-scheme="cobalt">Cobalt</button>
-                            <button class="cde-preset" data-scheme="forest">Forest</button>
-                            <button class="cde-preset" data-scheme="sunset">Sunset</button>
-                            <button class="cde-preset" data-scheme="amber">Amber</button>
-                            <button class="cde-preset" data-scheme="monochrome">Mono</button>
-
+            <div class="modal-body">
+                <div class="cde-sidepanel">
+                    <div class="cde-category active" data-category="colors" onclick="switchStyleTab('colors')">
+                        <div class="cde-category-icon">
+                            <img src="./src/icons/org.xfce.settings.appearance.png" alt="Colors" width="16" height="16">
                         </div>
+                        <span>Colors</span>
                     </div>
-                    <div class="cde-controlrow">
-                        <label class="cde-label">Workspace:</label>
-                        <div class="cde-colorselector">
-                            <input type="color" id="color-workspace" value="#a0a0a0" data-var="--cde-workspace">
-                            <div class="cde-colorswatch" style="background-color: #a0a0a0;"></div>
-                            <span class="cde-colorname">Gray</span>
+
+                    <div class="cde-category" data-category="fonts" onclick="switchStyleTab('fonts')">
+                        <div class="cde-category-icon">
+                            <img src="./src/icons/font-x-generic.png" alt="Fonts" width="16" height="16">
                         </div>
-                    </div>
-
-                    <div class="cde-controlrow">
-                        <label class="cde-label">Active Title:</label>
-                        <div class="cde-colorselector">
-                            <input type="color" id="color-title-active" value="#000080" data-var="--cde-title-active">
-                            <div class="cde-colorswatch" style="background-color: #000080;"></div>
-                            <span class="cde-colorname">Navy Blue</span>
-                        </div>
-                    </div>
-
-                    <div class="cde-controlrow">
-                        <label class="cde-label">Background:</label>
-                        <div class="cde-colorselector">
-                            <input type="color" id="color-background" value="#c0c0c0" data-var="--cde-background">
-                            <div class="cde-colorswatch" style="background-color: #c0c0c0;"></div>
-                            <span class="cde-colorname">Light Gray</span>
-                        </div>
-                    </div>
-
-                    <div class="cde-controlrow">
-                        <label class="cde-label">Highlight:</label>
-                        <div class="cde-colorselector">
-                            <input type="color" id="color-highlight" value="#0000ff" data-var="--cde-highlight">
-                            <div class="cde-colorswatch" style="background-color: #0000ff;"></div>
-                            <span class="cde-colorname">Blue</span>
-                        </div>
-                    </div>
-
-                    <div class="cde-controlrow">
-                        <label class="cde-label">Text Color:</label>
-                        <div class="cde-colorselector">
-                            <input type="color" id="color-text" value="#000000" data-var="--cde-text-color">
-                            <div class="cde-colorswatch" style="background-color: #000000;"></div>
-                            <span class="cde-colorname">Black</span>
-                        </div>
-                    </div>
-
-
-                </div>
-
-                <div class="cde-controlgroup" id="fonts-panel">
-                    <h3 class="cde-subtitle">Font Settings</h3>
-
-                    <div class="cde-font-presets">
-                        <h4>Font Theme</h4>
-                        <div class="cde-preset-row">
-                            <button class="cde-preset" data-preset="classic-cde">Classic CDE</button>
-                            <button class="cde-preset" data-preset="modern">Modern</button>
-                            <button class="cde-preset" data-preset="retro">Retro</button>
-                            <button class="cde-preset" data-preset="terminal">Terminal</button>
-                        </div>
-                    </div>
-
-                    <div class="cde-controlrow">
-                        <label class="cde-label">UI Font Family:</label>
-                        <select class="cde-select" id="font-family-base">
-                            <option value='"Fixedsys", "Lucida Console", monospace'>Fixedsys (Default)</option>
-                            <option value='"MS Sans Serif", sans-serif'>MS Sans Serif</option>
-                            <option value='"Times New Roman", serif'>Times New Roman</option>
-                            <option value='Arial, sans-serif'>Arial</option>
-                            <option value='"Courier New", monospace'>Courier New</option>
-                            <option value='"Tahoma", sans-serif'>Tahoma</option>
-                            <option value='"Verdana", sans-serif'>Verdana</option>
-                            <option value='"Ubuntu Mono", monospace'>Ubuntu Mono</option>
-                            <option value='"DejaVu Sans Mono", monospace'>DejaVu Sans Mono</option>
-                        </select>
-                    </div>
-
-                    <div class="cde-controlrow">
-                        <label class="cde-label">Terminal Font:</label>
-                        <select class="cde-select" id="font-family-terminal">
-                            <option value='"Courier New", monospace'>Courier New (Default)</option>
-                            <option value='"Lucida Console", monospace'>Lucida Console</option>
-                            <option value='Consolas, monospace'>Consolas</option>
-                            <option value='"Fixedsys", monospace'>Fixedsys</option>
-                            <option value='"Monaco", monospace'>Monaco</option>
-                            <option value='"Ubuntu Mono", monospace'>Ubuntu Mono</option>
-                            <option value='"DejaVu Sans Mono", monospace'>DejaVu Sans Mono</option>
-                        </select>
-                    </div>
-
-                    <div class="cde-controlrow">
-                        <label class="cde-label">Base Font Size:</label>
-                        <input type="range" class="cde-slider" id="font-size-base" min="10" max="18" value="12"
-                            step="1">
-                        <span class="cde-slidervalue" id="font-size-value">12px</span>
-                    </div>
-
-                    <div class="cde-controlrow">
-                        <label class="cde-label">Title Font Size:</label>
-                        <input type="range" class="cde-slider" id="font-size-title" min="11" max="20" value="13"
-                            step="1">
-                        <span class="cde-slidervalue" id="font-size-title-value">13px</span>
-                    </div>
-
-                    <div class="cde-controlrow">
-                        <label class="cde-label">Line Height:</label>
-                        <input type="range" class="cde-slider" id="line-height-base" min="1.0" max="2.0" value="1.45"
-                            step="0.05">
-                        <span class="cde-slidervalue" id="line-height-value">1.45</span>
-                    </div>
-
-                    <div class="cde-controlrow">
-                        <label class="cde-label">Font Weight:</label>
-                        <select class="cde-select" id="font-weight">
-                            <option value="300">Light (300)</option>
-                            <option value="400" selected>Normal (400)</option>
-                            <option value="600">Semibold (600)</option>
-                            <option value="700">Bold (700)</option>
-                            <option value="800">Extra Bold (800)</option>
-                        </select>
-                    </div>
-
-                    <div class="cde-controlrow">
-                        <div class="cde-label"></div>
-                        <button class="cde-btn" onclick="styleManager.testFontPreview()" style="margin-top: 10px;">
-                            Preview Fonts
-                        </button>
-                    </div>
-
-                    <div class="cde-controlrow">
-                        <div class="cde-label">Preview:</div>
-                        <div class="cde-font-preview" id="font-preview">
-                            <div class="font-preview-title">Title Bar Example</div>
-                            <div class="font-preview-text">This is regular text in the selected font.</div>
-                            <div class="font-preview-terminal">Terminal: $ ls -la</div>
-                            <div class="font-preview-small">Small text for status bars</div>
-                        </div>
+                        <span>Fonts</span>
                     </div>
                 </div>
 
+                <div class="cde-controlpanel">
+                    <div class="cde-controlgroup active" id="colors-panel">
+                        <h3 class="cde-subtitle">Color Settings</h3>
+                        <div class="cde-presets">
+                            <h4>CDE Classic Themes</h4>
+                            <div class="cde-preset-row">
+                                <button class="cde-preset" data-scheme="platinum">Platinum</button>
+                                <button class="cde-preset" data-scheme="olive">Olive</button>
+                                <button class="cde-preset" data-scheme="marine">Marine</button>
+                                <button class="cde-preset" data-scheme="sand">Sand</button>
+                                <button class="cde-preset" data-scheme="midnight">Midnight</button>
+                                <button class="cde-preset" data-scheme="cobalt">Cobalt</button>
+                                <button class="cde-preset" data-scheme="forest">Forest</button>
+                                <button class="cde-preset" data-scheme="sunset">Sunset</button>
+                                <button class="cde-preset" data-scheme="amber">Amber</button>
+                                <button class="cde-preset" data-scheme="monochrome">Mono</button>
+                            </div>
+                        </div>
+
+                        <div class="cde-controlrow">
+                            <label class="cde-label">Workspace:</label>
+                            <div class="cde-colorselector">
+                                <input type="color" id="color-workspace" value="#a0a0a0" data-var="--cde-workspace">
+                                <div class="cde-colorswatch" style="background-color: #a0a0a0;"></div>
+                                <span class="cde-colorname">Gray</span>
+                            </div>
+                        </div>
+
+                        <div class="cde-controlrow">
+                            <label class="cde-label">Active Title:</label>
+                            <div class="cde-colorselector">
+                                <input type="color" id="color-title-active" value="#000080"
+                                    data-var="--cde-title-active">
+                                <div class="cde-colorswatch" style="background-color: #000080;"></div>
+                                <span class="cde-colorname">Navy Blue</span>
+                            </div>
+                        </div>
+
+                        <div class="cde-controlrow">
+                            <label class="cde-label">Background:</label>
+                            <div class="cde-colorselector">
+                                <input type="color" id="color-background" value="#c0c0c0" data-var="--cde-background">
+                                <div class="cde-colorswatch" style="background-color: #c0c0c0;"></div>
+                                <span class="cde-colorname">Light Gray</span>
+                            </div>
+                        </div>
+
+                        <div class="cde-controlrow">
+                            <label class="cde-label">Highlight:</label>
+                            <div class="cde-colorselector">
+                                <input type="color" id="color-highlight" value="#0000ff" data-var="--cde-highlight">
+                                <div class="cde-colorswatch" style="background-color: #0000ff;"></div>
+                                <span class="cde-colorname">Blue</span>
+                            </div>
+                        </div>
+
+                        <div class="cde-controlrow">
+                            <label class="cde-label">Text Color:</label>
+                            <div class="cde-colorselector">
+                                <input type="color" id="color-text" value="#000000" data-var="--cde-text-color">
+                                <div class="cde-colorswatch" style="background-color: #000000;"></div>
+                                <span class="cde-colorname">Black</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cde-controlgroup" id="fonts-panel">
+                        <h3 class="cde-subtitle">Font Settings</h3>
+
+                        <div class="cde-font-presets">
+                            <h4>Font Theme</h4>
+                            <div class="cde-preset-row">
+                                <button class="cde-preset" data-preset="classic-cde">Classic CDE</button>
+                                <button class="cde-preset" data-preset="modern">Modern</button>
+                                <button class="cde-preset" data-preset="retro">Retro</button>
+                                <button class="cde-preset" data-preset="terminal">Terminal</button>
+                            </div>
+                        </div>
+
+                        <div class="cde-controlrow">
+                            <label class="cde-label">UI Font Family:</label>
+                            <select class="cde-select" id="font-family-base">
+                                <option value='"Fixedsys", "Lucida Console", monospace'>Fixedsys (Default)</option>
+                                <option value='"MS Sans Serif", sans-serif'>MS Sans Serif</option>
+                                <option value='"Times New Roman", serif'>Times New Roman</option>
+                                <option value='Arial, sans-serif'>Arial</option>
+                                <option value='"Courier New", monospace'>Courier New</option>
+                                <option value='"Tahoma", sans-serif'>Tahoma</option>
+                                <option value='"Verdana", sans-serif'>Verdana</option>
+                                <option value='"Ubuntu Mono", monospace'>Ubuntu Mono</option>
+                                <option value='"DejaVu Sans Mono", monospace'>DejaVu Sans Mono</option>
+                            </select>
+                        </div>
+
+                        <div class="cde-controlrow">
+                            <label class="cde-label">Terminal Font:</label>
+                            <select class="cde-select" id="font-family-terminal">
+                                <option value='"Courier New", monospace'>Courier New (Default)</option>
+                                <option value='"Lucida Console", monospace'>Lucida Console</option>
+                                <option value='Consolas, monospace'>Consolas</option>
+                                <option value='"Fixedsys", monospace'>Fixedsys</option>
+                                <option value='"Monaco", monospace'>Monaco</option>
+                                <option value='"Ubuntu Mono", monospace'>Ubuntu Mono</option>
+                                <option value='"DejaVu Sans Mono", monospace'>DejaVu Sans Mono</option>
+                            </select>
+                        </div>
+
+                        <div class="cde-controlrow">
+                            <label class="cde-label">Base Font Size:</label>
+                            <input type="range" class="cde-slider" id="font-size-base" min="10" max="18" value="12"
+                                step="1">
+                            <span class="cde-slidervalue" id="font-size-value">12px</span>
+                        </div>
+
+                        <div class="cde-controlrow">
+                            <label class="cde-label">Title Font Size:</label>
+                            <input type="range" class="cde-slider" id="font-size-title" min="11" max="20" value="13"
+                                step="1">
+                            <span class="cde-slidervalue" id="font-size-title-value">13px</span>
+                        </div>
+
+                        <div class="cde-controlrow">
+                            <label class="cde-label">Line Height:</label>
+                            <input type="range" class="cde-slider" id="line-height-base" min="1.0" max="2.0"
+                                value="1.45" step="0.05">
+                            <span class="cde-slidervalue" id="line-height-value">1.45</span>
+                        </div>
+
+                        <div class="cde-controlrow">
+                            <label class="cde-label">Font Weight:</label>
+                            <select class="cde-select" id="font-weight">
+                                <option value="300">Light (300)</option>
+                                <option value="400" selected>Normal (400)</option>
+                                <option value="600">Semibold (600)</option>
+                                <option value="700">Bold (700)</option>
+                                <option value="800">Extra Bold (800)</option>
+                            </select>
+                        </div>
+
+                        <div class="cde-controlrow">
+                            <div class="cde-label"></div>
+                            <button class="cde-btn" onclick="styleManager.testFontPreview()" style="margin-top: 10px;">
+                                Preview Fonts
+                            </button>
+                        </div>
+
+                        <div class="cde-controlrow">
+                            <div class="cde-label">Preview:</div>
+                            <div class="cde-font-preview" id="font-preview">
+                                <div class="font-preview-title">Title Bar Example</div>
+                                <div class="font-preview-text">This is regular text in the selected font.</div>
+                                <div class="font-preview-terminal">Terminal: $ ls -la</div>
+                                <div class="font-preview-small">Small text for status bars</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cde-statusbar">
+                <div class="cde-statusleft">CDE Style Manager</div>
+                <div class="cde-statusright" id="style-status">Ready</div>
+            </div>
+
+            <div class="cde-actionbar">
+                <button class="cde-btn cde-btn-default" onclick="styleManager.apply()">Apply</button>
+                <button class="cde-btn" onclick="styleManager.reset()">Reset</button>
+                <button class="cde-btn" onclick="styleManager.save()">Save</button>
+                <button class="cde-btn" onclick="styleManager.close()">Close</button>
             </div>
         </div>
 
-        <div class="cde-statusbar">
-            <div class="cde-statusleft">CDE Style Manager</div>
-            <div class="cde-statusright" id="style-status">Ready</div>
-        </div>
-
-        <div class="cde-actionbar">
-            <button class="cde-btn cde-btn-default" onclick="styleManager.apply()">Apply</button>
-            <button class="cde-btn" onclick="styleManager.reset()">Reset</button>
-            <button class="cde-btn" onclick="styleManager.save()">Save</button>
-            <button class="cde-btn" onclick="styleManager.close()">Close</button>
-        </div>
-    </div>
-
-    <div class="window" id="top-monitor">
-        <div class="titlebar" id="top-monitor-titlebar">
-            <span class="titlebar-text">Process Monitor</span>
-            <div class="close-btn" onclick="TopMonitor.close()">
-                <img src="./src/icons/tab_close.png">
+        <!-- Top Monitor -->
+        <div class="window" id="top-monitor">
+            <div class="titlebar" id="top-monitor-titlebar">
+                <span class="titlebar-text">Process Monitor</span>
+                <div class="window-controls">
+                    <div class="min-btn" onclick="minimizeWindow('top-monitor')">
+                        <img src="./src/icons/shade-inactive.png" alt="Minimize">
+                    </div>
+                    <div class="max-btn" onclick="maximizeWindow('top-monitor')">
+                        <img src="./src/icons/maximize-inactive.png" alt="Maximize">
+                    </div>
+                    <div class="close-btn" onclick="TopMonitor.close()">
+                        <img src="./src/icons/close-inactive.png">
+                    </div>
+                </div>
+            </div>
+            <div class="terminal-body">
+                <div id="top-monitor-content"></div>
             </div>
         </div>
-        <div class="terminal-body">
-            <div id="top-monitor-content"></div>
-        </div>
-    </div>
-    </div>
+
+    </div> <!-- cierre desktop-ui -->
 
     <script src="./src/js/init.js"></script>
     <script src="./src/js/config.js"></script>

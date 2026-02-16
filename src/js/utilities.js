@@ -2,7 +2,6 @@
  * @fileoverview Utilidades de ventanas, sonido, captura de pantalla y monitor de procesos estilo htop.
  * @author victxrlarixs
  */
-
 // ============================================================================
 // WindowManager: control de ventanas (foco, arrastre, reloj, dropdown)
 // ============================================================================
@@ -14,57 +13,99 @@ const WindowManager = (() => {
     let offsetY = 0;
     const MIN_VISIBLE = CONFIG.WINDOW.MIN_VISIBLE;
 
+    /**
+     * Eleva una ventana al frente (z-index máximo) y la marca como activa.
+     * @param {string} id - ID del elemento ventana.
+     */
     function focusWindow(id) {
         const win = document.getElementById(id);
         if (!win) return;
+
+        // Quitar la clase 'active' de todas las ventanas y modales
+        document.querySelectorAll('.window, .cde-retro-modal').forEach(w => {
+            w.classList.remove('active');
+        });
+
+        // Añadir clase 'active' a la ventana actual
+        win.classList.add('active');
+
+        // Incrementar z-index y aplicarlo
         zIndex++;
         win.style.zIndex = zIndex;
     }
 
+    /**
+     * Inicia el arrastre de una ventana.
+     * @param {Event} e - Evento mousedown.
+     * @param {string} id - ID de la ventana a arrastrar.
+     */
     function drag(e, id) {
         const el = document.getElementById(id);
         if (!el) return;
+
         focusWindow(id);
         currentDrag = el;
+
         const rect = el.getBoundingClientRect();
         offsetX = e.clientX - rect.left;
         offsetY = e.clientY - rect.top;
+
         document.addEventListener("mousemove", move);
         document.addEventListener("mouseup", stopDrag);
     }
 
+    /**
+     * Mueve la ventana mientras se arrastra, con límites de pantalla.
+     * @param {MouseEvent} e
+     */
     function move(e) {
         if (!currentDrag) return;
+
         let left = e.clientX - offsetX;
         let top = e.clientY - offsetY;
+
         const winWidth = currentDrag.offsetWidth;
         const winHeight = currentDrag.offsetHeight;
         const maxX = window.innerWidth - MIN_VISIBLE;
         const maxY = window.innerHeight - MIN_VISIBLE;
+
         left = Math.min(Math.max(left, MIN_VISIBLE - winWidth), maxX);
         top = Math.min(Math.max(top, MIN_VISIBLE - winHeight), maxY);
+
         currentDrag.style.left = left + "px";
         currentDrag.style.top = top + "px";
     }
 
+    /** Finaliza el arrastre y limpia los eventos. */
     function stopDrag() {
         currentDrag = null;
         document.removeEventListener("mousemove", move);
         document.removeEventListener("mouseup", stopDrag);
     }
 
+    /**
+     * Inicializa la captura de clics en ventanas usando delegación.
+     * Cualquier clic dentro de una ventana la elevará al frente.
+     */
     function initWindows() {
-        document.querySelectorAll(".window").forEach(win => {
-            win.addEventListener("mousedown", () => focusWindow(win.id));
-        });
-        document.querySelectorAll(".cde-retro-modal").forEach(modal => {
-            modal.addEventListener("mousedown", () => focusWindow(modal.id));
+        // Escuchamos en el documento para capturar clics incluso si la propagación se detiene
+        document.addEventListener('mousedown', (e) => {
+            // Buscar el elemento window más cercano (incluye modales)
+            const win = e.target.closest('.window, .cde-retro-modal');
+            if (win) {
+                focusWindow(win.id);
+            }
         });
     }
+
+    /* ------------------------------------------------------------------
+       Reloj del sistema (formato 24h)
+    ------------------------------------------------------------------ */
 
     function updateClock() {
         const clockEl = document.getElementById("clock");
         if (!clockEl) return;
+
         const now = new Date();
         const h = now.getHours().toString().padStart(2, "0");
         const m = now.getMinutes().toString().padStart(2, "0");
@@ -76,24 +117,37 @@ const WindowManager = (() => {
         setInterval(updateClock, 1000);
     }
 
+    /* ------------------------------------------------------------------
+       Menú desplegable de utilidades (dropdown)
+    ------------------------------------------------------------------ */
+
     function initDropdown() {
         const dropdownBtn = document.getElementById('utilitiesBtn');
         const dropdownMenu = document.getElementById('utilitiesDropdown');
+
         if (!dropdownBtn || !dropdownMenu) return;
+
         if (dropdownMenu.parentElement !== dropdownBtn) {
             dropdownBtn.appendChild(dropdownMenu);
         }
+
         dropdownBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             dropdownBtn.classList.toggle('open');
         });
+
         document.addEventListener('click', (e) => {
             if (!dropdownBtn.contains(e.target)) {
                 dropdownBtn.classList.remove('open');
             }
         });
+
         dropdownMenu.addEventListener('click', (e) => e.stopPropagation());
     }
+
+    /* ------------------------------------------------------------------
+       Inicialización general
+    ------------------------------------------------------------------ */
 
     function init() {
         initWindows();
@@ -523,3 +577,73 @@ window.TopMonitor = TopMonitor;
 window.openTaskManagerInTerminal = () => TopMonitor.open();
 
 console.log('✅ Utilities module loaded (WindowManager + beep + screenshot + htop monitor)');
+
+// ============================================================================
+// Minimizar y maximizar ventanas
+// ============================================================================
+
+// Almacena el estado anterior de las ventanas para restaurar posición y tamaño
+const windowStates = {};
+
+/**
+ * Minimiza una ventana (la oculta)
+ * @param {string} id - ID de la ventana
+ */
+function minimizeWindow(id) {
+    const win = document.getElementById(id);
+    if (!win) return;
+
+    // Guardar estado actual si no está minimizada (por si queremos restaurar después)
+    if (win.style.display !== 'none') {
+        windowStates[id] = {
+            display: win.style.display,
+            left: win.style.left,
+            top: win.style.top,
+            width: win.style.width,
+            height: win.style.height,
+            maximized: win.classList.contains('maximized')
+        };
+    }
+
+    win.style.display = 'none';
+}
+
+/**
+ * Maximiza o restaura una ventana
+ * @param {string} id - ID de la ventana
+ */
+function maximizeWindow(id) {
+    const win = document.getElementById(id);
+    if (!win) return;
+
+    // Si ya está maximizada, restaurar
+    if (win.classList.contains('maximized')) {
+        win.classList.remove('maximized');
+        // Restaurar posición y tamaño guardados
+        if (windowStates[id]) {
+            win.style.left = windowStates[id].left || '';
+            win.style.top = windowStates[id].top || '';
+            win.style.width = windowStates[id].width || '';
+            win.style.height = windowStates[id].height || '';
+        }
+        // Traer al frente
+        if (window.focusWindow) window.focusWindow(id);
+    } else {
+        // Guardar estado actual antes de maximizar
+        windowStates[id] = {
+            left: win.style.left,
+            top: win.style.top,
+            width: win.style.width,
+            height: win.style.height,
+            maximized: false
+        };
+        // Aplicar clase maximizada
+        win.classList.add('maximized');
+        // Ajustar z-index
+        if (window.focusWindow) window.focusWindow(id);
+    }
+}
+
+// Exponer globalmente
+window.minimizeWindow = minimizeWindow;
+window.maximizeWindow = maximizeWindow;
