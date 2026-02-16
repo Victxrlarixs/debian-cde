@@ -1,0 +1,68 @@
+---
+// src/components/FileManager.astro
+import WindowControls from "./WindowControls.astro";
+---
+
+<div class="window" id="fm">
+    <div class="titlebar" onmousedown="drag(event, 'fm')">
+        <span class="titlebar-text">victxrlarixs</span>
+        <WindowControls windowId="fm" closeFunction="closeFileManager" />
+    </div>
+    <div class="fm-container">
+        <div class="fm-menubar">
+            <span>File</span>
+            <span>Edit</span>
+            <span>View</span>
+            <span>Go</span>
+            <a
+                href="https://github.com/Victxrlarixs/debian-cde/issues"
+                target="_blank"><span>Help</span></a
+            >
+        </div>
+        <div class="fm-toolbar">
+            <button class="fm-btn" onclick="goBack()">
+                <img src="/icons/previous.png" alt="Back" />
+            </button>
+            <button class="fm-btn" onclick="goForward()">
+                <img src="/icons/right.png" alt="Forward" />
+            </button>
+            <button class="fm-btn" onclick="goUp()">
+                <img src="/icons/go-up.png" alt="Up" />
+            </button>
+            <button class="fm-btn" onclick="goHome()">
+                <img src="/icons/gohome.png" alt="Home" />
+            </button>
+            <input class="fm-path" id="fmPath" />
+        </div>
+        <div class="fm-body">
+            <div class="fm-sidebar">
+                <div class="fm-section">Places</div>
+                <div class="fm-item" onclick="openPath('/home/victxrlarixs/')">
+                    <img src="/icons/gohome.png" class="fm-icon" /> victxrlarixs
+                </div>
+                <div
+                    class="fm-item"
+                    onclick="openPath('/home/victxrlarixs/Desktop/')"
+                >
+                    <img src="/icons/desktop.png" class="fm-icon" /> Desktop
+                </div>
+                <div class="fm-item">
+                    <img src="/icons/user-trash-full.png" class="fm-icon" /> Trash
+                </div>
+                <div class="fm-section">Devices</div>
+                <div class="fm-item">
+                    <img src="/icons/drive-harddisk.png" class="fm-icon" /> File System
+                </div>
+                <div class="fm-section">Network</div>
+                <div class="fm-item">
+                    <img
+                        src="/icons/preferences-system-network.png"
+                        class="fm-icon"
+                    /> Browse Network
+                </div>
+            </div>
+            <div class="fm-files" id="fmFiles"></div>
+        </div>
+        <div class="fm-status" id="fmStatus"></div>
+    </div>
+</div>

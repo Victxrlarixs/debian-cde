@@ -61,7 +61,7 @@ const CDEModal = (() => {
             titlebar.innerHTML = `
                 <span class="titlebar-text">CDE Dialog</span>
                 <div class="close-btn">
-                    <img src="./src/icons/tab_close.png">
+                    <img src="/icons/tab_close.png">
                 </div>
             `;
 

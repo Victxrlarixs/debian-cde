@@ -64,7 +64,7 @@ body {
     line-height: var(--line-height-base);
 
     /* Fondo tipo circuito retro — se repite en mosaico */
-    background-image: url("../images/motif.png");
+    background-image: url("/images/motif.png");
     background-size: contain;
     background-repeat: repeat;
     background-position: center;
@@ -251,7 +251,7 @@ body {
 
 /* ----- Cursor personalizado (SVG) ----- */
 * {
-    cursor: url('../icons/cursor.svg'), auto;
+    cursor: url('/icons/cursor.svg'), auto;
 }
 
 #cde-prompt-input {

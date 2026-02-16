@@ -1,0 +1,36 @@
+---
+import Layout from "../layouts/layout.astro";
+import TopBar from "../components/TopBar.astro";
+import Panel from "../components/Panel.astro";
+import Terminal from "../components/Terminal.astro";
+import FileManager from "../components/FileManager.astro";
+import StyleManager from "../components/StyleManager.astro";
+import ProcessMonitor from "../components/ProcessMonitor.astro";
+import BootSequence from "../components/BootSequence.astro";
+---
+
+<Layout title="Debian">
+  <!-- Pantalla de boot -->
+  <BootSequence />
+  <!-- Escritorio CDE -->
+  <div id="desktop-ui">
+    <!-- Topbar -->
+    <TopBar />
+
+    <!-- Terminal -->
+    <Terminal />
+
+    <!-- File Manager -->
+    <FileManager />
+
+    <!-- Panel CDE -->
+    <Panel />
+
+    <!-- StyleManager -->
+    <StyleManager />
+
+    <!-- Process Monitor -->
+    <ProcessMonitor />
+  </div>
+  <!-- cierre desktop-ui -->
+</Layout>
