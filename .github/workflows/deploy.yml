@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [atro-implementation]
+    branches: [astro-implementation]
 
 permissions:
   contents: write
