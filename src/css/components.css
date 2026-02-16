@@ -666,7 +666,6 @@
     transform: translate(-50%, -50%) !important;
     margin: 0 !important;
     display: none;
-    /* Oculto por defecto */
     flex-direction: column;
     z-index: 10000;
 }
@@ -674,14 +673,10 @@
 /* Asegurar que el #styleManager no herede este posicionamiento forzado */
 #styleManager.cde-retro-modal {
     position: fixed !important;
-    /* Ya lo tiene, pero reforzamos */
     top: 50% !important;
     left: 50% !important;
     transform: translate(-50%, -50%) !important;
 }
-
-
-
 
 /* ------------------------------------------------------------------
    CDE MODAL – Estilos globales para ventanas modales
@@ -781,9 +776,8 @@
 }
 
 /* ==================================================================
-   Monitor de procesos estilo htop (sin estilos inline)
+   Monitor de procesos estilo htop
    ================================================================== */
-
 #top-monitor {
     top: 150px;
     left: 300px;
@@ -807,6 +801,8 @@
     overflow-y: auto;
     height: auto;
     min-height: 100px;
+    display: flex;
+    flex-direction: column;
 }
 
 #top-monitor .cpu-bar {
@@ -854,6 +850,8 @@
 
 #top-monitor-content {
     white-space: pre;
+    flex: 1;
+    overflow-y: auto;
 }
 
 #top-monitor .titlebar {
@@ -924,4 +922,179 @@
 
 #top-monitor .swap-bar-fill {
     background-color: #ff00ff;
+}
+
+/* ==================================================================
+   Botones de control de ventana (min/max/close)
+   ================================================================== */
+.min-btn,
+.max-btn,
+.close-btn {
+    width: 18px;
+    height: 18px;
+    background: var(--button-active);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid;
+    border-top-color: var(--border-light);
+    border-left-color: var(--border-light);
+    border-right-color: var(--border-dark);
+    border-bottom-color: var(--border-dark);
+    margin-left: 4px;
+}
+
+.min-btn img,
+.max-btn img,
+.close-btn img {
+    width: 12px;
+    height: 12px;
+    image-rendering: pixelated;
+}
+
+.min-btn:active,
+.max-btn:active,
+.close-btn:active {
+    border: 2px solid;
+    border-top-color: var(--border-dark);
+    border-left-color: var(--border-dark);
+    border-right-color: var(--border-light);
+    border-bottom-color: var(--border-light);
+}
+
+.min-btn:hover,
+.max-btn:hover,
+.close-btn:hover {
+    background: var(--dock-icon-hover);
+}
+
+/* Contenedor de los botones en la barra de título */
+.window-controls {
+    display: flex;
+    gap: 2px;
+}
+
+/* ==================================================================
+   Estado maximizado para ventanas y modales
+   ================================================================== */
+.window.maximized,
+.cde-retro-modal.maximized {
+    top: 28px !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: calc(100% - 106px) !important;
+    max-width: none;
+    max-height: calc(100% - 106px) !important;
+    transform: none !important;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Reglas generales para el contenido de ventanas maximizadas */
+.window.maximized .terminal-body,
+.window.maximized .fm-container,
+.window.maximized #top-monitor .terminal-body,
+.cde-retro-modal.maximized .modal-body {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+/* Ajuste específico para la terminal (mayor especificidad) */
+#terminal.maximized .terminal-body {
+    flex: 1 1 0;
+    height: 100%;
+    /* Ocupa todo el espacio disponible */
+    min-height: 0;
+    overflow-y: auto;
+}
+
+/* Ajuste específico para el File Manager (ya funcionaba, pero lo mantenemos) */
+.window.maximized .fm-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.window.maximized .fm-body {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+}
+
+.window.maximized .fm-files {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Ajuste para el top monitor */
+.window.maximized #top-monitor .terminal-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.window.maximized #top-monitor-content {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Ajuste para el Style Manager */
+.cde-retro-modal.maximized .modal-body {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+}
+
+.cde-retro-modal.maximized .cde-controlpanel {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Forzar que la terminal maximizada tenga altura completa y scroll */
+#terminal.maximized .terminal-body {
+    height: 100% !important;
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+
+/* ==================================================================
+   Ajustes adicionales para taskmanager maximizado
+   ================================================================== */
+#top-monitor.maximized {
+    background: #000 !important;
+}
+
+#top-monitor.maximized .terminal-body,
+#top-monitor.maximized #top-monitor-content {
+    background: #000 !important;
+}
+
+#top-monitor.maximized .terminal-body {
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+#top-monitor.maximized #top-monitor-content {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* ==================================================================
+   Monitor de procesos en tamaño normal (no maximizado)
+   ================================================================== */
+#top-monitor {
+    width: 750px;
+    height: 400px;
+}
+
+#top-monitor .terminal-body {
+    height: calc(100% - 30px);
+    overflow-y: auto;
+    padding: 6px;
 }

@@ -265,3 +265,17 @@ input:focus {
 body.fonts-changing * {
     transition: none !important;
 }
+
+/* Ventana activa: resaltado visual */
+.window.active,
+.cde-retro-modal.active {
+    box-shadow: 0 0 0 2px var(--titlebar-color), 4px 4px 0 var(--shadow-color);
+    /* También puedes cambiar el color de la barra de título si lo deseas */
+}
+
+/* Opcional: si quieres que la barra de título también se resalte */
+.window.active .titlebar,
+.cde-retro-modal.active .titlebar {
+    background: var(--titlebar-color);
+    filter: brightness(1.2);
+}
