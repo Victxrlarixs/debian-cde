@@ -118,7 +118,7 @@
 
         <!-- CDE Panel -->
         <div id="cde-panel">
-            <div class="cde-menu-btn">
+            <div class="cde-menu-btn" onclick="window.open('https://www.debian.org', '_blank')">
                 <img src="./src/icons/Debian.png" alt="Menu">
             </div>
             <div class="cde-sep"></div>
@@ -159,6 +159,17 @@
                 <div class="menu-item" onclick="terminal.style.display='block'">
                     <img src="./src/icons/konsole.png" alt=""> Terminal
                 </div>
+                <div class="menu-item" onclick="openStyleManager()">
+                    <img src="./src/icons/org.xfce.settings.appearance.png" alt=""> Style Manager
+                </div>
+                <div class="menu-item" onclick="toggleFileManager()">
+                    <img src="./src/icons/org.xfce.filemanager.png" alt=""> File Manager
+                </div>
+                <div class="menu-item">
+                    <a href="https://github.com/Victxrlarixs/debian-cde" target="_blank">
+                        <img src="./src/icons/konqueror.png" alt="Browser"> Go
+                    </a>
+                </div>
             </div>
 
             <div class="cde-sep"></div>
@@ -177,9 +188,9 @@
 
             <div class="cde-sep"></div>
 
-            <div class="tray-icon" title="">
-                <img src="./src/icons/gnome-computer.png" alt="">
-            </div>
+            <!-- <div class="tray-icon" title="">
+    <img src="./src/icons/gnome-computer.png" alt="">
+</div> -->
             <div class="tray-icon" id="screenshot-btn" onclick="captureFullPageScreenshot()" title="Take Screenshot">
                 <img src="./src/icons/org.xfce.screenshooter.png" alt="Camera">
             </div>
