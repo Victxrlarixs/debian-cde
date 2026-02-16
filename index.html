@@ -177,7 +177,8 @@
             <div class="tray-icon" title="Printer">
                 <img src="./src/icons/printer.png" alt="Printer">
             </div>
-            <div class="tray-icon" id="taskmanager-btn" onclick="TaskManager.open()" title="Task Manager">
+            <div class="tray-icon" id="taskmanager-btn" onclick="openTaskManagerInTerminal()"
+                title="Process Monitor (top)">
                 <img src="./src/icons/org.xfce.taskmanager.png" alt="TaskManager">
             </div>
         </div>
@@ -382,20 +383,15 @@
         </div>
     </div>
 
-    <div class="window" id="taskmanager" style="top:120px; left:200px; width:450px; height:300px; display:none;">
-        <div class="titlebar" id="taskmanager-titlebar">
-            <span class="titlebar-text">Task Manager</span>
-            <div class="close-btn" onclick="TaskManager.close()">
+    <div class="window" id="top-monitor">
+        <div class="titlebar" id="top-monitor-titlebar">
+            <span class="titlebar-text">Process Monitor</span>
+            <div class="close-btn" onclick="TopMonitor.close()">
                 <img src="./src/icons/tab_close.png">
             </div>
         </div>
-        <div class="terminal-body" style="background: var(--window-color); color: black; padding: 0;">
-            <div id="taskmanager-content" style="padding: 10px;">
-            </div>
-        </div>
-        <div class="cde-actionbar" style="justify-content: flex-end;">
-            <button class="cde-btn" onclick="TaskManager.killProcess()">Kill Process</button>
-            <button class="cde-btn" onclick="TaskManager.refresh()">Refresh</button>
+        <div class="terminal-body">
+            <div id="top-monitor-content"></div>
         </div>
     </div>
     </div>

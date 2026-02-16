@@ -45,6 +45,7 @@
     /* Efectos visuales */
     --shadow-color: rgba(0, 0, 0, 0.3);
     --glow-color: rgba(0, 255, 136, 0.05);
+
 }
 
 /* ------------------------------------------------------------------
@@ -276,4 +277,9 @@ body {
     margin-bottom: 20px;
     opacity: 1 !important;
     /* visible desde el inicio */
+}
+
+#taskmanager .terminal-body {
+    background: var(--terminal-bg-color) !important;
+    color: var(--terminal-text-color) !important;
 }
