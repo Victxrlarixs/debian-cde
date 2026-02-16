@@ -2,7 +2,10 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [astro-implementation]
+    branches: [atro-implementation]
+
+permissions:
+  contents: write
 
 jobs:
   build-and-deploy:
@@ -31,4 +34,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           publish_branch: gh-pages
-          cname: debian.com.mx  # si usas dominio personalizado
+          force_orphan: true
+          cname: debian.com.mx
