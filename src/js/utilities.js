@@ -188,7 +188,12 @@ function captureFullPageScreenshot() {
                 btn.style.cursor = 'pointer';
             }
             console.error('Screenshot error:', error);
-            alert('Error al capturar. Revisa la consola.');
+            // Restauramos el modal de error
+            if (window.CDEModal) {
+                CDEModal.alert('Error al capturar pantalla.');
+            } else {
+                alert('Error al capturar. Revisa la consola.');
+            }
         });
 }
 
