@@ -270,7 +270,7 @@ function captureFullPageScreenshot(): void {
       }
       console.error('Screenshot error:', error);
       // Restauramos el modal de error
-        CDEModal.alert('Error al capturar pantalla.');
+      CDEModal.alert('Error al capturar pantalla.');
     });
 }
 

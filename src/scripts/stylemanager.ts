@@ -70,7 +70,6 @@ export class StyleManager {
       btn.addEventListener('click', this.handleFontPresetClick);
     });
 
-    // Para compatibilidad con los presets de fuente que no tienen data-type="font"
     const fontPresetNames = ['classic-cde', 'modern', 'retro', 'terminal'];
     document.querySelectorAll('.cde-preset[data-preset]').forEach((btn) => {
       const presetName = btn.getAttribute('data-preset');

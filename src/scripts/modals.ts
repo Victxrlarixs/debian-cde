@@ -175,13 +175,10 @@ class CDEModalClass {
   }
 }
 
-// Instancia única
 export const CDEModal = new CDEModalClass();
 
-// Asignación global para compatibilidad
 if (typeof window !== 'undefined') {
   (window as any).CDEModal = CDEModal;
 }
 
-// Exportar también la clase por si alguien quiere extenderla
 export default CDEModal;
