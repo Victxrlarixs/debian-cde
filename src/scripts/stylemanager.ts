@@ -228,7 +228,7 @@ export class StyleManager {
     const modal = document.getElementById('styleManager') as HTMLElement | null;
     if (modal) {
       modal.style.display = 'flex';
-      modal.style.zIndex = '10000'; // Podría venir de CONFIG.STYLEMANAGER.BASE_Z_INDEX
+      modal.style.zIndex = '10000';
       console.log('Style Manager opened');
     }
   }
@@ -256,7 +256,7 @@ export class StyleManager {
     this.applyAllStyles();
     this.applyAllFontStyles();
     this.updateStatus('All changes applied');
-    this.showMessage('✓ Styles applied successfully');
+    this.showMessage('Styles applied successfully.');
   }
 
   private applyAllStyles(): void {
@@ -293,7 +293,7 @@ export class StyleManager {
         }
       }
       this.updateStatus(`Applied theme: ${scheme}`);
-      this.showMessage(`✓ ${scheme} theme applied`);
+      this.showMessage(`${scheme} theme applied.`);
     }
   }
 
@@ -306,7 +306,7 @@ export class StyleManager {
       }
       this.updateFontControls();
       this.updateStatus(`Applied font preset: ${presetName}`);
-      this.showMessage(`✓ ${presetName} font preset applied`);
+      this.showMessage(`${presetName} font preset applied.`);
     }
   }
 
@@ -320,7 +320,7 @@ export class StyleManager {
     this.updateUI();
     this.updateFontControls();
     this.updateStatus('Reset to default');
-    this.showMessage('✓ Reset to default theme and fonts');
+    this.showMessage('Reset to default theme and fonts.');
     document
       .querySelectorAll('.cde-preset.active')
       .forEach((btn) => btn.classList.remove('active'));
@@ -334,10 +334,10 @@ export class StyleManager {
       };
       localStorage.setItem('cde-styles', JSON.stringify(allSettings));
       this.updateStatus('All settings saved');
-      this.showMessage('✓ Configuration saved');
+      this.showMessage('Configuration saved.');
       console.log('Styles and fonts saved to localStorage');
     } catch (e) {
-      this.showMessage('✗ Error saving configuration');
+      this.showMessage('Error saving configuration.');
       console.error('Error saving styles:', e);
     }
   }
@@ -458,7 +458,7 @@ export class StyleManager {
 
   public testFontPreview(): void {
     this.updateFontPreview();
-    this.showMessage('✓ Font preview updated');
+    this.showMessage('Font preview updated.');
   }
 
   public setActiveCategory(category: string): void {

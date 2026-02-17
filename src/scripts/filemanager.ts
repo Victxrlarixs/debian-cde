@@ -559,6 +559,22 @@ function isOpen(): boolean {
   return win?.style.display !== 'none' && win?.style.display !== '';
 }
 
+console.log('✅ FileManager module loaded (call FileManager.init() to start)');
+
+
+export const FileManager = {
+  init,
+  open,
+  close,
+  toggle,
+  isOpen,
+  openPath,
+  goBack,
+  goForward,
+  goUp,
+  goHome,
+};
+
 // Exponer al ámbito global
 window.openFileManager = open;
 window.closeFileManager = close;
@@ -569,5 +585,3 @@ window.goBack = goBack;
 window.goForward = goForward;
 window.goUp = goUp;
 window.goHome = goHome;
-
-console.log('✅ FileManager module loaded (call FileManager.init() to start)');

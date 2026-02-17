@@ -1,0 +1,52 @@
+{
+    "__default__": {
+    "--font-family-base": "\"Fixedsys\", \"Lucida Console\", monospace",
+    "--font-family-terminal": "\"Courier New\", monospace",
+    "--font-size-base": "12px",
+    "--font-size-title": "13px",
+    "--font-size-small": "11px",
+    "--font-weight-normal": "400",
+    "--font-weight-bold": "700",
+    "--line-height-base": "1.45"
+  },
+  "classic-cde": {
+    "--font-family-base": "\"Fixedsys\", \"Lucida Console\", monospace",
+    "--font-family-terminal": "\"Courier New\", monospace",
+    "--font-size-base": "12px",
+    "--font-size-title": "13px",
+    "--font-size-small": "11px",
+    "--font-weight-normal": "400",
+    "--font-weight-bold": "700",
+    "--line-height-base": "1.45"
+  },
+  "modern": {
+    "--font-family-base": "Arial, sans-serif",
+    "--font-family-terminal": "Consolas, monospace",
+    "--font-size-base": "14px",
+    "--font-size-title": "15px",
+    "--font-size-small": "12px",
+    "--font-weight-normal": "400",
+    "--font-weight-bold": "700",
+    "--line-height-base": "1.5"
+  },
+  "retro": {
+    "--font-family-base": "\"MS Sans Serif\", sans-serif",
+    "--font-family-terminal": "\"Lucida Console\", monospace",
+    "--font-size-base": "11px",
+    "--font-size-title": "12px",
+    "--font-size-small": "10px",
+    "--font-weight-normal": "700",
+    "--font-weight-bold": "900",
+    "--line-height-base": "1.3"
+  },
+  "terminal": {
+    "--font-family-base": "\"Ubuntu Mono\", monospace",
+    "--font-family-terminal": "\"DejaVu Sans Mono\", monospace",
+    "--font-size-base": "13px",
+    "--font-size-title": "14px",
+    "--font-size-small": "12px",
+    "--font-weight-normal": "400",
+    "--font-weight-bold": "700",
+    "--line-height-base": "1.4"
+  }
+}

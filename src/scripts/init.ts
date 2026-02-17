@@ -64,7 +64,7 @@ class DebianRealBoot {
     this.bootLog = [];
 
     if (!this.container) {
-      console.error('❌ No se encontró #boot-log-container');
+      console.error('Error: No se encontró el contenedor #boot-log-container');
       this.completeBoot();
       return;
     }
@@ -150,21 +150,21 @@ class DebianRealBoot {
 function initDesktop(): void {
   if (desktopInitialized) return;
 
-  console.log('🖥️ Initializing CDE Desktop Environment...');
+  console.log('Initializing CDE Desktop Environment...');
 
   if (typeof window.initClock === 'function') window.initClock();
   // if (typeof initTerminal === 'function') initTerminal();
   if (typeof window.initWindowManager === 'function') window.initWindowManager();
-  window.styleManager?.init(); // Ahora sí, con optional chaining
+  window.styleManager?.init();
   desktopInitialized = true;
-  console.log('✅ CDE Desktop initialized successfully!');
+  console.log('CDE Desktop initialized successfully.');
 }
 
 // ---------------------------------------------------------------------
 // Arranque automático
 // ---------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('📄 DOM Content Loaded');
+  console.log('DOM Content Loaded');
   window.debianBoot = new DebianRealBoot();
   window.debianBoot.start();
 });
@@ -173,4 +173,4 @@ document.addEventListener('DOMContentLoaded', () => {
 window.initDesktop = initDesktop;
 window.DebianRealBoot = DebianRealBoot;
 
-console.log('✅ init.ts loaded (con logo Debian)');
+console.log('init.ts loaded (Debian boot sequence)');
