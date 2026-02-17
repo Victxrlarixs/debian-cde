@@ -1,18 +1,95 @@
+// src/scripts/config.ts
+
 /**
- * @fileoverview Configuración global del proyecto CDE.
+ * Configuración global del proyecto CDE.
  * Todas las constantes, rutas, tiempos y valores por defecto centralizados.
- * @author victxrlarixs
  */
 
-const CONFIG = {
-    // ==================================================================
-    // UTILITIES
-    // ==================================================================
+export interface WindowConfig {
+    MIN_VISIBLE: number;
+    BASE_Z_INDEX: number;
+}
+
+export interface AudioConfig {
+    BEEP_FREQUENCY: number;
+    BEEP_GAIN: number;
+    BEEP_DURATION: number;
+}
+
+export interface ScreenshotConfig {
+    SCALE: number;
+    TOAST_MESSAGE: string;
+    FILENAME_PREFIX: string;
+}
+
+export interface FileManagerConfig {
+    BASE_Z_INDEX: number;
+}
+
+export interface FSConfig {
+    HOME: string;
+    DESKTOP: string;
+    TRASH: string;
+    NETWORK: string;
+}
+
+export interface TerminalConfig {
+    HOME_PATH: string;
+    MIN_TYPING_DELAY: number;
+    MAX_TYPING_DELAY: number;
+    POST_COMMAND_DELAY: number;
+    POST_SEQUENCE_DELAY: number;
+    MAX_LINES: number;
+    CLEANUP_INTERVAL: number;
+    SCROLL_INTERVAL: number;
+    TRANSITION_MESSAGES: string[];
+}
+
+export interface BootSequenceItem {
+    delay: number;
+    text: string;
+    type: string;
+}
+
+export interface BootConfig {
+    LOGO: string;
+    SEQUENCE: BootSequenceItem[];
+    FINAL_DELAY: number;
+}
+
+export interface TaskManagerConfig {
+    BUTTON_ID: string;
+    WINDOW_ID: string;
+    BASE_Z_INDEX: number;
+}
+
+export interface DefaultStyles {
+    COLORS: Record<string, string>;
+    FONTS: Record<string, string>;
+}
+
+export type Theme = Record<string, string>;
+export type FontPreset = Record<string, string>;
+
+export interface Config {
+    WINDOW: WindowConfig;
+    AUDIO: AudioConfig;
+    SCREENSHOT: ScreenshotConfig;
+    FILEMANAGER: FileManagerConfig;
+    FS: FSConfig;
+    TERMINAL: TerminalConfig;
+    BOOT: BootConfig;
+    TASK_MANAGER: TaskManagerConfig;
+    DEFAULT_STYLES: DefaultStyles;
+    THEMES: Record<string, Theme>;
+    FONT_PRESETS: Record<string, FontPreset>;
+}
+
+export const CONFIG: Config = {
     WINDOW: {
         MIN_VISIBLE: 20,
         BASE_Z_INDEX: 100,
     },
-
     AUDIO: {
         BEEP_FREQUENCY: 880,
         BEEP_GAIN: 0.1,
@@ -23,67 +100,34 @@ const CONFIG = {
         TOAST_MESSAGE: '📸 Capturando escritorio...',
         FILENAME_PREFIX: 'CDE',
     },
-    // ==================================================================
-    // SISTEMA DE ARCHIVOS VIRTUAL
-    // ==================================================================
     FILEMANAGER: {
         BASE_Z_INDEX: 1000,
     },
     FS: {
-        /** Ruta base del home del usuario */
         HOME: '/home/victxrlarixs/',
-        /** Ruta del escritorio */
         DESKTOP: '/home/victxrlarixs/Desktop/',
-        /** Ruta de la papelera (carpeta oculta) */
         TRASH: '/home/victxrlarixs/.Trash/',
-        /** Ruta de red simulada */
         NETWORK: '/network/',
     },
-
-    // ==================================================================
-    // TERMINAL Y TUTORIAL
-    // ==================================================================
     TERMINAL: {
-        /** Ruta base (sin barra final) */
         HOME_PATH: '/home/victxrlarixs',
-
-        /** Delay mínimo entre caracteres (ms) */
         MIN_TYPING_DELAY: 20,
-        /** Delay máximo entre caracteres (ms) */
         MAX_TYPING_DELAY: 80,
-
-        /** Tiempo de espera después de un comando (ms) */
         POST_COMMAND_DELAY: 800,
-        /** Tiempo de espera entre secuencias (ms) */
         POST_SEQUENCE_DELAY: 2000,
-
-        /** Límite de líneas visibles en la terminal */
         MAX_LINES: 50,
-
-        /** Intervalo de limpieza automática (ms) */
         CLEANUP_INTERVAL: 30000,
-        /** Intervalo de scroll automático (ms) */
         SCROLL_INTERVAL: 500,
-
-        /** Mensajes de transición entre secuencias */
         TRANSITION_MESSAGES: [
             '🔄 Continuando con más comandos útiles...',
             '📚 Siguiente tema: comandos de administración...',
             '🚀 Avanzando a operaciones más complejas...',
             '💡 Aprendiendo nuevas funcionalidades...',
             '🛠️ Próxima sección: herramientas de desarrollo...',
-            '🌐 Explorando comandos de red...'
+            '🌐 Explorando comandos de red...',
         ],
-
-        // NOTA: Las secuencias completas del tutorial (TUTORIAL_SEQUENCES)
-        // se mantienen en terminal.js por su extensión y porque son específicas de ese módulo.
     },
-
-    // ==================================================================
-    // ARRANQUE (BOOT)
-    // ==================================================================
     BOOT: {
-        /** Arte ASCII del logo de Debian */
         LOGO: `
                                   _,met$$$$$gg.
                                ,g$$$$$$$$$$$$$$$P.
@@ -115,8 +159,6 @@ const CONFIG = {
                \`$g. ,$$$ \`$$._ _., $$ _,g$P' $$ \`$b. ,$$$ $$    $$
                 \`Y$$P'$$. \`Y$$$$P',$$$$P"'  ,$$. \`Y$$P'$$.$$.  ,$$.
         `,
-
-        /** Secuencia de mensajes del kernel (cada paso tiene delay, texto y tipo) */
         SEQUENCE: [
             { delay: 177, text: "[    0.000000] Starting Debian CDE simulation [debian.com.mx]", type: "kernel" },
             { delay: 221, text: "[    0.227156] smpboot: CPU0: Retro Render Engine (1995 compatibility)", type: "cpu" },
@@ -134,37 +176,13 @@ const CONFIG = {
             { delay: 647, text: "[    4.444444] Style Manager: listening for color changes", type: "desktop" },
             { delay: 700, text: "[    5.000000] CDE Desktop ready ....", type: "desktop" },
         ],
-
-        /** Tiempo extra después de la última línea (ms) */
         FINAL_DELAY: 443,
     },
-
-    // ==================================================================
-    // VENTANAS (WINDOW MANAGER)
-    // ==================================================================
-    WINDOW: {
-        /** Mínimo de píxeles visibles al arrastrar una ventana */
-        MIN_VISIBLE: 20,
-        /** Valor inicial de z-index (se incrementa dinámicamente) */
-        BASE_Z_INDEX: 100,
-    },
-
-    // ==================================================================
-    // TASK MANAGER
-    // ==================================================================
     TASK_MANAGER: {
-        /** ID del botón que abre el Task Manager (en el panel) */
         BUTTON_ID: 'taskmanager-btn',
-        /** ID de la ventana del Task Manager */
         WINDOW_ID: 'taskmanager',
-        /** Z-index base para la ventana */
         BASE_Z_INDEX: 2000,
     },
-
-    // ==================================================================
-    // ESTILOS POR DEFECTO (colores y fuentes base)
-    // NOTA: Los presets completos de temas y fuentes se encuentran en stylemanager.js
-    // ==================================================================
     DEFAULT_STYLES: {
         COLORS: {
             '--topbar-color': '#c6bdb3',
@@ -181,7 +199,7 @@ const CONFIG = {
             '--button-active': '#d6cec4',
             '--separator-color': '#8f877d',
             '--modal-bg': '#dcd6cc',
-            '--scrollbar-color': '#00ff88'
+            '--scrollbar-color': '#00ff88',
         },
         FONTS: {
             '--font-family-base': '"Fixedsys", "Lucida Console", monospace',
@@ -191,15 +209,9 @@ const CONFIG = {
             '--font-size-small': '11px',
             '--font-weight-normal': '400',
             '--font-weight-bold': '700',
-            '--line-height-base': '1.45'
-        }
+            '--line-height-base': '1.45',
+        },
     },
-
-    // ==================================================================
-    // TEMAS CLÁSICOS CDE (presets de color)
-    // Se mantienen aquí para centralizar, pero si prefieres dejarlos en
-    // stylemanager.js por claridad, puedes comentar esta sección.
-    // ==================================================================
     THEMES: {
         platinum: {
             '--topbar-color': '#c0c0c0',
@@ -216,7 +228,7 @@ const CONFIG = {
             '--modal-bg': '#c0c0c0',
             '--scrollbar-color': '#000080',
             '--terminal-bg-color': '#000000',
-            '--terminal-text-color': '#00ff00'
+            '--terminal-text-color': '#00ff00',
         },
         olive: {
             '--topbar-color': '#c0c0a0',
@@ -233,7 +245,7 @@ const CONFIG = {
             '--modal-bg': '#c0c0a0',
             '--scrollbar-color': '#3c5a3c',
             '--terminal-bg-color': '#1e2a1e',
-            '--terminal-text-color': '#c0ffc0'
+            '--terminal-text-color': '#c0ffc0',
         },
         marine: {
             '--topbar-color': '#a0c0e0',
@@ -250,7 +262,7 @@ const CONFIG = {
             '--modal-bg': '#a0c0e0',
             '--scrollbar-color': '#2a4a6a',
             '--terminal-bg-color': '#0a1a2a',
-            '--terminal-text-color': '#a0d0ff'
+            '--terminal-text-color': '#a0d0ff',
         },
         sand: {
             '--topbar-color': '#e0d0c0',
@@ -267,7 +279,7 @@ const CONFIG = {
             '--modal-bg': '#e0d0c0',
             '--scrollbar-color': '#8b6b4b',
             '--terminal-bg-color': '#2a1e14',
-            '--terminal-text-color': '#e0d0a0'
+            '--terminal-text-color': '#e0d0a0',
         },
         midnight: {
             '--topbar-color': '#1a2b3c',
@@ -286,7 +298,7 @@ const CONFIG = {
             '--terminal-bg-color': '#0a1a2a',
             '--terminal-text-color': '#5a9eff',
             '--text-color': '#ffffff',
-            '--button-text': '#ffffff'
+            '--button-text': '#ffffff',
         },
         cobalt: {
             '--topbar-color': '#003366',
@@ -304,7 +316,7 @@ const CONFIG = {
             '--scrollbar-color': '#ffaa00',
             '--terminal-bg-color': '#001a33',
             '--terminal-text-color': '#ffaa00',
-            '--text-color': '#ffffff'
+            '--text-color': '#ffffff',
         },
         forest: {
             '--topbar-color': '#2a5a2a',
@@ -322,7 +334,7 @@ const CONFIG = {
             '--scrollbar-color': '#ffcc66',
             '--terminal-bg-color': '#0a1a0a',
             '--terminal-text-color': '#ccff99',
-            '--text-color': '#ffffff'
+            '--text-color': '#ffffff',
         },
         sunset: {
             '--topbar-color': '#b84c4c',
@@ -340,7 +352,7 @@ const CONFIG = {
             '--scrollbar-color': '#ffd700',
             '--terminal-bg-color': '#2a1a1a',
             '--terminal-text-color': '#ffb347',
-            '--text-color': '#ffffff'
+            '--text-color': '#ffffff',
         },
         amber: {
             '--topbar-color': '#c49a6c',
@@ -358,7 +370,7 @@ const CONFIG = {
             '--scrollbar-color': '#6a4a2a',
             '--terminal-bg-color': '#2a1e0a',
             '--terminal-text-color': '#ffbf00',
-            '--text-color': '#000000'
+            '--text-color': '#000000',
         },
         monochrome: {
             '--topbar-color': '#e0e0e0',
@@ -376,13 +388,9 @@ const CONFIG = {
             '--scrollbar-color': '#404040',
             '--terminal-bg-color': '#000000',
             '--terminal-text-color': '#00ff00',
-            '--text-color': '#000000'
-        }
+            '--text-color': '#000000',
+        },
     },
-
-    // ==================================================================
-    // PRESETS DE FUENTES
-    // ==================================================================
     FONT_PRESETS: {
         'classic-cde': {
             '--font-family-base': '"Fixedsys", "Lucida Console", monospace',
@@ -392,7 +400,7 @@ const CONFIG = {
             '--font-size-small': '11px',
             '--font-weight-normal': '400',
             '--font-weight-bold': '700',
-            '--line-height-base': '1.45'
+            '--line-height-base': '1.45',
         },
         modern: {
             '--font-family-base': 'Arial, sans-serif',
@@ -402,7 +410,7 @@ const CONFIG = {
             '--font-size-small': '12px',
             '--font-weight-normal': '400',
             '--font-weight-bold': '700',
-            '--line-height-base': '1.5'
+            '--line-height-base': '1.5',
         },
         retro: {
             '--font-family-base': '"MS Sans Serif", sans-serif',
@@ -412,7 +420,7 @@ const CONFIG = {
             '--font-size-small': '10px',
             '--font-weight-normal': '700',
             '--font-weight-bold': '900',
-            '--line-height-base': '1.3'
+            '--line-height-base': '1.3',
         },
         terminal: {
             '--font-family-base': '"Ubuntu Mono", monospace',
@@ -422,12 +430,13 @@ const CONFIG = {
             '--font-size-small': '12px',
             '--font-weight-normal': '400',
             '--font-weight-bold': '700',
-            '--line-height-base': '1.4'
-        }
-    }
+            '--line-height-base': '1.4',
+        },
+    },
 };
 
+if (typeof window !== 'undefined') {
+    (window as any).CONFIG = CONFIG;
+}
 
-
-// Exponer globalmente
-window.CONFIG = CONFIG;
+export default CONFIG;

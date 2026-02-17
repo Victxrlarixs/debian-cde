@@ -1,9 +1,20 @@
-/**
- * @fileoverview Administrador de estilos CDE para personalización de colores y fuentes.
- * @author victxrlarixs
- */
+// src/scripts/stylemanager.ts
 
-class StyleManager {
+import { CONFIG } from './config';
+
+/**
+ * Administrador de estilos CDE para personalización de colores y fuentes.
+ */
+export class StyleManager {
+    public styles: Record<string, string>;
+    public fontStyles: Record<string, string>;
+    public presets: Record<string, Record<string, string>>;
+    public fontPresets: Record<string, Record<string, string>>;
+    public defaultStyles: Record<string, string>;
+    public defaultFontStyles: Record<string, string>;
+    public allStyles: Record<string, string>;
+    public defaultAllStyles: Record<string, string>;
+
     constructor() {
         // Cargar valores por defecto desde CONFIG
         this.styles = { ...CONFIG.DEFAULT_STYLES.COLORS };
@@ -17,7 +28,7 @@ class StyleManager {
         this.defaultAllStyles = { ...this.defaultStyles, ...this.defaultFontStyles };
     }
 
-    init() {
+    public init(): void {
         this.loadSavedStyles();
         this.bindEvents();
         this.setupColorInputs();
@@ -27,7 +38,7 @@ class StyleManager {
         console.log('Style Manager initialized');
     }
 
-    bindEvents() {
+    private bindEvents(): void {
         const styleManagerIcon = document.querySelector('.cde-icon img[src*="appearance"]')?.parentElement;
         if (styleManagerIcon) {
             styleManagerIcon.addEventListener('click', (e) => {
@@ -49,66 +60,78 @@ class StyleManager {
         if (saveBtn) saveBtn.addEventListener('click', () => this.save());
 
         document.querySelectorAll('.cde-preset[data-scheme]').forEach(btn => {
-            btn.onclick = null;
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const scheme = e.currentTarget.dataset.scheme;
-                this.applyPreset(scheme);
-                this.highlightActiveColorPreset(e.currentTarget);
-            });
+            btn.removeEventListener('click', this.handlePresetClick);
+            btn.addEventListener('click', this.handlePresetClick);
         });
 
         document.querySelectorAll('.cde-preset[data-preset][data-type="font"]').forEach(btn => {
-            btn.onclick = null;
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const presetName = e.currentTarget.dataset.preset;
-                this.applyFontPreset(presetName);
-                this.highlightActiveFontPreset(e.currentTarget);
-            });
+            btn.removeEventListener('click', this.handleFontPresetClick);
+            btn.addEventListener('click', this.handleFontPresetClick);
         });
 
+        // Para compatibilidad con los presets de fuente que no tienen data-type="font"
         const fontPresetNames = ['classic-cde', 'modern', 'retro', 'terminal'];
         document.querySelectorAll('.cde-preset[data-preset]').forEach(btn => {
-            const presetName = btn.dataset.preset;
-            if (fontPresetNames.includes(presetName)) {
-                btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    this.applyFontPreset(presetName);
-                    this.highlightActiveFontPreset(e.currentTarget);
-                });
+            const presetName = btn.getAttribute('data-preset');
+            if (presetName && fontPresetNames.includes(presetName)) {
+                btn.removeEventListener('click', this.handleFontPresetClick);
+                btn.addEventListener('click', this.handleFontPresetClick);
             }
         });
 
         document.querySelectorAll('.cde-category').forEach(cat => {
-            cat.onclick = null;
-            cat.addEventListener('click', (e) => {
-                const category = e.currentTarget.dataset.category;
-                this.setActiveCategory(category);
-            });
+            cat.removeEventListener('click', this.handleCategoryClick);
+            cat.addEventListener('click', this.handleCategoryClick);
         });
 
         const titlebar = document.getElementById('styleManagerTitlebar');
         if (titlebar) titlebar.addEventListener('mousedown', (e) => this.startDrag(e));
     }
 
-    highlightActiveColorPreset(activeButton) {
+    private handlePresetClick = (e: Event): void => {
+        e.preventDefault();
+        e.stopPropagation();
+        const target = e.currentTarget as HTMLElement;
+        const scheme = target.dataset.scheme;
+        if (scheme) {
+            this.applyPreset(scheme);
+            this.highlightActiveColorPreset(target);
+        }
+    };
+
+    private handleFontPresetClick = (e: Event): void => {
+        e.preventDefault();
+        e.stopPropagation();
+        const target = e.currentTarget as HTMLElement;
+        const presetName = target.dataset.preset;
+        if (presetName) {
+            this.applyFontPreset(presetName);
+            this.highlightActiveFontPreset(target);
+        }
+    };
+
+    private handleCategoryClick = (e: Event): void => {
+        const target = e.currentTarget as HTMLElement;
+        const category = target.dataset.category;
+        if (category) {
+            this.setActiveCategory(category);
+        }
+    };
+
+    public highlightActiveColorPreset(activeButton: HTMLElement): void {
         document.querySelectorAll('.cde-preset[data-scheme]').forEach(btn => btn.classList.remove('active'));
         document.querySelectorAll('.cde-preset[data-preset][data-type="font"]').forEach(btn => btn.classList.remove('active'));
-        if (activeButton) activeButton.classList.add('active');
+        activeButton.classList.add('active');
     }
 
-    highlightActiveFontPreset(activeButton) {
+    public highlightActiveFontPreset(activeButton: HTMLElement): void {
         document.querySelectorAll('.cde-preset[data-preset][data-type="font"]').forEach(btn => btn.classList.remove('active'));
         document.querySelectorAll('.cde-preset[data-scheme]').forEach(btn => btn.classList.remove('active'));
-        if (activeButton) activeButton.classList.add('active');
+        activeButton.classList.add('active');
     }
 
-    setupColorInputs() {
-        const colorMap = {
+    private setupColorInputs(): void {
+        const colorMap: Record<string, string> = {
             'color-workspace': '--workspace-color',
             'color-title-active': '--titlebar-color',
             'color-background': '--window-color',
@@ -117,15 +140,15 @@ class StyleManager {
         };
 
         Object.entries(colorMap).forEach(([inputId, cssVar]) => {
-            const input = document.getElementById(inputId);
+            const input = document.getElementById(inputId) as HTMLInputElement | null;
             if (input) {
                 input.addEventListener('input', (e) => {
-                    const value = e.target.value;
+                    const value = (e.target as HTMLInputElement).value;
                     this.applyStyle(cssVar, value);
-                    const selector = e.target.closest('.cde-colorselector');
+                    const selector = input.closest('.cde-colorselector');
                     if (selector) {
-                        const swatch = selector.querySelector('.cde-colorswatch');
-                        const nameSpan = selector.querySelector('.cde-colorname');
+                        const swatch = selector.querySelector('.cde-colorswatch') as HTMLElement | null;
+                        const nameSpan = selector.querySelector('.cde-colorname') as HTMLElement | null;
                         if (swatch) swatch.style.backgroundColor = value;
                         if (nameSpan) nameSpan.textContent = this.getColorName(value);
                     }
@@ -135,7 +158,7 @@ class StyleManager {
         });
     }
 
-    setupFontControls() {
+    private setupFontControls(): void {
         this.setupFontSelect('font-family-base', '--font-family-base');
         this.setupFontSelect('font-family-terminal', '--font-family-terminal');
         this.setupSlider('font-size-base', '--font-size-base', 'font-size-value', 'px');
@@ -150,33 +173,33 @@ class StyleManager {
         this.updateFontControls();
     }
 
-    setupFontSelect(elementId, cssVar) {
-        const select = document.getElementById(elementId);
+    private setupFontSelect(elementId: string, cssVar: string): void {
+        const select = document.getElementById(elementId) as HTMLSelectElement | null;
         if (select) {
             select.addEventListener('change', (e) => {
-                this.applyFontStyle(cssVar, e.target.value);
+                this.applyFontStyle(cssVar, (e.target as HTMLSelectElement).value);
                 this.updateFontPreview();
                 this.updateStatus(`Font changed: ${cssVar}`);
             });
         }
     }
 
-    setupSlider(sliderId, cssVar, valueId, suffix = '') {
-        const slider = document.getElementById(sliderId);
-        const valueSpan = document.getElementById(valueId);
+    private setupSlider(sliderId: string, cssVar: string, valueId: string, suffix: string = ''): void {
+        const slider = document.getElementById(sliderId) as HTMLInputElement | null;
+        const valueSpan = document.getElementById(valueId) as HTMLElement | null;
 
         if (slider && valueSpan) {
             slider.addEventListener('input', (e) => {
-                const value = e.target.value + suffix;
+                const value = (e.target as HTMLInputElement).value + suffix;
                 this.applyFontStyle(cssVar, value);
-                valueSpan.textContent = e.target.value + suffix;
+                valueSpan.textContent = (e.target as HTMLInputElement).value + suffix;
                 this.updateFontPreview();
             });
         }
     }
 
-    getLabelFromId(id) {
-        const labels = {
+    private getLabelFromId(id: string): string {
+        const labels: Record<string, string> = {
             'color-workspace': 'Workspace',
             'color-title-active': 'Active Title',
             'color-background': 'Background',
@@ -186,8 +209,8 @@ class StyleManager {
         return labels[id] || id.replace('color-', '').replace(/-/g, ' ');
     }
 
-    open() {
-        const modal = document.getElementById('styleManager');
+    public open(): void {
+        const modal = document.getElementById('styleManager') as HTMLElement | null;
         if (modal) {
             modal.style.display = 'flex';
             modal.style.zIndex = '10000'; // Podría venir de CONFIG.STYLEMANAGER.BASE_Z_INDEX
@@ -195,56 +218,58 @@ class StyleManager {
         }
     }
 
-    close() {
-        const modal = document.getElementById('styleManager');
+    public close(): void {
+        const modal = document.getElementById('styleManager') as HTMLElement | null;
         if (modal) {
             modal.style.display = 'none';
             console.log('Style Manager closed');
         }
     }
 
-    applyStyle(cssVar, value) {
+    public applyStyle(cssVar: string, value: string): void {
         document.documentElement.style.setProperty(cssVar, value);
         this.styles[cssVar] = value;
     }
 
-    applyFontStyle(cssVar, value) {
+    public applyFontStyle(cssVar: string, value: string): void {
         document.documentElement.style.setProperty(cssVar, value);
         this.fontStyles[cssVar] = value;
         this.allStyles[cssVar] = value;
     }
 
-    apply() {
+    public apply(): void {
         this.applyAllStyles();
         this.applyAllFontStyles();
         this.updateStatus('All changes applied');
         this.showMessage('✓ Styles applied successfully');
     }
 
-    applyAllStyles() {
+    private applyAllStyles(): void {
         for (const [cssVar, value] of Object.entries(this.styles)) {
             document.documentElement.style.setProperty(cssVar, value);
         }
     }
 
-    applyAllFontStyles() {
+    private applyAllFontStyles(): void {
         for (const [cssVar, value] of Object.entries(this.fontStyles)) {
             document.documentElement.style.setProperty(cssVar, value);
         }
     }
 
-    applyPreset(scheme) {
-        if (this.presets[scheme]) {
+    public applyPreset(scheme: string): void {
+        const preset = this.presets[scheme];
+        if (preset) {
             console.log(`Applying preset: ${scheme}`);
-            for (const [cssVar, value] of Object.entries(this.presets[scheme])) {
+            for (const [cssVar, value] of Object.entries(preset)) {
                 this.applyStyle(cssVar, value);
-                const input = document.querySelector(`input[data-var="${cssVar}"]`);
+                // Actualizar input si existe
+                const input = document.querySelector(`input[data-var="${cssVar}"]`) as HTMLInputElement | null;
                 if (input) {
                     input.value = value;
                     const selector = input.closest('.cde-colorselector');
                     if (selector) {
-                        const swatch = selector.querySelector('.cde-colorswatch');
-                        const nameSpan = selector.querySelector('.cde-colorname');
+                        const swatch = selector.querySelector('.cde-colorswatch') as HTMLElement | null;
+                        const nameSpan = selector.querySelector('.cde-colorname') as HTMLElement | null;
                         if (swatch) swatch.style.backgroundColor = value;
                         if (nameSpan) nameSpan.textContent = this.getColorName(value);
                     }
@@ -255,10 +280,11 @@ class StyleManager {
         }
     }
 
-    applyFontPreset(presetName) {
-        if (this.fontPresets[presetName]) {
+    public applyFontPreset(presetName: string): void {
+        const preset = this.fontPresets[presetName];
+        if (preset) {
             console.log(`Applying font preset: ${presetName}`);
-            for (const [cssVar, value] of Object.entries(this.fontPresets[presetName])) {
+            for (const [cssVar, value] of Object.entries(preset)) {
                 this.applyFontStyle(cssVar, value);
             }
             this.updateFontControls();
@@ -267,7 +293,7 @@ class StyleManager {
         }
     }
 
-    reset() {
+    public reset(): void {
         for (const [cssVar, value] of Object.entries(this.defaultStyles)) {
             this.applyStyle(cssVar, value);
         }
@@ -281,7 +307,7 @@ class StyleManager {
         document.querySelectorAll('.cde-preset.active').forEach(btn => btn.classList.remove('active'));
     }
 
-    save() {
+    public save(): void {
         try {
             const allSettings = {
                 colors: this.styles,
@@ -297,7 +323,7 @@ class StyleManager {
         }
     }
 
-    loadSavedStyles() {
+    private loadSavedStyles(): void {
         try {
             const saved = localStorage.getItem('cde-styles');
             if (saved) {
@@ -317,15 +343,15 @@ class StyleManager {
         }
     }
 
-    updateUI() {
+    public updateUI(): void {
         for (const [cssVar, value] of Object.entries(this.styles)) {
-            const input = document.querySelector(`input[data-var="${cssVar}"]`);
+            const input = document.querySelector(`input[data-var="${cssVar}"]`) as HTMLInputElement | null;
             if (input) {
                 input.value = value;
                 const selector = input.closest('.cde-colorselector');
                 if (selector) {
-                    const swatch = selector.querySelector('.cde-colorswatch');
-                    const nameSpan = selector.querySelector('.cde-colorname');
+                    const swatch = selector.querySelector('.cde-colorswatch') as HTMLElement | null;
+                    const nameSpan = selector.querySelector('.cde-colorname') as HTMLElement | null;
                     if (swatch) swatch.style.backgroundColor = value;
                     if (nameSpan) nameSpan.textContent = this.getColorName(value);
                 }
@@ -334,7 +360,7 @@ class StyleManager {
         console.log('UI updated with current styles');
     }
 
-    updateFontControls() {
+    public updateFontControls(): void {
         const baseFont = this.fontStyles['--font-family-base'] || CONFIG.DEFAULT_STYLES.FONTS['--font-family-base'];
         const terminalFont = this.fontStyles['--font-family-terminal'] || CONFIG.DEFAULT_STYLES.FONTS['--font-family-terminal'];
         const fontSize = parseInt(this.fontStyles['--font-size-base'] || '12');
@@ -352,8 +378,8 @@ class StyleManager {
         this.updateFontPreview();
     }
 
-    setSelectValue(id, value) {
-        const select = document.getElementById(id);
+    private setSelectValue(id: string, value: string): void {
+        const select = document.getElementById(id) as HTMLSelectElement | null;
         if (select) {
             for (let i = 0; i < select.options.length; i++) {
                 if (select.options[i].value === value) {
@@ -364,14 +390,14 @@ class StyleManager {
         }
     }
 
-    setSliderValue(sliderId, value, valueId, suffix) {
-        const slider = document.getElementById(sliderId);
-        const valueSpan = document.getElementById(valueId);
-        if (slider) slider.value = value;
+    private setSliderValue(sliderId: string, value: number, valueId: string, suffix: string): void {
+        const slider = document.getElementById(sliderId) as HTMLInputElement | null;
+        const valueSpan = document.getElementById(valueId) as HTMLElement | null;
+        if (slider) slider.value = String(value);
         if (valueSpan) valueSpan.textContent = value + suffix;
     }
 
-    updateFontPreview() {
+    private updateFontPreview(): void {
         const preview = document.getElementById('font-preview');
         if (!preview) return;
 
@@ -379,39 +405,39 @@ class StyleManager {
         preview.style.fontSize = this.fontStyles['--font-size-base'];
         preview.style.lineHeight = this.fontStyles['--line-height-base'];
 
-        const title = preview.querySelector('.font-preview-title');
+        const title = preview.querySelector('.font-preview-title') as HTMLElement | null;
         if (title) {
             title.style.fontSize = this.fontStyles['--font-size-title'];
             title.style.fontWeight = this.fontStyles['--font-weight-bold'] || '700';
             title.style.fontFamily = this.fontStyles['--font-family-base'];
         }
 
-        const text = preview.querySelector('.font-preview-text');
+        const text = preview.querySelector('.font-preview-text') as HTMLElement | null;
         if (text) {
             text.style.fontSize = this.fontStyles['--font-size-base'];
             text.style.fontWeight = this.fontStyles['--font-weight-normal'] || '400';
             text.style.fontFamily = this.fontStyles['--font-family-base'];
         }
 
-        const terminal = preview.querySelector('.font-preview-terminal');
+        const terminal = preview.querySelector('.font-preview-terminal') as HTMLElement | null;
         if (terminal) {
             terminal.style.fontFamily = this.fontStyles['--font-family-terminal'];
             terminal.style.fontSize = this.fontStyles['--font-size-base'];
         }
 
-        const small = preview.querySelector('.font-preview-small');
+        const small = preview.querySelector('.font-preview-small') as HTMLElement | null;
         if (small) {
             small.style.fontSize = this.fontStyles['--font-size-small'] || '11px';
             small.style.fontFamily = this.fontStyles['--font-family-base'];
         }
     }
 
-    testFontPreview() {
+    public testFontPreview(): void {
         this.updateFontPreview();
         this.showMessage('✓ Font preview updated');
     }
 
-    setActiveCategory(category) {
+    public setActiveCategory(category: string): void {
         document.querySelectorAll('.cde-category').forEach(cat => cat.classList.remove('active'));
         document.querySelectorAll('.cde-controlgroup').forEach(panel => panel.classList.remove('active'));
 
@@ -424,8 +450,8 @@ class StyleManager {
         this.updateStatus(`Viewing: ${category}`);
     }
 
-    getColorName(hex) {
-        const colors = {
+    private getColorName(hex: string): string {
+        const colors: Record<string, string> = {
             '#000000': 'Black', '#ffffff': 'White',
             '#c0c0c0': 'Light Gray', '#808080': 'Gray',
             '#404040': 'Dark Gray', '#000080': 'Navy Blue',
@@ -453,48 +479,48 @@ class StyleManager {
         return colors[hex.toLowerCase()] || hex.toUpperCase();
     }
 
-    updateStatus(message) {
+    private updateStatus(message: string): void {
         const statusElement = document.getElementById('style-status');
         if (statusElement) statusElement.textContent = message;
     }
 
-    showMessage(message) {
+    private showMessage(message: string): void {
         const msgBox = document.createElement('div');
         msgBox.style.cssText = `
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: var(--modal-bg, #c0c0c0);
-            border: 2px solid;
-            border-top-color: var(--border-light, #ffffff);
-            border-left-color: var(--border-light, #ffffff);
-            border-right-color: var(--border-dark, #404040);
-            border-bottom-color: var(--border-dark, #404040);
-            padding: 20px;
-            z-index: 10001;
-            font-family: var(--font-family-base, monospace);
-            font-size: 12px;
-            color: #000000;
-            box-shadow: 4px 4px 0 var(--shadow-color, #000000);
-            min-width: 200px;
-            text-align: center;
-        `;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--modal-bg, #c0c0c0);
+      border: 2px solid;
+      border-top-color: var(--border-light, #ffffff);
+      border-left-color: var(--border-light, #ffffff);
+      border-right-color: var(--border-dark, #404040);
+      border-bottom-color: var(--border-dark, #404040);
+      padding: 20px;
+      z-index: 10001;
+      font-family: var(--font-family-base, monospace);
+      font-size: 12px;
+      color: #000000;
+      box-shadow: 4px 4px 0 var(--shadow-color, #000000);
+      min-width: 200px;
+      text-align: center;
+    `;
         msgBox.innerHTML = `<div style="margin-bottom: 10px;">${message}</div>`;
         document.body.appendChild(msgBox);
         setTimeout(() => msgBox.parentNode?.removeChild(msgBox), 2000);
     }
 
-    startDrag(e) {
-        if (e.target.classList.contains('close-btn')) return;
-        const modal = document.getElementById('styleManager');
+    private startDrag(e: MouseEvent): void {
+        if ((e.target as HTMLElement).classList.contains('close-btn')) return;
+        const modal = document.getElementById('styleManager') as HTMLElement | null;
         if (!modal) return;
 
         const rect = modal.getBoundingClientRect();
-        let offsetX = e.clientX - rect.left;
-        let offsetY = e.clientY - rect.top;
+        const offsetX = e.clientX - rect.left;
+        const offsetY = e.clientY - rect.top;
 
-        const onMouseMove = (moveEvent) => {
+        const onMouseMove = (moveEvent: MouseEvent) => {
             modal.style.left = `${moveEvent.clientX - offsetX}px`;
             modal.style.top = `${moveEvent.clientY - offsetY}px`;
             modal.style.transform = 'none';
@@ -511,27 +537,33 @@ class StyleManager {
     }
 }
 
-window.switchStyleTab = function (category) {
-    if (window.styleManager) window.styleManager.setActiveCategory(category);
-};
+// Declaración global para window.styleManager
+declare global {
+    interface Window {
+        styleManager?: StyleManager;
+        openStyleManager?: () => void;
+        switchStyleTab?: (category: string) => void;
+    }
+}
 
+// Inicialización cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
     window.styleManager = new StyleManager();
-    setTimeout(() => window.styleManager.init(), 100);
+    setTimeout(() => window.styleManager?.init(), 100);
     window.openStyleManager = () => window.styleManager?.open();
     console.log('CDE Style Manager loaded');
 
-    // Arrastre de la ventana Style Manager
-    const styleManager = document.getElementById('styleManager');
+    // Arrastre de la ventana Style Manager (ya manejado dentro de la clase, pero mantenemos compatibilidad)
+    const styleManagerEl = document.getElementById('styleManager');
     const styleManagerTitlebar = document.getElementById('styleManagerTitlebar');
-    if (styleManager && styleManagerTitlebar) {
+    if (styleManagerEl && styleManagerTitlebar) {
         let isDragging = false;
         let dragOffset = { x: 0, y: 0 };
 
         styleManagerTitlebar.addEventListener('mousedown', function (e) {
-            if (e.target.classList.contains('close-btn')) return;
+            if ((e.target as HTMLElement).classList.contains('close-btn')) return;
             isDragging = true;
-            const rect = styleManager.getBoundingClientRect();
+            const rect = styleManagerEl.getBoundingClientRect();
             dragOffset.x = e.clientX - rect.left;
             dragOffset.y = e.clientY - rect.top;
             document.addEventListener('mousemove', onMouseMove);
@@ -539,11 +571,11 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
         });
 
-        function onMouseMove(e) {
-            if (!isDragging) return;
-            styleManager.style.left = (e.clientX - dragOffset.x) + 'px';
-            styleManager.style.top = (e.clientY - dragOffset.y) + 'px';
-            styleManager.style.transform = 'none';
+        function onMouseMove(e: MouseEvent) {
+            if (!isDragging || !styleManagerEl) return;
+            styleManagerEl.style.left = (e.clientX - dragOffset.x) + 'px';
+            styleManagerEl.style.top = (e.clientY - dragOffset.y) + 'px';
+            styleManagerEl.style.transform = 'none';
         }
 
         function onMouseUp() {
@@ -553,3 +585,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
+// Exponer función global para cambiar pestañas
+window.switchStyleTab = function (category: string) {
+    window.styleManager?.setActiveCategory(category);
+};

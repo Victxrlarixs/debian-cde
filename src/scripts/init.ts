@@ -1,9 +1,18 @@
-/**
- * @fileoverview Simulación de arranque Debian CDE.
- * Muestra el logo de Debian, luego la secuencia de boot (~10s)
- * y finalmente inicializa el escritorio.
- * @author victxrlarixs
- */
+// src/scripts/init.ts
+
+import { CONFIG } from './config';
+import type { StyleManager } from './stylemanager';
+
+declare global {
+    interface Window {
+        debianBoot: DebianRealBoot;
+        initDesktop: () => void;
+        DebianRealBoot: typeof DebianRealBoot;
+        initClock?: () => void;
+        initWindowManager?: () => void;
+        styleManager?: StyleManager;
+    }
+}
 
 let desktopInitialized = false;
 
@@ -13,23 +22,17 @@ let desktopInitialized = false;
  * en #boot-log-container y finaliza revelando el escritorio (#desktop-ui).
  */
 class DebianRealBoot {
+    private currentStep: number = 0;
+    private logo: string;
+    private bootSequence: Array<{ delay: number; text: string; type: string }>;
+    private bootLog: string[] = [];
+    private container: HTMLElement | null;
+    private bootScreen: HTMLElement | null;
+
     constructor() {
-        /** @type {number} Índice del paso actual en la secuencia */
-        this.currentStep = 0;
-
-        /** @type {string} Arte ASCII del logo de Debian (desde config) */
         this.logo = CONFIG.BOOT.LOGO;
-
-        /** @type {Array<{delay: number, text: string, type: string}>} */
         this.bootSequence = CONFIG.BOOT.SEQUENCE;
-
-        /** @type {Array<string>} Historial de líneas mostradas */
-        this.bootLog = [];
-
-        /** @type {HTMLElement|null} Contenedor donde se escriben las líneas */
         this.container = document.getElementById('boot-log-container');
-
-        /** @type {HTMLElement|null} Pantalla completa de boot */
         this.bootScreen = document.getElementById('debian-boot-screen');
     }
 
@@ -37,7 +40,7 @@ class DebianRealBoot {
      * Inserta el logo de Debian al inicio del contenedor.
      * @private
      */
-    insertLogo() {
+    private insertLogo(): void {
         if (!this.container) return;
 
         const logoDiv = document.createElement('div');
@@ -56,7 +59,7 @@ class DebianRealBoot {
     /**
      * Inicia la secuencia de arranque.
      */
-    start() {
+    public start(): void {
         this.currentStep = 0;
         this.bootLog = [];
 
@@ -75,7 +78,7 @@ class DebianRealBoot {
      * Reproduce recursivamente cada línea de la secuencia.
      * @private
      */
-    startBootSequence() {
+    private startBootSequence(): void {
         const showNextStep = () => {
             if (this.currentStep >= this.bootSequence.length) {
                 setTimeout(() => this.completeBoot(), CONFIG.BOOT.FINAL_DELAY);
@@ -86,14 +89,14 @@ class DebianRealBoot {
             const line = document.createElement('div');
             line.className = this.getLineClass(step.type);
             line.style.cssText = `
-                opacity: 0;
-                animation: bootLineAppear 0.1s forwards;
-                white-space: pre-wrap;
-            `;
+        opacity: 0;
+        animation: bootLineAppear 0.1s forwards;
+        white-space: pre-wrap;
+      `;
             line.textContent = step.text;
 
-            this.container.appendChild(line);
-            this.container.scrollTop = this.container.scrollHeight;
+            this.container!.appendChild(line);
+            this.container!.scrollTop = this.container!.scrollHeight;
             this.bootLog.push(step.text);
             this.currentStep++;
 
@@ -104,19 +107,19 @@ class DebianRealBoot {
 
     /**
      * Devuelve el nombre de clase CSS según el tipo de mensaje.
-     * @param {string} type
-     * @returns {string}
+     * @param type - Tipo de mensaje
+     * @returns Nombre de clase CSS
      */
-    getLineClass(type) {
-        const map = {
-            'kernel': 'boot-kernel',
-            'cpu': 'boot-cpu',
-            'memory': 'boot-memory',
-            'fs': 'boot-fs',
-            'systemd': 'boot-systemd',
-            'service': 'boot-service',
-            'drm': 'boot-drm',
-            'desktop': 'boot-desktop',
+    private getLineClass(type: string): string {
+        const map: Record<string, string> = {
+            kernel: 'boot-kernel',
+            cpu: 'boot-cpu',
+            memory: 'boot-memory',
+            fs: 'boot-fs',
+            systemd: 'boot-systemd',
+            service: 'boot-service',
+            drm: 'boot-drm',
+            desktop: 'boot-desktop',
         };
         return map[type] || 'boot-default';
     }
@@ -124,13 +127,13 @@ class DebianRealBoot {
     /**
      * Finaliza el boot.
      */
-    completeBoot() {
+    private completeBoot(): void {
         if (this.bootScreen) {
             this.bootScreen.style.transition = 'opacity 0.5s ease-out';
             this.bootScreen.style.opacity = '0';
 
             setTimeout(() => {
-                this.bootScreen.style.display = 'none';
+                this.bootScreen!.style.display = 'none';
                 const desktop = document.getElementById('desktop-ui');
                 if (desktop) desktop.style.display = 'block';
                 initDesktop();
@@ -144,15 +147,15 @@ class DebianRealBoot {
 /**
  * Inicializa todos los módulos del escritorio CDE.
  */
-function initDesktop() {
+function initDesktop(): void {
     if (desktopInitialized) return;
 
     console.log('🖥️ Initializing CDE Desktop Environment...');
 
-    if (typeof initClock === 'function') initClock();
+    if (typeof window.initClock === 'function') window.initClock();
     // if (typeof initTerminal === 'function') initTerminal();
-    if (typeof initWindowManager === 'function') initWindowManager();
-    //  if (window.styleManager?.init === 'function') window.styleManager.init();
+    if (typeof window.initWindowManager === 'function') window.initWindowManager();
+    window.styleManager?.init(); // Ahora sí, con optional chaining
     desktopInitialized = true;
     console.log('✅ CDE Desktop initialized successfully!');
 }
@@ -166,7 +169,8 @@ document.addEventListener('DOMContentLoaded', () => {
     window.debianBoot.start();
 });
 
+// Exponer globalmente
 window.initDesktop = initDesktop;
 window.DebianRealBoot = DebianRealBoot;
 
-console.log('✅ init.js loaded (con logo Debian)');
+console.log('✅ init.ts loaded (con logo Debian)');
