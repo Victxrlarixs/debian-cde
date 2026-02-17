@@ -1,5 +1,5 @@
 {
-    "__default__": {
+  "__default__": {
     "--font-family-base": "\"Fixedsys\", \"Lucida Console\", monospace",
     "--font-family-terminal": "\"Courier New\", monospace",
     "--font-size-base": "12px",

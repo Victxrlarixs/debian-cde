@@ -1,0 +1,24 @@
+{
+  "/home/victxrlarixs/": {
+    "type": "folder",
+    "children": {
+      "Desktop": { "type": "folder", "children": {} },
+      "welcome.txt": { "type": "file", "content": "Welcome to Debian WebCDE." },
+      "tutorials": {
+        "type": "folder",
+        "children": {
+          "getting-started.txt": {
+            "type": "file",
+            "content": "Use ls, cd, cat, mkdir, touch."
+          }
+        }
+      },
+      "settings": {
+        "type": "folder",
+        "children": {
+          "theme.txt": { "type": "file", "content": "Current theme: CDE Retro" }
+        }
+      }
+    }
+  }
+}

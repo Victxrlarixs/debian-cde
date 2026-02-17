@@ -1,6 +1,7 @@
 // src/scripts/utilities.ts
 
 import { CONFIG } from './config';
+import { CDEModal } from './modals';
 
 // ============================================================================
 // WindowManager: control de ventanas (foco, arrastre, reloj, dropdown)
@@ -191,7 +192,6 @@ declare global {
 }
 
 function retroBeep(): void {
-  console.log('🔊 Intentando reproducir beep...');
   try {
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     const audioCtx = new AudioContextClass();
@@ -215,7 +215,7 @@ function playBeep(audioCtx: AudioContext): void {
   gainNode.connect(audioCtx.destination);
   oscillator.start();
   oscillator.stop(audioCtx.currentTime + CONFIG.AUDIO.BEEP_DURATION);
-  console.log('✅ Beep reproducido');
+  console.log('Beep');
 }
 
 // ============================================================================
@@ -270,11 +270,7 @@ function captureFullPageScreenshot(): void {
       }
       console.error('Screenshot error:', error);
       // Restauramos el modal de error
-      if (window.CDEModal) {
-        (window.CDEModal as any).alert('Error al capturar pantalla.');
-      } else {
-        alert('Error al capturar. Revisa la consola.');
-      }
+      CDEModal.alert('Error al capturar pantalla.');
     });
 }
 
@@ -737,5 +733,3 @@ window.TopMonitor = TopMonitor;
 window.openTaskManagerInTerminal = () => TopMonitor.open();
 window.minimizeWindow = minimizeWindow;
 window.maximizeWindow = maximizeWindow;
-
-console.log('✅ Utilities module loaded (WindowManager + beep + screenshot + htop monitor)');

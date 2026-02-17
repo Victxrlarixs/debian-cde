@@ -150,14 +150,11 @@ class DebianRealBoot {
 function initDesktop(): void {
   if (desktopInitialized) return;
 
-  console.log('Initializing CDE Desktop Environment...');
-
   if (typeof window.initClock === 'function') window.initClock();
   // if (typeof initTerminal === 'function') initTerminal();
   if (typeof window.initWindowManager === 'function') window.initWindowManager();
   window.styleManager?.init();
   desktopInitialized = true;
-  console.log('CDE Desktop initialized successfully.');
 }
 
 // ---------------------------------------------------------------------
@@ -172,5 +169,3 @@ document.addEventListener('DOMContentLoaded', () => {
 // Exponer globalmente
 window.initDesktop = initDesktop;
 window.DebianRealBoot = DebianRealBoot;
-
-console.log('init.ts loaded (Debian boot sequence)');
