@@ -1,23 +1,44 @@
-/**
- * @fileoverview Utilidades de ventanas, sonido, captura de pantalla y monitor de procesos estilo htop.
- * @author victxrlarixs
- */
+// src/scripts/utilities.ts
+
+import { CONFIG } from './config';
+
 // ============================================================================
 // WindowManager: control de ventanas (foco, arrastre, reloj, dropdown)
 // ============================================================================
 
+// Interfaz para el estado de arrastre
+interface DragState {
+    element: HTMLElement | null;
+    offsetX: number;
+    offsetY: number;
+}
+
+// Almacena el estado anterior de las ventanas para restaurar posición y tamaño
+interface WindowState {
+    display?: string;
+    left?: string;
+    top?: string;
+    width?: string;
+    height?: string;
+    maximized: boolean;
+}
+
+const windowStates: Record<string, WindowState> = {};
+
 const WindowManager = (() => {
     let zIndex = CONFIG.WINDOW.BASE_Z_INDEX;
-    let currentDrag = null;
-    let offsetX = 0;
-    let offsetY = 0;
+    const dragState: DragState = {
+        element: null,
+        offsetX: 0,
+        offsetY: 0,
+    };
     const MIN_VISIBLE = CONFIG.WINDOW.MIN_VISIBLE;
 
     /**
      * Eleva una ventana al frente (z-index máximo) y la marca como activa.
-     * @param {string} id - ID del elemento ventana.
+     * @param id - ID del elemento ventana.
      */
-    function focusWindow(id) {
+    function focusWindow(id: string): void {
         const win = document.getElementById(id);
         if (!win) return;
 
@@ -31,67 +52,67 @@ const WindowManager = (() => {
 
         // Incrementar z-index y aplicarlo
         zIndex++;
-        win.style.zIndex = zIndex;
+        win.style.zIndex = String(zIndex);
     }
 
     /**
      * Inicia el arrastre de una ventana.
-     * @param {Event} e - Evento mousedown.
-     * @param {string} id - ID de la ventana a arrastrar.
+     * @param e - Evento mousedown.
+     * @param id - ID de la ventana a arrastrar.
      */
-    function drag(e, id) {
+    function drag(e: MouseEvent, id: string): void {
         const el = document.getElementById(id);
         if (!el) return;
 
         focusWindow(id);
-        currentDrag = el;
+        dragState.element = el;
 
         const rect = el.getBoundingClientRect();
-        offsetX = e.clientX - rect.left;
-        offsetY = e.clientY - rect.top;
+        dragState.offsetX = e.clientX - rect.left;
+        dragState.offsetY = e.clientY - rect.top;
 
-        document.addEventListener("mousemove", move);
-        document.addEventListener("mouseup", stopDrag);
+        document.addEventListener('mousemove', move);
+        document.addEventListener('mouseup', stopDrag);
     }
 
     /**
      * Mueve la ventana mientras se arrastra, con límites de pantalla.
-     * @param {MouseEvent} e
+     * @param e - MouseEvent
      */
-    function move(e) {
-        if (!currentDrag) return;
+    function move(e: MouseEvent): void {
+        if (!dragState.element) return;
 
-        let left = e.clientX - offsetX;
-        let top = e.clientY - offsetY;
+        let left = e.clientX - dragState.offsetX;
+        let top = e.clientY - dragState.offsetY;
 
-        const winWidth = currentDrag.offsetWidth;
-        const winHeight = currentDrag.offsetHeight;
+        const winWidth = dragState.element.offsetWidth;
+        const winHeight = dragState.element.offsetHeight;
         const maxX = window.innerWidth - MIN_VISIBLE;
         const maxY = window.innerHeight - MIN_VISIBLE;
 
         left = Math.min(Math.max(left, MIN_VISIBLE - winWidth), maxX);
         top = Math.min(Math.max(top, MIN_VISIBLE - winHeight), maxY);
 
-        currentDrag.style.left = left + "px";
-        currentDrag.style.top = top + "px";
+        dragState.element.style.left = left + 'px';
+        dragState.element.style.top = top + 'px';
     }
 
     /** Finaliza el arrastre y limpia los eventos. */
-    function stopDrag() {
-        currentDrag = null;
-        document.removeEventListener("mousemove", move);
-        document.removeEventListener("mouseup", stopDrag);
+    function stopDrag(): void {
+        dragState.element = null;
+        document.removeEventListener('mousemove', move);
+        document.removeEventListener('mouseup', stopDrag);
     }
 
     /**
      * Inicializa la captura de clics en ventanas usando delegación.
      * Cualquier clic dentro de una ventana la elevará al frente.
      */
-    function initWindows() {
+    function initWindows(): void {
         // Escuchamos en el documento para capturar clics incluso si la propagación se detiene
         document.addEventListener('mousedown', (e) => {
             // Buscar el elemento window más cercano (incluye modales)
-            const win = e.target.closest('.window, .cde-retro-modal');
+            const win = (e.target as Element).closest('.window, .cde-retro-modal');
             if (win) {
                 focusWindow(win.id);
             }
@@ -102,17 +123,17 @@ const WindowManager = (() => {
        Reloj del sistema (formato 24h)
     ------------------------------------------------------------------ */
 
-    function updateClock() {
-        const clockEl = document.getElementById("clock");
+    function updateClock(): void {
+        const clockEl = document.getElementById('clock');
         if (!clockEl) return;
 
         const now = new Date();
-        const h = now.getHours().toString().padStart(2, "0");
-        const m = now.getMinutes().toString().padStart(2, "0");
+        const h = now.getHours().toString().padStart(2, '0');
+        const m = now.getMinutes().toString().padStart(2, '0');
         clockEl.textContent = `${h}:${m}`;
     }
 
-    function initClock() {
+    function initClock(): void {
         updateClock();
         setInterval(updateClock, 1000);
     }
@@ -121,7 +142,7 @@ const WindowManager = (() => {
        Menú desplegable de utilidades (dropdown)
     ------------------------------------------------------------------ */
 
-    function initDropdown() {
+    function initDropdown(): void {
         const dropdownBtn = document.getElementById('utilitiesBtn');
         const dropdownMenu = document.getElementById('utilitiesDropdown');
 
@@ -137,7 +158,7 @@ const WindowManager = (() => {
         });
 
         document.addEventListener('click', (e) => {
-            if (!dropdownBtn.contains(e.target)) {
+            if (!dropdownBtn.contains(e.target as Node)) {
                 dropdownBtn.classList.remove('open');
             }
         });
@@ -149,7 +170,7 @@ const WindowManager = (() => {
        Inicialización general
     ------------------------------------------------------------------ */
 
-    function init() {
+    function init(): void {
         initWindows();
         initClock();
         initDropdown();
@@ -158,19 +179,22 @@ const WindowManager = (() => {
     return { init, drag, focusWindow };
 })();
 
-document.addEventListener('DOMContentLoaded', () => WindowManager.init());
-window.drag = WindowManager.drag;
-window.focusWindow = WindowManager.focusWindow;
-
 // ============================================================================
 // Utilidades de sonido (beep retro)
 // ============================================================================
 
-function retroBeep() {
+declare global {
+    interface Window {
+        AudioContext: typeof AudioContext;
+        webkitAudioContext: typeof AudioContext;
+    }
+}
+
+function retroBeep(): void {
     console.log('🔊 Intentando reproducir beep...');
     try {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        const audioCtx = new AudioContext();
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        const audioCtx = new AudioContextClass();
         if (audioCtx.state === 'suspended') {
             audioCtx.resume().then(() => playBeep(audioCtx));
         } else {
@@ -181,7 +205,7 @@ function retroBeep() {
     }
 }
 
-function playBeep(audioCtx) {
+function playBeep(audioCtx: AudioContext): void {
     const oscillator = audioCtx.createOscillator();
     const gainNode = audioCtx.createGain();
     oscillator.type = 'sine';
@@ -198,8 +222,11 @@ function playBeep(audioCtx) {
 // Captura de pantalla
 // ============================================================================
 
-function captureFullPageScreenshot() {
-    const btn = document.getElementById('screenshot-btn');
+// Declaración para html2canvas (asumiendo que está cargado globalmente)
+declare function html2canvas(element: HTMLElement, options?: any): Promise<HTMLCanvasElement>;
+
+function captureFullPageScreenshot(): void {
+    const btn = document.getElementById('screenshot-btn') as HTMLElement | null;
     if (btn) {
         btn.style.opacity = '0.5';
         btn.style.cursor = 'wait';
@@ -216,13 +243,13 @@ function captureFullPageScreenshot() {
         logging: false,
         windowWidth: window.innerWidth,
         windowHeight: window.innerHeight,
-        onclone: (clonedDoc) => {
+        onclone: (clonedDoc: Document) => {
             const clonedToast = clonedDoc.querySelector('.screenshot-toast');
-            if (clonedToast) clonedToast.style.display = 'none';
-        }
+            if (clonedToast) (clonedToast as HTMLElement).style.display = 'none';
+        },
     };
     html2canvas(document.documentElement, options)
-        .then(canvas => {
+        .then((canvas: HTMLCanvasElement) => {
             const now = new Date();
             const filename = `${CONFIG.SCREENSHOT.FILENAME_PREFIX}-${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')} ${now.getHours().toString().padStart(2, '0')}.${now.getMinutes().toString().padStart(2, '0')}.${now.getSeconds().toString().padStart(2, '0')}.png`;
             const link = document.createElement('a');
@@ -235,7 +262,7 @@ function captureFullPageScreenshot() {
                 btn.style.cursor = 'pointer';
             }
         })
-        .catch(error => {
+        .catch((error: any) => {
             document.body.removeChild(toast);
             if (btn) {
                 btn.style.opacity = '1';
@@ -244,7 +271,7 @@ function captureFullPageScreenshot() {
             console.error('Screenshot error:', error);
             // Restauramos el modal de error
             if (window.CDEModal) {
-                CDEModal.alert('Error al capturar pantalla.');
+                (window.CDEModal as any).alert('Error al capturar pantalla.');
             } else {
                 alert('Error al capturar. Revisa la consola.');
             }
@@ -255,18 +282,28 @@ function captureFullPageScreenshot() {
 // Monitor de procesos estilo htop (sin estilos inline)
 // ============================================================================
 
-function scanProcesses() {
-    const processes = [];
+interface ProcessInfo {
+    pid: number;
+    name: string;
+    cpu: string;
+    mem: string;
+    elementId: string | null;
+    visible: boolean;
+    isModal: boolean;
+}
+
+function scanProcesses(): ProcessInfo[] {
+    const processes: ProcessInfo[] = [];
     const windows = document.querySelectorAll('.window');
     const modals = document.querySelectorAll('.cde-retro-modal');
     let pid = 1000;
 
     windows.forEach(win => {
         if (win.id === 'top-monitor') return;
-        const isVisible = win.style.display !== 'none';
+        const isVisible = (win as HTMLElement).style.display !== 'none';
         const titleEl = win.querySelector('.titlebar-text');
         let name = win.id || 'Window';
-        if (titleEl) name = titleEl.textContent;
+        if (titleEl) name = titleEl.textContent || name;
         else if (win.id === 'terminal') name = 'Terminal';
         else if (win.id === 'fm') name = 'File Manager';
 
@@ -277,13 +314,13 @@ function scanProcesses() {
             mem: (Math.random() * 10 + 2).toFixed(1),
             elementId: win.id,
             visible: isVisible,
-            isModal: false
+            isModal: false,
         });
     });
 
     modals.forEach(modal => {
         if (modal.id === 'styleManager') {
-            const isVisible = modal.style.display !== 'none';
+            const isVisible = (modal as HTMLElement).style.display !== 'none';
             processes.push({
                 pid: pid++,
                 name: 'Style Manager',
@@ -291,7 +328,7 @@ function scanProcesses() {
                 mem: (Math.random() * 8 + 1).toFixed(1),
                 elementId: modal.id,
                 visible: isVisible,
-                isModal: true
+                isModal: true,
             });
         }
     });
@@ -306,14 +343,14 @@ function scanProcesses() {
 
 const TopMonitor = (() => {
     const WINDOW_ID = 'top-monitor';
-    let interval = null;
+    let interval: number | undefined;
     let zIndex = 3000;
-    let processes = [];
+    let processes: ProcessInfo[] = [];
     let selectedIndex = 0;
-    let contentDiv = null;
-    let winElement = null;
+    let contentDiv: HTMLElement | null = null;
+    let winElement: HTMLElement | null = null;
 
-    function getWindow() {
+    function getWindow(): HTMLElement | null {
         if (!winElement) {
             winElement = document.getElementById(WINDOW_ID);
             if (winElement) {
@@ -325,7 +362,7 @@ const TopMonitor = (() => {
         return winElement;
     }
 
-    function handleKeyDown(e) {
+    function handleKeyDown(e: KeyboardEvent): void {
         if (!contentDiv) return;
 
         switch (e.key) {
@@ -363,7 +400,7 @@ const TopMonitor = (() => {
         }
     }
 
-    function killSelected() {
+    function killSelected(): void {
         if (!processes.length) return;
         const proc = processes[selectedIndex];
         if (!proc.elementId) {
@@ -382,7 +419,7 @@ const TopMonitor = (() => {
         render();
     }
 
-    function addMessage(msg) {
+    function addMessage(msg: string): void {
         if (!contentDiv) return;
         const msgDiv = document.createElement('div');
         msgDiv.className = 'monitor-message';
@@ -392,29 +429,29 @@ const TopMonitor = (() => {
         adjustWindowHeight();
     }
 
-    function showHelp() {
+    function showHelp(): void {
         if (!contentDiv) return;
         const helpLines = [
             'Help:',
             '  ↑/↓ : Navigate through processes',
             '  k   : Kill selected process',
             '  q/ESC : Quit',
-            '  ?   : Show this help'
+            '  ?   : Show this help',
         ];
         helpLines.forEach(line => {
             const helpDiv = document.createElement('div');
             helpDiv.className = 'help-line';
             helpDiv.textContent = line;
-            contentDiv.appendChild(helpDiv);
+            contentDiv!.appendChild(helpDiv);
         });
         contentDiv.scrollTop = contentDiv.scrollHeight;
         adjustWindowHeight();
     }
 
-    function adjustWindowHeight() {
+    function adjustWindowHeight(): void {
         if (!winElement || !contentDiv) return;
         const titlebar = winElement.querySelector('.titlebar');
-        const titlebarHeight = titlebar ? titlebar.offsetHeight : 28;
+        const titlebarHeight = titlebar ? (titlebar as HTMLElement).offsetHeight : 28;
         const lineHeight = 18; // aprox
         const lines = contentDiv.innerText.split('\n').length;
         const contentHeight = lines * lineHeight + 12;
@@ -422,7 +459,7 @@ const TopMonitor = (() => {
         winElement.style.height = totalHeight + 'px';
     }
 
-    function createBar(percentage, type) {
+    function createBar(percentage: number, type: string): HTMLElement {
         const container = document.createElement('span');
         container.className = `${type}-bar-container`;
 
@@ -434,7 +471,7 @@ const TopMonitor = (() => {
         return container;
     }
 
-    function render() {
+    function render(): void {
         if (!contentDiv) return;
 
         processes = scanProcesses();
@@ -462,18 +499,18 @@ const TopMonitor = (() => {
         // Limpiar contenido
         contentDiv.innerHTML = '';
 
-        function addLine(text, className = '') {
+        function addLine(text: string, className: string = ''): void {
             const line = document.createElement('div');
             if (className) line.className = className;
             line.textContent = text;
-            contentDiv.appendChild(line);
+            contentDiv!.appendChild(line);
         }
 
-        function addBarLine(label, bars) {
+        function addBarLine(label: string, bars: (HTMLElement | Text)[]): void {
             const line = document.createElement('div');
             line.appendChild(document.createTextNode(`  ${label} `));
             bars.forEach(bar => line.appendChild(bar));
-            contentDiv.appendChild(line);
+            contentDiv!.appendChild(line);
         }
 
         addLine(`${timeStr} up 1 day, load average: ${load1}, ${load5}, ${load15}`);
@@ -532,7 +569,7 @@ const TopMonitor = (() => {
             const tail = document.createTextNode(`  ${cpu} ${mem} ${time} ${p.name}`);
             row.appendChild(tail);
 
-            contentDiv.appendChild(row);
+            contentDiv!.appendChild(row);
         });
 
         addLine('');
@@ -541,12 +578,12 @@ const TopMonitor = (() => {
         adjustWindowHeight();
     }
 
-    function open() {
+    function open(): void {
         getWindow();
         if (!winElement) return;
 
         winElement.style.display = 'block';
-        winElement.style.zIndex = ++zIndex;
+        winElement.style.zIndex = String(++zIndex);
         winElement.focus();
         if (window.focusWindow) window.focusWindow(WINDOW_ID);
 
@@ -562,34 +599,26 @@ const TopMonitor = (() => {
         }, 2000);
     }
 
-    function close() {
+    function close(): void {
         if (winElement) winElement.style.display = 'none';
         if (interval) {
             clearInterval(interval);
-            interval = null;
+            interval = undefined;
         }
     }
 
     return { open, close };
 })();
 
-window.TopMonitor = TopMonitor;
-window.openTaskManagerInTerminal = () => TopMonitor.open();
-
-console.log('✅ Utilities module loaded (WindowManager + beep + screenshot + htop monitor)');
-
 // ============================================================================
 // Minimizar y maximizar ventanas
 // ============================================================================
 
-// Almacena el estado anterior de las ventanas para restaurar posición y tamaño
-const windowStates = {};
-
 /**
  * Minimiza una ventana (la oculta)
- * @param {string} id - ID de la ventana
+ * @param id - ID de la ventana
  */
-function minimizeWindow(id) {
+function minimizeWindow(id: string): void {
     const win = document.getElementById(id);
     if (!win) return;
 
@@ -601,7 +630,7 @@ function minimizeWindow(id) {
             top: win.style.top,
             width: win.style.width,
             height: win.style.height,
-            maximized: win.classList.contains('maximized')
+            maximized: win.classList.contains('maximized'),
         };
     }
 
@@ -610,9 +639,9 @@ function minimizeWindow(id) {
 
 /**
  * Maximiza o restaura una ventana
- * @param {string} id - ID de la ventana
+ * @param id - ID de la ventana
  */
-function maximizeWindow(id) {
+function maximizeWindow(id: string): void {
     const win = document.getElementById(id);
     if (!win) return;
 
@@ -635,7 +664,7 @@ function maximizeWindow(id) {
             top: win.style.top,
             width: win.style.width,
             height: win.style.height,
-            maximized: false
+            maximized: false,
         };
         // Aplicar clase maximizada
         win.classList.add('maximized');
@@ -644,6 +673,41 @@ function maximizeWindow(id) {
     }
 }
 
-// Exponer globalmente
+// ============================================================================
+// Exposición global (compatibilidad con HTML existente)
+// ============================================================================
+
+declare global {
+    interface Window {
+        // WindowManager
+        drag: (e: MouseEvent, id: string) => void;
+        focusWindow?: (id: string) => void; // ← cambiamos a opcional
+        // Utilidades de sonido
+        retroBeep: () => void;
+        // Captura de pantalla
+        captureFullPageScreenshot: () => void;
+        // TopMonitor
+        TopMonitor: typeof TopMonitor;
+        openTaskManagerInTerminal: () => void;
+        // Minimizar/maximizar
+        minimizeWindow: typeof minimizeWindow;
+        maximizeWindow: typeof maximizeWindow;
+    }
+}
+
+// Inicialización cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', () => {
+    WindowManager.init();
+});
+
+// Asignar a window
+window.drag = WindowManager.drag;
+window.focusWindow = WindowManager.focusWindow;
+window.retroBeep = retroBeep;
+window.captureFullPageScreenshot = captureFullPageScreenshot;
+window.TopMonitor = TopMonitor;
+window.openTaskManagerInTerminal = () => TopMonitor.open();
 window.minimizeWindow = minimizeWindow;
 window.maximizeWindow = maximizeWindow;
+
+console.log('✅ Utilities module loaded (WindowManager + beep + screenshot + htop monitor)');
