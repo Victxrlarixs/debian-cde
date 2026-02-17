@@ -11,53 +11,57 @@
 
 /* ----- Líneas de barrido estilo CRT sobre ventanas ----- */
 .window::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: repeating-linear-gradient(to bottom,
-            rgba(255, 255, 255, 0.02) 0px,
-            rgba(255, 255, 255, 0.02) 1px,
-            transparent 2px,
-            transparent 4px);
-    mix-blend-mode: overlay;
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.02) 0px,
+    rgba(255, 255, 255, 0.02) 1px,
+    transparent 2px,
+    transparent 4px
+  );
+  mix-blend-mode: overlay;
 }
 
 /* ----- Cursor de terminal parpadeante (hacker) ----- */
 #terminalInput::after {
-    content: "";
-    display: inline-block;
-    width: 7px;
-    height: 14px;
-    background: var(--terminal-text-color);
-    margin-left: 2px;
-    animation: blink 1s infinite;
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 14px;
+  background: var(--terminal-text-color);
+  margin-left: 2px;
+  animation: blink 1s infinite;
 }
 
 @keyframes blink {
-    50% {
-        opacity: 0;
-    }
+  50% {
+    opacity: 0;
+  }
 }
 
 /* ----- Efecto glitch para textos de terminal ----- */
 @keyframes glitch {
-    0% {
-        text-shadow: 0 0 4px rgba(0, 255, 136, 0.3);
-    }
+  0% {
+    text-shadow: 0 0 4px rgba(0, 255, 136, 0.3);
+  }
 
-    50% {
-        text-shadow: 2px 0 rgba(0, 255, 136, 0.6), -2px 0 rgba(0, 150, 80, 0.4);
-    }
+  50% {
+    text-shadow:
+      2px 0 rgba(0, 255, 136, 0.6),
+      -2px 0 rgba(0, 150, 80, 0.4);
+  }
 
-    100% {
-        text-shadow: 0 0 4px rgba(0, 255, 136, 0.3);
-    }
+  100% {
+    text-shadow: 0 0 4px rgba(0, 255, 136, 0.3);
+  }
 }
 
 .prompt,
 .terminal-body {
-    animation: glitch 6s infinite;
+  animation: glitch 6s infinite;
 }
 
 /* ------------------------------------------------------------------
@@ -65,29 +69,29 @@
       Animación para notificaciones temporales.
    ------------------------------------------------------------------ */
 .cde-message {
-    animation: fadeInOut 2s ease-in-out;
+  animation: fadeInOut 2s ease-in-out;
 }
 
 @keyframes fadeInOut {
-    0% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.9);
-    }
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
 
-    10% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-    }
+  10% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
 
-    90% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-    }
+  90% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
 
-    100% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.9);
-    }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
 }
 
 /* ------------------------------------------------------------------
@@ -103,7 +107,7 @@ body,
 .fm-menubar,
 .fm-path,
 .cde-btn {
-    font-size: var(--font-size-base);
+  font-size: var(--font-size-base);
 }
 
 /* Tamaño de título (ligeramente mayor) */
@@ -111,7 +115,7 @@ body,
 .cde-subtitle,
 .terminal-body,
 #terminalInput {
-    font-size: var(--font-size-title);
+  font-size: var(--font-size-title);
 }
 
 /* Tamaño pequeño (etiquetas, barras de estado, presets) */
@@ -122,5 +126,5 @@ body,
 .fm-status,
 .menu-item,
 .cde-preset {
-    font-size: var(--font-size-small);
+  font-size: var(--font-size-small);
 }

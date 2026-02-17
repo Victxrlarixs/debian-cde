@@ -14,6 +14,7 @@
 The project lives at **[debian.com.mx](https://debian.com.mx)** and serves as a tribute to early Unix desktop environments as well as a playground for retro UI development.
 
 ---
+
 ## ✨ Features
 
 - 🐧 **Boot sequence**
@@ -25,11 +26,13 @@ The project lives at **[debian.com.mx](https://debian.com.mx)** and serves as a 
 - 📁 **Virtual File Manager** – Navigate, create, rename and delete files/folders. Includes menu bar, toolbar and context menu.
 - 📸 **Integrated screenshot** – One‑click download of the entire desktop as a PNG.
 - 📊 **Process Monitor** – Real‑time process list with keyboard navigation (↑/↓, k kill, q quit, ? help) and colored CPU/memory bars.
+
 ---
 
 ## 🚀 Getting Started
 
-Just visit **[debian.com.mx](https://debian.com.mx)** and start exploring.  
+Just visit **[debian.com.mx](https://debian.com.mx)** and start exploring.
 
 ---
+
 <p align="center"> Made with ☕️ and 🖥️ nostalgia<br /> <a href="https://debian.com.mx">debian.com.mx</a> </p>
