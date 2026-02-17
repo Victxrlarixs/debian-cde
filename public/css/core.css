@@ -8,44 +8,43 @@
       Controlan colores, tipografía, bordes y efectos.
    ------------------------------------------------------------------ */
 :root {
-    /* Colores base de la interfaz */
-    --topbar-color: #c6bdb3;
-    --window-color: #dcd6cc;
-    --titlebar-color: #4a6c7a;
-    --terminal-bg-color: #070b0d;
-    --terminal-text-color: #c7fbe3;
-    --dock-color: #e6e1d8;
-    --menu-color: #bfb6aa;
-    --dock-icon-bg: #bfb9ad;
-    --dock-icon-hover: #e0dad0;
-    --dock-icon-active: #d8d1c6;
-    --button-bg: #bfb6aa;
-    --button-active: #d6cec4;
-    --separator-color: #8f877d;
-    --modal-bg: #dcd6cc;
-    --scrollbar-color: #00ff88;
+  /* Colores base de la interfaz */
+  --topbar-color: #c6bdb3;
+  --window-color: #dcd6cc;
+  --titlebar-color: #4a6c7a;
+  --terminal-bg-color: #070b0d;
+  --terminal-text-color: #c7fbe3;
+  --dock-color: #e6e1d8;
+  --menu-color: #bfb6aa;
+  --dock-icon-bg: #bfb9ad;
+  --dock-icon-hover: #e0dad0;
+  --dock-icon-active: #d8d1c6;
+  --button-bg: #bfb6aa;
+  --button-active: #d6cec4;
+  --separator-color: #8f877d;
+  --modal-bg: #dcd6cc;
+  --scrollbar-color: #00ff88;
 
-    /* Bordes estilo CDE: bisel 3D fijo */
-    --border-light: #ffffff;
-    --border-dark: #404040;
-    --border-inset-light: #dfdfdf;
-    --border-inset-dark: #808080;
+  /* Bordes estilo CDE: bisel 3D fijo */
+  --border-light: #ffffff;
+  --border-dark: #404040;
+  --border-inset-light: #dfdfdf;
+  --border-inset-dark: #808080;
 
-    /* Tipografía — completamente ajustable por el usuario */
-    --font-family-base: "Fixedsys", "Lucida Console", monospace;
-    --font-family-terminal: "Courier New", monospace;
-    --font-size-base: 12px;
-    --font-size-title: 13px;
-    --font-size-small: 11px;
-    --font-size-large: 13px;
-    --font-weight-normal: 400;
-    --font-weight-bold: 700;
-    --line-height-base: 1.45;
+  /* Tipografía — completamente ajustable por el usuario */
+  --font-family-base: 'Fixedsys', 'Lucida Console', monospace;
+  --font-family-terminal: 'Courier New', monospace;
+  --font-size-base: 12px;
+  --font-size-title: 13px;
+  --font-size-small: 11px;
+  --font-size-large: 13px;
+  --font-weight-normal: 400;
+  --font-weight-bold: 700;
+  --line-height-base: 1.45;
 
-    /* Efectos visuales */
-    --shadow-color: rgba(0, 0, 0, 0.3);
-    --glow-color: rgba(0, 255, 136, 0.05);
-
+  /* Efectos visuales */
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --glow-color: rgba(0, 255, 136, 0.05);
 }
 
 /* ------------------------------------------------------------------
@@ -55,23 +54,23 @@
    ------------------------------------------------------------------ */
 html,
 body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    font-family: var(--font-family-base);
-    font-size: var(--font-size-base);
-    font-weight: var(--font-weight-normal);
-    line-height: var(--line-height-base);
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-base);
 
-    /* Fondo tipo circuito retro — se repite en mosaico */
-    background-image: url("/images/motif.png");
-    background-size: contain;
-    background-repeat: repeat;
-    background-position: center;
-    background-attachment: fixed;
+  /* Fondo tipo circuito retro — se repite en mosaico */
+  background-image: url('/images/motif.png');
+  background-size: contain;
+  background-repeat: repeat;
+  background-position: center;
+  background-attachment: fixed;
 
-    /* Evita scroll no deseado en el viewport */
-    overflow: hidden;
+  /* Evita scroll no deseado en el viewport */
+  overflow: hidden;
 }
 
 /* ------------------------------------------------------------------
@@ -79,15 +78,15 @@ body {
       Control rápido de visibilidad y estados.
    ------------------------------------------------------------------ */
 .hidden {
-    display: none !important;
+  display: none !important;
 }
 
 .visible {
-    display: flex !important;
+  display: flex !important;
 }
 
 .active {
-    background: var(--dock-icon-active) !important;
+  background: var(--dock-icon-active) !important;
 }
 
 /* ------------------------------------------------------------------
@@ -95,82 +94,82 @@ body {
       Visible desde el primer momento, se desvanece al terminar.
    ------------------------------------------------------------------ */
 #debian-boot-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #000000;
-    color: #AAAAAA;
-    font-family: 'DejaVu Sans Mono', monospace;
-    font-size: 12px;
-    line-height: 1.1;
-    z-index: 99999;
-    padding: 10px;
-    box-sizing: border-box;
-    opacity: 1;
-    transition: opacity 0.5s ease-out;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  color: #aaaaaa;
+  font-family: 'DejaVu Sans Mono', monospace;
+  font-size: 12px;
+  line-height: 1.1;
+  z-index: 99999;
+  padding: 10px;
+  box-sizing: border-box;
+  opacity: 1;
+  transition: opacity 0.5s ease-out;
 }
 
 /* Cabecera del boot: versión de Debian */
 #debian-boot-screen .header {
-    color: #00AA00;
-    border-bottom: 1px solid #333333;
-    padding-bottom: 5px;
-    margin-bottom: 10px;
-    font-weight: bold;
+  color: #00aa00;
+  border-bottom: 1px solid #333333;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  font-weight: bold;
 }
 
 /* Contenedor donde se escriben las líneas del kernel */
 #boot-log-container {
-    height: calc(100% - 30px);
-    overflow-y: auto;
-    font-family: monospace;
+  height: calc(100% - 30px);
+  overflow-y: auto;
+  font-family: monospace;
 }
 
 /* Animación de aparición de cada línea */
 @keyframes bootLineAppear {
-    to {
-        opacity: 1;
-    }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Clases de color para cada tipo de mensaje de boot */
 .boot-kernel {
-    color: #CCCCCC;
+  color: #cccccc;
 }
 
 .boot-cpu {
-    color: #88AAFF;
+  color: #88aaff;
 }
 
 .boot-memory {
-    color: #FFAA88;
+  color: #ffaa88;
 }
 
 .boot-fs {
-    color: #FFFF88;
+  color: #ffff88;
 }
 
 .boot-systemd {
-    color: #88FFFF;
+  color: #88ffff;
 }
 
 .boot-service {
-    color: #00FF00;
+  color: #00ff00;
 }
 
 .boot-drm {
-    color: #FF8888;
+  color: #ff8888;
 }
 
 .boot-desktop {
-    color: #00FFAA;
-    font-weight: bold;
+  color: #00ffaa;
+  font-weight: bold;
 }
 
 .boot-default {
-    color: #AAAAAA;
+  color: #aaaaaa;
 }
 
 /* ------------------------------------------------------------------
@@ -178,7 +177,7 @@ body {
       Inicialmente oculto; se muestra tras completar el boot.
    ------------------------------------------------------------------ */
 #desktop-ui {
-    display: none;
+  display: none;
 }
 
 /* ------------------------------------------------------------------
@@ -188,98 +187,98 @@ body {
 
 /* ----- Barra de desplazamiento (WebKit) ----- */
 ::-webkit-scrollbar {
-    width: 8px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--button-bg);
+  background: var(--button-bg);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--titlebar-color);
-    border: 1px solid var(--border-dark);
+  background: var(--titlebar-color);
+  border: 1px solid var(--border-dark);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--separator-color);
+  background: var(--separator-color);
 }
 
 /* ----- Botones de ventana (minimizar, cerrar) ----- */
 .min-btn,
 .close-btn,
 .cde-window-btn {
-    width: 18px;
-    height: 18px;
-    padding: 0;
-    margin-left: 4px;
-    background: var(--button-active);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  margin-left: 4px;
+  background: var(--button-active);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    /* Bisel 3D estilo CDE */
-    border: 2px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
+  /* Bisel 3D estilo CDE */
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
 }
 
 .min-btn img,
 .close-btn img {
-    width: 12px;
-    height: 12px;
-    image-rendering: pixelated;
+  width: 12px;
+  height: 12px;
+  image-rendering: pixelated;
 }
 
 /* Estado presionado: invierte el bisel */
 .min-btn:active,
 .close-btn:active,
 .cde-window-btn:active {
-    border: 2px solid;
-    border-top-color: var(--border-dark);
-    border-left-color: var(--border-dark);
-    border-right-color: var(--border-light);
-    border-bottom-color: var(--border-light);
+  border: 2px solid;
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
 }
 
 .min-btn:hover,
 .close-btn:hover {
-    background: var(--dock-icon-hover);
+  background: var(--dock-icon-hover);
 }
 
 /* ----- Cursor personalizado (SVG) ----- */
 * {
-    cursor: url('/icons/cursor.svg'), auto;
+  cursor: url('/icons/cursor.svg'), auto;
 }
 
 #cde-prompt-input {
-    width: 100%;
-    padding: 4px 6px;
-    background: var(--button-active);
-    border: 2px solid;
-    border-top-color: var(--border-inset-dark);
-    border-left-color: var(--border-inset-dark);
-    border-right-color: var(--border-inset-light);
-    border-bottom-color: var(--border-inset-light);
-    font-family: var(--font-family-base);
-    font-size: var(--font-size-base);
-    box-sizing: border-box;
+  width: 100%;
+  padding: 4px 6px;
+  background: var(--button-active);
+  border: 2px solid;
+  border-top-color: var(--border-inset-dark);
+  border-left-color: var(--border-inset-dark);
+  border-right-color: var(--border-inset-light);
+  border-bottom-color: var(--border-inset-light);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  box-sizing: border-box;
 }
 
 /* Logo de Debian en el bootloader */
 .boot-logo {
-    color: #00AA00;
-    font-family: monospace;
-    white-space: pre;
-    line-height: 1.2;
-    margin-bottom: 20px;
-    opacity: 1 !important;
-    /* visible desde el inicio */
+  color: #00aa00;
+  font-family: monospace;
+  white-space: pre;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  opacity: 1 !important;
+  /* visible desde el inicio */
 }
 
 #taskmanager .terminal-body {
-    background: var(--terminal-bg-color) !important;
-    color: var(--terminal-text-color) !important;
+  background: var(--terminal-bg-color) !important;
+  color: var(--terminal-text-color) !important;
 }

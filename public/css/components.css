@@ -9,54 +9,54 @@
       Fija en la parte superior, contiene indicadores de sistema.
    ------------------------------------------------------------------ */
 #topbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 28px;
-    background: var(--topbar-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 10px;
-    font-size: var(--font-size-base);
-    border-bottom: 2px solid var(--separator-color);
-    z-index: 9998;
-    border: 1px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 28px;
+  background: var(--topbar-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  font-size: var(--font-size-base);
+  border-bottom: 2px solid var(--separator-color);
+  z-index: 9998;
+  border: 1px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
 }
 
 .top-left,
 .top-right {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .top-center {
-    font-weight: bold;
-    color: #333;
-    font-size: 12px;
+  font-weight: bold;
+  color: #333;
+  font-size: 12px;
 }
 
 .sys-item {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 2px 4px;
-    background: var(--dock-color);
-    border: 2px outset #eee;
-    font-family: var(--font-family-base);
-    font-size: var(--font-size-small);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px;
+  background: var(--dock-color);
+  border: 2px outset #eee;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-small);
 }
 
 .sys-icon {
-    width: 20px;
-    height: 20px;
-    image-rendering: pixelated;
+  width: 20px;
+  height: 20px;
+  image-rendering: pixelated;
 }
 
 /* ------------------------------------------------------------------
@@ -65,393 +65,393 @@
       Contiene menú, pager, iconos, bandeja y botón de salida.
    ------------------------------------------------------------------ */
 #cde-panel {
-    position: fixed;
-    bottom: 4px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    height: 78px;
-    background: var(--dock-color);
-    padding: 2px 4px;
-    font-family: "Lucida Sans", "Helvetica", Arial, sans-serif;
-    font-size: 11px;
-    z-index: 9999;
-    border: 2px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
-    box-shadow: 2px 2px 0 var(--shadow-color);
+  position: fixed;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 78px;
+  background: var(--dock-color);
+  padding: 2px 4px;
+  font-family: 'Lucida Sans', 'Helvetica', Arial, sans-serif;
+  font-size: 11px;
+  z-index: 9999;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  box-shadow: 2px 2px 0 var(--shadow-color);
 }
 
 /* ----- Separadores estilo Motif ----- */
 .cde-sep {
-    width: 2px;
-    height: 62px;
-    margin: 0 1px;
-    background: var(--border-dark);
-    box-shadow:
-        inset 1px 0 0 var(--border-light),
-        inset -1px 0 0 var(--border-inset-dark);
+  width: 2px;
+  height: 62px;
+  margin: 0 1px;
+  background: var(--border-dark);
+  box-shadow:
+    inset 1px 0 0 var(--border-light),
+    inset -1px 0 0 var(--border-inset-dark);
 }
 
 /* ----- Botón de menú (imagen) ----- */
 .cde-menu-btn {
-    width: 40px;
-    height: 50px;
-    background: var(--button-bg);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
-    padding: 0;
+  width: 40px;
+  height: 50px;
+  background: var(--button-bg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  padding: 0;
 }
 
 .cde-menu-btn img {
-    width: 28px;
-    height: 28px;
-    image-rendering: pixelated;
-    pointer-events: none;
+  width: 28px;
+  height: 28px;
+  image-rendering: pixelated;
+  pointer-events: none;
 }
 
 .cde-menu-btn:active {
-    border-top-color: var(--border-dark);
-    border-left-color: var(--border-dark);
-    border-right-color: var(--border-light);
-    border-bottom-color: var(--border-light);
-    background: var(--button-active);
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+  background: var(--button-active);
 }
 
 /* ----- Pager de espacios de trabajo (cuadrícula 2x2) ----- */
 .cde-pager {
-    display: grid;
-    grid-template-columns: 42px 42px;
-    grid-template-rows: 22px 22px;
-    gap: 2px;
-    height: 48px;
-    width: 88px;
-    padding: 2px;
-    background: var(--dock-icon-bg);
-    border: 2px solid;
-    border-top-color: var(--border-inset-dark);
-    border-left-color: var(--border-inset-dark);
-    border-right-color: var(--border-inset-light);
-    border-bottom-color: var(--border-inset-light);
-    margin: 0 auto;
-    align-self: center;
+  display: grid;
+  grid-template-columns: 42px 42px;
+  grid-template-rows: 22px 22px;
+  gap: 2px;
+  height: 48px;
+  width: 88px;
+  padding: 2px;
+  background: var(--dock-icon-bg);
+  border: 2px solid;
+  border-top-color: var(--border-inset-dark);
+  border-left-color: var(--border-inset-dark);
+  border-right-color: var(--border-inset-light);
+  border-bottom-color: var(--border-inset-light);
+  margin: 0 auto;
+  align-self: center;
 }
 
 .pager-workspace {
-    width: 42px;
-    height: 22px;
-    text-align: center;
-    padding: 0;
-    background: var(--button-bg);
-    font-size: 11px;
-    line-height: 22px;
-    cursor: pointer;
-    border: 2px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
+  width: 42px;
+  height: 22px;
+  text-align: center;
+  padding: 0;
+  background: var(--button-bg);
+  font-size: 11px;
+  line-height: 22px;
+  cursor: pointer;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
 }
 
 .pager-workspace.active {
-    background: var(--titlebar-color);
-    color: white;
-    font-weight: bold;
-    border-top-color: var(--border-dark);
-    border-left-color: var(--border-dark);
-    border-right-color: var(--border-light);
-    border-bottom-color: var(--border-light);
+  background: var(--titlebar-color);
+  color: white;
+  font-weight: bold;
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
 }
 
 /* ----- Botones de desplazamiento (scroll) ----- */
 .cde-scroll {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-    height: 48px;
-    padding: 0 2px;
-    background: var(--dock-icon-bg);
-    border: 2px solid;
-    border-top-color: var(--border-inset-dark);
-    border-left-color: var(--border-inset-dark);
-    border-right-color: var(--border-inset-light);
-    border-bottom-color: var(--border-inset-light);
-    align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  height: 48px;
+  padding: 0 2px;
+  background: var(--dock-icon-bg);
+  border: 2px solid;
+  border-top-color: var(--border-inset-dark);
+  border-left-color: var(--border-inset-dark);
+  border-right-color: var(--border-inset-light);
+  border-bottom-color: var(--border-inset-light);
+  align-self: center;
 }
 
 .scroll-btn {
-    width: 18px;
-    height: 23px;
-    background: var(--button-bg);
-    font-size: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    border: 2px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 18px;
+  height: 23px;
+  background: var(--button-bg);
+  font-size: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .scroll-btn:active {
-    border-top-color: var(--border-dark);
-    border-left-color: var(--border-dark);
-    border-right-color: var(--border-light);
-    border-bottom-color: var(--border-light);
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
 }
 
 /* ----- Bloque de iconos (doble fila) ----- */
 .cde-icon-block {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    height: 62px;
-    background: var(--dock-icon-bg);
-    border: 2px solid;
-    border-top-color: var(--border-inset-dark);
-    border-left-color: var(--border-inset-dark);
-    border-right-color: var(--border-inset-light);
-    border-bottom-color: var(--border-inset-light);
-    padding: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  height: 62px;
+  background: var(--dock-icon-bg);
+  border: 2px solid;
+  border-top-color: var(--border-inset-dark);
+  border-left-color: var(--border-inset-dark);
+  border-right-color: var(--border-inset-light);
+  border-bottom-color: var(--border-inset-light);
+  padding: 2px;
 }
 
 /* Fila superior: botones de acción */
 .cde-icon-buttons {
-    display: flex;
-    gap: 1px;
-    height: 20px;
+  display: flex;
+  gap: 1px;
+  height: 20px;
 }
 
 .cde-icon-btn {
-    width: 36px;
-    height: 20px;
-    background: var(--button-bg);
-    border: 2px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    font-weight: bold;
-    cursor: pointer;
-    padding: 0;
-    color: black;
+  width: 36px;
+  height: 20px;
+  background: var(--button-bg);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0;
+  color: black;
 }
 
 .cde-icon-btn:active {
-    border-top-color: var(--border-dark);
-    border-left-color: var(--border-dark);
-    border-right-color: var(--border-light);
-    border-bottom-color: var(--border-light);
-    background: var(--button-active);
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+  background: var(--button-active);
 }
 
 /* Botón con flecha desplegable (Utilities) */
 .cde-icon-btn.dropdown-btn {
-    position: relative;
+  position: relative;
 }
 
 /* Fila inferior: iconos de aplicaciones */
 .cde-icons {
-    display: flex;
-    gap: 1px;
-    height: 38px;
+  display: flex;
+  gap: 1px;
+  height: 38px;
 }
 
 .cde-icon {
-    width: 36px;
-    height: 38px;
-    background: var(--button-bg);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
+  width: 36px;
+  height: 38px;
+  background: var(--button-bg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
 }
 
 .cde-icon:hover {
-    background: var(--dock-icon-hover);
+  background: var(--dock-icon-hover);
 }
 
 .cde-icon:active {
-    border-top-color: var(--border-dark);
-    border-left-color: var(--border-dark);
-    border-right-color: var(--border-light);
-    border-bottom-color: var(--border-light);
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
 }
 
 .cde-icon img {
-    width: 24px;
-    height: 24px;
-    image-rendering: pixelated;
-    pointer-events: none;
+  width: 24px;
+  height: 24px;
+  image-rendering: pixelated;
+  pointer-events: none;
 }
 
 .cde-icon a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
 /* ----- Menú desplegable hacia arriba (dropdown) ----- */
 .cde-icon-btn.dropdown-btn .dropdown-menu {
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    min-width: 140px;
-    background: var(--menu-color);
-    border: 2px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
-    box-shadow: 2px 2px 0 var(--shadow-color);
-    padding: 4px 0;
-    display: none;
-    z-index: 10000;
-    margin-bottom: 4px;
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 140px;
+  background: var(--menu-color);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  box-shadow: 2px 2px 0 var(--shadow-color);
+  padding: 4px 0;
+  display: none;
+  z-index: 10000;
+  margin-bottom: 4px;
 }
 
 .cde-icon-btn.dropdown-btn .dropdown-menu .menu-item {
-    padding: 6px 12px;
-    font-size: 11px;
-    color: black;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    white-space: nowrap;
-    background: transparent;
-    border: none;
-    width: 100%;
-    text-align: left;
+  padding: 6px 12px;
+  font-size: 11px;
+  color: black;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
 }
 
 .cde-icon-btn.dropdown-btn .dropdown-menu .menu-item:hover {
-    background: var(--titlebar-color);
-    color: white;
+  background: var(--titlebar-color);
+  color: white;
 }
 
 .cde-icon-btn.dropdown-btn .dropdown-menu .menu-item img {
-    width: 16px;
-    height: 16px;
-    image-rendering: pixelated;
+  width: 16px;
+  height: 16px;
+  image-rendering: pixelated;
 }
 
 .cde-icon-btn.dropdown-btn.open .dropdown-menu {
-    display: block;
+  display: block;
 }
 
 /* ----- Bandeja del sistema (doble fila) ----- */
 .cde-tray {
-    display: flex;
-    gap: 1px;
-    height: 62px;
-    padding: 0 2px;
-    background: var(--dock-icon-bg);
-    border: 2px solid;
-    border-top-color: var(--border-inset-dark);
-    border-left-color: var(--border-inset-dark);
-    border-right-color: var(--border-inset-light);
-    border-bottom-color: var(--border-inset-light);
+  display: flex;
+  gap: 1px;
+  height: 62px;
+  padding: 0 2px;
+  background: var(--dock-icon-bg);
+  border: 2px solid;
+  border-top-color: var(--border-inset-dark);
+  border-left-color: var(--border-inset-dark);
+  border-right-color: var(--border-inset-light);
+  border-bottom-color: var(--border-inset-light);
 }
 
 .cde-tray .cde-icon-buttons {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
 }
 
 .cde-tray .cde-icons {
-    margin-top: auto;
+  margin-top: auto;
 }
 
 .tray-icon-btn {
-    width: 32px;
-    height: 20px;
-    background: var(--button-bg);
-    border: 2px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 2px;
+  width: 32px;
+  height: 20px;
+  background: var(--button-bg);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2px;
 }
 
 .tray-icon {
-    width: 32px;
-    height: 38px;
-    background: var(--button-bg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
+  width: 32px;
+  height: 38px;
+  background: var(--button-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
 }
 
 .tray-icon img {
-    width: 30px;
-    height: 30px;
-    image-rendering: pixelated;
+  width: 30px;
+  height: 30px;
+  image-rendering: pixelated;
 }
 
 /* ----- Botón de salida (Exit) ----- */
 .cde-exit-btn {
-    padding: 0 10px;
-    height: 50px;
-    line-height: 48px;
-    background: var(--button-bg);
-    font-size: 11px;
-    font-weight: bold;
-    color: black;
-    cursor: pointer;
-    border: 2px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
+  padding: 0 10px;
+  height: 50px;
+  line-height: 48px;
+  background: var(--button-bg);
+  font-size: 11px;
+  font-weight: bold;
+  color: black;
+  cursor: pointer;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
 }
 
 .cde-exit-btn:active {
-    border-top-color: var(--border-dark);
-    border-left-color: var(--border-dark);
-    border-right-color: var(--border-light);
-    border-bottom-color: var(--border-light);
-    background: var(--button-active);
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+  background: var(--button-active);
 }
 
 /* ------------------------------------------------------------------
@@ -459,70 +459,70 @@
       Estilo clásico con bisel 3D, sombra y título arrastrable.
    ------------------------------------------------------------------ */
 .window {
-    position: absolute;
-    background: var(--window-color);
-    z-index: 1000;
-    border: 2px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
-    box-shadow: 4px 4px 0 var(--shadow-color);
-    user-select: none;
+  position: absolute;
+  background: var(--window-color);
+  z-index: 1000;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  box-shadow: 4px 4px 0 var(--shadow-color);
+  user-select: none;
 }
 
 .titlebar {
-    background: var(--titlebar-color);
-    color: white;
-    padding: 4px 8px;
-    cursor: move;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: var(--font-size-title);
-    font-family: var(--font-family-base);
-    font-weight: var(--font-weight-bold);
-    border-bottom: 2px solid var(--border-dark);
+  background: var(--titlebar-color);
+  color: white;
+  padding: 4px 8px;
+  cursor: move;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-size-title);
+  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-bold);
+  border-bottom: 2px solid var(--border-dark);
 }
 
 /* Botones de ventana (minimizar, cerrar) */
 .min-btn,
 .close-btn,
 .cde-window-btn {
-    width: 18px;
-    height: 18px;
-    background: var(--button-active);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
+  width: 18px;
+  height: 18px;
+  background: var(--button-active);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
 }
 
 .min-btn img,
 .close-btn img {
-    width: 12px;
-    height: 12px;
-    image-rendering: pixelated;
+  width: 12px;
+  height: 12px;
+  image-rendering: pixelated;
 }
 
 .min-btn:active,
 .close-btn:active,
 .cde-window-btn:active {
-    border: 2px solid;
-    border-top-color: var(--border-dark);
-    border-left-color: var(--border-dark);
-    border-right-color: var(--border-light);
-    border-bottom-color: var(--border-light);
+  border: 2px solid;
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
 }
 
 .min-btn:hover,
 .close-btn:hover {
-    background: var(--dock-icon-hover);
+  background: var(--dock-icon-hover);
 }
 
 /* ------------------------------------------------------------------
@@ -530,61 +530,60 @@
       Menú principal, submenús y separadores.
    ------------------------------------------------------------------ */
 #cde-menu {
-    position: fixed;
-    top: 26px;
-    left: 4px;
-    width: 220px;
-    background: var(--menu-color);
-    font-size: var(--font-size-base);
-    font-family: var(--font-family-base);
-    z-index: 9999;
-    border: 2px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
+  position: fixed;
+  top: 26px;
+  left: 4px;
+  width: 220px;
+  background: var(--menu-color);
+  font-size: var(--font-size-base);
+  font-family: var(--font-family-base);
+  z-index: 9999;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
 }
 
 .menu-item {
-    padding: 4px 10px;
-    cursor: pointer;
-    white-space: nowrap;
-    font-family: var(--font-family-base);
+  padding: 4px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: var(--font-family-base);
 }
 
 .menu-item:hover {
-    background: var(--titlebar-color);
-    color: white;
+  background: var(--titlebar-color);
+  color: white;
 }
 
 .menu-separator {
-    height: 1px;
-    background: var(--separator-color);
-    margin: 4px 0;
+  height: 1px;
+  background: var(--separator-color);
+  margin: 4px 0;
 }
 
 .has-submenu {
-    position: relative;
+  position: relative;
 }
 
 .submenu {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 100%;
-    width: 200px;
-    background: var(--menu-color);
-    border: 2px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 200px;
+  background: var(--menu-color);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
 }
 
 .has-submenu:hover .submenu {
-    display: block;
+  display: block;
 }
-
 
 /* ------------------------------------------------------------------
    FILE MANAGER — MENÚS DESPLEGABLES Y CONTEXTUALES
@@ -593,66 +592,65 @@
 
 /* Menú desplegable de la barra superior (Archivo, Editar, etc.) */
 .fm-dropdown {
-    position: absolute;
-    background: var(--menu-color);
-    border: 2px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
-    box-shadow: 2px 2px 0 var(--shadow-color);
-    min-width: 180px;
-    padding: 4px 0;
-    z-index: 10000;
+  position: absolute;
+  background: var(--menu-color);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  box-shadow: 2px 2px 0 var(--shadow-color);
+  min-width: 180px;
+  padding: 4px 0;
+  z-index: 10000;
 }
 
 .fm-dropdown-item {
-    padding: 6px 12px;
-    font-size: var(--font-size-small);
-    font-family: var(--font-family-base);
-    color: black;
-    cursor: pointer;
-    white-space: nowrap;
-    background: transparent;
-    border: 1px solid transparent;
+  padding: 6px 12px;
+  font-size: var(--font-size-small);
+  font-family: var(--font-family-base);
+  color: black;
+  cursor: pointer;
+  white-space: nowrap;
+  background: transparent;
+  border: 1px solid transparent;
 }
 
 .fm-dropdown-item:hover {
-    background: var(--titlebar-color);
-    color: white;
+  background: var(--titlebar-color);
+  color: white;
 }
 
 /* Menú contextual (clic derecho) */
 .fm-contextmenu {
-    position: absolute;
-    background: var(--menu-color);
-    border: 2px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
-    box-shadow: 2px 2px 0 var(--shadow-color);
-    min-width: 160px;
-    padding: 4px 0;
-    z-index: 10000;
+  position: absolute;
+  background: var(--menu-color);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  box-shadow: 2px 2px 0 var(--shadow-color);
+  min-width: 160px;
+  padding: 4px 0;
+  z-index: 10000;
 }
 
 .fm-context-item {
-    padding: 6px 12px;
-    font-size: var(--font-size-small);
-    font-family: var(--font-family-base);
-    color: black;
-    cursor: pointer;
-    white-space: nowrap;
-    background: transparent;
-    border: 1px solid transparent;
+  padding: 6px 12px;
+  font-size: var(--font-size-small);
+  font-family: var(--font-family-base);
+  color: black;
+  cursor: pointer;
+  white-space: nowrap;
+  background: transparent;
+  border: 1px solid transparent;
 }
 
 .fm-context-item:hover {
-    background: var(--titlebar-color);
-    color: white;
+  background: var(--titlebar-color);
+  color: white;
 }
-
 
 /* ------------------------------------------------------------------
    MODAL CDE GLOBAL – Posicionamiento fijo y centrado
@@ -660,22 +658,22 @@
    ------------------------------------------------------------------ */
 .cde-retro-modal,
 #cde-modal-global {
-    position: fixed !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    margin: 0 !important;
-    display: none;
-    flex-direction: column;
-    z-index: 10000;
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
+  display: none;
+  flex-direction: column;
+  z-index: 10000;
 }
 
 /* Asegurar que el #styleManager no herede este posicionamiento forzado */
 #styleManager.cde-retro-modal {
-    position: fixed !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
 }
 
 /* ------------------------------------------------------------------
@@ -686,242 +684,241 @@
 /* Modal base – hereda de .cde-retro-modal pero aseguramos posición fija */
 #cde-modal-global,
 .cde-retro-modal.cde-modal-global {
-    position: fixed !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    width: 400px;
-    max-width: 90vw;
-    background: var(--modal-bg);
-    border: 2px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
-    box-shadow: 4px 4px 0 var(--shadow-color);
-    display: none;
-    flex-direction: column;
-    z-index: 10000;
-    font-family: var(--font-family-base);
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 400px;
+  max-width: 90vw;
+  background: var(--modal-bg);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  box-shadow: 4px 4px 0 var(--shadow-color);
+  display: none;
+  flex-direction: column;
+  z-index: 10000;
+  font-family: var(--font-family-base);
 }
 
 /* Cuerpo del modal */
 #cde-modal-global .modal-body,
 .cde-retro-modal.cde-modal-global .modal-body {
-    padding: 20px;
-    min-height: 80px;
-    background: var(--modal-bg);
-    color: var(--text-color, #000000);
-    border: none;
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-base);
+  padding: 20px;
+  min-height: 80px;
+  background: var(--modal-bg);
+  color: var(--text-color, #000000);
+  border: none;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
 }
 
 /* Barra de acciones (botones) */
 #cde-modal-global .cde-actionbar,
 .cde-retro-modal.cde-modal-global .cde-actionbar {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    padding: 10px;
-    background: var(--button-active);
-    border-top: 2px solid var(--separator-color);
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+  background: var(--button-active);
+  border-top: 2px solid var(--separator-color);
 }
 
 /* Input de prompt */
 #cde-prompt-input {
-    width: 100%;
-    padding: 4px 6px;
-    background: var(--button-active);
-    border: 2px solid;
-    border-top-color: var(--border-inset-dark);
-    border-left-color: var(--border-inset-dark);
-    border-right-color: var(--border-inset-light);
-    border-bottom-color: var(--border-inset-light);
-    font-family: var(--font-family-base);
-    font-size: var(--font-size-base);
-    box-sizing: border-box;
-    margin-top: 8px;
+  width: 100%;
+  padding: 4px 6px;
+  background: var(--button-active);
+  border: 2px solid;
+  border-top-color: var(--border-inset-dark);
+  border-left-color: var(--border-inset-dark);
+  border-right-color: var(--border-inset-light);
+  border-bottom-color: var(--border-inset-light);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  box-sizing: border-box;
+  margin-top: 8px;
 }
 
 /* Ajustes responsivos */
 @media (max-width: 480px) {
-
-    #cde-modal-global,
-    .cde-retro-modal.cde-modal-global {
-        width: 95vw;
-    }
+  #cde-modal-global,
+  .cde-retro-modal.cde-modal-global {
+    width: 95vw;
+  }
 }
 
 /* ------------------------------------------------------------------
    SCREENSHOT TOAST
    ------------------------------------------------------------------ */
 .screenshot-toast {
-    position: fixed;
-    bottom: 100px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--titlebar-color, #4a6c7a);
-    color: white;
-    padding: 8px 20px;
-    border: 2px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
-    font-family: var(--font-family-base, monospace);
-    font-size: 12px;
-    z-index: 99999;
-    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--titlebar-color, #4a6c7a);
+  color: white;
+  padding: 8px 20px;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  font-family: var(--font-family-base, monospace);
+  font-size: 12px;
+  z-index: 99999;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
 }
 
 /* ==================================================================
    Monitor de procesos estilo htop
    ================================================================== */
 #top-monitor {
-    top: 150px;
-    left: 300px;
-    width: 750px;
-    display: none;
-    font-family: monospace;
-    font-size: 13px;
-    line-height: 1.3;
-    background: #000;
-    color: #0f0;
-    border: 2px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
+  top: 150px;
+  left: 300px;
+  width: 750px;
+  display: none;
+  font-family: monospace;
+  font-size: 13px;
+  line-height: 1.3;
+  background: #000;
+  color: #0f0;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
 }
 
 #top-monitor .terminal-body {
-    background: #000;
-    padding: 6px;
-    overflow-y: auto;
-    height: auto;
-    min-height: 100px;
-    display: flex;
-    flex-direction: column;
+  background: #000;
+  padding: 6px;
+  overflow-y: auto;
+  height: auto;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
 }
 
 #top-monitor .cpu-bar {
-    color: #0f0;
+  color: #0f0;
 }
 
 #top-monitor .mem-bar {
-    color: #ff0;
+  color: #ff0;
 }
 
 #top-monitor .swap-bar {
-    color: #f0f;
+  color: #f0f;
 }
 
 #top-monitor .selected {
-    background-color: #ff0;
-    color: #000;
-    font-weight: bold;
+  background-color: #ff0;
+  color: #000;
+  font-weight: bold;
 }
 
 #top-monitor .system-process {
-    color: #0ff;
+  color: #0ff;
 }
 
 #top-monitor .user-process {
-    color: #0f0;
+  color: #0f0;
 }
 
 #top-monitor .status-R {
-    color: #0f0;
-    font-weight: bold;
+  color: #0f0;
+  font-weight: bold;
 }
 
 #top-monitor .status-S {
-    color: #ff0;
+  color: #ff0;
 }
 
 #top-monitor .help-line {
-    color: #aaa;
+  color: #aaa;
 }
 
 #top-monitor .monitor-message {
-    color: #ff0;
+  color: #ff0;
 }
 
 #top-monitor-content {
-    white-space: pre;
-    flex: 1;
-    overflow-y: auto;
+  white-space: pre;
+  flex: 1;
+  overflow-y: auto;
 }
 
 #top-monitor .titlebar {
-    background: var(--titlebar-color);
-    color: white;
-    padding: 4px 8px;
-    cursor: move;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: var(--font-size-title);
-    font-family: var(--font-family-base);
-    font-weight: var(--font-weight-bold);
-    border-bottom: 2px solid var(--border-dark);
+  background: var(--titlebar-color);
+  color: white;
+  padding: 4px 8px;
+  cursor: move;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-size-title);
+  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-bold);
+  border-bottom: 2px solid var(--border-dark);
 }
 
 #top-monitor .close-btn {
-    width: 18px;
-    height: 18px;
-    background: var(--button-active);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
+  width: 18px;
+  height: 18px;
+  background: var(--button-active);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
 }
 
 #top-monitor .close-btn:active {
-    border-top-color: var(--border-dark);
-    border-left-color: var(--border-dark);
-    border-right-color: var(--border-light);
-    border-bottom-color: var(--border-light);
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
 }
 
 #top-monitor .close-btn img {
-    width: 12px;
-    height: 12px;
-    image-rendering: pixelated;
+  width: 12px;
+  height: 12px;
+  image-rendering: pixelated;
 }
 
 /* Contenedores de barras para CPU, Memoria y Swap */
 #top-monitor .cpu-bar-container,
 #top-monitor .mem-bar-container,
 #top-monitor .swap-bar-container {
-    display: inline-block;
-    width: 80px;
-    height: 12px;
-    background-color: #333;
-    border: 1px solid #555;
-    margin: 0 4px;
-    vertical-align: middle;
+  display: inline-block;
+  width: 80px;
+  height: 12px;
+  background-color: #333;
+  border: 1px solid #555;
+  margin: 0 4px;
+  vertical-align: middle;
 }
 
 #top-monitor .cpu-bar-fill {
-    display: block;
-    height: 100%;
-    background-color: #ffaa00;
-    width: 0%;
+  display: block;
+  height: 100%;
+  background-color: #ffaa00;
+  width: 0%;
 }
 
 #top-monitor .mem-bar-fill {
-    background-color: #ffaa00;
+  background-color: #ffaa00;
 }
 
 #top-monitor .swap-bar-fill {
-    background-color: #ff00ff;
+  background-color: #ff00ff;
 }
 
 /* ==================================================================
@@ -930,49 +927,49 @@
 .min-btn,
 .max-btn,
 .close-btn {
-    width: 18px;
-    height: 18px;
-    background: var(--button-active);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
-    margin-left: 4px;
+  width: 18px;
+  height: 18px;
+  background: var(--button-active);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  margin-left: 4px;
 }
 
 .min-btn img,
 .max-btn img,
 .close-btn img {
-    width: 12px;
-    height: 12px;
-    image-rendering: pixelated;
+  width: 12px;
+  height: 12px;
+  image-rendering: pixelated;
 }
 
 .min-btn:active,
 .max-btn:active,
 .close-btn:active {
-    border: 2px solid;
-    border-top-color: var(--border-dark);
-    border-left-color: var(--border-dark);
-    border-right-color: var(--border-light);
-    border-bottom-color: var(--border-light);
+  border: 2px solid;
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
 }
 
 .min-btn:hover,
 .max-btn:hover,
 .close-btn:hover {
-    background: var(--dock-icon-hover);
+  background: var(--dock-icon-hover);
 }
 
 /* Contenedor de los botones en la barra de título */
 .window-controls {
-    display: flex;
-    gap: 2px;
+  display: flex;
+  gap: 2px;
 }
 
 /* ==================================================================
@@ -980,16 +977,16 @@
    ================================================================== */
 .window.maximized,
 .cde-retro-modal.maximized {
-    top: 28px !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: calc(100% - 106px) !important;
-    max-width: none;
-    max-height: calc(100% - 106px) !important;
-    transform: none !important;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+  top: 28px !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: calc(100% - 106px) !important;
+  max-width: none;
+  max-height: calc(100% - 106px) !important;
+  transform: none !important;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 /* Reglas generales para el contenido de ventanas maximizadas */
@@ -997,104 +994,103 @@
 .window.maximized .fm-container,
 .window.maximized #top-monitor .terminal-body,
 .cde-retro-modal.maximized .modal-body {
-    flex: 1 1 0;
-    min-height: 0;
-    overflow-y: auto;
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 /* Ajuste específico para la terminal (mayor especificidad) */
 #terminal.maximized .terminal-body {
-    flex: 1 1 0;
-    height: 100%;
-    /* Ocupa todo el espacio disponible */
-    min-height: 0;
-    overflow-y: auto;
+  flex: 1 1 0;
+  height: 100%;
+  /* Ocupa todo el espacio disponible */
+  min-height: 0;
+  overflow-y: auto;
 }
 
 /* Ajuste específico para el File Manager (ya funcionaba, pero lo mantenemos) */
 .window.maximized .fm-container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .window.maximized .fm-body {
-    flex: 1;
-    min-height: 0;
-    display: flex;
+  flex: 1;
+  min-height: 0;
+  display: flex;
 }
 
 .window.maximized .fm-files {
-    flex: 1;
-    overflow-y: auto;
+  flex: 1;
+  overflow-y: auto;
 }
 
 /* Ajuste para el top monitor */
 .window.maximized #top-monitor .terminal-body {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .window.maximized #top-monitor-content {
-    flex: 1;
-    overflow-y: auto;
+  flex: 1;
+  overflow-y: auto;
 }
 
 /* Ajuste para el Style Manager */
 .cde-retro-modal.maximized .modal-body {
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    overflow: hidden;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
 }
 
 .cde-retro-modal.maximized .cde-controlpanel {
-    flex: 1;
-    overflow-y: auto;
+  flex: 1;
+  overflow-y: auto;
 }
 
 /* Forzar que la terminal maximizada tenga altura completa y scroll */
 #terminal.maximized .terminal-body {
-    height: 100% !important;
-    max-height: 100%;
-    overflow-y: auto;
+  height: 100% !important;
+  max-height: 100%;
+  overflow-y: auto;
 }
-
 
 /* ==================================================================
    Ajustes adicionales para taskmanager maximizado
    ================================================================== */
 #top-monitor.maximized {
-    background: #000 !important;
+  background: #000 !important;
 }
 
 #top-monitor.maximized .terminal-body,
 #top-monitor.maximized #top-monitor-content {
-    background: #000 !important;
+  background: #000 !important;
 }
 
 #top-monitor.maximized .terminal-body {
-    flex: 1;
-    min-height: 0;
-    height: 100%;
-    overflow: hidden;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
 }
 
 #top-monitor.maximized #top-monitor-content {
-    flex: 1;
-    overflow-y: auto;
+  flex: 1;
+  overflow-y: auto;
 }
 
 /* ==================================================================
    Monitor de procesos en tamaño normal (no maximizado)
    ================================================================== */
 #top-monitor {
-    width: 750px;
-    height: 400px;
+  width: 750px;
+  height: 400px;
 }
 
 #top-monitor .terminal-body {
-    height: calc(100% - 30px);
-    overflow-y: auto;
-    padding: 6px;
+  height: calc(100% - 30px);
+  overflow-y: auto;
+  padding: 6px;
 }
