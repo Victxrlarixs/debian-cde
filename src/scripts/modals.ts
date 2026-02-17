@@ -160,12 +160,18 @@ class CDEModalClass {
       <p style="margin:0 0 10px 0;">${question}</p>
       <input type="text" id="cde-prompt-input" value="${defaultValue}">
     `;
-    await this.open('CDE Prompt', content, [
-      { label: 'Accept', value: null, isDefault: true },
-      { label: 'Cancel', value: null },
+
+    // Usamos open con un valor especial que luego interpretamos
+    const result = await this.open('CDE Prompt', content, [
+      { label: 'Accept', value: 'ACCEPT', isDefault: true },
+      { label: 'Cancel', value: 'CANCEL' },
     ]);
-    const input = document.getElementById('cde-prompt-input') as HTMLInputElement;
-    return input ? input.value : null;
+
+    if (result === 'ACCEPT') {
+      const input = document.getElementById('cde-prompt-input') as HTMLInputElement;
+      return input ? input.value : null;
+    }
+    return null;
   }
 }
 

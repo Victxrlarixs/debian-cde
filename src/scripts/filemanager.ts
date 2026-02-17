@@ -1,20 +1,10 @@
 // src/scripts/filemanager.ts
 
 import { CONFIG } from './config';
-
-/**
- * Interfaz para el objeto CDEModal (definido en modals.ts)
- * Se asume que window.CDEModal tiene estos métodos.
- */
-interface CDEModalInterface {
-  alert(message: string): Promise<void>;
-  confirm(question: string): Promise<boolean>;
-  prompt(question: string, defaultValue?: string): Promise<string | null>;
-}
-
+import filesystemData from '../data/filesystem.json';
+import { CDEModal } from './modals';
 declare global {
   interface Window {
-    CDEModal?: CDEModalInterface;
     openFileManager: () => void;
     closeFileManager: () => void;
     toggleFileManager: () => void;
@@ -26,17 +16,6 @@ declare global {
     goHome: () => void;
   }
 }
-
-// ------------------------------------------------------------------
-// DEPENDENCIA: CDEModal (con fallback nativo)
-// ------------------------------------------------------------------
-const CDEModal: CDEModalInterface = window.CDEModal || {
-  alert: async (msg: string) => {
-    alert(msg);
-  },
-  confirm: async (msg: string) => confirm(msg),
-  prompt: async (msg: string, def: string = '') => prompt(msg, def),
-};
 
 // ------------------------------------------------------------------
 // TIPOS DEL SISTEMA DE ARCHIVOS VIRTUAL
@@ -55,31 +34,7 @@ interface VirtualFolder {
 
 type VirtualFileSystemNode = VirtualFile | VirtualFolder;
 
-// Sistema de archivos virtual (estructura)
-const fs: Record<string, VirtualFolder> = {
-  [CONFIG.FS.HOME]: {
-    type: 'folder',
-    children: {
-      Desktop: { type: 'folder', children: {} },
-      'welcome.txt': { type: 'file', content: 'Welcome to Debian WebCDE.' },
-      tutorials: {
-        type: 'folder',
-        children: {
-          'getting-started.txt': {
-            type: 'file',
-            content: 'Use ls, cd, cat, mkdir, touch.',
-          },
-        },
-      },
-      settings: {
-        type: 'folder',
-        children: {
-          'theme.txt': { type: 'file', content: 'Current theme: CDE Retro' },
-        },
-      },
-    },
-  },
-};
+const fs = filesystemData as Record<string, VirtualFolder>;
 
 let currentPath: string = CONFIG.FS.HOME;
 let history: string[] = [];
@@ -111,7 +66,7 @@ function renderFiles(): void {
   const status = document.getElementById('fmStatus');
 
   if (!container || !pathInput || !status) {
-    console.warn('⚠️ File Manager: elementos no encontrados');
+    console.warn('File Manager: elementos no encontrados');
     return;
   }
 
@@ -120,7 +75,7 @@ function renderFiles(): void {
 
   const folder = getCurrentFolder();
   if (!folder) {
-    console.warn(`⚠️ File Manager: ruta no encontrada: ${currentPath}`);
+    console.warn(`File Manager: ruta no encontrada: ${currentPath}`);
     return;
   }
 
@@ -257,7 +212,7 @@ async function rename(oldName: string, newName: string): Promise<void> {
 function openTextWindow(name: string, content: string): void {
   const win = document.getElementById('textWindow') as HTMLElement | null;
   if (!win) {
-    console.warn('⚠️ File Manager: elemento #textWindow no encontrado');
+    console.warn('File Manager: elemento #textWindow no encontrado');
     return;
   }
   const titleEl = document.getElementById('textTitle') as HTMLElement | null;
@@ -492,11 +447,6 @@ async function handleContextMenu(e: MouseEvent): Promise<void> {
 // ------------------------------------------------------------------
 
 function init(): void {
-  if (initialized) {
-    console.log('⚠️ File Manager: ya inicializado');
-    return;
-  }
-  console.log('📁 File Manager: inicializando...');
   currentPath = CONFIG.FS.HOME;
   history = [currentPath];
   historyIndex = 0;
@@ -517,14 +467,12 @@ function init(): void {
 
   renderFiles();
 
-  // Cerrar menús al hacer clic fuera
   document.addEventListener('click', (e) => {
     if (activeMenu && !activeMenu.contains(e.target as Node)) closeMenu();
     closeContextMenu();
   });
 
   initialized = true;
-  console.log('✅ File Manager: inicializado');
 }
 
 function open(): void {
@@ -558,9 +506,6 @@ function isOpen(): boolean {
   const win = document.getElementById('fm') as HTMLElement | null;
   return win?.style.display !== 'none' && win?.style.display !== '';
 }
-
-console.log('✅ FileManager module loaded (call FileManager.init() to start)');
-
 
 export const FileManager = {
   init,

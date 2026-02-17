@@ -119,7 +119,6 @@ function cleanupTerminal(): void {
   const lines = terminalBody.innerHTML.split('\n');
   if (lines.length > MAX_LINES) {
     terminalBody.innerHTML = lines.slice(-MAX_LINES).join('\n');
-    console.log('TerminalTutorial: limpieza automática (', lines.length, '→', MAX_LINES, ')');
   }
 }
 
@@ -133,12 +132,7 @@ function keepScrollBottom(): void {
 export const TerminalTutorial = {
   start(containerId: string = 'terminalBody'): void {
     if (tutorialActive) return;
-    console.log('TerminalTutorial: iniciando...');
     terminalBody = document.getElementById(containerId);
-    if (!terminalBody) {
-      console.error('TerminalTutorial: no se encontró #' + containerId);
-      return;
-    }
 
     currentPath = HOME_PATH;
     tutorialActive = true;
@@ -159,11 +153,9 @@ export const TerminalTutorial = {
     print('Modo automático activado (sin interacción del usuario)\n');
 
     pendingTimeout = setTimeout(runStep, 1000);
-    console.log('TerminalTutorial: iniciado correctamente');
   },
 
   stop(): void {
-    console.log('TerminalTutorial: deteniendo...');
     tutorialActive = false;
     if (cleanupInterval) {
       clearInterval(cleanupInterval);
@@ -177,7 +169,6 @@ export const TerminalTutorial = {
       clearTimeout(pendingTimeout);
       pendingTimeout = undefined;
     }
-    console.log('TerminalTutorial: detenido');
   },
 };
 
@@ -212,5 +203,3 @@ window.closeTerminal = function closeTerminal(): void {
     TerminalTutorial.stop();
   }
 };
-
-console.log('TerminalTutorial module loaded (no auto-start, controlado por ventana)');

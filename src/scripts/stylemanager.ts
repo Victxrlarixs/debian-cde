@@ -35,7 +35,6 @@ export class StyleManager {
     this.setupFontControls();
     this.updateUI();
     this.updateFontControls();
-    console.log('Style Manager initialized');
   }
 
   private bindEvents(): void {
@@ -229,7 +228,6 @@ export class StyleManager {
     if (modal) {
       modal.style.display = 'flex';
       modal.style.zIndex = '10000';
-      console.log('Style Manager opened');
     }
   }
 
@@ -237,7 +235,6 @@ export class StyleManager {
     const modal = document.getElementById('styleManager') as HTMLElement | null;
     if (modal) {
       modal.style.display = 'none';
-      console.log('Style Manager closed');
     }
   }
 
@@ -599,7 +596,6 @@ document.addEventListener('DOMContentLoaded', () => {
   window.styleManager = new StyleManager();
   setTimeout(() => window.styleManager?.init(), 100);
   window.openStyleManager = () => window.styleManager?.open();
-  console.log('CDE Style Manager loaded');
 
   // Arrastre de la ventana Style Manager (ya manejado dentro de la clase, pero mantenemos compatibilidad)
   const styleManagerEl = document.getElementById('styleManager');
