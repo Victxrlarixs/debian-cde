@@ -1,0 +1,28 @@
+---
+import WindowControls from "./common/WindowControls.astro";
+---
+
+<div class="cde-retro-modal" id="styleManagerStartup">
+  <div class="titlebar" id="styleManagerStartupTitlebar">
+    <span class="titlebar-text">Style Manager - Startup</span>
+    <WindowControls
+      windowId="styleManagerStartup"
+      closeFunction="styleManager.closeStartup"
+    />
+  </div>
+
+  <div class="modal-body" style="padding: 16px; text-align: center;">
+    <p>Startup settings will be available soon.</p>
+  </div>
+
+  <div class="cde-statusbar">
+    <div class="cde-statusleft">Startup</div>
+    <div class="cde-statusright" id="startupStatus">Ready</div>
+  </div>
+
+  <div class="cde-actionbar">
+    <button class="cde-btn cde-btn-default" onclick="styleManager.closeStartup()">OK</button>
+    <button class="cde-btn" onclick="styleManager.closeStartup()">Cancel</button>
+    <button class="cde-btn" onclick="styleManager.showMessage('Help not implemented')">Help</button>
+  </div>
+</div>

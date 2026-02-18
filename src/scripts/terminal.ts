@@ -148,10 +148,8 @@ export const TerminalTutorial = {
     cleanupInterval = setInterval(cleanupTerminal, CLEANUP_INTERVAL);
     scrollInterval = setInterval(keepScrollBottom, SCROLL_INTERVAL);
 
-    print('Terminal Debian-CDE - Tutorial Automático');
-    print('Ejecutando comandos en bucle infinito...\n');
-    print('Modo automático activado (sin interacción del usuario)\n');
-
+    print('Linux Man References');
+    
     pendingTimeout = setTimeout(runStep, 1000);
   },
 

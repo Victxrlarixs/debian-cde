@@ -1,0 +1,80 @@
+---
+import WindowControls from "./common/WindowControls.astro";
+---
+
+<div class="cde-retro-modal" id="styleManagerMouse" style="width: 400px;">
+  <div class="titlebar" id="styleManagerMouseTitlebar">
+    <span class="titlebar-text">Style Manager - Mouse</span>
+    <WindowControls
+      windowId="styleManagerMouse"
+      closeFunction="styleManager.closeMouse"
+    />
+  </div>
+
+  <div class="modal-body" style="padding: 12px; display: flex; flex-direction: column; gap: 12px;">
+
+    <!-- Fila superior: Icono del mouse a la izquierda, controles a la derecha -->
+    <div style="display: flex; gap: 16px;">
+      <!-- Icono del mouse (Test) -->
+      <button class="cde-category-icon-btn" style="width: 120px; height: 150px; padding: 8px 0;" onclick="styleManager.showMessage('Test Double-Click')">
+        <img src="/icons/org.xfce.settings.mouse.png" alt="Mouse" width="60px" height="60px" style="image-rendering: pixelated;" />
+        <span style="font-size: 11px; margin-top: 4px;">Test</span>
+      </button>
+
+      <!-- Handedness y Button 2 al lado del icono -->
+      <div style="display: flex; gap: 24px; flex: 1;">
+        <!-- Handedness -->
+        <div>
+          <span style="font-weight: bold; font-size: 11px; display: block; margin-bottom: 6px;">Handedness:</span>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <label style="display: flex; align-items: center; gap: 4px; font-size: 11px;">
+              <input type="radio" name="handedness" style="margin: 0;"> Right
+            </label>
+            <label style="display: flex; align-items: center; gap: 4px; font-size: 11px;">
+              <input type="radio" name="handedness" style="margin: 0;"> Left
+            </label>
+          </div>
+        </div>
+        <!-- Button 2 -->
+        <div>
+          <span style="font-weight: bold; font-size: 11px; display: block; margin-bottom: 6px;">Button 2:</span>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <label style="display: flex; align-items: center; gap: 4px; font-size: 11px;">
+              <input type="radio" name="button2" checked style="margin: 0;"> Transfer
+            </label>
+            <label style="display: flex; align-items: center; gap: 4px; font-size: 11px;">
+              <input type="radio" name="button2" style="margin: 0;"> Adjust
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sliders -->
+    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 4px;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-weight: bold; font-size: 11px; width: 75px;">Double-click:</span>
+        <input type="range" min="0" max="1" step="0.1" value="0.5" style="width: 160px; height: 4px;" />
+        <span style="font-size: 11px; width: 30px; text-align: right;">0.5</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-weight: bold; font-size: 11px; width: 75px;">Acceleration:</span>
+        <input type="range" min="0" max="4" step="0.5" value="2" style="width: 160px; height: 4px;" />
+        <span style="font-size: 11px; width: 30px; text-align: right;">2</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-weight: bold; font-size: 11px; width: 75px;">Threshold:</span>
+        <input type="range" min="0" max="8" step="1" value="4" style="width: 160px; height: 4px;" />
+        <span style="font-size: 11px; width: 30px; text-align: right;">4</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Action buttons -->
+  <div class="cde-actionbar" style="padding: 8px; gap: 8px; justify-content: center;">
+    <button class="cde-btn cde-btn-default" style="padding: 4px 16px; font-size: 11px;" onclick="styleManager.closeMouse()">OK</button>
+    <button class="cde-btn" style="padding: 4px 16px; font-size: 11px;" onclick="styleManager.closeMouse()">Cancel</button>
+    <button class="cde-btn" style="padding: 4px 16px; font-size: 11px;" onclick="styleManager.closeMouse()">Help</button>
+  </div>
+</div>

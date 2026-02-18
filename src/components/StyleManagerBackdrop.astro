@@ -1,0 +1,28 @@
+---
+import WindowControls from "./common/WindowControls.astro";
+---
+
+<div class="cde-retro-modal" id="styleManagerBackdrop">
+  <div class="titlebar" id="styleManagerBackdropTitlebar">
+    <span class="titlebar-text">Style Manager - Backdrop</span>
+    <WindowControls
+      windowId="styleManagerBackdrop"
+      closeFunction="styleManager.closeBackdrop"
+    />
+  </div>
+
+  <div class="modal-body" style="padding: 16px; text-align: center;">
+    <p>Backdrop settings will be available soon.</p>
+  </div>
+
+  <div class="cde-statusbar">
+    <div class="cde-statusleft">Backdrop</div>
+    <div class="cde-statusright" id="backdropStatus">Ready</div>
+  </div>
+
+  <div class="cde-actionbar">
+    <button class="cde-btn cde-btn-default" onclick="styleManager.closeBackdrop()">OK</button>
+    <button class="cde-btn" onclick="styleManager.closeBackdrop()">Cancel</button>
+    <button class="cde-btn" onclick="styleManager.showMessage('Help not implemented')">Help</button>
+  </div>
+</div>

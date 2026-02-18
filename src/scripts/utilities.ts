@@ -38,24 +38,41 @@ const WindowManager = (() => {
   /**
    * Eleva una ventana al frente (z-index máximo) y la marca como activa.
    * @param id - ID del elemento ventana.
-   */
-  function focusWindow(id: string): void {
-    const win = document.getElementById(id);
-    if (!win) return;
+   */function focusWindow(id: string): void {
+  const win = document.getElementById(id);
+  if (!win) return;
 
-    // Quitar la clase 'active' de todas las ventanas y modales
-    document.querySelectorAll('.window, .cde-retro-modal').forEach((w) => {
-      w.classList.remove('active');
-    });
+  // NO quitamos la clase 'active' de la principal si la nueva ventana NO es la principal
+  const elementsToRepaint = document.querySelectorAll('.window, .cde-retro-modal, #cde-panel');
+  elementsToRepaint.forEach((el) => {
+    const element = el as HTMLElement;
+    
+    // Solo quitamos la clase 'active' si NO es la principal Y es una ventana/modal
+    if (element.id !== 'styleManagerMain' && 
+        (element.classList.contains('window') || element.classList.contains('cde-retro-modal'))) {
+      element.classList.remove('active');
+    }
+    
+    // Forzar repaint (esto no afecta clases, solo pintado)
+    element.style.transform = 'scale(1)';
+    element.offsetHeight;
+    element.style.transform = '';
+  });
 
-    // Añadir clase 'active' a la ventana actual
+  // Añadir clase 'active' a la nueva ventana (si es ventana/modal)
+  if (win.classList.contains('window') || win.classList.contains('cde-retro-modal')) {
     win.classList.add('active');
-
-    // Incrementar z-index y aplicarlo
-    zIndex++;
-    win.style.zIndex = String(zIndex);
   }
 
+  // Forzar repaint en la ventana que recibe el foco
+  win.style.transform = 'scale(1)';
+  win.offsetHeight;
+  win.style.transform = '';
+
+  // Incrementar z-index
+  zIndex++;
+  win.style.zIndex = String(zIndex);
+}
   /**
    * Inicia el arrastre de una ventana.
    * @param e - Evento mousedown.
