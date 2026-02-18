@@ -3,19 +3,24 @@
 export interface Props {
     windowId: string;
     closeFunction: string;
+    disableMaximize?: boolean; // Nueva prop opcional
 }
 
-const { windowId, closeFunction } = Astro.props;
+const { windowId, closeFunction, disableMaximize = false } = Astro.props;
 ---
 
 <div class="window-controls">
-    <div class="min-btn" onclick={`minimizeWindow('${windowId}')`}>
-        <img src="/icons/shade-inactive.png" alt="Minimize" />
-    </div>
-    <div class="max-btn" onclick={`maximizeWindow('${windowId}')`}>
-        <img src="/icons/maximize-inactive.png" alt="Maximize" />
-    </div>
+    {!disableMaximize && (
+        <>
+            <div class="min-btn" onclick={`minimizeWindow('${windowId}')`}>
+                <img src="/icons/shade-inactive.png" alt="Minimize" />
+            </div>
+            <div class="max-btn" onclick={`maximizeWindow('${windowId}')`}>
+                <img src="/icons/maximize-inactive.png" alt="Maximize" />
+            </div>
+        </>
+    )}
     <div class="close-btn" onclick={`${closeFunction}()`}>
-        <img src="/icons/close-inactive.png" />
+        <img src="/icons/close-inactive.png" alt="Close" />
     </div>
 </div>
