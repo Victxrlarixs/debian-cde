@@ -1,0 +1,96 @@
+---
+import WindowControls from "./common/WindowControls.astro";
+---
+
+<div class="cde-retro-modal style-manager-font" id="styleManagerFont">
+  <div class="titlebar" id="styleManagerFontTitlebar">
+    <span class="titlebar-text">Style Manager - Font</span>
+    <WindowControls
+      windowId="styleManagerFont"
+      closeFunction="styleManager.closeFont"
+    />
+  </div>
+
+  <div class="modal-body">
+    <!-- Icono de fuente arriba de todo -->
+    <div class="font-icon-container">
+      <img src="/icons/font-x-generic.png" alt="Font" width="48" height="48" />
+    </div>
+
+    <!-- Font Theme (ahora sin el texto "Font Theme", solo el icono lo representa) -->
+    <div class="font-preset-row">
+      <button class="cde-preset" data-preset="classic-cde">Classic CDE</button>
+      <button class="cde-preset" data-preset="modern">Modern</button>
+      <button class="cde-preset" data-preset="retro">Retro</button>
+      <button class="cde-preset" data-preset="terminal">Terminal</button>
+    </div>
+
+    <div class="cde-controlrow">
+      <label class="cde-label">UI Font Family:</label>
+      <select class="cde-select" id="font-family-base">
+        <option value='"Fixedsys", "Lucida Console", monospace'>Fixedsys (Default)</option>
+        <option value='"MS Sans Serif", sans-serif'>MS Sans Serif</option>
+        <option value='"Times New Roman", serif'>Times New Roman</option>
+        <option value="Arial, sans-serif">Arial</option>
+        <option value='"Courier New", monospace'>Courier New</option>
+      </select>
+    </div>
+
+    <div class="cde-controlrow">
+      <label class="cde-label">Terminal Font:</label>
+      <select class="cde-select" id="font-family-terminal">
+        <option value='"Courier New", monospace'>Courier New (Default)</option>
+        <option value='"Lucida Console", monospace'>Lucida Console</option>
+        <option value="Consolas, monospace">Consolas</option>
+        <option value='"Fixedsys", monospace'>Fixedsys</option>
+      </select>
+    </div>
+
+    <div class="cde-controlrow">
+      <label class="cde-label">Base Font Size:</label>
+      <input type="range" class="cde-slider" id="font-size-base" min="10" max="18" value="12" step="1" />
+      <span class="cde-slidervalue" id="font-size-value">12px</span>
+    </div>
+
+    <div class="cde-controlrow">
+      <label class="cde-label">Title Font Size:</label>
+      <input type="range" class="cde-slider" id="font-size-title" min="11" max="20" value="13" step="1" />
+      <span class="cde-slidervalue" id="font-size-title-value">13px</span>
+    </div>
+
+    <div class="cde-controlrow">
+      <label class="cde-label">Line Height:</label>
+      <input type="range" class="cde-slider" id="line-height-base" min="1.0" max="2.0" value="1.45" step="0.05" />
+      <span class="cde-slidervalue" id="line-height-value">1.45</span>
+    </div>
+
+    <div class="cde-controlrow">
+      <label class="cde-label">Font Weight:</label>
+      <select class="cde-select" id="font-weight">
+        <option value="300">Light (300)</option>
+        <option value="400" selected>Normal (400)</option>
+        <option value="600">Semibold (600)</option>
+        <option value="700">Bold (700)</option>
+      </select>
+    </div>
+
+    <div class="cde-font-preview" id="font-preview">
+      <div class="font-preview-title">Title Bar Example</div>
+      <div class="font-preview-text">Regular text in selected font.</div>
+      <div class="font-preview-terminal">Terminal: $ ls -la</div>
+      <div class="font-preview-small">Small text for status bars</div>
+    </div>
+
+  </div>
+
+  <div class="cde-statusbar">
+    <div class="cde-statusleft">Font</div>
+    <div class="cde-statusright" id="fontStatus">Ready</div>
+  </div>
+
+  <div class="cde-actionbar">
+    <button class="cde-btn cde-btn-default" onclick="styleManager.applyFont(); styleManager.closeFont()">OK</button>
+    <button class="cde-btn" onclick="styleManager.closeFont()">Cancel</button>
+    <button class="cde-btn" onclick="styleManager.showMessage('Help not implemented')">Help</button>
+  </div>
+</div>

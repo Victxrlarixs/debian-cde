@@ -1,0 +1,44 @@
+---
+import WindowControls from "./common/WindowControls.astro";
+---
+
+<div class="cde-retro-modal style-manager-keyboard" id="styleManagerKeyboard">
+  <div class="titlebar" id="styleManagerKeyboardTitlebar">
+    <span class="titlebar-text">Style Manager - Keyboard</span>
+    <WindowControls
+      windowId="styleManagerKeyboard"
+      closeFunction="styleManager.closeKeyboard"
+    />
+  </div>
+
+  <div class="modal-body">
+    <div class="keyboard-content">
+      <div class="keyboard-icon">
+        <img src="/icons/org.xfce.settings.keyboard.png" alt="Keyboard" width="48" height="48" />
+      </div>
+
+      <div class="keyboard-controls">
+        <div class="keyboard-row">
+          <input type="checkbox" id="keyboard-default" checked>
+          <label for="keyboard-default">Default</label>
+        </div>
+
+        <div class="keyboard-row">
+          <input type="checkbox" id="keyboard-autorepeat" checked>
+          <label for="keyboard-autorepeat">Auto Repeat</label>
+        </div>
+
+        <div class="keyboard-row">
+          <label for="keyboard-volume">Click Volume</label>
+          <input type="range" id="keyboard-volume" min="0" max="100" value="50">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cde-actionbar">
+    <button class="cde-btn cde-btn-default" onclick="styleManager.closeKeyboard()">OK</button>
+    <button class="cde-btn" onclick="styleManager.closeKeyboard()">Cancel</button>
+    <button class="cde-btn" onclick="styleManager.closeKeyboard()">Help</button>
+  </div>
+</div>

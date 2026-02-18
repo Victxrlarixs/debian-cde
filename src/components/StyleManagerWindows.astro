@@ -1,0 +1,64 @@
+---
+import WindowControls from "./common/WindowControls.astro";
+---
+
+<div class="cde-retro-modal style-manager-window" id="styleManagerWindow">
+  <div class="titlebar" id="styleManagerWindowTitlebar">
+    <span class="titlebar-text">Style Manager - Window</span>
+    <WindowControls
+      windowId="styleManagerWindow"
+      closeFunction="styleManager.closeWindow"
+    />
+  </div>
+
+  <div class="modal-body">
+    <div class="window-icon-container">
+      <img src="/icons/org.xfce.xfwm4.png" alt="Window" width="48" height="48" />
+    </div>
+
+    <div class="window-section-title">Window Behavior</div>
+
+    <div class="window-row">
+      <input type="checkbox" id="window-point">
+      <label for="window-point">Point In Window To Make Active</label>
+    </div>
+
+    <div class="window-row">
+      <input type="checkbox" id="window-click">
+      <label for="window-click">Click In Window To Make Active</label>
+    </div>
+
+    <div class="window-row">
+      <input type="checkbox" id="window-raise" checked>
+      <label for="window-raise">Raise Window When Made Active</label>
+    </div>
+
+    <div class="window-row">
+      <input type="checkbox" id="window-allow">
+      <label for="window-allow">Allow Primary Windows On Top</label>
+    </div>
+
+    <div class="window-row">
+      <input type="checkbox" id="window-show">
+      <label for="window-show">Show Contents During Move</label>
+    </div>
+
+    <div class="window-section-title">Window Icons</div>
+
+    <div class="window-row">
+      <input type="checkbox" id="window-iconbox">
+      <label for="window-iconbox">Use Icon Box</label>
+    </div>
+
+    <div class="window-row">
+      <input type="checkbox" id="window-workspace">
+      <label for="window-workspace">Place On Workspace</label>
+    </div>
+  </div>
+
+  <div class="cde-actionbar">
+    <button class="cde-btn cde-btn-default" onclick="styleManager.closeWindow()">OK</button>
+    <button class="cde-btn" onclick="styleManager.closeWindow()">Cancel</button>
+    <button class="cde-btn" onclick="styleManager.closeWindow()">Help</button>
+  </div>
+</div>

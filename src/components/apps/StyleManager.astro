@@ -1,0 +1,89 @@
+---
+import WindowControls from "../common/WindowControls.astro";
+import StyleManagerColor from "../StyleManagerColor.astro";
+import StyleManagerFont from "../StyleManagerFont.astro";
+import StyleManagerMouse from "../StyleManagerMouse.astro";
+import StyleManagerBackdrop from "../StyleManagerBackdrop.astro";
+import StyleManagerKeyboard from "../StyleManagerKeyboard.astro";
+import StyleManagerWindow from "../StyleManagerWindows.astro";
+import StyleManagerScreen from "../StyleManagerScreen.astro";
+import StyleManagerStartup from "../StyleManagerStartup.astro";
+---
+
+<div class="cde-retro-modal style-manager-main" id="styleManagerMain">
+  <div class="titlebar" id="styleManagerMainTitlebar">
+    <span class="titlebar-text">Style Manager</span>
+    <WindowControls
+      windowId="styleManagerMain"
+      closeFunction="styleManager.closeMain"
+    />
+  </div>
+
+  <div class="cde-menubar">
+    <div class="cde-menu-item">File</div>
+    <div class="cde-menu-item">Help</div>
+  </div>
+
+  <div class="modal-body style-manager-body">
+    <div class="style-manager-categories">
+      <div class="cde-category-icon-btn" onclick="styleManager.openColor()">
+        <img src="/icons/org.xfce.settings.appearance.png" alt="Color" width="32" height="32" />
+        <span>Color</span>
+      </div>
+
+      <div class="cde-category-icon-btn" onclick="styleManager.openFont()">
+        <img src="/icons/font-x-generic.png" alt="Font" width="32" height="32" />
+        <span>Font</span>
+      </div>
+
+      <div class="cde-category-icon-btn" onclick="styleManager.openBackdrop()">
+        <img src="/icons/org.xfce.PanelProfiles.png" alt="Backdrop" width="32" height="32" />
+        <span>Backdrop</span>
+      </div>
+
+      <div class="cde-category-icon-btn" onclick="styleManager.openKeyboard()">
+        <img src="/icons/org.xfce.settings.keyboard.png" alt="Keyboard" width="32" height="32" />
+        <span>Keyboard</span>
+      </div>
+
+      <div class="cde-category-icon-btn" onclick="styleManager.openMouse()">
+        <img src="/icons/org.xfce.settings.mouse.png" alt="Mouse" width="32" height="32" />
+        <span>Mouse</span>
+      </div>
+
+      <div class="cde-category-icon-btn" onclick="retroBeep()">
+        <img src="/icons/multimedia-volume-control.png" alt="Beep" width="32" height="32" />
+        <span>Beep</span>
+      </div>
+
+      <div class="cde-category-icon-btn" onclick="styleManager.openWindow()">
+        <img src="/icons/org.xfce.xfwm4.png" alt="Window" width="32" height="32" />
+        <span>Window</span>
+      </div>
+
+      <div class="cde-category-icon-btn" onclick="styleManager.openScreen()">
+        <img src="/icons/display.png" alt="Screen" width="32" height="32" />
+        <span>Screen</span>
+      </div>
+
+      <div class="cde-category-icon-btn" onclick="styleManager.openStartup()">
+        <img src="/icons/gcr-key.png" alt="Startup" width="32" height="32" />
+        <span>Startup</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cde-statusbar">
+    <div class="cde-statusleft">CDE Style Manager</div>
+    <div class="cde-statusright" id="styleMainStatus">Ready</div>
+  </div>
+</div>
+
+    <StyleManagerColor />
+    <StyleManagerFont />
+    <StyleManagerMouse />
+    <StyleManagerBackdrop />
+    <StyleManagerKeyboard />
+    <StyleManagerWindow />
+    <StyleManagerScreen />
+    <StyleManagerStartup />

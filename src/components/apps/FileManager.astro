@@ -1,6 +1,6 @@
 ---
 // src/components/FileManager.astro
-import WindowControls from "./WindowControls.astro";
+import WindowControls from "../common/WindowControls.astro";
 ---
 
 <div class="window" id="fm">
@@ -68,10 +68,9 @@ import WindowControls from "./WindowControls.astro";
 </div>
 
 <script>
-  import('../scripts/filemanager.ts').then((module) => {
-      module.FileManager.init();
-    }
-  ).catch(error => {
+  import('../../scripts/filemanager.ts').then((module) => {
+    module.FileManager.init();
+  }).catch(error => {
     console.error('Error al cargar FileManager:', error);
   });
 </script>

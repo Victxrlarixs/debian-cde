@@ -4,6 +4,7 @@ import { CONFIG } from './config';
 
 /**
  * Administrador de estilos CDE para personalización de colores y fuentes.
+ * Ahora maneja múltiples ventanas independientes.
  */
 export class StyleManager {
   public styles: Record<string, string>;
@@ -35,59 +36,68 @@ export class StyleManager {
     this.setupFontControls();
     this.updateUI();
     this.updateFontControls();
+    this.makeAllWindowsDraggable();
   }
 
   private bindEvents(): void {
+    // Icono en el dock para abrir el Style Manager principal
     const styleManagerIcon = document.querySelector(
       '.cde-icon img[src*="appearance"]'
     )?.parentElement;
     if (styleManagerIcon) {
       styleManagerIcon.addEventListener('click', (e) => {
         e.preventDefault();
-        this.open();
+        this.openMain();
       });
     }
 
-    const closeBtn = document.querySelector('#styleManager .close-btn');
-    if (closeBtn) closeBtn.addEventListener('click', () => this.close());
+    // Botones de cierre de cada ventana (definidos en sus componentes)
+    const closeMain = document.querySelector('#styleManagerMain .close-btn');
+    if (closeMain) closeMain.addEventListener('click', () => this.closeMain());
 
-    const applyBtn = document.querySelector('#styleManager .cde-btn-default');
-    if (applyBtn) applyBtn.addEventListener('click', () => this.apply());
+    const closeColor = document.querySelector('#styleManagerColor .close-btn');
+    if (closeColor) closeColor.addEventListener('click', () => this.closeColor());
 
-    const resetBtn = document.querySelector('#styleManager .cde-btn:nth-child(2)');
-    if (resetBtn) resetBtn.addEventListener('click', () => this.reset());
+    const closeFont = document.querySelector('#styleManagerFont .close-btn');
+    if (closeFont) closeFont.addEventListener('click', () => this.closeFont());
 
-    const saveBtn = document.querySelector('#styleManager .cde-btn:nth-child(3)');
-    if (saveBtn) saveBtn.addEventListener('click', () => this.save());
+    const closeBackdrop = document.querySelector('#styleManagerBackdrop .close-btn');
+    if (closeBackdrop) closeBackdrop.addEventListener('click', () => this.closeBackdrop());
 
+    // Botones Apply, Reset, Save de la ventana Color
+    const applyColorBtn = document.querySelector('#styleManagerColor .cde-btn-default');
+    if (applyColorBtn) applyColorBtn.addEventListener('click', () => this.applyColor());
+
+    const resetColorBtn = document.querySelector('#styleManagerColor .cde-btn:nth-child(2)');
+    if (resetColorBtn) resetColorBtn.addEventListener('click', () => this.resetColor());
+
+    const saveColorBtn = document.querySelector('#styleManagerColor .cde-btn:nth-child(3)');
+    if (saveColorBtn) saveColorBtn.addEventListener('click', () => this.saveColor());
+
+    // Botones Apply, Reset, Save de la ventana Font
+    const applyFontBtn = document.querySelector('#styleManagerFont .cde-btn-default');
+    if (applyFontBtn) applyFontBtn.addEventListener('click', () => this.applyFont());
+
+    const resetFontBtn = document.querySelector('#styleManagerFont .cde-btn:nth-child(2)');
+    if (resetFontBtn) resetFontBtn.addEventListener('click', () => this.resetFont());
+
+    const saveFontBtn = document.querySelector('#styleManagerFont .cde-btn:nth-child(3)');
+    if (saveFontBtn) saveFontBtn.addEventListener('click', () => this.saveFont());
+
+    // Presets de color
     document.querySelectorAll('.cde-preset[data-scheme]').forEach((btn) => {
       btn.removeEventListener('click', this.handlePresetClick);
       btn.addEventListener('click', this.handlePresetClick);
     });
 
-    document.querySelectorAll('.cde-preset[data-preset][data-type="font"]').forEach((btn) => {
+    // Presets de fuente
+    document.querySelectorAll('.cde-preset[data-preset]').forEach((btn) => {
       btn.removeEventListener('click', this.handleFontPresetClick);
       btn.addEventListener('click', this.handleFontPresetClick);
     });
-
-    const fontPresetNames = ['classic-cde', 'modern', 'retro', 'terminal'];
-    document.querySelectorAll('.cde-preset[data-preset]').forEach((btn) => {
-      const presetName = btn.getAttribute('data-preset');
-      if (presetName && fontPresetNames.includes(presetName)) {
-        btn.removeEventListener('click', this.handleFontPresetClick);
-        btn.addEventListener('click', this.handleFontPresetClick);
-      }
-    });
-
-    document.querySelectorAll('.cde-category').forEach((cat) => {
-      cat.removeEventListener('click', this.handleCategoryClick);
-      cat.addEventListener('click', this.handleCategoryClick);
-    });
-
-    const titlebar = document.getElementById('styleManagerTitlebar');
-    if (titlebar) titlebar.addEventListener('mousedown', (e) => this.startDrag(e));
   }
 
+  // --- Manejadores de presets ---
   private handlePresetClick = (e: Event): void => {
     e.preventDefault();
     e.stopPropagation();
@@ -110,34 +120,21 @@ export class StyleManager {
     }
   };
 
-  private handleCategoryClick = (e: Event): void => {
-    const target = e.currentTarget as HTMLElement;
-    const category = target.dataset.category;
-    if (category) {
-      this.setActiveCategory(category);
-    }
-  };
-
   public highlightActiveColorPreset(activeButton: HTMLElement): void {
     document
       .querySelectorAll('.cde-preset[data-scheme]')
-      .forEach((btn) => btn.classList.remove('active'));
-    document
-      .querySelectorAll('.cde-preset[data-preset][data-type="font"]')
       .forEach((btn) => btn.classList.remove('active'));
     activeButton.classList.add('active');
   }
 
   public highlightActiveFontPreset(activeButton: HTMLElement): void {
     document
-      .querySelectorAll('.cde-preset[data-preset][data-type="font"]')
-      .forEach((btn) => btn.classList.remove('active'));
-    document
-      .querySelectorAll('.cde-preset[data-scheme]')
+      .querySelectorAll('.cde-preset[data-preset]')
       .forEach((btn) => btn.classList.remove('active'));
     activeButton.classList.add('active');
   }
 
+  // --- Configuración de inputs de color ---
   private setupColorInputs(): void {
     const colorMap: Record<string, string> = {
       'color-workspace': '--workspace-color',
@@ -160,12 +157,13 @@ export class StyleManager {
             if (swatch) swatch.style.backgroundColor = value;
             if (nameSpan) nameSpan.textContent = this.getColorName(value);
           }
-          this.updateStatus(`Changed: ${cssVar}`);
+          this.updateStatus('Color changed', 'colorStatus');
         });
       }
     });
   }
 
+  // --- Configuración de controles de fuente ---
   private setupFontControls(): void {
     this.setupFontSelect('font-family-base', '--font-family-base');
     this.setupFontSelect('font-family-terminal', '--font-family-terminal');
@@ -187,7 +185,7 @@ export class StyleManager {
       select.addEventListener('change', (e) => {
         this.applyFontStyle(cssVar, (e.target as HTMLSelectElement).value);
         this.updateFontPreview();
-        this.updateStatus(`Font changed: ${cssVar}`);
+        this.updateStatus('Font changed', 'fontStatus');
       });
     }
   }
@@ -211,32 +209,131 @@ export class StyleManager {
     }
   }
 
-  private getLabelFromId(id: string): string {
-    const labels: Record<string, string> = {
-      'color-workspace': 'Workspace',
-      'color-title-active': 'Active Title',
-      'color-background': 'Background',
-      'color-highlight': 'Highlight',
-      'color-text': 'Text Color',
-    };
-    return labels[id] || id.replace('color-', '').replace(/-/g, ' ');
+  // --- Apertura y cierre de ventanas específicas ---
+  public openMain(): void {
+    this.showWindow('styleManagerMain');
   }
 
-  public open(): void {
-    const modal = document.getElementById('styleManager') as HTMLElement | null;
-    if (modal) {
-      modal.style.display = 'flex';
-      modal.style.zIndex = '10000';
+  public closeMain(): void {
+    this.hideWindow('styleManagerMain');
+  }
+
+  public openColor(): void {
+    this.showWindow('styleManagerColor');
+  }
+
+  public closeColor(): void {
+    this.hideWindow('styleManagerColor');
+  }
+
+  public openFont(): void {
+    this.showWindow('styleManagerFont');
+  }
+
+  public closeFont(): void {
+    this.hideWindow('styleManagerFont');
+  }
+
+  public openBackdrop(): void {
+    this.showWindow('styleManagerBackdrop');
+  }
+
+  public closeBackdrop(): void {
+    this.hideWindow('styleManagerBackdrop');
+  }
+
+  // Métodos para otras ventanas (puedes agregar más)
+  public openMouse(): void {
+    this.showWindow('styleManagerMouse');
+  }
+
+  public closeMouse(): void {
+    this.hideWindow('styleManagerMouse');
+  }
+
+  public openKeyboard(): void {
+    this.showWindow('styleManagerKeyboard');
+  }
+
+  public closeKeyboard(): void {
+    this.hideWindow('styleManagerKeyboard');
+  }
+
+  public openWindow(): void {
+    this.showWindow('styleManagerWindow');
+  }
+
+  public closeWindow(): void {
+    this.hideWindow('styleManagerWindow');
+  }
+
+  public openScreen(): void {
+    this.showWindow('styleManagerScreen');
+  }
+
+  public closeScreen(): void {
+    this.hideWindow('styleManagerScreen');
+  }
+
+  public openBeep(): void {
+    this.showWindow('styleManagerBeep');
+  }
+
+  public closeBeep(): void {
+    this.hideWindow('styleManagerBeep');
+  }
+
+  public openStartup(): void {
+    this.showWindow('styleManagerStartup');
+  }
+
+  public closeStartup(): void {
+    this.hideWindow('styleManagerStartup');
+  }
+
+private showWindow(id: string): void {
+  const win = document.getElementById(id);
+  if (!win) return;
+
+  // Mostrar la ventana
+  win.style.display = 'flex';
+  win.style.zIndex = '10000';
+
+  // Llamar a focusWindow para manejar foco y z-index
+  if (window.focusWindow) {
+    window.focusWindow(id);
+  }
+
+  // Forzar repaint en la ventana principal y en el dock
+  const mainWin = document.getElementById('styleManagerMain');
+  const dock = document.getElementById('cde-panel');
+
+  if (mainWin) {
+    // Obtener el color de fondo actual calculado (el del tema)
+    const bgColor = window.getComputedStyle(mainWin).backgroundColor;
+    // Asignarlo temporalmente como estilo en línea
+    mainWin.style.backgroundColor = bgColor;
+    // Forzar reflow (el navegador debe pintar el nuevo color)
+    mainWin.offsetHeight;
+    // Restaurar para que siga usando la variable CSS
+    mainWin.style.backgroundColor = '';
+  }
+
+  if (dock) {
+    const dockBg = window.getComputedStyle(dock).backgroundColor;
+    dock.style.backgroundColor = dockBg;
+    dock.offsetHeight;
+    dock.style.backgroundColor = '';
+  }
+}
+  private hideWindow(id: string): void {
+    const win = document.getElementById(id) as HTMLElement | null;
+    if (win) {
+      win.style.display = 'none';
     }
   }
 
-  public close(): void {
-    const modal = document.getElementById('styleManager') as HTMLElement | null;
-    if (modal) {
-      modal.style.display = 'none';
-    }
-  }
-
+  // --- Aplicación de estilos (funcionalidad existente) ---
   public applyStyle(cssVar: string, value: string): void {
     document.documentElement.style.setProperty(cssVar, value);
     this.styles[cssVar] = value;
@@ -248,32 +345,102 @@ export class StyleManager {
     this.allStyles[cssVar] = value;
   }
 
-  public apply(): void {
-    this.applyAllStyles();
-    this.applyAllFontStyles();
-    this.updateStatus('All changes applied');
-    this.showMessage('Styles applied successfully.');
-  }
-
-  private applyAllStyles(): void {
+  // Aplicar todos los estilos de color actuales
+  public applyColor(): void {
     for (const [cssVar, value] of Object.entries(this.styles)) {
       document.documentElement.style.setProperty(cssVar, value);
     }
+    this.updateStatus('Color changes applied', 'colorStatus');
+    this.showMessage('Color settings applied.');
   }
 
-  private applyAllFontStyles(): void {
+  // Aplicar todos los estilos de fuente actuales
+  public applyFont(): void {
     for (const [cssVar, value] of Object.entries(this.fontStyles)) {
       document.documentElement.style.setProperty(cssVar, value);
     }
+    this.updateFontPreview();
+    this.updateStatus('Font changes applied', 'fontStatus');
+    this.showMessage('Font settings applied.');
   }
 
+  // Aplicar todo (equivalente al apply original)
+  public apply(): void {
+    this.applyColor();
+    this.applyFont();
+  }
+
+  // Resetear colores a valores por defecto
+  public resetColor(): void {
+    for (const [cssVar, value] of Object.entries(this.defaultStyles)) {
+      this.applyStyle(cssVar, value);
+    }
+    this.updateUI();
+    this.updateStatus('Color reset to default', 'colorStatus');
+    this.showMessage('Colors reset to default.');
+    document.querySelectorAll('.cde-preset.active').forEach((btn) => btn.classList.remove('active'));
+  }
+
+  // Resetear fuentes a valores por defecto
+  public resetFont(): void {
+    for (const [cssVar, value] of Object.entries(this.defaultFontStyles)) {
+      this.applyFontStyle(cssVar, value);
+    }
+    this.updateFontControls();
+    this.updateStatus('Font reset to default', 'fontStatus');
+    this.showMessage('Fonts reset to default.');
+    document.querySelectorAll('.cde-preset.active').forEach((btn) => btn.classList.remove('active'));
+  }
+
+  // Resetear todo
+  public reset(): void {
+    this.resetColor();
+    this.resetFont();
+  }
+
+  // Guardar colores en localStorage
+  public saveColor(): void {
+    try {
+      const saved = localStorage.getItem('cde-styles');
+      const allSettings = saved ? JSON.parse(saved) : { colors: {}, fonts: {} };
+      allSettings.colors = this.styles;
+      localStorage.setItem('cde-styles', JSON.stringify(allSettings));
+      this.updateStatus('Color settings saved', 'colorStatus');
+      this.showMessage('Color configuration saved.');
+    } catch (e) {
+      this.showMessage('Error saving color settings.');
+      console.error('Error saving colors:', e);
+    }
+  }
+
+  // Guardar fuentes en localStorage
+  public saveFont(): void {
+    try {
+      const saved = localStorage.getItem('cde-styles');
+      const allSettings = saved ? JSON.parse(saved) : { colors: {}, fonts: {} };
+      allSettings.fonts = this.fontStyles;
+      localStorage.setItem('cde-styles', JSON.stringify(allSettings));
+      this.updateStatus('Font settings saved', 'fontStatus');
+      this.showMessage('Font configuration saved.');
+    } catch (e) {
+      this.showMessage('Error saving font settings.');
+      console.error('Error saving fonts:', e);
+    }
+  }
+
+  // Guardar todo
+  public save(): void {
+    this.saveColor();
+    this.saveFont();
+  }
+
+  // Aplicar preset de color
   public applyPreset(scheme: string): void {
     const preset = this.presets[scheme];
     if (preset) {
       console.log(`Applying preset: ${scheme}`);
       for (const [cssVar, value] of Object.entries(preset)) {
         this.applyStyle(cssVar, value);
-        // Actualizar input si existe
         const input = document.querySelector(
           `input[data-var="${cssVar}"]`
         ) as HTMLInputElement | null;
@@ -288,11 +455,12 @@ export class StyleManager {
           }
         }
       }
-      this.updateStatus(`Applied theme: ${scheme}`);
+      this.updateStatus(`Applied theme: ${scheme}`, 'colorStatus');
       this.showMessage(`${scheme} theme applied.`);
     }
   }
 
+  // Aplicar preset de fuente
   public applyFontPreset(presetName: string): void {
     const preset = this.fontPresets[presetName];
     if (preset) {
@@ -301,55 +469,31 @@ export class StyleManager {
         this.applyFontStyle(cssVar, value);
       }
       this.updateFontControls();
-      this.updateStatus(`Applied font preset: ${presetName}`);
+      this.updateStatus(`Applied font preset: ${presetName}`, 'fontStatus');
       this.showMessage(`${presetName} font preset applied.`);
     }
   }
 
-  public reset(): void {
-    for (const [cssVar, value] of Object.entries(this.defaultStyles)) {
-      this.applyStyle(cssVar, value);
-    }
-    for (const [cssVar, value] of Object.entries(this.defaultFontStyles)) {
-      this.applyFontStyle(cssVar, value);
-    }
-    this.updateUI();
-    this.updateFontControls();
-    this.updateStatus('Reset to default');
-    this.showMessage('Reset to default theme and fonts.');
-    document
-      .querySelectorAll('.cde-preset.active')
-      .forEach((btn) => btn.classList.remove('active'));
-  }
-
-  public save(): void {
-    try {
-      const allSettings = {
-        colors: this.styles,
-        fonts: this.fontStyles,
-      };
-      localStorage.setItem('cde-styles', JSON.stringify(allSettings));
-      this.updateStatus('All settings saved');
-      this.showMessage('Configuration saved.');
-      console.log('Styles and fonts saved to localStorage');
-    } catch (e) {
-      this.showMessage('Error saving configuration.');
-      console.error('Error saving styles:', e);
-    }
-  }
-
+  // Cargar estilos guardados
   private loadSavedStyles(): void {
     try {
       const saved = localStorage.getItem('cde-styles');
       if (saved) {
-        const savedSettings = JSON.parse(saved);
+        const savedSettings = JSON.parse(saved) as {
+          colors?: Record<string, string>;
+          fonts?: Record<string, string>;
+        };
         if (savedSettings.colors) {
           Object.assign(this.styles, savedSettings.colors);
-          this.applyAllStyles();
+          for (const [cssVar, value] of Object.entries(savedSettings.colors)) {
+            document.documentElement.style.setProperty(cssVar, value);
+          }
         }
         if (savedSettings.fonts) {
           Object.assign(this.fontStyles, savedSettings.fonts);
-          this.applyAllFontStyles();
+          for (const [cssVar, value] of Object.entries(savedSettings.fonts)) {
+            document.documentElement.style.setProperty(cssVar, value);
+          }
         }
         console.log('Loaded saved styles and fonts from localStorage');
       }
@@ -358,6 +502,7 @@ export class StyleManager {
     }
   }
 
+  // Actualizar UI de colores con los valores actuales
   public updateUI(): void {
     for (const [cssVar, value] of Object.entries(this.styles)) {
       const input = document.querySelector(
@@ -374,9 +519,9 @@ export class StyleManager {
         }
       }
     }
-    console.log('UI updated with current styles');
   }
 
+  // Actualizar controles de fuente con los valores actuales
   public updateFontControls(): void {
     const baseFont =
       this.fontStyles['--font-family-base'] || CONFIG.DEFAULT_STYLES.FONTS['--font-family-base'];
@@ -417,7 +562,8 @@ export class StyleManager {
     if (valueSpan) valueSpan.textContent = value + suffix;
   }
 
-  private updateFontPreview(): void {
+  // Actualizar vista previa de fuentes
+  public updateFontPreview(): void {
     const preview = document.getElementById('font-preview');
     if (!preview) return;
 
@@ -452,26 +598,13 @@ export class StyleManager {
     }
   }
 
+  // Probar vista previa (botón)
   public testFontPreview(): void {
     this.updateFontPreview();
     this.showMessage('Font preview updated.');
   }
 
-  public setActiveCategory(category: string): void {
-    document.querySelectorAll('.cde-category').forEach((cat) => cat.classList.remove('active'));
-    document
-      .querySelectorAll('.cde-controlgroup')
-      .forEach((panel) => panel.classList.remove('active'));
-
-    const activeCat = document.querySelector(`.cde-category[data-category="${category}"]`);
-    const activePanel = document.getElementById(`${category}-panel`);
-
-    if (activeCat) activeCat.classList.add('active');
-    if (activePanel) activePanel.classList.add('active');
-
-    this.updateStatus(`Viewing: ${category}`);
-  }
-
+  // Obtener nombre de color a partir de hex
   private getColorName(hex: string): string {
     const colors: Record<string, string> = {
       '#000000': 'Black',
@@ -523,12 +656,14 @@ export class StyleManager {
     return colors[hex.toLowerCase()] || hex.toUpperCase();
   }
 
-  private updateStatus(message: string): void {
-    const statusElement = document.getElementById('style-status');
+  // Actualizar mensaje de estado en una barra específica
+  private updateStatus(message: string, statusId: string = 'styleMainStatus'): void {
+    const statusElement = document.getElementById(statusId);
     if (statusElement) statusElement.textContent = message;
   }
 
-  private showMessage(message: string): void {
+  // Mostrar mensaje emergente temporal
+  public showMessage(message: string): void {
     const msgBox = document.createElement('div');
     msgBox.style.cssText = `
       position: fixed;
@@ -555,58 +690,39 @@ export class StyleManager {
     setTimeout(() => msgBox.parentNode?.removeChild(msgBox), 2000);
   }
 
-  private startDrag(e: MouseEvent): void {
-    if ((e.target as HTMLElement).classList.contains('close-btn')) return;
-    const modal = document.getElementById('styleManager') as HTMLElement | null;
-    if (!modal) return;
+  // Hacer que todas las ventanas del Style Manager sean arrastrables
+  private makeAllWindowsDraggable(): void {
+    const windows = [
+      'styleManagerMain',
+      'styleManagerColor',
+      'styleManagerFont',
+      'styleManagerBackdrop',
+      'styleManagerMouse',
+      'styleManagerKeyboard',
+      'styleManagerWindow',
+      'styleManagerScreen',
+      'styleManagerBeep',
+      'styleManagerStartup'
+    ];
 
-    const rect = modal.getBoundingClientRect();
-    const offsetX = e.clientX - rect.left;
-    const offsetY = e.clientY - rect.top;
-
-    const onMouseMove = (moveEvent: MouseEvent) => {
-      modal.style.left = `${moveEvent.clientX - offsetX}px`;
-      modal.style.top = `${moveEvent.clientY - offsetY}px`;
-      modal.style.transform = 'none';
-    };
-
-    const onMouseUp = () => {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-    };
-
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-    e.preventDefault();
+    windows.forEach(id => {
+      const win = document.getElementById(id);
+      const titlebar = document.getElementById(`${id}Titlebar`);
+      if (win && titlebar) {
+        this.makeDraggable(win, titlebar);
+      }
+    });
   }
-}
 
-// Declaración global para window.styleManager
-declare global {
-  interface Window {
-    styleManager?: StyleManager;
-    openStyleManager?: () => void;
-    switchStyleTab?: (category: string) => void;
-  }
-}
-
-// Inicialización cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', () => {
-  window.styleManager = new StyleManager();
-  setTimeout(() => window.styleManager?.init(), 100);
-  window.openStyleManager = () => window.styleManager?.open();
-
-  // Arrastre de la ventana Style Manager (ya manejado dentro de la clase, pero mantenemos compatibilidad)
-  const styleManagerEl = document.getElementById('styleManager');
-  const styleManagerTitlebar = document.getElementById('styleManagerTitlebar');
-  if (styleManagerEl && styleManagerTitlebar) {
+  // Función de arrastre (adaptada de tu código existente)
+  private makeDraggable(win: HTMLElement, titlebar: HTMLElement): void {
     let isDragging = false;
     let dragOffset = { x: 0, y: 0 };
 
-    styleManagerTitlebar.addEventListener('mousedown', function (e) {
+    titlebar.addEventListener('mousedown', (e) => {
       if ((e.target as HTMLElement).classList.contains('close-btn')) return;
       isDragging = true;
-      const rect = styleManagerEl.getBoundingClientRect();
+      const rect = win.getBoundingClientRect();
       dragOffset.x = e.clientX - rect.left;
       dragOffset.y = e.clientY - rect.top;
       document.addEventListener('mousemove', onMouseMove);
@@ -614,22 +730,32 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
     });
 
-    function onMouseMove(e: MouseEvent) {
-      if (!isDragging || !styleManagerEl) return;
-      styleManagerEl.style.left = e.clientX - dragOffset.x + 'px';
-      styleManagerEl.style.top = e.clientY - dragOffset.y + 'px';
-      styleManagerEl.style.transform = 'none';
-    }
+    const onMouseMove = (e: MouseEvent) => {
+      if (!isDragging || !win) return;
+      win.style.left = e.clientX - dragOffset.x + 'px';
+      win.style.top = e.clientY - dragOffset.y + 'px';
+      win.style.transform = 'none';
+    };
 
-    function onMouseUp() {
+    const onMouseUp = () => {
       isDragging = false;
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
-    }
+    };
   }
+}
+
+// Declaración global para window.styleManager
+declare global {
+  interface Window {
+    styleManager?: StyleManager;
+  }
+}
+
+// Inicialización cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', () => {
+  window.styleManager = new StyleManager();
+  setTimeout(() => window.styleManager?.init(), 100);
 });
 
-// Exponer función global para cambiar pestañas
-window.switchStyleTab = function (category: string) {
-  window.styleManager?.setActiveCategory(category);
-};
+

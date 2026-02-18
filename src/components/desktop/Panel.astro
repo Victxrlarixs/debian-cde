@@ -1,5 +1,5 @@
 ---
-// src/components/Panel.astro
+// src/components/desktop/Panel.astro
 ---
 
 <div id="cde-panel">
@@ -47,7 +47,7 @@
             </div>
             <div
                 class="cde-icon"
-                onclick="openStyleManager()"
+                onclick="styleManager.openMain()"
                 title="Style Manager"
             >
                 <img
@@ -65,7 +65,7 @@
         <div class="menu-item" onclick="terminal.style.display='block'">
             <img src="/icons/konsole.png" alt="" /> Terminal
         </div>
-        <div class="menu-item" onclick="openStyleManager()">
+        <div class="menu-item" onclick="styleManager.openMain()">
             <img src="/icons/org.xfce.settings.appearance.png" alt="" /> Style Manager
         </div>
         <div class="menu-item" onclick="toggleFileManager()">

@@ -63,9 +63,9 @@ body {
   line-height: var(--line-height-base);
 
   /* Fondo tipo circuito retro — se repite en mosaico */
-  background-image: url('/images/motif.png');
-  background-size: contain;
-  background-repeat: repeat;
+  background-image: url('/images/Motif.png');
+  background-size: cover;
+  background-repeat: no-repeat;
   background-position: center;
   background-attachment: fixed;
 

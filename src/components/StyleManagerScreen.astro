@@ -1,0 +1,28 @@
+---
+import WindowControls from "./common/WindowControls.astro";
+---
+
+<div class="cde-retro-modal" id="styleManagerScreen">
+  <div class="titlebar" id="styleManagerScreenTitlebar">
+    <span class="titlebar-text">Style Manager - Screen</span>
+    <WindowControls
+      windowId="styleManagerScreen"
+      closeFunction="styleManager.closeScreen"
+    />
+  </div>
+
+  <div class="modal-body" style="padding: 16px; text-align: center;">
+    <p>Screen settings will be available soon.</p>
+  </div>
+
+  <div class="cde-statusbar">
+    <div class="cde-statusleft">Screen</div>
+    <div class="cde-statusright" id="screenStatus">Ready</div>
+  </div>
+
+  <div class="cde-actionbar">
+    <button class="cde-btn cde-btn-default" onclick="styleManager.closeScreen()">OK</button>
+    <button class="cde-btn" onclick="styleManager.closeScreen()">Cancel</button>
+    <button class="cde-btn" onclick="styleManager.showMessage('Help not implemented')">Help</button>
+  </div>
+</div>
