@@ -1,9 +1,11 @@
 import { CONFIG } from '../core/config';
 
 // ============================================================================
-// htop-style process monitor
+// Process Monitor - Static htop-style process viewer
+// No automatic updates, only updates on user interaction
 // ============================================================================
 
+/** Represents a process in the system */
 interface ProcessInfo {
   pid: number;
   name: string;
@@ -85,13 +87,16 @@ function scanProcesses(): ProcessInfo[] {
 
 const ProcessMonitor = (() => {
   const WINDOW_ID = 'process-monitor';
-  let interval: number | undefined;
   let zIndex = 3000;
   let processes: ProcessInfo[] = [];
   let selectedIndex = 0;
   let contentDiv: HTMLElement | null = null;
   let winElement: HTMLElement | null = null;
 
+  /**
+   * Gets or creates the window element reference.
+   * @returns The window element or null if not found
+   */
   function getWindow(): HTMLElement | null {
     if (!winElement) {
       winElement = document.getElementById(WINDOW_ID);
@@ -104,6 +109,10 @@ const ProcessMonitor = (() => {
     return winElement;
   }
 
+  /**
+   * Handles keyboard navigation and commands.
+   * @param e - Keyboard event
+   */
   function handleKeyDown(e: KeyboardEvent): void {
     if (!contentDiv) return;
 
@@ -112,16 +121,14 @@ const ProcessMonitor = (() => {
         e.preventDefault();
         if (selectedIndex > 0) {
           selectedIndex--;
-          render();
-          console.log(`ProcessMonitor: navigation up, selected index ${selectedIndex}`);
+          updateSelectedRow();
         }
         break;
       case 'ArrowDown':
         e.preventDefault();
         if (selectedIndex < processes.length - 1) {
           selectedIndex++;
-          render();
-          console.log(`ProcessMonitor: navigation down, selected index ${selectedIndex}`);
+          updateSelectedRow();
         }
         break;
       case 'k':
@@ -134,39 +141,59 @@ const ProcessMonitor = (() => {
       case 'Escape':
         e.preventDefault();
         close();
-        console.log('ProcessMonitor: closed by user.');
-        break;
-      case '?':
-        e.preventDefault();
-        showHelp();
         break;
       default:
         break;
     }
   }
 
+  /**
+   * Updates the visual selection indicator.
+   */
+  function updateSelectedRow(): void {
+    if (!contentDiv) return;
+
+    contentDiv.querySelectorAll('.selected').forEach((el) => {
+      el.classList.remove('selected');
+    });
+
+    const rows = contentDiv.children;
+    if (rows.length > selectedIndex + 7) {
+      const rowIndex = selectedIndex + 7;
+      if (rowIndex < rows.length) {
+        (rows[rowIndex] as HTMLElement).classList.add('selected');
+      }
+    }
+  }
+
+  /**
+   * Kills the selected process (hides its window).
+   */
   function killSelected(): void {
     if (!processes.length) return;
     const proc = processes[selectedIndex];
     if (!proc.elementId) {
       addMessage(`Cannot kill system process ${proc.pid}.`);
-      console.warn(`ProcessMonitor: attempt to kill system process ${proc.pid} blocked.`);
       return;
     }
     const element = document.getElementById(proc.elementId);
     if (!element) {
       addMessage(`Window for process ${proc.pid} not found.`);
-      console.warn(`ProcessMonitor: element for PID ${proc.pid} not found.`);
       return;
     }
     element.style.display = 'none';
     addMessage(`Process ${proc.pid} (${proc.name}) terminated.`);
-    console.log(`ProcessMonitor: process ${proc.pid} (${proc.name}) terminated.`);
+
+    // Rescan processes after kill
     processes = scanProcesses();
     selectedIndex = Math.min(selectedIndex, processes.length - 1);
-    render();
+    fullRender();
   }
 
+  /**
+   * Adds a message to the monitor output.
+   * @param msg - Message to display
+   */
   function addMessage(msg: string): void {
     if (!contentDiv) return;
     const msgDiv = document.createElement('div');
@@ -177,37 +204,26 @@ const ProcessMonitor = (() => {
     adjustWindowHeight();
   }
 
-  function showHelp(): void {
-    if (!contentDiv) return;
-    const helpLines = [
-      'Help:',
-      '  ↑/↓ : Navigate through processes',
-      '  k   : Kill selected process',
-      '  q/ESC : Quit',
-      '  ?   : Show this help',
-    ];
-    helpLines.forEach((line) => {
-      const helpDiv = document.createElement('div');
-      helpDiv.className = 'help-line';
-      helpDiv.textContent = line;
-      contentDiv!.appendChild(helpDiv);
-    });
-    contentDiv.scrollTop = contentDiv.scrollHeight;
-    adjustWindowHeight();
-    console.log('ProcessMonitor: help displayed.');
-  }
-
+  /**
+   * Adjusts window height based on content.
+   */
   function adjustWindowHeight(): void {
     if (!winElement || !contentDiv) return;
     const titlebar = winElement.querySelector('.titlebar');
     const titlebarHeight = titlebar ? (titlebar as HTMLElement).offsetHeight : 28;
-    const lineHeight = 18; // approximate
+    const lineHeight = 18;
     const lines = contentDiv.innerText.split('\n').length;
     const contentHeight = lines * lineHeight + 12;
     const totalHeight = titlebarHeight + contentHeight + 4;
     winElement.style.height = totalHeight + 'px';
   }
 
+  /**
+   * Creates a percentage bar element.
+   * @param percentage - Value from 0-100
+   * @param type - Bar type (cpu, mem, swap)
+   * @returns HTML element
+   */
   function createBar(percentage: number, type: string): HTMLElement {
     const container = document.createElement('span');
     container.className = `${type}-bar-container`;
@@ -220,54 +236,50 @@ const ProcessMonitor = (() => {
     return container;
   }
 
-  function render(): void {
+  /**
+   * Performs a full render of the monitor content.
+   */
+  function fullRender(): void {
     if (!contentDiv) return;
 
-    processes = scanProcesses();
     const now = new Date();
     const timeStr = now.toLocaleTimeString();
-
     const load1 = (Math.random() * 0.5 + 0.05).toFixed(2);
     const load5 = (Math.random() * 0.4 + 0.1).toFixed(2);
     const load15 = (Math.random() * 0.3 + 0.1).toFixed(2);
-
-    const cpuCores = [];
-    for (let i = 0; i < 4; i++) cpuCores.push(Math.random() * 100);
-
+    const cpuCores = Array(4)
+      .fill(0)
+      .map(() => Math.random() * 100);
     const memTotal = 7985.5;
     const memUsed = Math.random() * 3000 + 1000;
     const memPercent = (memUsed / memTotal) * 100;
-
     const swapTotal = 2048;
     const swapUsed = Math.random() * 500;
     const swapPercent = (swapUsed / swapTotal) * 100;
-
     const running = Math.floor(Math.random() * 3) + 1;
     const sleeping = processes.length - running;
 
-    // Clear content
     contentDiv.innerHTML = '';
 
-    function addLine(text: string, className: string = ''): void {
+    const addLine = (text: string, className: string = ''): void => {
       const line = document.createElement('div');
       if (className) line.className = className;
       line.textContent = text;
       contentDiv!.appendChild(line);
-    }
+    };
 
-    function addBarLine(label: string, bars: (HTMLElement | Text)[]): void {
+    const addBarLine = (label: string, bars: (HTMLElement | Text)[]): void => {
       const line = document.createElement('div');
       line.appendChild(document.createTextNode(`  ${label} `));
       bars.forEach((bar) => line.appendChild(bar));
       contentDiv!.appendChild(line);
-    }
+    };
 
-    addLine(`${timeStr} up 1 day, load average: ${load1}, ${load5}, ${load15}`);
+    addLine(`${timeStr} up 1 day, load: ${load1}, ${load5}, ${load15}`);
     addLine(`Tasks: ${processes.length} total, ${running} running, ${sleeping} sleeping`);
     addLine('Threads: 0');
     addLine('');
 
-    // Create CPU bars (simulated with spans)
     const cpuBarElements = cpuCores.map((p) => createBar(p, 'cpu'));
     addBarLine('CPU0', [cpuBarElements[0]]);
     addBarLine('CPU1', [cpuBarElements[1]]);
@@ -288,8 +300,7 @@ const ProcessMonitor = (() => {
     addLine('  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND');
 
     processes.forEach((p, idx) => {
-      const user = p.elementId ? 'victxr' : 'root';
-      const userClass = p.elementId ? 'user-process' : 'system-process';
+      const user = p.elementId ? 'user' : 'system';
       const virt = Math.floor(Math.random() * 200 + 100)
         .toString()
         .padStart(5);
@@ -299,46 +310,25 @@ const ProcessMonitor = (() => {
       const shr = Math.floor(Math.random() * 30 + 10)
         .toString()
         .padStart(4);
-      const cpu = p.cpu.padStart(4);
-      const mem = p.mem.padStart(5);
-      const time = '0:00.0';
       const status = p.visible ? 'R' : 'S';
-      const statusClass = p.visible ? 'status-R' : 'status-S';
       const selector = idx === selectedIndex ? '▶' : ' ';
       const rowClass = idx === selectedIndex ? 'selected' : '';
 
       const row = document.createElement('div');
       row.className = rowClass;
-
-      const pidSpan = document.createElement('span');
-      pidSpan.textContent = `${selector} ${p.pid.toString().padStart(5)} `;
-      row.appendChild(pidSpan);
-
-      const userSpan = document.createElement('span');
-      userSpan.className = userClass;
-      userSpan.textContent = user.padEnd(8);
-      row.appendChild(userSpan);
-
-      const rest = document.createTextNode(` 20   0 ${virt} ${res} ${shr} `);
-      row.appendChild(rest);
-
-      const statusSpan = document.createElement('span');
-      statusSpan.className = statusClass;
-      statusSpan.textContent = status;
-      row.appendChild(statusSpan);
-
-      const tail = document.createTextNode(`  ${cpu} ${mem} ${time} ${p.name}`);
-      row.appendChild(tail);
-
+      row.textContent = `${selector} ${p.pid.toString().padStart(5)} ${user.padEnd(8)} 20   0 ${virt} ${res} ${shr} ${status}  ${p.cpu.padStart(4)} ${p.mem.padStart(5)} 0:00.0 ${p.name}`;
       contentDiv!.appendChild(row);
     });
 
     addLine('');
-    addLine('  ↑/↓: navigate  k: kill  q/ESC: quit  ?: help', 'help-line');
+    addLine('  ↑/↓: navigate  k: kill  q: quit', 'help-line');
 
     adjustWindowHeight();
   }
 
+  /**
+   * Opens the process monitor.
+   */
   function open(): void {
     getWindow();
     if (!winElement) return;
@@ -350,47 +340,35 @@ const ProcessMonitor = (() => {
 
     processes = scanProcesses();
     selectedIndex = 0;
-    render();
-    console.log('ProcessMonitor opened.');
-
-    if (interval) clearInterval(interval);
-    interval = setInterval(() => {
-      processes = scanProcesses();
-      if (selectedIndex >= processes.length) selectedIndex = processes.length - 1;
-      render();
-    }, 2000);
+    fullRender();
+    console.log(`[ProcessMonitor] Opened`);
   }
 
+  /**
+   * Closes the process monitor.
+   */
   function close(): void {
-    if (winElement) winElement.style.display = 'none';
-    if (interval) {
-      clearInterval(interval);
-      interval = undefined;
+    if (winElement) {
+      winElement.style.display = 'none';
+      console.log(`[ProcessMonitor] Closed`);
     }
-    console.log('ProcessMonitor closed.');
   }
 
   return { open, close };
 })();
 
 // ============================================================================
-// Global exposure (compatibility with existing HTML)
+// Global exposure
 // ============================================================================
 
 declare global {
   interface Window {
-    // ProcessMonitor
     ProcessMonitor: typeof ProcessMonitor;
     openTaskManagerInTerminal: () => void;
   }
 }
 
-// Assign to window
 window.ProcessMonitor = ProcessMonitor;
 window.openTaskManagerInTerminal = () => ProcessMonitor.open();
-
-// ============================================================================
-// Exports
-// ============================================================================
 
 export { ProcessMonitor };

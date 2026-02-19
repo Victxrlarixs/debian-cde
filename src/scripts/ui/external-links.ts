@@ -5,7 +5,7 @@ import { CDEModal } from './modals';
 /**
  * Displays a confirmation dialog before opening an external link.
  * Ensures the modal is clean (no menu items) and shows the target URL.
- * 
+ *
  * @param url - The external URL to open
  */
 export function confirmExternalLink(url: string): void {
@@ -15,17 +15,17 @@ export function confirmExternalLink(url: string): void {
   const modal = document.getElementById('cde-modal-global');
   if (modal) {
     const menuItems = modal.querySelectorAll('.cde-menu-item');
-    menuItems.forEach(item => item.remove());
+    menuItems.forEach((item) => item.remove());
     if (menuItems.length > 0) {
       console.log(`[ExternalLink] Removed ${menuItems.length} menu items from modal`);
     }
-    
+
     const menubar = modal.querySelector('.cde-menubar');
     if (menubar) {
       menubar.remove();
       console.log('[ExternalLink] Removed menubar from modal');
     }
-    
+
     const titleEl = modal.querySelector('.titlebar-text');
     if (titleEl) {
       titleEl.textContent = '';
@@ -47,14 +47,10 @@ export function confirmExternalLink(url: string): void {
     </p>
   `;
 
-  CDEModal.open(
-    'External Link',
-    content,
-    [
-      { label: 'Continue', value: true, isDefault: true },
-      { label: 'Cancel', value: false }
-    ]
-  ).then((confirmed: boolean) => {
+  CDEModal.open('External Link', content, [
+    { label: 'Continue', value: true, isDefault: true },
+    { label: 'Cancel', value: false },
+  ]).then((confirmed: boolean) => {
     if (confirmed) {
       console.log(`[ExternalLink] User confirmed, opening: ${url}`);
       window.open(url, '_blank');

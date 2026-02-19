@@ -3,118 +3,100 @@
 ---
 
 <div id="cde-panel">
-    <div
-        class="cde-menu-btn"
-        onclick="window.open('https://www.debian.org', '_blank')"
-    >
-        <img src="/icons/Debian.png" alt="Menu" />
-    </div>
-    <div class="cde-sep"></div>
+  <div class="cde-menu-btn" onclick="window.open('https://www.debian.org', '_blank')">
+    <img src="/icons/Debian.png" alt="Menu" />
+  </div>
+  <div class="cde-sep"></div>
 
-    <div class="cde-icon-block">
-        <div class="cde-icon-buttons">
-            <div class="cde-icon-btn"></div>
-            <div class="cde-icon-btn"></div>
-            <div class="cde-icon-btn"></div>
-            <div class="cde-icon-btn"></div>
-            <div class="cde-icon-btn dropdown-btn" id="utilitiesBtn">
-                <img src="/icons/go-up.png" alt="arrow" class="arrow-icon" />
-            </div>
+  <div class="cde-icon-block">
+    <div class="cde-icon-buttons">
+      <div class="cde-icon-btn"></div>
+      <div class="cde-icon-btn"></div>
+      <div class="cde-icon-btn"></div>
+      <div class="cde-icon-btn"></div>
+      <div class="cde-icon-btn dropdown-btn" id="utilitiesBtn">
+        <img src="/icons/go-up.png" alt="arrow" class="arrow-icon" />
+      </div>
+    </div>
+
+    <div class="cde-icons">
+      <div class="cde-icon" onclick="openTerminal()" title="Open Terminal">
+        <img src="/icons/konsole.png" alt="Terminal" />
+      </div>
+      <div class="cde-icon" onclick="toggleFileManager()" title="File Manager">
+        <img src="/icons/filemanager.png" alt="File Manager" />
+      </div>
+      <div class="cde-icon" title="Github Repo">
+        <div
+          onclick="confirmExternalLink('https://github.com/Victxrlarixs/debian-cde')"
+          style="cursor: pointer;"
+        >
+          <img src="/icons/konqueror.png" alt="Browser" />
         </div>
-
-        <div class="cde-icons">
-            <div
-                class="cde-icon"
-                onclick="openTerminal()"
-                title="Open Terminal"
-            >
-                <img src="/icons/konsole.png" alt="Terminal" />
-            </div>
-            <div
-                class="cde-icon"
-                onclick="toggleFileManager()"
-                title="File Manager"
-            >
-                <img src="/icons/filemanager.png" alt="File Manager" />
-            </div>
-<div class="cde-icon" title="Github Repo">
-    <div onclick="confirmExternalLink('https://github.com/Victxrlarixs/debian-cde')" style="cursor: pointer;">
-        <img src="/icons/konqueror.png" alt="Browser" />
+      </div>
+      <div class="cde-icon" onclick="styleManager.openMain()" title="Style Manager">
+        <img src="/icons/org.xfce.settings.appearance.png" alt="Style Manager" />
+      </div>
+      <div class="cde-icon" id="utilitiesIcon" title="Run">
+        <img src="/icons/org.xfce.session.png" alt="Utilities" />
+      </div>
     </div>
-</div>
-            <div
-                class="cde-icon"
-                onclick="styleManager.openMain()"
-                title="Style Manager"
-            >
-                <img
-                    src="/icons/org.xfce.settings.appearance.png"
-                    alt="Style Manager"
-                />
-            </div>
-            <div class="cde-icon" id="utilitiesIcon" title="Run">
-                <img src="/icons/org.xfce.session.png" alt="Utilities" />
-            </div>
-        </div>
-    </div>
+  </div>
 
-    <div class="dropdown-menu" id="utilitiesDropdown">
-        <div class="menu-item" onclick="terminal.style.display='block'">
-            <img src="/icons/konsole.png" alt="" /> Terminal
-        </div>
-        <div class="menu-item" onclick="styleManager.openMain()">
-            <img src="/icons/org.xfce.settings.appearance.png" alt="" /> Style Manager
-        </div>
-        <div class="menu-item" onclick="toggleFileManager()">
-            <img src="/icons/org.xfce.filemanager.png" alt="" /> File Manager
-        </div>
-        <div class="menu-item">
-            <a
-                href="https://github.com/Victxrlarixs/debian-cde"
-                target="_blank"
-            >
-                <img src="/icons/konqueror.png" alt="Browser" /> Go
-            </a>
-        </div>
+  <div class="dropdown-menu" id="utilitiesDropdown">
+    <div class="menu-item" onclick="terminal.style.display='block'">
+      <img src="/icons/konsole.png" alt="" /> Terminal
     </div>
-
-    <div class="cde-sep"></div>
-
-    <div class="cde-pager">
-        <div class="pager-workspace active">One</div>
-        <div class="pager-workspace">Two</div>
-        <div class="pager-workspace">Three</div>
-        <div class="pager-workspace">Four</div>
+    <div class="menu-item" onclick="styleManager.openMain()">
+      <img src="/icons/org.xfce.settings.appearance.png" alt="" /> Style Manager
     </div>
-
-    <div class="cde-scroll">
-        <div class="scroll-btn">▲</div>
-        <div class="scroll-btn">▼</div>
+    <div class="menu-item" onclick="toggleFileManager()">
+      <img src="/icons/org.xfce.filemanager.png" alt="" /> File Manager
     </div>
-
-    <div class="cde-sep"></div>
-
-    <div
-        class="tray-icon"
-        id="screenshot-btn"
-        onclick="captureFullPageScreenshot()"
-        title="Take Screenshot"
-    >
-        <img src="/icons/org.xfce.screenshooter.png" alt="Camera" />
+    <div class="menu-item">
+      <a href="https://github.com/Victxrlarixs/debian-cde" target="_blank">
+        <img src="/icons/konqueror.png" alt="Browser" /> Go
+      </a>
     </div>
-<div
-  class="tray-icon"
-  title="Report Issue"
-  onclick="confirmExternalLink('https://github.com/Victxrlarixs/debian-cde/issues')"
->
-  <img src="/icons/help.png" alt="Issue" />
-</div>
-    <div
-        class="tray-icon"
-        id="taskmanager-btn"
-        onclick="openTaskManagerInTerminal()"
-        title="Process Monitor (top)"
-    >
-        <img src="/icons/org.xfce.taskmanager.png" alt="TaskManager" />
-    </div>
+  </div>
+
+  <div class="cde-sep"></div>
+
+  <div class="cde-pager">
+    <div class="pager-workspace active">One</div>
+    <div class="pager-workspace">Two</div>
+    <div class="pager-workspace">Three</div>
+    <div class="pager-workspace">Four</div>
+  </div>
+
+  <div class="cde-scroll">
+    <div class="scroll-btn">▲</div>
+    <div class="scroll-btn">▼</div>
+  </div>
+
+  <div class="cde-sep"></div>
+
+  <div
+    class="tray-icon"
+    id="screenshot-btn"
+    onclick="captureFullPageScreenshot()"
+    title="Take Screenshot"
+  >
+    <img src="/icons/org.xfce.screenshooter.png" alt="Camera" />
+  </div>
+  <div
+    class="tray-icon"
+    title="Report Issue"
+    onclick="confirmExternalLink('https://github.com/Victxrlarixs/debian-cde/issues')"
+  >
+    <img src="/icons/help.png" alt="Issue" />
+  </div>
+  <div
+    class="tray-icon"
+    id="taskmanager-btn"
+    onclick="openTaskManagerInTerminal()"
+    title="Process Monitor (top)"
+  >
+    <img src="/icons/org.xfce.taskmanager.png" alt="TaskManager" />
+  </div>
 </div>

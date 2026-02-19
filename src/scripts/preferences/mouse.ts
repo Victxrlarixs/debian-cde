@@ -16,7 +16,8 @@ const mouseSettings = {
 /**
  * Loads mouse settings from localStorage.
  */
-export function loadMouseSettings(): void {  // ← EXPORT
+export function loadMouseSettings(): void {
+  // ← EXPORT
   try {
     const saved = localStorage.getItem('cde-mouse-settings');
     if (saved) {
@@ -33,7 +34,8 @@ export function loadMouseSettings(): void {  // ← EXPORT
 /**
  * Saves mouse settings to localStorage.
  */
-export function saveMouseSettings(): void {  // ← EXPORT
+export function saveMouseSettings(): void {
+  // ← EXPORT
   localStorage.setItem('cde-mouse-settings', JSON.stringify(mouseSettings));
   console.log('[MouseSettings] Saved to localStorage:', mouseSettings);
 }
@@ -41,7 +43,8 @@ export function saveMouseSettings(): void {  // ← EXPORT
 /**
  * Applies mouse settings.
  */
-export function applyMouseSettings(): void {  // ← EXPORT
+export function applyMouseSettings(): void {
+  // ← EXPORT
   console.log('[MouseSettings] Applied:', mouseSettings);
   saveMouseSettings();
 }
@@ -51,7 +54,8 @@ export function applyMouseSettings(): void {  // ← EXPORT
  * @param key - The setting key
  * @param value - The new value
  */
-export function updateMouseSetting(key: string, value: any): void {  // ← EXPORT
+export function updateMouseSetting(key: string, value: any): void {
+  // ← EXPORT
   if (key in mouseSettings) {
     (mouseSettings as any)[key] = value;
     applyMouseSettings();
@@ -64,7 +68,8 @@ export function updateMouseSetting(key: string, value: any): void {  // ← EXPO
 /**
  * Synchronizes the mouse panel controls with the current settings.
  */
-export function syncMouseControls(): void {  // ← EXPORT
+export function syncMouseControls(): void {
+  // ← EXPORT
   const panel = document.getElementById('styleManagerMouse');
   if (!panel) {
     console.warn('[MouseSettings] Panel not found');

@@ -77,7 +77,9 @@ const WindowManager = (() => {
       // Increment z-index
       zIndex++;
       win.style.zIndex = String(zIndex);
-      console.log(`[WindowManager] focusWindow: window "${id}" brought to front, new z-index ${zIndex}.`);
+      console.log(
+        `[WindowManager] focusWindow: window "${id}" brought to front, new z-index ${zIndex}.`
+      );
     }
   }
 
@@ -89,17 +91,19 @@ const WindowManager = (() => {
   function normalizeWindowPosition(win: HTMLElement): void {
     // Save the original transform style
     const originalTransform = win.style.transform;
-    
+
     // Get the current position of the window (considering transform)
     const rect = win.getBoundingClientRect();
-    
+
     // Set absolute position with current values
     win.style.position = 'absolute';
     win.style.left = rect.left + 'px';
     win.style.top = rect.top + 'px';
     win.style.transform = 'none';
-    
-    console.log(`[WindowManager] Normalized window position: left=${rect.left}px, top=${rect.top}px`);
+
+    console.log(
+      `[WindowManager] Normalized window position: left=${rect.left}px, top=${rect.top}px`
+    );
   }
 
   /**
@@ -110,7 +114,7 @@ const WindowManager = (() => {
   function drag(e: MouseEvent, id: string): void {
     e.preventDefault(); // Prevent text selection
     e.stopPropagation(); // Prevent propagation
-    
+
     const el = document.getElementById(id);
     if (!el) {
       console.warn(`[WindowManager] drag: window with id "${id}" not found.`);
@@ -129,9 +133,9 @@ const WindowManager = (() => {
     }
 
     focusWindow(id);
-    
+
     const rect = el.getBoundingClientRect();
-    
+
     dragState.element = el;
     dragState.offsetX = e.clientX - rect.left;
     dragState.offsetY = e.clientY - rect.top;
@@ -144,7 +148,7 @@ const WindowManager = (() => {
     // Use capture phase to ensure we capture all events
     document.addEventListener('mousemove', move, true);
     document.addEventListener('mouseup', stopDrag, true);
-    
+
     console.log(`[WindowManager] drag started for window "${id}".`);
   }
 
@@ -176,15 +180,15 @@ const WindowManager = (() => {
   /** Ends dragging and cleans up event listeners. */
   function stopDrag(e: MouseEvent): void {
     if (!dragState.element || !dragState.isDragging) return;
-    
+
     e.preventDefault();
     e.stopPropagation();
-    
+
     console.log(`[WindowManager] drag stopped for window "${dragState.element.id}".`);
-    
+
     dragState.isDragging = false;
     dragState.element = null;
-    
+
     document.removeEventListener('mousemove', move, true);
     document.removeEventListener('mouseup', stopDrag, true);
   }
@@ -195,7 +199,7 @@ const WindowManager = (() => {
   function titlebarDragHandler(e: MouseEvent): void {
     const titlebar = e.currentTarget as HTMLElement;
     const win = titlebar.parentElement;
-    
+
     if (win && win.id) {
       drag(e, win.id);
     } else {
@@ -210,7 +214,7 @@ const WindowManager = (() => {
     document.addEventListener('mousedown', (e) => {
       // Do not focus if we are dragging
       if (dragState.isDragging) return;
-      
+
       const win = (e.target as Element).closest('.window, .cde-retro-modal');
       if (win) {
         focusWindow(win.id);
@@ -232,25 +236,51 @@ const WindowManager = (() => {
       return;
     }
 
-    if (dropdownMenu.parentElement !== dropdownBtn) {
-      dropdownBtn.appendChild(dropdownMenu);
-    }
+    let clickJustOpened = false;
 
     dropdownBtn.addEventListener('click', (e) => {
       e.stopPropagation();
+      e.preventDefault();
+
+      const willOpen = !dropdownBtn.classList.contains('open');
       dropdownBtn.classList.toggle('open');
+
+      if (willOpen) {
+        const rect = dropdownBtn.getBoundingClientRect();
+        dropdownMenu.style.position = 'fixed';
+        dropdownMenu.style.bottom = window.innerHeight - rect.top + 'px';
+        dropdownMenu.style.left = rect.left + 'px';
+        dropdownMenu.style.display = 'block';
+
+        clickJustOpened = true;
+
+        setTimeout(() => {
+          clickJustOpened = false;
+        }, 200);
+      } else {
+        dropdownMenu.style.display = 'none';
+      }
+
       console.log(
         `[WindowManager] Dropdown toggled: ${dropdownBtn.classList.contains('open') ? 'open' : 'closed'}`
       );
     });
 
     document.addEventListener('click', (e) => {
-      if (!dropdownBtn.contains(e.target as Node)) {
+      if (clickJustOpened) return;
+
+      if (!dropdownBtn.contains(e.target as Node) && !dropdownMenu.contains(e.target as Node)) {
         dropdownBtn.classList.remove('open');
+        dropdownMenu.style.display = 'none';
       }
     });
 
-    dropdownMenu.addEventListener('click', (e) => e.stopPropagation());
+    dropdownMenu.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+
+    dropdownMenu.style.display = 'none';
+
     console.log('[WindowManager] Dropdown initialized.');
   }
 
@@ -279,17 +309,17 @@ const WindowManager = (() => {
     allWindows.forEach((id) => {
       const win = document.getElementById(id);
       const titlebar = document.getElementById(`${id}Titlebar`);
-      
+
       if (win && titlebar) {
         // Normalize position at startup
         setTimeout(() => {
           normalizeWindowPosition(win);
         }, 100);
-        
+
         titlebar.removeEventListener('mousedown', titlebarDragHandler);
         titlebar.addEventListener('mousedown', titlebarDragHandler);
         draggableCount++;
-        
+
         titlebar.setAttribute('data-draggable', 'true');
         console.log(`[WindowManager] Draggable initialized for: ${id}`);
       }
@@ -305,11 +335,11 @@ const WindowManager = (() => {
   function init(): void {
     initWindows();
     initDropdown();
-    
+
     setTimeout(() => {
       initDraggableTitlebars();
     }, 200);
-    
+
     console.log('[WindowManager] Fully initialized.');
   }
 

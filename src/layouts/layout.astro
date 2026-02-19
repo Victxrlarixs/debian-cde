@@ -10,10 +10,7 @@ const { title } = Astro.props;
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="description"
-      content="Retro Debian CDE Desktop UI inspirado en Unix y Linux."
-    />
+    <meta name="description" content="Retro Debian CDE Desktop UI inspirado en Unix y Linux." />
     <meta name="keywords" content="Debian, Linux, CDE, Retro Desktop, Unix" />
     <title>{title}</title>
     <link rel="shortcut icon" type="image/x-icon" href="/icons/favicon.ico" />
@@ -25,12 +22,11 @@ const { title } = Astro.props;
   <body>
     <slot />
 
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
     ></script>
 
     <script>
-      import "/src/scripts/core.ts";
+      import '/src/scripts/core.ts';
     </script>
   </body>
 </html>

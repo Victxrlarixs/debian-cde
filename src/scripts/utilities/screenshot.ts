@@ -9,7 +9,7 @@ import { CDEModal } from '../ui/modals';
 /**
  * Type declaration for html2canvas library.
  * Assumes html2canvas is loaded globally via script tag.
- * 
+ *
  * @param element - The HTML element to capture
  * @param options - Configuration options for the capture
  * @returns Promise resolving to an HTMLCanvasElement
@@ -18,22 +18,22 @@ declare function html2canvas(element: HTMLElement, options?: any): Promise<HTMLC
 
 /**
  * Captures a full-page screenshot using html2canvas and triggers a download.
- * 
+ *
  * @remarks
  * This function captures the entire document element (html2canvas) and saves it
  * as a PNG file with a timestamp in the filename. During capture:
  * - The screenshot button is visually disabled (opacity 0.5, cursor wait)
  * - A toast notification is displayed (temporarily hidden in the cloned document)
  * - Error handling shows a modal alert if capture fails
- * 
+ *
  * Configuration is loaded from CONFIG.SCREENSHOT:
  * - SCALE: Resolution scale factor
  * - TOAST_MESSAGE: Message displayed during capture
  * - FILENAME_PREFIX: Prefix for the generated filename
- * 
+ *
  * The function is exposed globally as window.captureFullPageScreenshot
  * for use in HTML onclick handlers.
- * 
+ *
  * @example
  * ```html
  * <button onclick="captureFullPageScreenshot()">Capture Screenshot</button>
@@ -41,7 +41,7 @@ declare function html2canvas(element: HTMLElement, options?: any): Promise<HTMLC
  */
 export function captureFullPageScreenshot(): void {
   console.log('[Screenshot] captureFullPageScreenshot: starting screenshot capture');
-  
+
   const btn = document.getElementById('screenshot-btn') as HTMLElement | null;
 
   if (btn) {
@@ -80,16 +80,20 @@ export function captureFullPageScreenshot(): void {
   html2canvas(document.documentElement, options)
     .then((canvas: HTMLCanvasElement) => {
       console.log('[Screenshot] Canvas generated successfully');
-      
+
       // Generate timestamp-based filename
       const now = new Date();
-      const filename = `${CONFIG.SCREENSHOT.FILENAME_PREFIX}-${
-        now.getFullYear()}-${
-        (now.getMonth() + 1).toString().padStart(2, '0')}-${
-        now.getDate().toString().padStart(2, '0')} ${
-        now.getHours().toString().padStart(2, '0')}.${
-        now.getMinutes().toString().padStart(2, '0')}.${
-        now.getSeconds().toString().padStart(2, '0')}.png`;
+      const filename = `${CONFIG.SCREENSHOT.FILENAME_PREFIX}-${now.getFullYear()}-${(
+        now.getMonth() + 1
+      )
+        .toString()
+        .padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')} ${now
+        .getHours()
+        .toString()
+        .padStart(2, '0')}.${now.getMinutes().toString().padStart(2, '0')}.${now
+        .getSeconds()
+        .toString()
+        .padStart(2, '0')}.png`;
 
       console.log(`[Screenshot] Generated filename: ${filename}`);
 
@@ -114,7 +118,7 @@ export function captureFullPageScreenshot(): void {
     })
     .catch((error: any) => {
       console.error('[Screenshot] Error during capture:', error);
-      
+
       // Clean up on error
       if (document.body.contains(toast)) {
         document.body.removeChild(toast);
@@ -128,10 +132,9 @@ export function captureFullPageScreenshot(): void {
       }
 
       // Show error to user
-      CDEModal.alert('Error capturing screenshot.')
-        .then(() => {
-          console.log('[Screenshot] Error alert displayed to user');
-        });
+      CDEModal.alert('Error capturing screenshot.').then(() => {
+        console.log('[Screenshot] Error alert displayed to user');
+      });
     });
 }
 
@@ -144,7 +147,7 @@ declare global {
     /**
      * Global function for capturing full-page screenshots.
      * Made available for HTML onclick handlers.
-     * 
+     *
      * @example
      * ```html
      * <button onclick="captureFullPageScreenshot()">Capture</button>

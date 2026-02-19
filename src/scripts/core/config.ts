@@ -174,24 +174,24 @@ const { __default__: defaultFonts, ...fontPresets } = fontsData;
 
 /**
  * Central configuration object for the CDE application.
- * 
+ *
  * @remarks
  * This object aggregates all configuration values from various sources:
  * - Hardcoded constants for window management, audio, filesystem, etc.
  * - Default styles extracted from themes.json and fonts.json
  * - Theme and font preset collections from JSON files
- * 
+ *
  * The configuration is exposed globally as `window.CONFIG` for debugging
  * and legacy compatibility purposes.
- * 
+ *
  * @example
  * ```typescript
  * import { CONFIG } from './config';
- * 
+ *
  * // Access configuration values
  * console.log(CONFIG.TERMINAL.MAX_LINES);
  * console.log(CONFIG.DEFAULT_STYLES.COLORS['--window-color']);
- * 
+ *
  * // Iterate through available themes
  * Object.keys(CONFIG.THEMES).forEach(theme => {
  *   console.log(`Theme available: ${theme}`);

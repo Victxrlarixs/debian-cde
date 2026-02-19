@@ -10,44 +10,44 @@ declare global {
      * Opens the file manager window.
      */
     openFileManager: () => void;
-    
+
     /**
      * Closes the file manager window.
      */
     closeFileManager: () => void;
-    
+
     /**
      * Toggles the file manager window visibility.
      */
     toggleFileManager: () => void;
-    
+
     /**
      * Checks if the file manager is currently open.
      * @returns {boolean} True if the file manager is open, false otherwise.
      */
     isFileManagerOpen: () => boolean;
-    
+
     /**
      * Navigates to the specified path in the file manager.
      * @param path - The path to navigate to.
      */
     openPath: (path: string) => void;
-    
+
     /**
      * Navigates back in the file manager history.
      */
     goBack: () => void;
-    
+
     /**
      * Navigates forward in the file manager history.
      */
     goForward: () => void;
-    
+
     /**
      * Navigates up one directory level.
      */
     goUp: () => void;
-    
+
     /**
      * Navigates to the home directory.
      */
@@ -119,7 +119,7 @@ let activeContextMenu: HTMLElement | null = null;
 
 /**
  * Retrieves the contents of the current folder.
- * 
+ *
  * @returns {Record<string, VirtualFileSystemNode> | null} The folder contents or null if not found
  */
 function getCurrentFolder(): Record<string, VirtualFileSystemNode> | null {
@@ -128,7 +128,7 @@ function getCurrentFolder(): Record<string, VirtualFileSystemNode> | null {
 
 /**
  * Renders the files in the current folder to the UI.
- * 
+ *
  * @remarks
  * Updates the file list display, path input, and status bar.
  * Handles hidden file filtering based on showHidden flag.
@@ -195,9 +195,9 @@ function renderFiles(): void {
 
 /**
  * Navigates to the specified filesystem path.
- * 
+ *
  * @param path - The path to navigate to
- * 
+ *
  * @remarks
  * Updates navigation history and current path, then re-renders.
  * Does nothing if the path does not exist in the filesystem.
@@ -207,12 +207,12 @@ function openPath(path: string): void {
     console.warn(`[FileManager] openPath: path does not exist: ${path}`);
     return;
   }
-  
+
   history = history.slice(0, historyIndex + 1);
   history.push(path);
   historyIndex++;
   currentPath = path;
-  
+
   console.log(`[FileManager] openPath: navigated to ${path}`);
   renderFiles();
 }
@@ -272,7 +272,7 @@ function goHome(): void {
 
 /**
  * Creates a new empty file with the specified name.
- * 
+ *
  * @param name - The name of the file to create
  * @returns Promise that resolves when the file is created
  */
@@ -287,7 +287,7 @@ async function touch(name: string): Promise<void> {
 
 /**
  * Creates a new folder with the specified name.
- * 
+ *
  * @param name - The name of the folder to create
  * @returns Promise that resolves when the folder is created
  */
@@ -302,17 +302,17 @@ async function mkdir(name: string): Promise<void> {
 
 /**
  * Deletes the specified file or folder.
- * 
+ *
  * @param name - The name of the item to delete
  * @returns Promise that resolves when the deletion is complete
- * 
+ *
  * @remarks
  * Shows a confirmation modal before deletion.
  */
 async function rm(name: string): Promise<void> {
   const folder = getCurrentFolder();
   if (!folder) return;
-  
+
   const confirmed = await CDEModal.confirm(`Delete ${name}?`);
   if (confirmed) {
     delete folder[name];
@@ -324,7 +324,7 @@ async function rm(name: string): Promise<void> {
 
 /**
  * Renames a file or folder.
- * 
+ *
  * @param oldName - The current name of the item
  * @param newName - The new name for the item
  * @returns Promise that resolves when the rename is complete
@@ -342,7 +342,7 @@ async function rename(oldName: string, newName: string): Promise<void> {
 
 /**
  * Opens a text file in a modal window.
- * 
+ *
  * @param name - The name of the file
  * @param content - The content of the file to display
  */
@@ -352,16 +352,16 @@ function openTextWindow(name: string, content: string): void {
     console.warn('[FileManager] openTextWindow: #textWindow element not found');
     return;
   }
-  
+
   const titleEl = document.getElementById('textTitle') as HTMLElement | null;
   const contentEl = document.getElementById('textContent') as HTMLElement | null;
-  
+
   if (titleEl) titleEl.textContent = name;
   if (contentEl) contentEl.textContent = content;
-  
+
   win.style.display = 'block';
   win.style.zIndex = String(++zIndex);
-  
+
   console.log(`[FileManager] openTextWindow: opened file "${name}"`);
 }
 
@@ -509,11 +509,11 @@ function setupMenuBar(): void {
       menu.style.left = rect.left + 'px';
       menu.style.top = rect.bottom + 'px';
       activeMenu = menu;
-      
+
       console.log(`[FileManager] setupMenuBar: opened "${name}" menu`);
     });
   });
-  
+
   console.log('[FileManager] setupMenuBar: menu bar initialized');
 }
 
@@ -529,13 +529,13 @@ function setupContextMenu(): void {
 
   fmFiles.removeEventListener('contextmenu', handleContextMenu);
   fmFiles.addEventListener('contextmenu', handleContextMenu);
-  
+
   console.log('[FileManager] setupContextMenu: context menu initialized');
 }
 
 /**
  * Handles right-click context menu events on file items.
- * 
+ *
  * @param e - The mouse event that triggered the context menu
  */
 async function handleContextMenu(e: MouseEvent): Promise<void> {
@@ -621,7 +621,7 @@ async function handleContextMenu(e: MouseEvent): Promise<void> {
   const menuRect = menu.getBoundingClientRect();
   const vw = window.innerWidth;
   const vh = window.innerHeight;
-  
+
   if (menuRect.right > vw) {
     menu.style.left = e.pageX - menuRect.width + 'px';
   }
@@ -639,14 +639,14 @@ async function handleContextMenu(e: MouseEvent): Promise<void> {
 
 /**
  * Initializes the file manager.
- * 
+ *
  * @remarks
  * Sets up the menu bar, context menu, sidebar navigation, and renders the initial files.
  * Should be called once before using the file manager.
  */
 function init(): void {
   console.log('[FileManager] init: initializing file manager');
-  
+
   currentPath = CONFIG.FS.HOME;
   history = [currentPath];
   historyIndex = 0;
@@ -685,15 +685,15 @@ function open(): void {
     console.warn('[FileManager] open: file manager window element not found');
     return;
   }
-  
+
   if (!initialized) {
     console.log('[FileManager] open: not initialized, initializing now');
     init();
   }
-  
+
   win.style.display = 'block';
   win.style.zIndex = String(++zIndex);
-  
+
   console.log('[FileManager] open: file manager window opened');
   renderFiles();
 }
@@ -720,12 +720,12 @@ function toggle(): void {
     console.warn('[FileManager] toggle: file manager window element not found');
     return;
   }
-  
+
   if (!initialized) {
     console.log('[FileManager] toggle: not initialized, initializing now');
     init();
   }
-  
+
   if (win.style.display === 'none' || win.style.display === '') {
     win.style.display = 'block';
     win.style.zIndex = String(++zIndex);
@@ -734,13 +734,13 @@ function toggle(): void {
     win.style.zIndex = String(++zIndex);
     console.log('[FileManager] toggle: file manager brought to front');
   }
-  
+
   renderFiles();
 }
 
 /**
  * Checks if the file manager is currently open.
- * 
+ *
  * @returns {boolean} True if the file manager is open, false otherwise
  */
 function isOpen(): boolean {
@@ -752,7 +752,7 @@ function isOpen(): boolean {
 
 /**
  * File Manager module for navigating and managing a virtual filesystem.
- * 
+ *
  * @remarks
  * Provides a complete file manager interface with navigation history,
  * context menus, file operations (create, delete, rename), and a modal
