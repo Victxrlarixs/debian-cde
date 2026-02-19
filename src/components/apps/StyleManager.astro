@@ -1,26 +1,25 @@
 ---
-import WindowControls from "../common/WindowControls.astro";
-import StyleManagerColor from "../StyleManagerColor.astro";
-import StyleManagerFont from "../StyleManagerFont.astro";
-import StyleManagerMouse from "../StyleManagerMouse.astro";
-import StyleManagerBackdrop from "../StyleManagerBackdrop.astro";
-import StyleManagerKeyboard from "../StyleManagerKeyboard.astro";
-import StyleManagerWindow from "../StyleManagerWindows.astro";
-import StyleManagerScreen from "../StyleManagerScreen.astro";
-import StyleManagerStartup from "../StyleManagerStartup.astro";
+import WindowControls from '../common/WindowControls.astro';
+import StyleManagerColor from '../StyleManagerColor.astro';
+import StyleManagerFont from '../StyleManagerFont.astro';
+import StyleManagerMouse from '../StyleManagerMouse.astro';
+import StyleManagerBackdrop from '../StyleManagerBackdrop.astro';
+import StyleManagerKeyboard from '../StyleManagerKeyboard.astro';
+import StyleManagerWindow from '../StyleManagerWindows.astro';
+import StyleManagerScreen from '../StyleManagerScreen.astro';
+import StyleManagerStartup from '../StyleManagerStartup.astro';
 ---
 
 <div class="cde-retro-modal style-manager-main" id="styleManagerMain">
   <div class="titlebar" id="styleManagerMainTitlebar">
     <span class="titlebar-text">Style Manager</span>
-<WindowControls
-  windowId="styleManagerMain"
-  closeFunction="styleManager.closeMain"
-  disableMaximize={true}
-/>
+    <WindowControls
+      windowId="styleManagerMain"
+      closeFunction="styleManager.closeMain"
+      disableMaximize={true}
+    />
   </div>
-  <div class="cde-menubar">
-  </div>
+  <div class="cde-menubar"></div>
 
   <div class="modal-body style-manager-body">
     <div class="style-manager-categories">
@@ -77,11 +76,11 @@ import StyleManagerStartup from "../StyleManagerStartup.astro";
   </div>
 </div>
 
-    <StyleManagerColor />
-    <StyleManagerFont />
-    <StyleManagerMouse />
-    <StyleManagerBackdrop />
-    <StyleManagerKeyboard />
-    <StyleManagerWindow />
-    <StyleManagerScreen />
-    <StyleManagerStartup />
+<StyleManagerColor />
+<StyleManagerFont />
+<StyleManagerMouse />
+<StyleManagerBackdrop />
+<StyleManagerKeyboard />
+<StyleManagerWindow />
+<StyleManagerScreen />
+<StyleManagerStartup />

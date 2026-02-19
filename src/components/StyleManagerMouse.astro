@@ -1,5 +1,5 @@
 ---
-import WindowControls from "./common/WindowControls.astro";
+import WindowControls from './common/WindowControls.astro';
 ---
 
 <div class="cde-retro-modal style-manager-mouse" id="styleManagerMouse">
@@ -22,15 +22,45 @@ import WindowControls from "./common/WindowControls.astro";
         <div class="mouse-control-column">
           <span>Handedness:</span>
           <div class="mouse-radio-group">
-            <label><input type="radio" name="handedness" value="right" onclick="updateMouseSetting('handedness', 'right')" checked> Right</label>
-            <label><input type="radio" name="handedness" value="left" onclick="updateMouseSetting('handedness', 'left')"> Left</label>
+            <label
+              ><input
+                type="radio"
+                name="handedness"
+                value="right"
+                onclick="updateMouseSetting('handedness', 'right')"
+                checked
+              /> Right</label
+            >
+            <label
+              ><input
+                type="radio"
+                name="handedness"
+                value="left"
+                onclick="updateMouseSetting('handedness', 'left')"
+              /> Left</label
+            >
           </div>
         </div>
         <div class="mouse-control-column">
           <span>Button 2:</span>
           <div class="mouse-radio-group">
-            <label><input type="radio" name="button2" value="transfer" onclick="updateMouseSetting('button2', 'transfer')" checked> Transfer</label>
-            <label><input type="radio" name="button2" value="adjust" onclick="updateMouseSetting('button2', 'adjust')"> Adjust</label>
+            <label
+              ><input
+                type="radio"
+                name="button2"
+                value="transfer"
+                onclick="updateMouseSetting('button2', 'transfer')"
+                checked
+              /> Transfer</label
+            >
+            <label
+              ><input
+                type="radio"
+                name="button2"
+                value="adjust"
+                onclick="updateMouseSetting('button2', 'adjust')"
+              /> Adjust</label
+            >
           </div>
         </div>
       </div>
@@ -39,17 +69,38 @@ import WindowControls from "./common/WindowControls.astro";
     <div class="mouse-sliders">
       <div class="mouse-slider-row">
         <span>Double-click:</span>
-        <input type="range" min="0" max="1" step="0.1" value="0.5" oninput="updateMouseSetting('doubleClick', this.value); this.nextElementSibling.textContent = this.value">
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.1"
+          value="0.5"
+          oninput="updateMouseSetting('doubleClick', this.value); this.nextElementSibling.textContent = this.value"
+        />
         <span>0.5</span>
       </div>
       <div class="mouse-slider-row">
         <span>Acceleration:</span>
-        <input type="range" min="0" max="4" step="0.5" value="2" oninput="updateMouseSetting('acceleration', this.value); this.nextElementSibling.textContent = this.value">
+        <input
+          type="range"
+          min="0"
+          max="4"
+          step="0.5"
+          value="2"
+          oninput="updateMouseSetting('acceleration', this.value); this.nextElementSibling.textContent = this.value"
+        />
         <span>2</span>
       </div>
       <div class="mouse-slider-row">
         <span>Threshold:</span>
-        <input type="range" min="0" max="8" step="1" value="4" oninput="updateMouseSetting('threshold', this.value); this.nextElementSibling.textContent = this.value">
+        <input
+          type="range"
+          min="0"
+          max="8"
+          step="1"
+          value="4"
+          oninput="updateMouseSetting('threshold', this.value); this.nextElementSibling.textContent = this.value"
+        />
         <span>4</span>
       </div>
     </div>

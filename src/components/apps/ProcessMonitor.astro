@@ -1,17 +1,14 @@
 ---
 // src/components/ProcessMonitor.astro
-import WindowControls from "../common/WindowControls.astro";
+import WindowControls from '../common/WindowControls.astro';
 ---
 
 <div class="window" id="process-monitor">
-    <div class="titlebar" id="process-monitor-titlebar">
-        <span class="titlebar-text">Process Monitor</span>
-        <WindowControls
-            windowId="process-monitor"
-            closeFunction="ProcessMonitor.close"
-        />
-    </div>
-    <div class="terminal-body">
-        <div id="process-monitor-content"></div>
-    </div>
+  <div class="titlebar" id="process-monitor-titlebar">
+    <span class="titlebar-text">Process Monitor</span>
+    <WindowControls windowId="process-monitor" closeFunction="ProcessMonitor.close" />
+  </div>
+  <div class="terminal-body">
+    <div id="process-monitor-content"></div>
+  </div>
 </div>

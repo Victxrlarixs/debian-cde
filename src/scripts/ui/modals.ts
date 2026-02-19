@@ -19,29 +19,29 @@ export interface ModalButton {
 
 /**
  * CDE Modal Dialog Manager
- * 
+ *
  * @class
  * @description
  * Provides a unified interface for creating and managing retro-styled modal dialogs
  * that match the CDE aesthetic. Supports alert, confirm, and prompt dialogs with
  * customizable buttons and content.
- * 
+ *
  * The modal system ensures proper z-index layering, handles cleanup of previous
  * modal instances, and provides Promise-based asynchronous interaction.
- * 
+ *
  * @example
  * ```typescript
  * // Alert dialog
  * await CDEModal.alert('Operation completed successfully');
- * 
+ *
  * // Confirm dialog
  * const confirmed = await CDEModal.confirm('Delete this file?');
  * if (confirmed) { // Handle deletion }
- * 
+ *
  * // Prompt dialog
  * const username = await CDEModal.prompt('Enter your name:', 'Guest');
  * if (username) { // Use input value }
- * 
+ *
  * // Custom dialog
  * const result = await CDEModal.open(
  *   'Custom Dialog',
@@ -61,14 +61,14 @@ class CDEModalClass {
 
   /**
    * Initializes or reuses the CDE modal instance.
-   * 
+   *
    * @returns {HTMLElement} The modal DOM element
-   * 
+   *
    * @remarks
    * If an existing modal is found in the DOM, it is cloned and cleaned
    * to remove any Style Manager artifacts. If no modal exists, a new one
    * is created from scratch.
-   * 
+   *
    * The close button is automatically wired to close the modal.
    */
   private getModal(): HTMLElement {
@@ -155,12 +155,12 @@ class CDEModalClass {
 
   /**
    * Opens a modal dialog with custom content and buttons.
-   * 
+   *
    * @param title - The title displayed in the modal's title bar
    * @param content - HTML content for the modal body
    * @param buttons - Array of button configurations (defaults to single Accept button)
    * @returns Promise that resolves with the value of the clicked button
-   * 
+   *
    * @remarks
    * The modal is displayed with proper z-index management. The returned Promise
    * resolves when any button is clicked or the modal is closed.
@@ -221,10 +221,10 @@ class CDEModalClass {
 
   /**
    * Displays an alert dialog with a single "Accept" button.
-   * 
+   *
    * @param message - The message to display in the alert
    * @returns Promise that resolves when the alert is acknowledged
-   * 
+   *
    * @example
    * ```typescript
    * await CDEModal.alert('File saved successfully');
@@ -238,10 +238,10 @@ class CDEModalClass {
 
   /**
    * Displays a confirmation dialog with Accept and Cancel buttons.
-   * 
+   *
    * @param question - The question to ask the user
    * @returns Promise resolving to true if Accept clicked, false if Cancel clicked
-   * 
+   *
    * @example
    * ```typescript
    * if (await CDEModal.confirm('Delete this item?')) {
@@ -261,11 +261,11 @@ class CDEModalClass {
 
   /**
    * Displays a prompt dialog with a text input field.
-   * 
+   *
    * @param question - The prompt question
    * @param defaultValue - Optional default value for the input field
    * @returns Promise resolving to the input value if Accept clicked, null if Cancel clicked
-   * 
+   *
    * @example
    * ```typescript
    * const name = await CDEModal.prompt('Enter your name:', 'Guest');
@@ -276,7 +276,7 @@ class CDEModalClass {
    */
   public async prompt(question: string, defaultValue: string = ''): Promise<string | null> {
     console.log(`[CDEModal] Displaying prompt dialog: "${question}" (default: "${defaultValue}")`);
-    
+
     const content = `
       <p style="margin:0 0 10px 0;">${question}</p>
       <input type="text" id="cde-prompt-input" value="${defaultValue}">
@@ -294,7 +294,7 @@ class CDEModalClass {
       console.log(`[CDEModal] Prompt accepted with value: "${inputValue}"`);
       return inputValue;
     }
-    
+
     console.log('[CDEModal] Prompt cancelled');
     return null;
   }
@@ -302,11 +302,11 @@ class CDEModalClass {
 
 /**
  * Singleton instance of the CDE Modal manager.
- * 
+ *
  * @remarks
  * This is the main export for the modal system. Use this instance
  * throughout the application for all modal dialogs.
- * 
+ *
  * The instance is also exposed globally as `window.CDEModal` for
  * compatibility with inline HTML event handlers.
  */

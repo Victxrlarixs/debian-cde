@@ -1,5 +1,5 @@
 ---
-import WindowControls from "./common/WindowControls.astro";
+import WindowControls from './common/WindowControls.astro';
 ---
 
 <div class="cde-retro-modal style-manager-color" id="styleManagerColor">
@@ -8,7 +8,7 @@ import WindowControls from "./common/WindowControls.astro";
     <WindowControls
       windowId="styleManagerColor"
       closeFunction="styleManager.closeColor"
-        disableMaximize={true}
+      disableMaximize={true}
     />
   </div>
 
@@ -32,45 +32,93 @@ import WindowControls from "./common/WindowControls.astro";
 
     <!-- Cuadros de color en fila (sin labels) -->
     <div class="color-swatches-row">
-      <button class="color-swatch-btn" style="background-color: var(--workspace-color, #a0a0a0);" 
-              onclick="document.getElementById('color-workspace').click()">
+      <button
+        class="color-swatch-btn"
+        style="background-color: var(--workspace-color, #a0a0a0);"
+        onclick="document.getElementById('color-workspace').click()"
+      >
       </button>
-      <input type="color" id="color-workspace" value="#a0a0a0" data-var="--workspace-color" style="display: none;" 
-             oninput="this.previousElementSibling.style.backgroundColor = this.value" />
+      <input
+        type="color"
+        id="color-workspace"
+        value="#a0a0a0"
+        data-var="--workspace-color"
+        style="display: none;"
+        oninput="this.previousElementSibling.style.backgroundColor = this.value"
+      />
 
-      <button class="color-swatch-btn" style="background-color: var(--titlebar-color, #000080);"
-              onclick="document.getElementById('color-title-active').click()">
+      <button
+        class="color-swatch-btn"
+        style="background-color: var(--titlebar-color, #000080);"
+        onclick="document.getElementById('color-title-active').click()"
+      >
       </button>
-      <input type="color" id="color-title-active" value="#000080" data-var="--titlebar-color" style="display: none;"
-             oninput="this.previousElementSibling.style.backgroundColor = this.value" />
+      <input
+        type="color"
+        id="color-title-active"
+        value="#000080"
+        data-var="--titlebar-color"
+        style="display: none;"
+        oninput="this.previousElementSibling.style.backgroundColor = this.value"
+      />
 
-      <button class="color-swatch-btn" style="background-color: var(--window-color, #c0c0c0);"
-              onclick="document.getElementById('color-background').click()">
+      <button
+        class="color-swatch-btn"
+        style="background-color: var(--window-color, #c0c0c0);"
+        onclick="document.getElementById('color-background').click()"
+      >
       </button>
-      <input type="color" id="color-background" value="#c0c0c0" data-var="--window-color" style="display: none;"
-             oninput="this.previousElementSibling.style.backgroundColor = this.value" />
+      <input
+        type="color"
+        id="color-background"
+        value="#c0c0c0"
+        data-var="--window-color"
+        style="display: none;"
+        oninput="this.previousElementSibling.style.backgroundColor = this.value"
+      />
 
-      <button class="color-swatch-btn" style="background-color: var(--highlight-color, #0000ff);"
-              onclick="document.getElementById('color-highlight').click()">
+      <button
+        class="color-swatch-btn"
+        style="background-color: var(--highlight-color, #0000ff);"
+        onclick="document.getElementById('color-highlight').click()"
+      >
       </button>
-      <input type="color" id="color-highlight" value="#0000ff" data-var="--highlight-color" style="display: none;"
-             oninput="this.previousElementSibling.style.backgroundColor = this.value" />
+      <input
+        type="color"
+        id="color-highlight"
+        value="#0000ff"
+        data-var="--highlight-color"
+        style="display: none;"
+        oninput="this.previousElementSibling.style.backgroundColor = this.value"
+      />
 
-      <button class="color-swatch-btn" style="background-color: var(--text-color, #000000);"
-              onclick="document.getElementById('color-text').click()">
+      <button
+        class="color-swatch-btn"
+        style="background-color: var(--text-color, #000000);"
+        onclick="document.getElementById('color-text').click()"
+      >
       </button>
-      <input type="color" id="color-text" value="#000000" data-var="--text-color" style="display: none;"
-             oninput="this.previousElementSibling.style.backgroundColor = this.value" />
+      <input
+        type="color"
+        id="color-text"
+        value="#000000"
+        data-var="--text-color"
+        style="display: none;"
+        oninput="this.previousElementSibling.style.backgroundColor = this.value"
+      />
     </div>
 
     <!-- Default button -->
     <div class="color-default-section">
-<button class="cde-btn color-default-btn" onclick="styleManager.resetColor()">Default</button>
+      <button class="cde-btn color-default-btn" onclick="styleManager.resetColor()">Default</button>
     </div>
   </div>
 
   <div class="cde-actionbar">
-    <button class="cde-btn cde-btn-default" onclick="styleManager.applyColor(); styleManager.closeColor()">OK</button>
+    <button
+      class="cde-btn cde-btn-default"
+      onclick="styleManager.applyColor(); styleManager.closeColor()">OK</button
+    >
     <button class="cde-btn" onclick="styleManager.closeColor()">Cancel</button>
     <button class="cde-btn" onclick="styleManager.showMessage('Help not implemented')">Help</button>
   </div>

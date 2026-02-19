@@ -7,7 +7,7 @@ import type { StyleManager } from '../features/stylemanager';
 import { retroBeep } from '../utilities/beep';
 import { captureFullPageScreenshot } from '../utilities/screenshot';
 import '../ui/external-links';
-import { ProcessMonitor } from '../features/processmonitor'; 
+import { ProcessMonitor } from '../features/processmonitor';
 import { mouseSettings } from '../preferences/mouse';
 /**
  * Global interface declarations for CDE desktop environment.
