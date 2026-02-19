@@ -37,14 +37,11 @@
             >
                 <img src="/icons/filemanager.png" alt="File Manager" />
             </div>
-            <div class="cde-icon" title="Github Repo">
-                <a
-                    href="https://github.com/Victxrlarixs/debian-cde"
-                    target="_blank"
-                >
-                    <img src="/icons/konqueror.png" alt="Browser" />
-                </a>
-            </div>
+<div class="cde-icon" title="Github Repo">
+    <div onclick="confirmExternalLink('https://github.com/Victxrlarixs/debian-cde')" style="cursor: pointer;">
+        <img src="/icons/konqueror.png" alt="Browser" />
+    </div>
+</div>
             <div
                 class="cde-icon"
                 onclick="styleManager.openMain()"
@@ -105,13 +102,13 @@
     >
         <img src="/icons/org.xfce.screenshooter.png" alt="Camera" />
     </div>
-    <div
-        class="tray-icon"
-        title="Report Issue"
-        onclick="window.open('https://github.com/Victxrlarixs/debian-cde/issues', '_blank')"
-    >
-        <img src="/icons/help.png" alt="Issue" />
-    </div>
+<div
+  class="tray-icon"
+  title="Report Issue"
+  onclick="confirmExternalLink('https://github.com/Victxrlarixs/debian-cde/issues')"
+>
+  <img src="/icons/help.png" alt="Issue" />
+</div>
     <div
         class="tray-icon"
         id="taskmanager-btn"
