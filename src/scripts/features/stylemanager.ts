@@ -1,10 +1,10 @@
 // src/scripts/stylemanager.ts
 
-import { CONFIG } from './config';
+import { CONFIG } from '../core/config';
 
 /**
- * Administrador de estilos CDE para personalización de colores y fuentes.
- * Ahora maneja múltiples ventanas independientes.
+ * CDE Style Manager for customization of colors and fonts.
+ * Now handles multiple independent windows.
  */
 export class StyleManager {
   public styles: Record<string, string>;
@@ -17,7 +17,7 @@ export class StyleManager {
   public defaultAllStyles: Record<string, string>;
 
   constructor() {
-    // Cargar valores por defecto desde CONFIG
+    // Load default values from CONFIG
     this.styles = { ...CONFIG.DEFAULT_STYLES.COLORS };
     this.fontStyles = { ...CONFIG.DEFAULT_STYLES.FONTS };
     this.presets = { ...CONFIG.THEMES };
@@ -40,7 +40,7 @@ export class StyleManager {
   }
 
   private bindEvents(): void {
-    // Icono en el dock para abrir el Style Manager principal
+    // Icon in the dock to open the main Style Manager
     const styleManagerIcon = document.querySelector(
       '.cde-icon img[src*="appearance"]'
     )?.parentElement;
@@ -51,7 +51,7 @@ export class StyleManager {
       });
     }
 
-    // Botones de cierre de cada ventana (definidos en sus componentes)
+    // Close buttons for each window (defined in their components)
     const closeMain = document.querySelector('#styleManagerMain .close-btn');
     if (closeMain) closeMain.addEventListener('click', () => this.closeMain());
 
@@ -64,7 +64,7 @@ export class StyleManager {
     const closeBackdrop = document.querySelector('#styleManagerBackdrop .close-btn');
     if (closeBackdrop) closeBackdrop.addEventListener('click', () => this.closeBackdrop());
 
-    // Botones Apply, Reset, Save de la ventana Color
+    // Apply, Reset, Save buttons for Color window
     const applyColorBtn = document.querySelector('#styleManagerColor .cde-btn-default');
     if (applyColorBtn) applyColorBtn.addEventListener('click', () => this.applyColor());
 
@@ -74,7 +74,7 @@ export class StyleManager {
     const saveColorBtn = document.querySelector('#styleManagerColor .cde-btn:nth-child(3)');
     if (saveColorBtn) saveColorBtn.addEventListener('click', () => this.saveColor());
 
-    // Botones Apply, Reset, Save de la ventana Font
+    // Apply, Reset, Save buttons for Font window
     const applyFontBtn = document.querySelector('#styleManagerFont .cde-btn-default');
     if (applyFontBtn) applyFontBtn.addEventListener('click', () => this.applyFont());
 
@@ -84,20 +84,20 @@ export class StyleManager {
     const saveFontBtn = document.querySelector('#styleManagerFont .cde-btn:nth-child(3)');
     if (saveFontBtn) saveFontBtn.addEventListener('click', () => this.saveFont());
 
-    // Presets de color
+    // Color presets
     document.querySelectorAll('.cde-preset[data-scheme]').forEach((btn) => {
       btn.removeEventListener('click', this.handlePresetClick);
       btn.addEventListener('click', this.handlePresetClick);
     });
 
-    // Presets de fuente
+    // Font presets
     document.querySelectorAll('.cde-preset[data-preset]').forEach((btn) => {
       btn.removeEventListener('click', this.handleFontPresetClick);
       btn.addEventListener('click', this.handleFontPresetClick);
     });
   }
 
-  // --- Manejadores de presets ---
+  // --- Preset handlers ---
   private handlePresetClick = (e: Event): void => {
     e.preventDefault();
     e.stopPropagation();
@@ -134,7 +134,7 @@ export class StyleManager {
     activeButton.classList.add('active');
   }
 
-  // --- Configuración de inputs de color ---
+  // --- Color input setup ---
   private setupColorInputs(): void {
     const colorMap: Record<string, string> = {
       'color-workspace': '--workspace-color',
@@ -155,7 +155,6 @@ export class StyleManager {
             const swatch = selector.querySelector('.cde-colorswatch') as HTMLElement | null;
             const nameSpan = selector.querySelector('.cde-colorname') as HTMLElement | null;
             if (swatch) swatch.style.backgroundColor = value;
-            if (nameSpan) nameSpan.textContent = this.getColorName(value);
           }
           this.updateStatus('Color changed', 'colorStatus');
         });
@@ -163,7 +162,7 @@ export class StyleManager {
     });
   }
 
-  // --- Configuración de controles de fuente ---
+  // --- Font control setup ---
   private setupFontControls(): void {
     this.setupFontSelect('font-family-base', '--font-family-base');
     this.setupFontSelect('font-family-terminal', '--font-family-terminal');
@@ -209,7 +208,7 @@ export class StyleManager {
     }
   }
 
-  // --- Apertura y cierre de ventanas específicas ---
+  // --- Opening and closing specific windows ---
   public openMain(): void {
     this.showWindow('styleManagerMain');
   }
@@ -242,7 +241,7 @@ export class StyleManager {
     this.hideWindow('styleManagerBackdrop');
   }
 
-  // Métodos para otras ventanas (puedes agregar más)
+  // Methods for other windows (you can add more)
   public openMouse(): void {
     this.showWindow('styleManagerMouse');
   }
@@ -291,41 +290,41 @@ export class StyleManager {
     this.hideWindow('styleManagerStartup');
   }
 
-private showWindow(id: string): void {
-  const win = document.getElementById(id);
-  if (!win) return;
+  private showWindow(id: string): void {
+    const win = document.getElementById(id);
+    if (!win) return;
 
-  // Mostrar la ventana
-  win.style.display = 'flex';
-  win.style.zIndex = '10000';
+    // Show the window
+    win.style.display = 'flex';
+    win.style.zIndex = '10000';
 
-  // Llamar a focusWindow para manejar foco y z-index
-  if (window.focusWindow) {
-    window.focusWindow(id);
+    // Call focusWindow to handle focus and z-index
+    if (window.focusWindow) {
+      window.focusWindow(id);
+    }
+
+    // Force repaint on main window and dock
+    const mainWin = document.getElementById('styleManagerMain');
+    const dock = document.getElementById('cde-panel');
+
+    if (mainWin) {
+      // Get the current computed background color (from theme)
+      const bgColor = window.getComputedStyle(mainWin).backgroundColor;
+      // Temporarily assign it as an inline style
+      mainWin.style.backgroundColor = bgColor;
+      // Force reflow (browser must paint the new color)
+      mainWin.offsetHeight;
+      // Restore so it continues using the CSS variable
+      mainWin.style.backgroundColor = '';
+    }
+
+    if (dock) {
+      const dockBg = window.getComputedStyle(dock).backgroundColor;
+      dock.style.backgroundColor = dockBg;
+      dock.offsetHeight;
+      dock.style.backgroundColor = '';
+    }
   }
-
-  // Forzar repaint en la ventana principal y en el dock
-  const mainWin = document.getElementById('styleManagerMain');
-  const dock = document.getElementById('cde-panel');
-
-  if (mainWin) {
-    // Obtener el color de fondo actual calculado (el del tema)
-    const bgColor = window.getComputedStyle(mainWin).backgroundColor;
-    // Asignarlo temporalmente como estilo en línea
-    mainWin.style.backgroundColor = bgColor;
-    // Forzar reflow (el navegador debe pintar el nuevo color)
-    mainWin.offsetHeight;
-    // Restaurar para que siga usando la variable CSS
-    mainWin.style.backgroundColor = '';
-  }
-
-  if (dock) {
-    const dockBg = window.getComputedStyle(dock).backgroundColor;
-    dock.style.backgroundColor = dockBg;
-    dock.offsetHeight;
-    dock.style.backgroundColor = '';
-  }
-}
   private hideWindow(id: string): void {
     const win = document.getElementById(id) as HTMLElement | null;
     if (win) {
@@ -333,7 +332,7 @@ private showWindow(id: string): void {
     }
   }
 
-  // --- Aplicación de estilos (funcionalidad existente) ---
+  // --- Style application (existing functionality) ---
   public applyStyle(cssVar: string, value: string): void {
     document.documentElement.style.setProperty(cssVar, value);
     this.styles[cssVar] = value;
@@ -345,7 +344,7 @@ private showWindow(id: string): void {
     this.allStyles[cssVar] = value;
   }
 
-  // Aplicar todos los estilos de color actuales
+  // Apply all current color styles
   public applyColor(): void {
     for (const [cssVar, value] of Object.entries(this.styles)) {
       document.documentElement.style.setProperty(cssVar, value);
@@ -354,7 +353,7 @@ private showWindow(id: string): void {
     this.showMessage('Color settings applied.');
   }
 
-  // Aplicar todos los estilos de fuente actuales
+  // Apply all current font styles
   public applyFont(): void {
     for (const [cssVar, value] of Object.entries(this.fontStyles)) {
       document.documentElement.style.setProperty(cssVar, value);
@@ -364,13 +363,13 @@ private showWindow(id: string): void {
     this.showMessage('Font settings applied.');
   }
 
-  // Aplicar todo (equivalente al apply original)
+  // Apply all (equivalent to original apply)
   public apply(): void {
     this.applyColor();
     this.applyFont();
   }
 
-  // Resetear colores a valores por defecto
+  // Reset colors to default values
   public resetColor(): void {
     for (const [cssVar, value] of Object.entries(this.defaultStyles)) {
       this.applyStyle(cssVar, value);
@@ -378,10 +377,12 @@ private showWindow(id: string): void {
     this.updateUI();
     this.updateStatus('Color reset to default', 'colorStatus');
     this.showMessage('Colors reset to default.');
-    document.querySelectorAll('.cde-preset.active').forEach((btn) => btn.classList.remove('active'));
+    document
+      .querySelectorAll('.cde-preset.active')
+      .forEach((btn) => btn.classList.remove('active'));
   }
 
-  // Resetear fuentes a valores por defecto
+  // Reset fonts to default values
   public resetFont(): void {
     for (const [cssVar, value] of Object.entries(this.defaultFontStyles)) {
       this.applyFontStyle(cssVar, value);
@@ -389,16 +390,18 @@ private showWindow(id: string): void {
     this.updateFontControls();
     this.updateStatus('Font reset to default', 'fontStatus');
     this.showMessage('Fonts reset to default.');
-    document.querySelectorAll('.cde-preset.active').forEach((btn) => btn.classList.remove('active'));
+    document
+      .querySelectorAll('.cde-preset.active')
+      .forEach((btn) => btn.classList.remove('active'));
   }
 
-  // Resetear todo
+  // Reset everything
   public reset(): void {
     this.resetColor();
     this.resetFont();
   }
 
-  // Guardar colores en localStorage
+  // Save colors to localStorage
   public saveColor(): void {
     try {
       const saved = localStorage.getItem('cde-styles');
@@ -413,7 +416,7 @@ private showWindow(id: string): void {
     }
   }
 
-  // Guardar fuentes en localStorage
+  // Save fonts to localStorage
   public saveFont(): void {
     try {
       const saved = localStorage.getItem('cde-styles');
@@ -428,13 +431,13 @@ private showWindow(id: string): void {
     }
   }
 
-  // Guardar todo
+  // Save everything
   public save(): void {
     this.saveColor();
     this.saveFont();
   }
 
-  // Aplicar preset de color
+  // Apply color preset
   public applyPreset(scheme: string): void {
     const preset = this.presets[scheme];
     if (preset) {
@@ -451,7 +454,6 @@ private showWindow(id: string): void {
             const swatch = selector.querySelector('.cde-colorswatch') as HTMLElement | null;
             const nameSpan = selector.querySelector('.cde-colorname') as HTMLElement | null;
             if (swatch) swatch.style.backgroundColor = value;
-            if (nameSpan) nameSpan.textContent = this.getColorName(value);
           }
         }
       }
@@ -460,7 +462,7 @@ private showWindow(id: string): void {
     }
   }
 
-  // Aplicar preset de fuente
+  // Apply font preset
   public applyFontPreset(presetName: string): void {
     const preset = this.fontPresets[presetName];
     if (preset) {
@@ -474,7 +476,7 @@ private showWindow(id: string): void {
     }
   }
 
-  // Cargar estilos guardados
+  // Load saved styles
   private loadSavedStyles(): void {
     try {
       const saved = localStorage.getItem('cde-styles');
@@ -502,7 +504,7 @@ private showWindow(id: string): void {
     }
   }
 
-  // Actualizar UI de colores con los valores actuales
+  // Update color UI with current values
   public updateUI(): void {
     for (const [cssVar, value] of Object.entries(this.styles)) {
       const input = document.querySelector(
@@ -515,13 +517,12 @@ private showWindow(id: string): void {
           const swatch = selector.querySelector('.cde-colorswatch') as HTMLElement | null;
           const nameSpan = selector.querySelector('.cde-colorname') as HTMLElement | null;
           if (swatch) swatch.style.backgroundColor = value;
-          if (nameSpan) nameSpan.textContent = this.getColorName(value);
         }
       }
     }
   }
 
-  // Actualizar controles de fuente con los valores actuales
+  // Update font controls with current values
   public updateFontControls(): void {
     const baseFont =
       this.fontStyles['--font-family-base'] || CONFIG.DEFAULT_STYLES.FONTS['--font-family-base'];
@@ -562,7 +563,7 @@ private showWindow(id: string): void {
     if (valueSpan) valueSpan.textContent = value + suffix;
   }
 
-  // Actualizar vista previa de fuentes
+  // Update font preview
   public updateFontPreview(): void {
     const preview = document.getElementById('font-preview');
     if (!preview) return;
@@ -598,71 +599,19 @@ private showWindow(id: string): void {
     }
   }
 
-  // Probar vista previa (botón)
+  // Test preview (button)
   public testFontPreview(): void {
     this.updateFontPreview();
     this.showMessage('Font preview updated.');
   }
 
-  // Obtener nombre de color a partir de hex
-  private getColorName(hex: string): string {
-    const colors: Record<string, string> = {
-      '#000000': 'Black',
-      '#ffffff': 'White',
-      '#c0c0c0': 'Light Gray',
-      '#808080': 'Gray',
-      '#404040': 'Dark Gray',
-      '#000080': 'Navy Blue',
-      '#0000ff': 'Blue',
-      '#008000': 'Green',
-      '#00ff00': 'Lime',
-      '#800000': 'Maroon',
-      '#ff0000': 'Red',
-      '#800080': 'Purple',
-      '#ff00ff': 'Magenta',
-      '#808000': 'Olive',
-      '#ffff00': 'Yellow',
-      '#008080': 'Teal',
-      '#00ffff': 'Cyan',
-      '#a0a0a0': 'Gray',
-      '#e0d0c0': 'Sand',
-      '#a0c0e0': 'Marine',
-      '#c0c0a0': 'Olive',
-      '#c6bdb3': 'Beige',
-      '#dcd6cc': 'Cream',
-      '#4a6c7a': 'Steel Blue',
-      '#070b0d': 'Dark Slate',
-      '#c7fbe3': 'Mint',
-      '#e6e1d8': 'Pearl',
-      '#bfb6aa': 'Taupe',
-      '#bfb9ad': 'Warm Gray',
-      '#e0dad0': 'Light Cream',
-      '#d8d1c6': 'Cream Gray',
-      '#8f877d': 'Dark Taupe',
-      '#00ff88': 'Cyber Green',
-      '#006400': 'Dark Green',
-      '#000060': 'Dark Navy',
-      '#806040': 'Brown',
-      '#202020': 'Charcoal',
-      '#303030': 'Dark Gray',
-      '#505050': 'Medium Gray',
-      '#000020': 'Midnight Blue',
-      '#000030': 'Deep Navy',
-      '#000040': 'Night Blue',
-      '#0080ff': 'Azure',
-      '#d8c8a8': 'Desert Sand',
-      '#a08040': 'Golden Brown',
-    };
-    return colors[hex.toLowerCase()] || hex.toUpperCase();
-  }
-
-  // Actualizar mensaje de estado en una barra específica
+  // Update status message in a specific bar
   private updateStatus(message: string, statusId: string = 'styleMainStatus'): void {
     const statusElement = document.getElementById(statusId);
     if (statusElement) statusElement.textContent = message;
   }
 
-  // Mostrar mensaje emergente temporal
+  // Show temporary popup message
   public showMessage(message: string): void {
     const msgBox = document.createElement('div');
     msgBox.style.cssText = `
@@ -690,7 +639,7 @@ private showWindow(id: string): void {
     setTimeout(() => msgBox.parentNode?.removeChild(msgBox), 2000);
   }
 
-  // Hacer que todas las ventanas del Style Manager sean arrastrables
+  // Make all Style Manager windows draggable
   private makeAllWindowsDraggable(): void {
     const windows = [
       'styleManagerMain',
@@ -702,10 +651,10 @@ private showWindow(id: string): void {
       'styleManagerWindow',
       'styleManagerScreen',
       'styleManagerBeep',
-      'styleManagerStartup'
+      'styleManagerStartup',
     ];
 
-    windows.forEach(id => {
+    windows.forEach((id) => {
       const win = document.getElementById(id);
       const titlebar = document.getElementById(`${id}Titlebar`);
       if (win && titlebar) {
@@ -714,7 +663,7 @@ private showWindow(id: string): void {
     });
   }
 
-  // Función de arrastre (adaptada de tu código existente)
+  // Drag function (adapted from your existing code)
   private makeDraggable(win: HTMLElement, titlebar: HTMLElement): void {
     let isDragging = false;
     let dragOffset = { x: 0, y: 0 };
@@ -745,17 +694,15 @@ private showWindow(id: string): void {
   }
 }
 
-// Declaración global para window.styleManager
+// Global declaration for window.styleManager
 declare global {
   interface Window {
     styleManager?: StyleManager;
   }
 }
 
-// Inicialización cuando el DOM esté listo
+// Initialization when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
   window.styleManager = new StyleManager();
   setTimeout(() => window.styleManager?.init(), 100);
 });
-
-

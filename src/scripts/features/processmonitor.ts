@@ -1,0 +1,396 @@
+import { CONFIG } from '../core/config';
+
+// ============================================================================
+// htop-style process monitor
+// ============================================================================
+
+interface ProcessInfo {
+  pid: number;
+  name: string;
+  cpu: string;
+  mem: string;
+  elementId: string | null;
+  visible: boolean;
+  isModal: boolean;
+}
+
+/**
+ * Scans the DOM for open windows and modals to generate a process list.
+ * @returns An array of ProcessInfo objects.
+ */
+function scanProcesses(): ProcessInfo[] {
+  const processes: ProcessInfo[] = [];
+  const windows = document.querySelectorAll('.window');
+  const modals = document.querySelectorAll('.cde-retro-modal');
+  let pid = 1000;
+
+  windows.forEach((win) => {
+    if (win.id === 'top-monitor') return;
+    const isVisible = (win as HTMLElement).style.display !== 'none';
+    const titleEl = win.querySelector('.titlebar-text');
+    let name = win.id || 'Window';
+    if (titleEl) name = titleEl.textContent || name;
+    else if (win.id === 'terminal') name = 'Terminal';
+    else if (win.id === 'fm') name = 'File Manager';
+
+    processes.push({
+      pid: pid++,
+      name: name,
+      cpu: (Math.random() * 5 + 0.1).toFixed(1),
+      mem: (Math.random() * 10 + 2).toFixed(1),
+      elementId: win.id,
+      visible: isVisible,
+      isModal: false,
+    });
+  });
+
+  modals.forEach((modal) => {
+    if (modal.id === 'styleManager') {
+      const isVisible = (modal as HTMLElement).style.display !== 'none';
+      processes.push({
+        pid: pid++,
+        name: 'Style Manager',
+        cpu: (Math.random() * 3 + 0.1).toFixed(1),
+        mem: (Math.random() * 8 + 1).toFixed(1),
+        elementId: modal.id,
+        visible: isVisible,
+        isModal: true,
+      });
+    }
+  });
+
+  processes.push(
+    {
+      pid: 1,
+      name: 'init',
+      cpu: '0.3',
+      mem: '1.2',
+      elementId: null,
+      visible: true,
+      isModal: false,
+    },
+    {
+      pid: 2,
+      name: 'kthreadd',
+      cpu: '0.0',
+      mem: '0.0',
+      elementId: null,
+      visible: true,
+      isModal: false,
+    }
+  );
+
+  return processes;
+}
+
+const TopMonitor = (() => {
+  const WINDOW_ID = 'top-monitor';
+  let interval: number | undefined;
+  let zIndex = 3000;
+  let processes: ProcessInfo[] = [];
+  let selectedIndex = 0;
+  let contentDiv: HTMLElement | null = null;
+  let winElement: HTMLElement | null = null;
+
+  function getWindow(): HTMLElement | null {
+    if (!winElement) {
+      winElement = document.getElementById(WINDOW_ID);
+      if (winElement) {
+        contentDiv = document.getElementById('top-monitor-content');
+        winElement.setAttribute('tabindex', '-1');
+        winElement.addEventListener('keydown', handleKeyDown);
+      }
+    }
+    return winElement;
+  }
+
+  function handleKeyDown(e: KeyboardEvent): void {
+    if (!contentDiv) return;
+
+    switch (e.key) {
+      case 'ArrowUp':
+        e.preventDefault();
+        if (selectedIndex > 0) {
+          selectedIndex--;
+          render();
+          console.log(`TopMonitor: navigation up, selected index ${selectedIndex}`);
+        }
+        break;
+      case 'ArrowDown':
+        e.preventDefault();
+        if (selectedIndex < processes.length - 1) {
+          selectedIndex++;
+          render();
+          console.log(`TopMonitor: navigation down, selected index ${selectedIndex}`);
+        }
+        break;
+      case 'k':
+      case 'K':
+        e.preventDefault();
+        killSelected();
+        break;
+      case 'q':
+      case 'Q':
+      case 'Escape':
+        e.preventDefault();
+        close();
+        console.log('TopMonitor: closed by user.');
+        break;
+      case '?':
+        e.preventDefault();
+        showHelp();
+        break;
+      default:
+        break;
+    }
+  }
+
+  function killSelected(): void {
+    if (!processes.length) return;
+    const proc = processes[selectedIndex];
+    if (!proc.elementId) {
+      addMessage(`Cannot kill system process ${proc.pid}.`);
+      console.warn(`TopMonitor: attempt to kill system process ${proc.pid} blocked.`);
+      return;
+    }
+    const element = document.getElementById(proc.elementId);
+    if (!element) {
+      addMessage(`Window for process ${proc.pid} not found.`);
+      console.warn(`TopMonitor: element for PID ${proc.pid} not found.`);
+      return;
+    }
+    element.style.display = 'none';
+    addMessage(`Process ${proc.pid} (${proc.name}) terminated.`);
+    console.log(`TopMonitor: process ${proc.pid} (${proc.name}) terminated.`);
+    processes = scanProcesses();
+    selectedIndex = Math.min(selectedIndex, processes.length - 1);
+    render();
+  }
+
+  function addMessage(msg: string): void {
+    if (!contentDiv) return;
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'monitor-message';
+    msgDiv.textContent = msg;
+    contentDiv.appendChild(msgDiv);
+    contentDiv.scrollTop = contentDiv.scrollHeight;
+    adjustWindowHeight();
+  }
+
+  function showHelp(): void {
+    if (!contentDiv) return;
+    const helpLines = [
+      'Help:',
+      '  ↑/↓ : Navigate through processes',
+      '  k   : Kill selected process',
+      '  q/ESC : Quit',
+      '  ?   : Show this help',
+    ];
+    helpLines.forEach((line) => {
+      const helpDiv = document.createElement('div');
+      helpDiv.className = 'help-line';
+      helpDiv.textContent = line;
+      contentDiv!.appendChild(helpDiv);
+    });
+    contentDiv.scrollTop = contentDiv.scrollHeight;
+    adjustWindowHeight();
+    console.log('TopMonitor: help displayed.');
+  }
+
+  function adjustWindowHeight(): void {
+    if (!winElement || !contentDiv) return;
+    const titlebar = winElement.querySelector('.titlebar');
+    const titlebarHeight = titlebar ? (titlebar as HTMLElement).offsetHeight : 28;
+    const lineHeight = 18; // approximate
+    const lines = contentDiv.innerText.split('\n').length;
+    const contentHeight = lines * lineHeight + 12;
+    const totalHeight = titlebarHeight + contentHeight + 4;
+    winElement.style.height = totalHeight + 'px';
+  }
+
+  function createBar(percentage: number, type: string): HTMLElement {
+    const container = document.createElement('span');
+    container.className = `${type}-bar-container`;
+
+    const fill = document.createElement('span');
+    fill.className = `${type}-bar-fill`;
+    fill.style.width = `${percentage}%`;
+
+    container.appendChild(fill);
+    return container;
+  }
+
+  function render(): void {
+    if (!contentDiv) return;
+
+    processes = scanProcesses();
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString();
+
+    const load1 = (Math.random() * 0.5 + 0.05).toFixed(2);
+    const load5 = (Math.random() * 0.4 + 0.1).toFixed(2);
+    const load15 = (Math.random() * 0.3 + 0.1).toFixed(2);
+
+    const cpuCores = [];
+    for (let i = 0; i < 4; i++) cpuCores.push(Math.random() * 100);
+
+    const memTotal = 7985.5;
+    const memUsed = Math.random() * 3000 + 1000;
+    const memPercent = (memUsed / memTotal) * 100;
+
+    const swapTotal = 2048;
+    const swapUsed = Math.random() * 500;
+    const swapPercent = (swapUsed / swapTotal) * 100;
+
+    const running = Math.floor(Math.random() * 3) + 1;
+    const sleeping = processes.length - running;
+
+    // Clear content
+    contentDiv.innerHTML = '';
+
+    function addLine(text: string, className: string = ''): void {
+      const line = document.createElement('div');
+      if (className) line.className = className;
+      line.textContent = text;
+      contentDiv!.appendChild(line);
+    }
+
+    function addBarLine(label: string, bars: (HTMLElement | Text)[]): void {
+      const line = document.createElement('div');
+      line.appendChild(document.createTextNode(`  ${label} `));
+      bars.forEach((bar) => line.appendChild(bar));
+      contentDiv!.appendChild(line);
+    }
+
+    addLine(`${timeStr} up 1 day, load average: ${load1}, ${load5}, ${load15}`);
+    addLine(`Tasks: ${processes.length} total, ${running} running, ${sleeping} sleeping`);
+    addLine('Threads: 0');
+    addLine('');
+
+    // Create CPU bars (simulated with spans)
+    const cpuBarElements = cpuCores.map((p) => createBar(p, 'cpu'));
+    addBarLine('CPU0', [cpuBarElements[0]]);
+    addBarLine('CPU1', [cpuBarElements[1]]);
+    addBarLine('CPU2', [cpuBarElements[2]]);
+    addBarLine('CPU3', [cpuBarElements[3]]);
+
+    const memBar = createBar(memPercent, 'mem');
+    const swapBar = createBar(swapPercent, 'swap');
+    addBarLine('Mem ', [
+      memBar,
+      document.createTextNode(` ${memUsed.toFixed(1)}/${memTotal.toFixed(1)} MB`),
+    ]);
+    addBarLine('Swap', [
+      swapBar,
+      document.createTextNode(` ${swapUsed.toFixed(1)}/${swapTotal.toFixed(1)} MB`),
+    ]);
+    addLine('');
+    addLine('  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND');
+
+    processes.forEach((p, idx) => {
+      const user = p.elementId ? 'victxr' : 'root';
+      const userClass = p.elementId ? 'user-process' : 'system-process';
+      const virt = Math.floor(Math.random() * 200 + 100)
+        .toString()
+        .padStart(5);
+      const res = Math.floor(Math.random() * 50 + 20)
+        .toString()
+        .padStart(4);
+      const shr = Math.floor(Math.random() * 30 + 10)
+        .toString()
+        .padStart(4);
+      const cpu = p.cpu.padStart(4);
+      const mem = p.mem.padStart(5);
+      const time = '0:00.0';
+      const status = p.visible ? 'R' : 'S';
+      const statusClass = p.visible ? 'status-R' : 'status-S';
+      const selector = idx === selectedIndex ? '▶' : ' ';
+      const rowClass = idx === selectedIndex ? 'selected' : '';
+
+      const row = document.createElement('div');
+      row.className = rowClass;
+
+      const pidSpan = document.createElement('span');
+      pidSpan.textContent = `${selector} ${p.pid.toString().padStart(5)} `;
+      row.appendChild(pidSpan);
+
+      const userSpan = document.createElement('span');
+      userSpan.className = userClass;
+      userSpan.textContent = user.padEnd(8);
+      row.appendChild(userSpan);
+
+      const rest = document.createTextNode(` 20   0 ${virt} ${res} ${shr} `);
+      row.appendChild(rest);
+
+      const statusSpan = document.createElement('span');
+      statusSpan.className = statusClass;
+      statusSpan.textContent = status;
+      row.appendChild(statusSpan);
+
+      const tail = document.createTextNode(`  ${cpu} ${mem} ${time} ${p.name}`);
+      row.appendChild(tail);
+
+      contentDiv!.appendChild(row);
+    });
+
+    addLine('');
+    addLine('  ↑/↓: navigate  k: kill  q/ESC: quit  ?: help', 'help-line');
+
+    adjustWindowHeight();
+  }
+
+  function open(): void {
+    getWindow();
+    if (!winElement) return;
+
+    winElement.style.display = 'block';
+    winElement.style.zIndex = String(++zIndex);
+    winElement.focus();
+    if (window.focusWindow) window.focusWindow(WINDOW_ID);
+
+    processes = scanProcesses();
+    selectedIndex = 0;
+    render();
+    console.log('TopMonitor opened.');
+
+    if (interval) clearInterval(interval);
+    interval = setInterval(() => {
+      processes = scanProcesses();
+      if (selectedIndex >= processes.length) selectedIndex = processes.length - 1;
+      render();
+    }, 2000);
+  }
+
+  function close(): void {
+    if (winElement) winElement.style.display = 'none';
+    if (interval) {
+      clearInterval(interval);
+      interval = undefined;
+    }
+    console.log('TopMonitor closed.');
+  }
+
+  return { open, close };
+})();
+
+// ============================================================================
+// Global exposure (compatibility with existing HTML)
+// ============================================================================
+
+declare global {
+  interface Window {
+    // TopMonitor
+    TopMonitor: typeof TopMonitor;
+    openTaskManagerInTerminal: () => void;
+  }
+}
+
+// Assign to window
+window.TopMonitor = TopMonitor;
+window.openTaskManagerInTerminal = () => TopMonitor.open();
+
+// ============================================================================
+// Exports
+// ============================================================================
+
+export { TopMonitor };

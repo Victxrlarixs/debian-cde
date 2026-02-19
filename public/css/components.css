@@ -1095,54 +1095,52 @@
   padding: 6px;
 }
 
-
 .cde-category-icon-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 8px 12px;
-    background: var(--button-bg);
-    border: 2px solid;
-    border-top-color: var(--border-light);
-    border-left-color: var(--border-light);
-    border-right-color: var(--border-dark);
-    border-bottom-color: var(--border-dark);
-    cursor: pointer;
-    font-family: var(--font-family-base);
-    font-size: var(--font-size-small);
-    text-align: center;
-    min-width: 70px;
-    flex: 0 0 auto;
-  }
-  .cde-category-icon-btn:hover {
-    background: var(--button-active);
-  }
-  .cde-category-icon-btn:active {
-    border-top-color: var(--border-dark);
-    border-left-color: var(--border-dark);
-    border-right-color: var(--border-light);
-    border-bottom-color: var(--border-light);
-  }
-  .cde-category-icon-btn img {
-    width: 32px;
-    height: 32px;
-    margin-bottom: 4px;
-    image-rendering: pixelated;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--button-bg);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  cursor: pointer;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-small);
+  text-align: center;
+  min-width: 70px;
+  flex: 0 0 auto;
+}
+.cde-category-icon-btn:hover {
+  background: var(--button-active);
+}
+.cde-category-icon-btn:active {
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+}
+.cde-category-icon-btn img {
+  width: 32px;
+  height: 32px;
+  margin-bottom: 4px;
+  image-rendering: pixelated;
+}
 
-    .cde-category-icon-btn-mouse img {
-    width: 60px;
-    height: 60px;
-    margin-bottom: 4px;
-    image-rendering: pixelated;
-  }
-  .cde-menubar .cde-menu-item:hover {
-    background: var(--titlebar-color);
-    color: white;
-  }
+.cde-category-icon-btn-mouse img {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 4px;
+  image-rendering: pixelated;
+}
+.cde-menubar .cde-menu-item:hover {
+  background: var(--titlebar-color);
+  color: white;
+}
 
-
-  /* Estilos para Style Manager principal */
+/* Estilos para Style Manager principal */
 .style-manager-main {
   min-width: 750px;
 }
@@ -1175,45 +1173,6 @@
   gap: 12px;
   justify-content: flex-start;
 }
-
-/* La clase .cde-category-icon-btn ya existe en tu CSS, pero la redefinimos por si acaso */
-.cde-category-icon-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 8px 12px;
-  background: var(--button-bg);
-  border: 2px solid;
-  border-top-color: var(--border-light);
-  border-left-color: var(--border-light);
-  border-right-color: var(--border-dark);
-  border-bottom-color: var(--border-dark);
-  cursor: pointer;
-  font-family: var(--font-family-base);
-  font-size: var(--font-size-small);
-  text-align: center;
-  min-width: 70px;
-  flex: 0 0 auto;
-}
-
-.cde-category-icon-btn:hover {
-  background: var(--button-active);
-}
-
-.cde-category-icon-btn:active {
-  border-top-color: var(--border-dark);
-  border-left-color: var(--border-dark);
-  border-right-color: var(--border-light);
-  border-bottom-color: var(--border-light);
-}
-
-.cde-category-icon-btn img {
-  width: 32px;
-  height: 32px;
-  margin-bottom: 4px;
-  image-rendering: pixelated;
-}
-
 
 /* Style Manager Font - compacto y alto */
 #styleManagerFont.style-manager-font {
@@ -1430,7 +1389,6 @@
   min-width: 45px;
 }
 
-
 /* Style Manager Keyboard - Versión con icono */
 #styleManagerKeyboard.style-manager-keyboard {
   width: 320px;
@@ -1474,7 +1432,7 @@
   min-width: 70px;
 }
 
-#styleManagerKeyboard .keyboard-row input[type="range"] {
+#styleManagerKeyboard .keyboard-row input[type='range'] {
   width: 100px;
   height: 4px;
 }
@@ -1490,8 +1448,6 @@
   font-size: 11px;
   min-width: 50px;
 }
-
-
 
 /* Style Manager Window */
 #styleManagerWindow.style-manager-window {
@@ -1538,7 +1494,7 @@
   font-size: 11px;
 }
 
-#styleManagerWindow .window-row input[type="checkbox"] {
+#styleManagerWindow .window-row input[type='checkbox'] {
   margin: 0;
 }
 
@@ -1568,4 +1524,122 @@
 
 #styleManagerFont.style-manager-font .font-preset-row {
   margin-bottom: 12px;
+}
+
+/* Style Manager Mouse */
+#styleManagerMouse.style-manager-mouse {
+  width: 400px;
+}
+
+#styleManagerMouse .modal-body {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#styleManagerMouse .mouse-icon-row {
+  display: flex;
+  gap: 16px;
+}
+
+#styleManagerMouse .mouse-icon-btn {
+  width: 120px;
+  height: 150px;
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--button-bg);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  cursor: pointer;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-small);
+  text-align: center;
+}
+
+#styleManagerMouse .mouse-icon-btn img {
+  width: 110px;
+  height: 135px;
+  margin-bottom: 4px;
+  image-rendering: pixelated;
+}
+
+#styleManagerMouse .mouse-controls-group {
+  display: flex;
+  gap: 24px;
+  flex: 1;
+}
+
+#styleManagerMouse .mouse-control-column {
+  flex: 1;
+}
+
+#styleManagerMouse .mouse-control-column > span {
+  font-weight: bold;
+  font-size: 11px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+#styleManagerMouse .mouse-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#styleManagerMouse .mouse-radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+}
+
+#styleManagerMouse .mouse-radio-group input[type='radio'] {
+  margin: 0;
+}
+
+#styleManagerMouse .mouse-sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+#styleManagerMouse .mouse-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#styleManagerMouse .mouse-slider-row span:first-child {
+  font-weight: bold;
+  font-size: 11px;
+  width: 75px;
+}
+
+#styleManagerMouse .mouse-slider-row input[type='range'] {
+  width: 160px;
+  height: 4px;
+}
+
+#styleManagerMouse .mouse-slider-row span:last-child {
+  font-size: 11px;
+  width: 30px;
+  text-align: right;
+}
+
+#styleManagerMouse .cde-actionbar {
+  padding: 8px;
+  gap: 8px;
+  justify-content: center;
+}
+
+#styleManagerMouse .cde-actionbar .cde-btn {
+  padding: 4px 16px;
+  font-size: 11px;
 }
