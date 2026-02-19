@@ -1,8 +1,7 @@
 // src/scripts/core.ts
 
-import './config';
-import './init';
-import './utilities';
-import './filemanager';
-import './terminal';
-import './stylemanager';
+import './core/config';
+import './boot/init';
+import './features/filemanager';
+import './features/terminal';
+import './features/stylemanager';
