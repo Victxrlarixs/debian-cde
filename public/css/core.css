@@ -229,7 +229,6 @@ body {
 .close-btn img {
   width: 12px;
   height: 12px;
-  image-rendering: pixelated;
 }
 
 /* Estado presionado: invierte el bisel */

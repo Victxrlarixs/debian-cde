@@ -112,7 +112,6 @@
 .fm-btn img {
   width: 16px;
   height: 16px;
-  image-rendering: pixelated;
 }
 
 .fm-btn:active {
@@ -171,7 +170,6 @@
 .fm-item img.fm-icon {
   width: 16px;
   height: 16px;
-  image-rendering: pixelated;
 }
 
 .fm-item:hover {

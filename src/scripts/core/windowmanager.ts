@@ -272,7 +272,7 @@ const WindowManager = (() => {
       'styleManagerStartup',
     ];
 
-    const otherWindows = ['terminal', 'fm', 'top-monitor'];
+    const otherWindows = ['terminal', 'fm', 'process-monitor'];
     const allWindows = [...styleManagerWindows, ...otherWindows];
     let draggableCount = 0;
 

@@ -25,7 +25,7 @@ function scanProcesses(): ProcessInfo[] {
   let pid = 1000;
 
   windows.forEach((win) => {
-    if (win.id === 'top-monitor') return;
+    if (win.id === 'process-monitor') return;
     const isVisible = (win as HTMLElement).style.display !== 'none';
     const titleEl = win.querySelector('.titlebar-text');
     let name = win.id || 'Window';
@@ -83,8 +83,8 @@ function scanProcesses(): ProcessInfo[] {
   return processes;
 }
 
-const TopMonitor = (() => {
-  const WINDOW_ID = 'top-monitor';
+const ProcessMonitor = (() => {
+  const WINDOW_ID = 'process-monitor';
   let interval: number | undefined;
   let zIndex = 3000;
   let processes: ProcessInfo[] = [];
@@ -96,7 +96,7 @@ const TopMonitor = (() => {
     if (!winElement) {
       winElement = document.getElementById(WINDOW_ID);
       if (winElement) {
-        contentDiv = document.getElementById('top-monitor-content');
+        contentDiv = document.getElementById('process-monitor-content');
         winElement.setAttribute('tabindex', '-1');
         winElement.addEventListener('keydown', handleKeyDown);
       }
@@ -113,7 +113,7 @@ const TopMonitor = (() => {
         if (selectedIndex > 0) {
           selectedIndex--;
           render();
-          console.log(`TopMonitor: navigation up, selected index ${selectedIndex}`);
+          console.log(`ProcessMonitor: navigation up, selected index ${selectedIndex}`);
         }
         break;
       case 'ArrowDown':
@@ -121,7 +121,7 @@ const TopMonitor = (() => {
         if (selectedIndex < processes.length - 1) {
           selectedIndex++;
           render();
-          console.log(`TopMonitor: navigation down, selected index ${selectedIndex}`);
+          console.log(`ProcessMonitor: navigation down, selected index ${selectedIndex}`);
         }
         break;
       case 'k':
@@ -134,7 +134,7 @@ const TopMonitor = (() => {
       case 'Escape':
         e.preventDefault();
         close();
-        console.log('TopMonitor: closed by user.');
+        console.log('ProcessMonitor: closed by user.');
         break;
       case '?':
         e.preventDefault();
@@ -150,18 +150,18 @@ const TopMonitor = (() => {
     const proc = processes[selectedIndex];
     if (!proc.elementId) {
       addMessage(`Cannot kill system process ${proc.pid}.`);
-      console.warn(`TopMonitor: attempt to kill system process ${proc.pid} blocked.`);
+      console.warn(`ProcessMonitor: attempt to kill system process ${proc.pid} blocked.`);
       return;
     }
     const element = document.getElementById(proc.elementId);
     if (!element) {
       addMessage(`Window for process ${proc.pid} not found.`);
-      console.warn(`TopMonitor: element for PID ${proc.pid} not found.`);
+      console.warn(`ProcessMonitor: element for PID ${proc.pid} not found.`);
       return;
     }
     element.style.display = 'none';
     addMessage(`Process ${proc.pid} (${proc.name}) terminated.`);
-    console.log(`TopMonitor: process ${proc.pid} (${proc.name}) terminated.`);
+    console.log(`ProcessMonitor: process ${proc.pid} (${proc.name}) terminated.`);
     processes = scanProcesses();
     selectedIndex = Math.min(selectedIndex, processes.length - 1);
     render();
@@ -194,7 +194,7 @@ const TopMonitor = (() => {
     });
     contentDiv.scrollTop = contentDiv.scrollHeight;
     adjustWindowHeight();
-    console.log('TopMonitor: help displayed.');
+    console.log('ProcessMonitor: help displayed.');
   }
 
   function adjustWindowHeight(): void {
@@ -351,7 +351,7 @@ const TopMonitor = (() => {
     processes = scanProcesses();
     selectedIndex = 0;
     render();
-    console.log('TopMonitor opened.');
+    console.log('ProcessMonitor opened.');
 
     if (interval) clearInterval(interval);
     interval = setInterval(() => {
@@ -367,7 +367,7 @@ const TopMonitor = (() => {
       clearInterval(interval);
       interval = undefined;
     }
-    console.log('TopMonitor closed.');
+    console.log('ProcessMonitor closed.');
   }
 
   return { open, close };
@@ -379,18 +379,18 @@ const TopMonitor = (() => {
 
 declare global {
   interface Window {
-    // TopMonitor
-    TopMonitor: typeof TopMonitor;
+    // ProcessMonitor
+    ProcessMonitor: typeof ProcessMonitor;
     openTaskManagerInTerminal: () => void;
   }
 }
 
 // Assign to window
-window.TopMonitor = TopMonitor;
-window.openTaskManagerInTerminal = () => TopMonitor.open();
+window.ProcessMonitor = ProcessMonitor;
+window.openTaskManagerInTerminal = () => ProcessMonitor.open();
 
 // ============================================================================
 // Exports
 // ============================================================================
 
-export { TopMonitor };
+export { ProcessMonitor };

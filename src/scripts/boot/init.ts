@@ -6,7 +6,8 @@ import { WindowManager } from '../core/windowmanager';
 import type { StyleManager } from '../features/stylemanager';
 import { retroBeep } from '../utilities/beep';
 import { captureFullPageScreenshot } from '../utilities/screenshot';
-import { TopMonitor } from '../features/processmonitor'; 
+import '../ui/external-links';
+import { ProcessMonitor } from '../features/processmonitor'; 
 import { mouseSettings } from '../preferences/mouse';
 /**
  * Global interface declarations for CDE desktop environment.
@@ -190,11 +191,11 @@ function initDesktop(): void {
   if (typeof window.captureFullPageScreenshot === 'function') {
     console.log('[Init] Screenshot utility available');
   }
-  if (TopMonitor) {
-    console.log('[Init] TopMonitor module loaded');
+  if (ProcessMonitor) {
+    console.log('[Init] ProcessMonitor module loaded');
     console.log('[Init]   - Mouse acceleration:', mouseSettings.acceleration);
-    if (typeof TopMonitor.open === 'function' && typeof TopMonitor.close === 'function') {
-      console.log('[Init]   - TopMonitor API ready (open/close)');
+    if (typeof ProcessMonitor.open === 'function' && typeof ProcessMonitor.close === 'function') {
+      console.log('[Init]   - ProcessMonitor API ready (open/close)');
     }
   }
 

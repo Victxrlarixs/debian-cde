@@ -3,15 +3,15 @@
 import WindowControls from "../common/WindowControls.astro";
 ---
 
-<div class="window" id="top-monitor">
-    <div class="titlebar" id="top-monitor-titlebar">
+<div class="window" id="process-monitor">
+    <div class="titlebar" id="process-monitor-titlebar">
         <span class="titlebar-text">Process Monitor</span>
         <WindowControls
-            windowId="top-monitor"
-            closeFunction="TopMonitor.close"
+            windowId="process-monitor"
+            closeFunction="ProcessMonitor.close"
         />
     </div>
     <div class="terminal-body">
-        <div id="top-monitor-content"></div>
+        <div id="process-monitor-content"></div>
     </div>
 </div>
