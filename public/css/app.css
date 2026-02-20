@@ -82,11 +82,11 @@
   display: flex;
   gap: 12px;
   border-bottom: 2px solid var(--separator-color);
+  color: var(--text-color);
 }
-
 /* ----- Barra de herramientas ----- */
 .fm-toolbar {
-  background: #b9b1a6;
+  background: var(--button-bg);
   padding: 4px;
   display: flex;
   gap: 4px;
@@ -146,12 +146,13 @@
 /* Barra lateral (lugares y dispositivos) */
 .fm-sidebar {
   width: 150px;
-  background: #b4ada3;
+  background: var(--titlebar-color);
   border-right: 2px solid var(--separator-color);
   padding: 6px;
   font-size: var(--font-size-base);
   font-family: var(--font-family-base);
   overflow-y: auto;
+  color: var(--text-color);
 }
 
 .fm-section {
@@ -165,6 +166,7 @@
   gap: 6px;
   padding: 2px 4px;
   cursor: pointer;
+  color: var(--text-color);
 }
 
 .fm-item img.fm-icon {
@@ -179,7 +181,7 @@
 /* Área de iconos (grid) */
 .fm-files {
   flex: 1;
-  background: #7a808a;
+  background: var(--window-color);
   padding: 12px;
   display: grid;
   grid-template-columns: repeat(auto-fill, 90px);
@@ -193,7 +195,7 @@
   align-items: center;
   font-size: var(--font-size-base);
   font-family: var(--font-family-base);
-  color: white;
+  color: var(--text-color);
   text-align: center;
   cursor: pointer;
 }
@@ -213,6 +215,7 @@
   background: var(--button-bg);
   font-size: var(--font-size-small);
   font-family: var(--font-family-base);
+  color: var(--text-color);
   padding: 2px 6px;
   border-top: 2px solid var(--separator-color);
 }
@@ -232,6 +235,7 @@
   transform: translate(-50%, -50%);
   background: var(--modal-bg);
   font-family: var(--font-family-base);
+  color: var(--text-color);
   font-size: var(--font-size-base);
   line-height: var(--line-height-base);
   z-index: 10000;
@@ -249,7 +253,7 @@
 /* Barra de título (arrastrable) */
 #styleManager .titlebar {
   background: var(--titlebar-color);
-  color: white;
+  color: var(--text-color);
   padding: 4px 8px;
   font-size: var(--font-size-title);
   font-family: var(--font-family-base);
@@ -267,6 +271,7 @@
 #styleManager .modal-body {
   flex: 1;
   display: flex;
+  color: var(--text-color);
   overflow: hidden;
   background: var(--modal-bg);
 }
@@ -291,7 +296,7 @@
   cursor: pointer;
   font-size: var(--font-size-small);
   font-family: var(--font-family-base);
-  color: #000000;
+  color: var(--text-color);
   border: 1px solid transparent;
 }
 
@@ -306,11 +311,12 @@
 
 .cde-category.active {
   background: var(--titlebar-color);
-  color: white;
+  color: var(--text-color);
   border: 1px solid var(--border-dark);
 }
 
 .cde-category-icon {
+  color: var(--text-color);
   width: 18px;
   height: 18px;
   background: var(--button-active);
@@ -368,7 +374,7 @@
   font-weight: bold;
   font-size: var(--font-size-small);
   font-family: var(--font-family-base);
-  color: #000000;
+  color: var(--text-color);
   flex-shrink: 0;
 }
 
@@ -400,6 +406,7 @@
 .cde-colorname {
   font-size: var(--font-size-small);
   font-family: monospace;
+  color: var(--text-color);
   background: #ffffff;
   padding: 2px 8px;
   border: 1px solid var(--separator-color);
@@ -502,6 +509,7 @@
 
 /* ----- Presets de temas CDE clásicos ----- */
 .cde-presets {
+  color: var(--text-color);
   margin-top: 0px;
   padding: 12px;
   background: var(--button-active);
@@ -525,6 +533,7 @@
 
 .cde-preset {
   padding: 4px 6px;
+  color: var(--text-color);
   background: var(--button-bg);
   font-size: 10px;
   font-family: var(--font-family-base);
@@ -588,6 +597,7 @@
   padding: 4px 16px;
   background: var(--button-bg);
   font-family: var(--font-family-base);
+  color: var(--text-color);
   font-size: var(--font-size-small);
   cursor: pointer;
   min-width: 80px;
@@ -612,7 +622,7 @@
 
 .cde-btn-default {
   background: var(--titlebar-color);
-  color: white;
+  color: var(--text-color);
   font-weight: bold;
 }
 

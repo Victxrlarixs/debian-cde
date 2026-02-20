@@ -134,6 +134,14 @@ export class StyleManager {
     activeButton.classList.add('active');
   }
 
+  // --- Helper to update swatch from input ---
+  private updateSwatchForInput(input: HTMLInputElement): void {
+    const swatch = input.previousElementSibling as HTMLElement | null;
+    if (swatch && swatch.classList.contains('color-swatch-btn')) {
+      swatch.style.backgroundColor = input.value;
+    }
+  }
+
   // --- Color input setup ---
   private setupColorInputs(): void {
     const colorMap: Record<string, string> = {
@@ -142,6 +150,13 @@ export class StyleManager {
       'color-background': '--window-color',
       'color-highlight': '--highlight-color',
       'color-text': '--text-color',
+      'color-topbar': '--topbar-color',
+      'color-dock': '--dock-color',
+      'color-modal-bg': '--modal-bg',
+      'color-dock-icon-bg': '--dock-icon-bg',
+      'color-button-bg': '--button-bg',
+      'color-terminal-bg': '--terminal-bg-color',
+      'color-terminal-text': '--terminal-text-color',
     };
 
     Object.entries(colorMap).forEach(([inputId, cssVar]) => {
@@ -150,12 +165,8 @@ export class StyleManager {
         input.addEventListener('input', (e) => {
           const value = (e.target as HTMLInputElement).value;
           this.applyStyle(cssVar, value);
-          const selector = input.closest('.cde-colorselector');
-          if (selector) {
-            const swatch = selector.querySelector('.cde-colorswatch') as HTMLElement | null;
-            const nameSpan = selector.querySelector('.cde-colorname') as HTMLElement | null;
-            if (swatch) swatch.style.backgroundColor = value;
-          }
+          this.updateSwatchForInput(input);
+          this.saveColor(); // Auto-save on every color change
           this.updateStatus('Color changed', 'colorStatus');
         });
       }
@@ -185,6 +196,7 @@ export class StyleManager {
         this.applyFontStyle(cssVar, (e.target as HTMLSelectElement).value);
         this.updateFontPreview();
         this.updateStatus('Font changed', 'fontStatus');
+        this.saveFont(); // Auto-save font changes
       });
     }
   }
@@ -204,6 +216,7 @@ export class StyleManager {
         this.applyFontStyle(cssVar, value);
         valueSpan.textContent = (e.target as HTMLInputElement).value + suffix;
         this.updateFontPreview();
+        this.saveFont(); // Auto-save font changes
       });
     }
   }
@@ -219,6 +232,7 @@ export class StyleManager {
 
   public openColor(): void {
     this.showWindow('styleManagerColor');
+    this.updateUI(); // Force swatch update when opening the window
   }
 
   public closeColor(): void {
@@ -294,27 +308,20 @@ export class StyleManager {
     const win = document.getElementById(id);
     if (!win) return;
 
-    // Show the window
     win.style.display = 'flex';
     win.style.zIndex = '10000';
 
-    // Call focusWindow to handle focus and z-index
     if (window.focusWindow) {
       window.focusWindow(id);
     }
 
-    // Force repaint on main window and dock
     const mainWin = document.getElementById('styleManagerMain');
     const dock = document.getElementById('cde-panel');
 
     if (mainWin) {
-      // Get the current computed background color (from theme)
       const bgColor = window.getComputedStyle(mainWin).backgroundColor;
-      // Temporarily assign it as an inline style
       mainWin.style.backgroundColor = bgColor;
-      // Force reflow (browser must paint the new color)
       mainWin.offsetHeight;
-      // Restore so it continues using the CSS variable
       mainWin.style.backgroundColor = '';
     }
 
@@ -332,7 +339,7 @@ export class StyleManager {
     }
   }
 
-  // --- Style application (existing functionality) ---
+  // --- Style application ---
   public applyStyle(cssVar: string, value: string): void {
     document.documentElement.style.setProperty(cssVar, value);
     this.styles[cssVar] = value;
@@ -375,6 +382,7 @@ export class StyleManager {
       this.applyStyle(cssVar, value);
     }
     this.updateUI();
+    this.saveColor(); // Save after reset
     this.updateStatus('Color reset to default', 'colorStatus');
     this.showMessage('Colors reset to default.');
     document
@@ -388,6 +396,7 @@ export class StyleManager {
       this.applyFontStyle(cssVar, value);
     }
     this.updateFontControls();
+    this.saveFont(); // Save after reset
     this.updateStatus('Font reset to default', 'fontStatus');
     this.showMessage('Fonts reset to default.');
     document
@@ -408,6 +417,7 @@ export class StyleManager {
       const allSettings = saved ? JSON.parse(saved) : { colors: {}, fonts: {} };
       allSettings.colors = this.styles;
       localStorage.setItem('cde-styles', JSON.stringify(allSettings));
+      console.log('[StyleManager] Colors saved to localStorage:', this.styles);
       this.updateStatus('Color settings saved', 'colorStatus');
       this.showMessage('Color configuration saved.');
     } catch (e) {
@@ -423,6 +433,7 @@ export class StyleManager {
       const allSettings = saved ? JSON.parse(saved) : { colors: {}, fonts: {} };
       allSettings.fonts = this.fontStyles;
       localStorage.setItem('cde-styles', JSON.stringify(allSettings));
+      console.log('[StyleManager] Fonts saved to localStorage:', this.fontStyles);
       this.updateStatus('Font settings saved', 'fontStatus');
       this.showMessage('Font configuration saved.');
     } catch (e) {
@@ -441,7 +452,7 @@ export class StyleManager {
   public applyPreset(scheme: string): void {
     const preset = this.presets[scheme];
     if (preset) {
-      console.log(`Applying preset: ${scheme}`);
+      console.log(`[StyleManager] Applying preset: ${scheme}`);
       for (const [cssVar, value] of Object.entries(preset)) {
         this.applyStyle(cssVar, value);
         const input = document.querySelector(
@@ -449,14 +460,10 @@ export class StyleManager {
         ) as HTMLInputElement | null;
         if (input) {
           input.value = value;
-          const selector = input.closest('.cde-colorselector');
-          if (selector) {
-            const swatch = selector.querySelector('.cde-colorswatch') as HTMLElement | null;
-            const nameSpan = selector.querySelector('.cde-colorname') as HTMLElement | null;
-            if (swatch) swatch.style.backgroundColor = value;
-          }
+          this.updateSwatchForInput(input);
         }
       }
+      this.saveColor(); // Auto-save after applying preset
       this.updateStatus(`Applied theme: ${scheme}`, 'colorStatus');
       this.showMessage(`${scheme} theme applied.`);
     }
@@ -466,11 +473,12 @@ export class StyleManager {
   public applyFontPreset(presetName: string): void {
     const preset = this.fontPresets[presetName];
     if (preset) {
-      console.log(`Applying font preset: ${presetName}`);
+      console.log(`[StyleManager] Applying font preset: ${presetName}`);
       for (const [cssVar, value] of Object.entries(preset)) {
         this.applyFontStyle(cssVar, value);
       }
       this.updateFontControls();
+      this.saveFont(); // Auto-save after applying font preset
       this.updateStatus(`Applied font preset: ${presetName}`, 'fontStatus');
       this.showMessage(`${presetName} font preset applied.`);
     }
@@ -490,17 +498,20 @@ export class StyleManager {
           for (const [cssVar, value] of Object.entries(savedSettings.colors)) {
             document.documentElement.style.setProperty(cssVar, value);
           }
+          console.log('[StyleManager] Loaded colors from localStorage:', savedSettings.colors);
         }
         if (savedSettings.fonts) {
           Object.assign(this.fontStyles, savedSettings.fonts);
           for (const [cssVar, value] of Object.entries(savedSettings.fonts)) {
             document.documentElement.style.setProperty(cssVar, value);
           }
+          console.log('[StyleManager] Loaded fonts from localStorage:', savedSettings.fonts);
         }
-        console.log('Loaded saved styles and fonts from localStorage');
+      } else {
+        console.log('[StyleManager] No saved styles found, using defaults.');
       }
     } catch (e) {
-      console.log('No saved styles found');
+      console.log('[StyleManager] Error loading saved styles:', e);
     }
   }
 
@@ -512,12 +523,7 @@ export class StyleManager {
       ) as HTMLInputElement | null;
       if (input) {
         input.value = value;
-        const selector = input.closest('.cde-colorselector');
-        if (selector) {
-          const swatch = selector.querySelector('.cde-colorswatch') as HTMLElement | null;
-          const nameSpan = selector.querySelector('.cde-colorname') as HTMLElement | null;
-          if (swatch) swatch.style.backgroundColor = value;
-        }
+        this.updateSwatchForInput(input);
       }
     }
   }
