@@ -48,9 +48,14 @@
   gap: 4px;
   padding: 2px 4px;
   background: var(--dock-color);
-  border: 2px outset #eee;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
   font-family: var(--font-family-base);
   font-size: var(--font-size-small);
+  color: var(--text-color);
 }
 
 .sys-icon {
@@ -164,7 +169,7 @@
 
 .pager-workspace.active {
   background: var(--titlebar-color);
-  color: white;
+  color: var(--text-color);
   font-weight: bold;
   border-top-color: var(--border-dark);
   border-left-color: var(--border-dark);
@@ -350,7 +355,7 @@
 
 .cde-icon-btn.dropdown-btn .dropdown-menu .menu-item:hover {
   background: var(--titlebar-color);
-  color: white;
+  color: var(--text-color);
 }
 
 .cde-icon-btn.dropdown-btn .dropdown-menu .menu-item img {
@@ -468,7 +473,7 @@
 
 .titlebar {
   background: var(--titlebar-color);
-  color: white;
+  color: var(--text-color);
   padding: 4px 8px;
   cursor: move;
   display: flex;
@@ -548,7 +553,7 @@
 
 .menu-item:hover {
   background: var(--titlebar-color);
-  color: white;
+  color: var(--text-color);
 }
 
 .menu-separator {
@@ -612,7 +617,7 @@
 
 .fm-dropdown-item:hover {
   background: var(--titlebar-color);
-  color: white;
+  color: var(--text-color);
 }
 
 /* Menú contextual (clic derecho) */
@@ -643,7 +648,7 @@
 
 .fm-context-item:hover {
   background: var(--titlebar-color);
-  color: white;
+  color: var(--text-color);
 }
 
 /* ------------------------------------------------------------------
@@ -703,10 +708,14 @@
   padding: 20px;
   min-height: 80px;
   background: var(--modal-bg);
-  color: var(--text-color, #000000);
+  color: var(--text-color);
   border: none;
   font-size: var(--font-size-base);
   line-height: var(--line-height-base);
+}
+
+.modal-body p {
+  color: var(--text-color);
 }
 
 /* Barra de acciones (botones) */
@@ -753,7 +762,7 @@
   left: 50%;
   transform: translateX(-50%);
   background: var(--titlebar-color, #4a6c7a);
-  color: white;
+  color: var(--text-color);
   padding: 8px 20px;
   border: 2px solid;
   border-top-color: var(--border-light);
@@ -847,7 +856,7 @@
 
 #process-monitor .titlebar {
   background: var(--titlebar-color);
-  color: white;
+  color: var(--text-color);
   padding: 4px 8px;
   cursor: move;
   display: flex;
@@ -932,7 +941,8 @@
   border-left-color: var(--border-light);
   border-right-color: var(--border-dark);
   border-bottom-color: var(--border-dark);
-  margin-left: 4px;
+  /* Eliminamos margin-left para que el contenedor controle el espaciado */
+  margin-left: 0;
 }
 
 .min-btn img,
@@ -958,12 +968,12 @@
   background: var(--dock-icon-hover);
 }
 
-/* Contenedor de los botones en la barra de título */
 .window-controls {
   display: flex;
   gap: 2px;
 }
 
+/* -
 /* ==================================================================
    Estado maximizado para ventanas y modales
    ================================================================== */
@@ -1104,6 +1114,7 @@
   text-align: center;
   min-width: 70px;
   flex: 0 0 auto;
+  color: var(--text-color);
 }
 .cde-category-icon-btn:hover {
   background: var(--button-active);
@@ -1127,7 +1138,7 @@
 }
 .cde-menubar .cde-menu-item:hover {
   background: var(--titlebar-color);
-  color: white;
+  color: var(--text-color);
 }
 
 /* Estilos para Style Manager principal */
@@ -1149,7 +1160,7 @@
 
 .cde-menu-item:hover {
   background: var(--titlebar-color);
-  color: white;
+  color: var(--text-color);
 }
 
 .style-manager-body {
@@ -1294,7 +1305,7 @@
   font-size: 11px;
   font-weight: bold;
   margin: 0 0 8px 0;
-  color: var(--titlebar-color);
+  color: var(--text-color);
 }
 
 #styleManagerColor .color-palette-scroll {
@@ -1326,7 +1337,7 @@
 
 #styleManagerColor .color-palette-item.active {
   background: var(--titlebar-color);
-  color: white;
+  color: var(--text-color);
 }
 
 /* Cuadros de color en fila */
@@ -1701,7 +1712,7 @@
 
 #utilitiesDropdown .menu-item:hover {
   background: var(--titlebar-color);
-  color: white;
+  color: var(--text-color);
 }
 
 #utilitiesDropdown .menu-item img {

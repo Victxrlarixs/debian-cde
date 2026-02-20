@@ -62,14 +62,12 @@ body {
   font-weight: var(--font-weight-normal);
   line-height: var(--line-height-base);
 
-  /* Fondo tipo circuito retro — se repite en mosaico */
-  background-image: url('/images/Motif.png');
-  background-size: cover;
-  background-repeat: no-repeat;
+  background-image: url('/backdrops/Marble.png');
+  background-size: auto;
+  background-repeat: repeat;
   background-position: center;
   background-attachment: fixed;
 
-  /* Evita scroll no deseado en el viewport */
   overflow: hidden;
 }
 
