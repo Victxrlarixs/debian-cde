@@ -8,7 +8,6 @@ import { retroBeep } from '../utilities/beep';
 import { captureFullPageScreenshot } from '../utilities/screenshot';
 import '../ui/external-links';
 import { ProcessMonitor } from '../features/processmonitor';
-import { mouseSettings } from '../preferences/mouse';
 /**
  * Global interface declarations for CDE desktop environment.
  */
@@ -193,7 +192,6 @@ function initDesktop(): void {
   }
   if (ProcessMonitor) {
     console.log('[Init] ProcessMonitor module loaded');
-    console.log('[Init]   - Mouse acceleration:', mouseSettings.acceleration);
     if (typeof ProcessMonitor.open === 'function' && typeof ProcessMonitor.close === 'function') {
       console.log('[Init]   - ProcessMonitor API ready (open/close)');
     }
