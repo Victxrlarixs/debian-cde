@@ -15,6 +15,8 @@ interface DragState {
   startY: number;
   startLeft: number;
   startTop: number;
+  lastX: number;
+  lastY: number;
   isDragging: boolean;
 }
 
@@ -41,6 +43,8 @@ const WindowManager = (() => {
     startY: 0,
     startLeft: 0,
     startTop: 0,
+    lastX: 0,
+    lastY: 0,
     isDragging: false,
   };
   const MIN_VISIBLE = CONFIG.WINDOW.MIN_VISIBLE;
@@ -126,6 +130,8 @@ const WindowManager = (() => {
     dragState.element = el;
     dragState.offsetX = e.clientX - rect.left;
     dragState.offsetY = e.clientY - rect.top;
+    dragState.lastX = e.clientX;
+    dragState.lastY = e.clientY;
     dragState.isDragging = true;
 
     // Capture the pointer to keep receiving events even if the pointer leaves the element
@@ -144,8 +150,24 @@ const WindowManager = (() => {
     e.preventDefault();
     e.stopPropagation();
 
-    let left = e.clientX - dragState.offsetX;
-    let top = e.clientY - dragState.offsetY;
+    // Get acceleration from CSS variable
+    const accelStr = getComputedStyle(document.documentElement).getPropertyValue('--mouse-acceleration');
+    const acceleration = parseFloat(accelStr) || 1;
+
+    // Movement delta since last event
+    const deltaX = e.clientX - dragState.lastX;
+    const deltaY = e.clientY - dragState.lastY;
+
+    // Apply acceleration to position
+    let currentLeft = parseFloat(dragState.element.style.left || '0');
+    let currentTop = parseFloat(dragState.element.style.top || '0');
+
+    let left = currentLeft + (deltaX * acceleration);
+    let top = currentTop + (deltaY * acceleration);
+
+    // Update last position
+    dragState.lastX = e.clientX;
+    dragState.lastY = e.clientY;
 
     const winWidth = dragState.element.offsetWidth;
     const winHeight = dragState.element.offsetHeight;
