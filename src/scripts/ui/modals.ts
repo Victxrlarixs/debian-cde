@@ -1,5 +1,7 @@
 // src/scripts/modals.ts
 
+import { logger } from '../utilities/logger';
+
 /**
  * @fileoverview CDE-style modal dialogs
  * Replaces alert, confirm, and prompt with themed, centered windows.
@@ -74,15 +76,15 @@ class CDEModalClass {
   private getModal(): HTMLElement {
     // Check if modal already exists and is still in the DOM
     if (this.modalElement && document.body.contains(this.modalElement)) {
-      console.log('[CDEModal] Reusing existing modal element');
+      logger.log('[CDEModal] Reusing existing modal element');
       return this.modalElement;
     }
 
-    console.log('[CDEModal] Creating new modal instance');
+    logger.log('[CDEModal] Creating new modal instance');
     const existing = document.querySelector('.cde-retro-modal');
 
     if (existing) {
-      console.log('[CDEModal] Cloning existing modal and cleaning artifacts');
+      logger.log('[CDEModal] Cloning existing modal and cleaning artifacts');
       // Clone and clean up residuals
       this.modalElement = existing.cloneNode(true) as HTMLElement;
       this.modalElement.id = 'cde-modal-global';
@@ -113,7 +115,7 @@ class CDEModalClass {
         actionbar.innerHTML = '';
       }
     } else {
-      console.log('[CDEModal] Creating new modal from scratch');
+      logger.log('[CDEModal] Creating new modal from scratch');
       this.modalElement = document.createElement('div');
       this.modalElement.className = 'cde-retro-modal cde-modal-global';
       this.modalElement.id = 'cde-modal-global';
@@ -143,13 +145,13 @@ class CDEModalClass {
     if (closeBtn) {
       (closeBtn as HTMLElement).onclick = (e: MouseEvent) => {
         e.stopPropagation();
-        console.log('[CDEModal] Close button clicked');
+        logger.log('[CDEModal] Close button clicked');
         this.close();
       };
     }
 
     document.body.appendChild(this.modalElement);
-    console.log('[CDEModal] Modal appended to DOM');
+    logger.log('[CDEModal] Modal appended to DOM');
     return this.modalElement;
   }
 
@@ -170,7 +172,7 @@ class CDEModalClass {
     content: string,
     buttons: ModalButton[] = [{ label: 'Accept', value: true }]
   ): Promise<any> {
-    console.log(`[CDEModal] Opening dialog: "${title}" with ${buttons.length} buttons`);
+    logger.log(`[CDEModal] Opening dialog: "${title}" with ${buttons.length} buttons`);
     const modal = this.getModal();
 
     const titleEl = modal.querySelector('.titlebar-text') as HTMLElement;
@@ -192,28 +194,28 @@ class CDEModalClass {
         button.onclick = (e) => {
           e.stopPropagation();
           const value = btn.value !== undefined ? btn.value : btn.label;
-          console.log(`[CDEModal] Button "${btn.label}" clicked, resolving with value:`, value);
+          logger.log(`[CDEModal] Button "${btn.label}" clicked, resolving with value:`, value);
           this.close();
           resolve(value);
         };
         actionbar.appendChild(button);
-        console.log(`[CDEModal] Added button ${index + 1}/${buttons.length}: "${btn.label}"`);
+        logger.log(`[CDEModal] Added button ${index + 1}/${buttons.length}: "${btn.label}"`);
       });
 
       modal.style.display = 'flex';
       const newZIndex = ++this.zIndex;
       modal.style.zIndex = String(newZIndex);
-      console.log(`[CDEModal] Modal displayed with z-index: ${newZIndex}`);
+      logger.log(`[CDEModal] Modal displayed with z-index: ${newZIndex}`);
     });
   }
 
   /** Closes the modal and cleans up the resolver. */
   public close(): void {
-    console.log('[CDEModal] Closing modal');
+    logger.log('[CDEModal] Closing modal');
     if (this.modalElement) {
       this.modalElement.style.display = 'none';
       this.currentResolver = null;
-      console.log('[CDEModal] Modal closed and hidden');
+      logger.log('[CDEModal] Modal closed and hidden');
     } else {
       console.warn('[CDEModal] Attempted to close modal but no modal element exists');
     }
@@ -231,9 +233,9 @@ class CDEModalClass {
    * ```
    */
   public async alert(message: string): Promise<void> {
-    console.log('[CDEModal] Displaying alert:', message);
+    logger.log('[CDEModal] Displaying alert:', message);
     await this.open('CDE Alert', `<p style="margin:0;">${message}</p>`);
-    console.log('[CDEModal] Alert acknowledged');
+    logger.log('[CDEModal] Alert acknowledged');
   }
 
   /**
@@ -250,12 +252,12 @@ class CDEModalClass {
    * ```
    */
   public async confirm(question: string): Promise<boolean> {
-    console.log('[CDEModal] Displaying confirm dialog:', question);
+    logger.log('[CDEModal] Displaying confirm dialog:', question);
     const result = await this.open('CDE Confirm', `<p style="margin:0;">${question}</p>`, [
       { label: 'Accept', value: true, isDefault: true },
       { label: 'Cancel', value: false },
     ]);
-    console.log(`[CDEModal] Confirm result: ${result}`);
+    logger.log(`[CDEModal] Confirm result: ${result}`);
     return result;
   }
 
@@ -270,12 +272,12 @@ class CDEModalClass {
    * ```typescript
    * const name = await CDEModal.prompt('Enter your name:', 'Guest');
    * if (name) {
-   *   console.log(`Hello, ${name}!`);
+   *   logger.log(`Hello, ${name}!`);
    * }
    * ```
    */
   public async prompt(question: string, defaultValue: string = ''): Promise<string | null> {
-    console.log(`[CDEModal] Displaying prompt dialog: "${question}" (default: "${defaultValue}")`);
+    logger.log(`[CDEModal] Displaying prompt dialog: "${question}" (default: "${defaultValue}")`);
 
     const content = `
       <p style="margin:0 0 10px 0;">${question}</p>
@@ -291,11 +293,11 @@ class CDEModalClass {
     if (result === 'ACCEPT') {
       const input = document.getElementById('cde-prompt-input') as HTMLInputElement;
       const inputValue = input ? input.value : null;
-      console.log(`[CDEModal] Prompt accepted with value: "${inputValue}"`);
+      logger.log(`[CDEModal] Prompt accepted with value: "${inputValue}"`);
       return inputValue;
     }
 
-    console.log('[CDEModal] Prompt cancelled');
+    logger.log('[CDEModal] Prompt cancelled');
     return null;
   }
 }
@@ -315,7 +317,7 @@ export const CDEModal = new CDEModalClass();
 // Expose globally for HTML inline handlers and debugging
 if (typeof window !== 'undefined') {
   (window as any).CDEModal = CDEModal;
-  console.log('[CDEModal] Global instance attached to window');
+  logger.log('[CDEModal] Global instance attached to window');
 }
 
 export default CDEModal;

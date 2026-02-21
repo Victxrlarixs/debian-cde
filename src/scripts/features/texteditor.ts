@@ -1,5 +1,7 @@
 // src/scripts/features/text-editor.ts
 
+import { logger } from '../utilities/logger';
+
 // ============================================================================
 // Text Editor - Read-only file viewer using terminal-body styling
 // ============================================================================
@@ -55,7 +57,7 @@ export function openTextEditor(title: string, content: string): void {
     window.focusWindow('text-editor');
   }
 
-  console.log(`[TextEditor] Opened: ${displayTitle}`);
+  logger.log(`[TextEditor] Opened: ${displayTitle}`);
 }
 
 /**
@@ -64,7 +66,7 @@ export function openTextEditor(title: string, content: string): void {
 export function closeTextEditor(): void {
   if (winElement) {
     winElement.style.display = 'none';
-    console.log('[TextEditor] Closed');
+    logger.log('[TextEditor] Closed');
   }
 }
 
@@ -118,4 +120,4 @@ window.openTextEditor = openTextEditor;
 window.closeTextEditor = closeTextEditor;
 window.openTutorial = openTutorial;
 
-console.log('[TextEditor] Module loaded');
+logger.log('[TextEditor] Module loaded');

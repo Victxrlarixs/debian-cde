@@ -3,6 +3,7 @@
 import { CONFIG } from '../core/config';
 import filesystemData from '../../data/filesystem.json';
 import { CDEModal } from '../ui/modals';
+import { logger } from '../utilities/logger';
 
 declare global {
   interface Window {
@@ -121,7 +122,7 @@ const rootPath = CONFIG.FS.HOME;
 const rootNode = (filesystemData as Record<string, VirtualFolder>)[rootPath];
 if (rootNode) {
   flattenFilesystem(rootPath, rootNode);
-  console.log('[FileManager] Filesystem flattened, entries:', Object.keys(fsMap).length);
+  logger.log('[FileManager] Filesystem flattened, entries:', Object.keys(fsMap).length);
 } else {
   console.error('[FileManager] Root path not found in filesystem data');
 }
@@ -238,7 +239,7 @@ function renderFiles(): void {
   });
 
   status.textContent = `${count} ${count === 1 ? 'item' : 'items'}`;
-  console.log(`[FileManager] renderFiles: displayed ${count} items at path ${currentPath}`);
+  logger.log(`[FileManager] renderFiles: displayed ${count} items at path ${currentPath}`);
 }
 
 /**
@@ -267,7 +268,7 @@ function openPath(path: string): void {
   historyIndex++;
   currentPath = path;
 
-  console.log(`[FileManager] openPath: navigated to ${path}`);
+  logger.log(`[FileManager] openPath: navigated to ${path}`);
   renderFiles();
 }
 
@@ -278,10 +279,10 @@ function goBack(): void {
   if (historyIndex > 0) {
     historyIndex--;
     currentPath = history[historyIndex];
-    console.log(`[FileManager] goBack: navigated to ${currentPath}`);
+    logger.log(`[FileManager] goBack: navigated to ${currentPath}`);
     renderFiles();
   } else {
-    console.log('[FileManager] goBack: no previous history entry');
+    logger.log('[FileManager] goBack: no previous history entry');
   }
 }
 
@@ -292,10 +293,10 @@ function goForward(): void {
   if (historyIndex < history.length - 1) {
     historyIndex++;
     currentPath = history[historyIndex];
-    console.log(`[FileManager] goForward: navigated to ${currentPath}`);
+    logger.log(`[FileManager] goForward: navigated to ${currentPath}`);
     renderFiles();
   } else {
-    console.log('[FileManager] goForward: no forward history entry');
+    logger.log('[FileManager] goForward: no forward history entry');
   }
 }
 
@@ -305,10 +306,10 @@ function goForward(): void {
 function goUp(): void {
   const parent = currentPath.split('/').slice(0, -2).join('/') + '/';
   if (fsMap[parent]) {
-    console.log(`[FileManager] goUp: from ${currentPath} to ${parent}`);
+    logger.log(`[FileManager] goUp: from ${currentPath} to ${parent}`);
     openPath(parent);
   } else {
-    console.log(`[FileManager] goUp: no parent directory for ${currentPath}`);
+    logger.log(`[FileManager] goUp: no parent directory for ${currentPath}`);
   }
 }
 
@@ -316,7 +317,7 @@ function goUp(): void {
  * Navigates to the home directory.
  */
 function goHome(): void {
-  console.log('[FileManager] goHome: navigating to home directory');
+  logger.log('[FileManager] goHome: navigating to home directory');
   openPath(CONFIG.FS.HOME);
 }
 
@@ -337,7 +338,7 @@ async function touch(name: string): Promise<void> {
     // Also add to the flattened map
     const filePath = currentPath + name;
     fsMap[filePath] = folder[name] as VirtualFile;
-    console.log(`[FileManager] touch: created file "${name}"`);
+    logger.log(`[FileManager] touch: created file "${name}"`);
     renderFiles();
   }
 }
@@ -355,7 +356,7 @@ async function mkdir(name: string): Promise<void> {
     folder[name] = newFolder;
     const folderPath = currentPath + name + '/';
     fsMap[folderPath] = newFolder;
-    console.log(`[FileManager] mkdir: created folder "${name}"`);
+    logger.log(`[FileManager] mkdir: created folder "${name}"`);
     renderFiles();
   }
 }
@@ -380,7 +381,7 @@ async function rm(name: string): Promise<void> {
     delete fsMap[fullPath];
     delete folder[name];
     fmSelected = null;
-    console.log(`[FileManager] rm: deleted "${name}"`);
+    logger.log(`[FileManager] rm: deleted "${name}"`);
     renderFiles();
   }
 }
@@ -405,7 +406,7 @@ async function rename(oldName: string, newName: string): Promise<void> {
     delete fsMap[oldFullPath];
 
     fmSelected = null;
-    console.log(`[FileManager] rename: renamed "${oldName}" to "${newName}"`);
+    logger.log(`[FileManager] rename: renamed "${oldName}" to "${newName}"`);
     renderFiles();
   }
 }
@@ -491,14 +492,14 @@ const fmMenus: Record<string, MenuItem[]> = {
       label: 'Show Hidden Files',
       action: () => {
         showHidden = !showHidden;
-        console.log(`[FileManager] showHidden: toggled to ${showHidden}`);
+        logger.log(`[FileManager] showHidden: toggled to ${showHidden}`);
         renderFiles();
       },
     },
     {
       label: 'Refresh',
       action: () => {
-        console.log('[FileManager] refresh: re-rendering files');
+        logger.log('[FileManager] refresh: re-rendering files');
         renderFiles();
       },
     },
@@ -536,7 +537,7 @@ function setupMenuBar(): void {
       const name = span.textContent?.trim() || '';
       const items = fmMenus[name];
       if (!items) {
-        console.log(`[FileManager] setupMenuBar: no items for menu "${name}"`);
+        logger.log(`[FileManager] setupMenuBar: no items for menu "${name}"`);
         return;
       }
 
@@ -565,11 +566,11 @@ function setupMenuBar(): void {
       menu.style.top = rect.bottom + 'px';
       activeMenu = menu;
 
-      console.log(`[FileManager] setupMenuBar: opened "${name}" menu`);
+      logger.log(`[FileManager] setupMenuBar: opened "${name}" menu`);
     });
   });
 
-  console.log('[FileManager] setupMenuBar: menu bar initialized');
+  logger.log('[FileManager] setupMenuBar: menu bar initialized');
 }
 
 /**
@@ -585,7 +586,7 @@ function setupContextMenu(): void {
   fmFiles.removeEventListener('contextmenu', handleContextMenu);
   fmFiles.addEventListener('contextmenu', handleContextMenu);
 
-  console.log('[FileManager] setupContextMenu: context menu initialized');
+  logger.log('[FileManager] setupContextMenu: context menu initialized');
 }
 
 /**
@@ -685,7 +686,7 @@ async function handleContextMenu(e: MouseEvent): Promise<void> {
   }
 
   activeContextMenu = menu;
-  console.log(`[FileManager] handleContextMenu: opened context menu for "${name}"`);
+  logger.log(`[FileManager] handleContextMenu: opened context menu for "${name}"`);
 }
 
 // ------------------------------------------------------------------
@@ -700,7 +701,7 @@ async function handleContextMenu(e: MouseEvent): Promise<void> {
  * Should be called once before using the file manager.
  */
 function init(): void {
-  console.log('[FileManager] init: initializing file manager');
+  logger.log('[FileManager] init: initializing file manager');
 
   currentPath = CONFIG.FS.HOME;
   history = [currentPath];
@@ -728,7 +729,7 @@ function init(): void {
   });
 
   initialized = true;
-  console.log('[FileManager] init: initialization complete');
+  logger.log('[FileManager] init: initialization complete');
 }
 
 /**
@@ -742,14 +743,14 @@ function open(): void {
   }
 
   if (!initialized) {
-    console.log('[FileManager] open: not initialized, initializing now');
+    logger.log('[FileManager] open: not initialized, initializing now');
     init();
   }
 
   win.style.display = 'block';
   win.style.zIndex = String(++zIndex);
 
-  console.log('[FileManager] open: file manager window opened');
+  logger.log('[FileManager] open: file manager window opened');
   renderFiles();
 }
 
@@ -760,7 +761,7 @@ function close(): void {
   const win = document.getElementById('fm') as HTMLElement | null;
   if (win) {
     win.style.display = 'none';
-    console.log('[FileManager] close: file manager window closed');
+    logger.log('[FileManager] close: file manager window closed');
   } else {
     console.warn('[FileManager] close: file manager window element not found');
   }
@@ -777,17 +778,17 @@ function toggle(): void {
   }
 
   if (!initialized) {
-    console.log('[FileManager] toggle: not initialized, initializing now');
+    logger.log('[FileManager] toggle: not initialized, initializing now');
     init();
   }
 
   if (win.style.display === 'none' || win.style.display === '') {
     win.style.display = 'block';
     win.style.zIndex = String(++zIndex);
-    console.log('[FileManager] toggle: file manager opened');
+    logger.log('[FileManager] toggle: file manager opened');
   } else {
     win.style.zIndex = String(++zIndex);
-    console.log('[FileManager] toggle: file manager brought to front');
+    logger.log('[FileManager] toggle: file manager brought to front');
   }
 
   renderFiles();
@@ -801,7 +802,7 @@ function toggle(): void {
 function isOpen(): boolean {
   const win = document.getElementById('fm') as HTMLElement | null;
   const isVisible = win?.style.display !== 'none' && win?.style.display !== '';
-  console.log(`[FileManager] isOpen: ${isVisible}`);
+  logger.log(`[FileManager] isOpen: ${isVisible}`);
   return isVisible;
 }
 
@@ -866,7 +867,7 @@ window.createFile = async (name: string, content: string): Promise<void> => {
     const filePath = currentPath + name;
     fsMap[filePath] = newFile;
     renderFiles();
-    console.log(`[FileManager] Created file "${name}" from editor`);
+    logger.log(`[FileManager] Created file "${name}" from editor`);
   }
 };
 
@@ -881,7 +882,7 @@ window.saveFile = (path: string, content: string): void => {
   const folder = getCurrentFolder();
   if (folder && folder[path]) {
     (folder[path] as VirtualFile).content = content;
-    console.log(`[FileManager] Saved file "${path}"`);
+    logger.log(`[FileManager] Saved file "${path}"`);
   } else {
     console.warn(`[FileManager] saveFile: file "${path}" not found in current folder`);
   }

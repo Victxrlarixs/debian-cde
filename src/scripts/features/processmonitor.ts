@@ -1,4 +1,5 @@
 import { CONFIG } from '../core/config';
+import { logger } from '../utilities/logger';
 
 // ============================================================================
 // Process Monitor - Live updating htop-style process viewer
@@ -480,7 +481,7 @@ const ProcessMonitor = (() => {
 
     if (updateInterval) clearInterval(updateInterval);
     updateInterval = setInterval(updateDataAndDisplay, 2000);
-    console.log(`[ProcessMonitor] Opened with live updates`);
+    logger.log(`[ProcessMonitor] Opened with live updates`);
   }
 
   /**
@@ -493,7 +494,7 @@ const ProcessMonitor = (() => {
     }
     if (winElement) {
       winElement.style.display = 'none';
-      console.log(`[ProcessMonitor] Closed`);
+      logger.log(`[ProcessMonitor] Closed`);
     }
   }
 

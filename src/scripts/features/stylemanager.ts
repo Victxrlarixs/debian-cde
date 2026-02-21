@@ -1,6 +1,7 @@
 // src/scripts/stylemanager.ts
 
 import { CONFIG } from '../core/config';
+import { logger } from '../utilities/logger';
 
 /**
  * CDE Style Manager for customization of colors and fonts.
@@ -499,7 +500,7 @@ export class StyleManager {
       const allSettings = saved ? JSON.parse(saved) : { colors: {}, fonts: {} };
       allSettings.colors = this.styles;
       localStorage.setItem('cde-styles', JSON.stringify(allSettings));
-      console.log('[StyleManager] Colors saved to localStorage:', this.styles);
+      logger.log('[StyleManager] Colors saved to localStorage:', this.styles);
       this.updateStatus('Color settings saved', 'colorStatus');
       this.showMessage('Color configuration saved.');
     } catch (e) {
@@ -515,7 +516,7 @@ export class StyleManager {
       const allSettings = saved ? JSON.parse(saved) : { colors: {}, fonts: {} };
       allSettings.fonts = this.fontStyles;
       localStorage.setItem('cde-styles', JSON.stringify(allSettings));
-      console.log('[StyleManager] Fonts saved to localStorage:', this.fontStyles);
+      logger.log('[StyleManager] Fonts saved to localStorage:', this.fontStyles);
       this.updateStatus('Font settings saved', 'fontStatus');
       this.showMessage('Font configuration saved.');
     } catch (e) {
@@ -537,7 +538,7 @@ export class StyleManager {
   public applyPreset(scheme: string): void {
     const preset = this.presets[scheme];
     if (preset) {
-      console.log(`[StyleManager] Applying preset: ${scheme}`);
+      logger.log(`[StyleManager] Applying preset: ${scheme}`);
       for (const [cssVar, value] of Object.entries(preset)) {
         this.applyStyle(cssVar, value);
         const input = document.querySelector(
@@ -561,7 +562,7 @@ export class StyleManager {
   public applyFontPreset(presetName: string): void {
     const preset = this.fontPresets[presetName];
     if (preset) {
-      console.log(`[StyleManager] Applying font preset: ${presetName}`);
+      logger.log(`[StyleManager] Applying font preset: ${presetName}`);
       for (const [cssVar, value] of Object.entries(preset)) {
         this.applyFontStyle(cssVar, value);
       }
@@ -586,20 +587,20 @@ export class StyleManager {
           for (const [cssVar, value] of Object.entries(savedSettings.colors)) {
             document.documentElement.style.setProperty(cssVar, value);
           }
-          console.log('[StyleManager] Loaded colors from localStorage:', savedSettings.colors);
+          logger.log('[StyleManager] Loaded colors from localStorage:', savedSettings.colors);
         }
         if (savedSettings.fonts) {
           Object.assign(this.fontStyles, savedSettings.fonts);
           for (const [cssVar, value] of Object.entries(savedSettings.fonts)) {
             document.documentElement.style.setProperty(cssVar, value);
           }
-          console.log('[StyleManager] Loaded fonts from localStorage:', savedSettings.fonts);
+          logger.log('[StyleManager] Loaded fonts from localStorage:', savedSettings.fonts);
         }
       } else {
-        console.log('[StyleManager] No saved styles found, using defaults.');
+        logger.log('[StyleManager] No saved styles found, using defaults.');
       }
     } catch (e) {
-      console.log('[StyleManager] Error loading saved styles:', e);
+      logger.log('[StyleManager] Error loading saved styles:', e);
     }
   }
 
@@ -775,9 +776,9 @@ export function loadMouseSettings(): void {
     const saved = localStorage.getItem('cde-mouse-settings');
     if (saved) {
       Object.assign(mouseSettings, JSON.parse(saved));
-      console.log('[MouseSettings] Loaded from localStorage:', mouseSettings);
+      logger.log('[MouseSettings] Loaded from localStorage:', mouseSettings);
     } else {
-      console.log('[MouseSettings] No saved settings found, using defaults.');
+      logger.log('[MouseSettings] No saved settings found, using defaults.');
     }
   } catch (e) {
     console.warn('[MouseSettings] Failed to load from localStorage:', e);
@@ -789,14 +790,14 @@ export function loadMouseSettings(): void {
  */
 export function saveMouseSettings(): void {
   localStorage.setItem('cde-mouse-settings', JSON.stringify(mouseSettings));
-  console.log('[MouseSettings] Saved to localStorage:', mouseSettings);
+  logger.log('[MouseSettings] Saved to localStorage:', mouseSettings);
 }
 
 /**
  * Applies mouse settings.
  */
 export function applyMouseSettings(): void {
-  console.log('[MouseSettings] Applied:', mouseSettings);
+  logger.log('[MouseSettings] Applied:', mouseSettings);
   saveMouseSettings();
 }
 
@@ -809,7 +810,7 @@ export function updateMouseSetting(key: string, value: any): void {
   if (key in mouseSettings) {
     (mouseSettings as any)[key] = value;
     applyMouseSettings();
-    console.log(`[MouseSettings] "${key}" updated to ${value}`);
+    logger.log(`[MouseSettings] "${key}" updated to ${value}`);
   } else {
     console.warn(`[MouseSettings] Unknown key: "${key}"`);
   }
@@ -877,7 +878,7 @@ export function syncMouseControls(): void {
     thresholdSpan.textContent = String(mouseSettings.threshold);
   }
 
-  console.log('[MouseSettings] Controls synchronized');
+  logger.log('[MouseSettings] Controls synchronized');
 }
 
 // ============================================================================
@@ -900,6 +901,6 @@ window.syncMouseControls = syncMouseControls;
 
 loadMouseSettings();
 
-console.log('[Init]   - Mouse acceleration:', mouseSettings.acceleration);
+logger.log('[Init]   - Mouse acceleration:', mouseSettings.acceleration);
 
 export { mouseSettings };
