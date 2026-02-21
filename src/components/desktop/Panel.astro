@@ -43,23 +43,6 @@
     </div>
   </div>
 
-  <div class="dropdown-menu" id="utilitiesDropdown">
-    <div class="menu-item" onclick="terminal.style.display='block'">
-      <img src="/icons/konsole.png" alt="" /> Terminal
-    </div>
-    <div class="menu-item" onclick="styleManager.openMain()">
-      <img src="/icons/org.xfce.settings.appearance.png" alt="" /> Style Manager
-    </div>
-    <div class="menu-item" onclick="toggleFileManager()">
-      <img src="/icons/org.xfce.filemanager.png" alt="" /> File Manager
-    </div>
-    <div class="menu-item">
-      <a href="https://github.com/Victxrlarixs/debian-cde" target="_blank">
-        <img src="/icons/konqueror.png" alt="Browser" /> Go
-      </a>
-    </div>
-  </div>
-
   <div class="cde-sep"></div>
 
   <div class="cde-pager">
@@ -84,13 +67,13 @@
   >
     <img src="/icons/org.xfce.screenshooter.png" alt="Camera" />
   </div>
-<div
-  class="tray-icon"
-  title="Linux Tutorial"
-  onclick="openTutorial()"
->
-  <img src="/icons/gedit.png" alt="Tutorial" />
-</div>
+  <div
+    class="tray-icon"
+    title="Linux Tutorial"
+    onclick="openTutorial()"
+  >
+    <img src="/icons/gedit.png" alt="Tutorial" />
+  </div>
   <div
     class="tray-icon"
     id="taskmanager-btn"
@@ -98,5 +81,18 @@
     title="Process Monitor (top)"
   >
     <img src="/icons/org.xfce.taskmanager.png" alt="TaskManager" />
+  </div>
+</div>
+
+<!-- Dropdown menu moved outside to avoid clipping by panel overflow/transform -->
+<div class="dropdown-menu" id="utilitiesDropdown">
+  <div class="menu-item" onclick="captureFullPageScreenshot()">
+    <img src="/icons/org.xfce.screenshooter.png" alt="" /> Screenshot
+  </div>
+  <div class="menu-item" onclick="openTutorial()">
+    <img src="/icons/gedit.png" alt="" /> Linux Tutorial
+  </div>
+  <div class="menu-item" onclick="openTaskManagerInTerminal()">
+    <img src="/icons/org.xfce.taskmanager.png" alt="" /> Process Monitor
   </div>
 </div>

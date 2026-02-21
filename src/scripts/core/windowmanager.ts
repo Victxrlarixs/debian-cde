@@ -211,36 +211,61 @@ const WindowManager = (() => {
   function initDropdown(): void {
     const dropdownBtn = document.getElementById('utilitiesBtn');
     const dropdownMenu = document.getElementById('utilitiesDropdown');
-    if (!dropdownBtn || !dropdownMenu) return;
+    
+    if (!dropdownBtn || !dropdownMenu) {
+      logger.warn('[WindowManager] Dropdown elements not found!', { btn: !!dropdownBtn, menu: !!dropdownMenu });
+      return;
+    }
 
-    let clickJustOpened = false;
+    logger.log('[WindowManager] Initializing dropdown menu (Floating mode)...');
+    let lastToggleTime = 0;
 
     dropdownBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       e.preventDefault();
-      const willOpen = !dropdownBtn.classList.contains('open');
-      dropdownBtn.classList.toggle('open');
+      
+      const now = Date.now();
+      if (now - lastToggleTime < 300) return;
+      lastToggleTime = now;
 
-      if (willOpen) {
+      const isOpen = dropdownBtn.classList.contains('open');
+      
+      if (!isOpen) {
+        // OPENING
+        dropdownBtn.classList.add('open');
         const rect = dropdownBtn.getBoundingClientRect();
+        
         dropdownMenu.style.position = 'fixed';
-        dropdownMenu.style.bottom = window.innerHeight - rect.top + 'px';
-        dropdownMenu.style.left = rect.left + 'px';
+        dropdownMenu.style.zIndex = '20000'; // Above everything
         dropdownMenu.style.display = 'block';
-        clickJustOpened = true;
-        setTimeout(() => { clickJustOpened = false; }, 200);
-      } else {
-        dropdownMenu.style.display = 'none';
-      }
-    });
 
-    document.addEventListener('click', (e) => {
-      if (clickJustOpened) return;
-      if (!dropdownBtn.contains(e.target as Node) && !dropdownMenu.contains(e.target as Node)) {
+        // Calculate position based on the button
+        const menuRect = dropdownMenu.getBoundingClientRect();
+        dropdownMenu.style.bottom = window.innerHeight - rect.top + 6 + 'px';
+        dropdownMenu.style.left = rect.left + (rect.width / 2) - (menuRect.width / 2) + 'px';
+        
+        logger.log('[WindowManager] Dropdown opened at bottom:', dropdownMenu.style.bottom);
+      } else {
+        // CLOSING
         dropdownBtn.classList.remove('open');
         dropdownMenu.style.display = 'none';
+        logger.log('[WindowManager] Dropdown closed via button click');
       }
     });
+
+    document.addEventListener('pointerdown', (e) => {
+      const now = Date.now();
+      if (now - lastToggleTime < 300) return;
+
+      if (!dropdownBtn.contains(e.target as Node) && !dropdownMenu.contains(e.target as Node)) {
+        if (dropdownBtn.classList.contains('open')) {
+          dropdownBtn.classList.remove('open');
+          dropdownMenu.style.display = 'none';
+          logger.log('[WindowManager] Dropdown closed from outside click');
+        }
+      }
+    });
+
     dropdownMenu.style.display = 'none';
   }
 

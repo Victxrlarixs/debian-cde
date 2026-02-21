@@ -84,7 +84,7 @@ body {
   display: flex !important;
 }
 
-.active {
+.cde-icon.active {
   background: var(--dock-icon-active) !important;
 }
 

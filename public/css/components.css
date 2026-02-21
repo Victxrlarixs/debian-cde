@@ -321,12 +321,8 @@
 }
 
 /* ----- Menú desplegable hacia arriba (dropdown) ----- */
-.cde-icon-btn.dropdown-btn .dropdown-menu {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  min-width: 140px;
+.dropdown-menu {
+  position: fixed;
   background: var(--menu-color);
   border: 2px solid;
   border-top-color: var(--border-light);
@@ -336,11 +332,11 @@
   box-shadow: 2px 2px 0 var(--shadow-color);
   padding: 4px 0;
   display: none;
-  z-index: 10000;
-  margin-bottom: 4px;
+  z-index: 20000;
+  min-width: 140px;
 }
 
-.cde-icon-btn.dropdown-btn .dropdown-menu .menu-item {
+.dropdown-menu .menu-item {
   padding: 6px 12px;
   font-size: 11px;
   color: black;
@@ -355,17 +351,18 @@
   text-align: left;
 }
 
-.cde-icon-btn.dropdown-btn .dropdown-menu .menu-item:hover {
+.dropdown-menu .menu-item:hover {
   background: var(--titlebar-color);
   color: var(--text-color);
 }
 
-.cde-icon-btn.dropdown-btn .dropdown-menu .menu-item img {
+.dropdown-menu .menu-item img {
   width: 16px;
   height: 16px;
 }
 
-.cde-icon-btn.dropdown-btn.open .dropdown-menu {
+/* Remove specific toggle rule as JS handles it, but keep for fallback */
+.open + .dropdown-menu {
   display: block;
 }
 
@@ -667,6 +664,7 @@
   display: none;
   flex-direction: column;
   z-index: 10000;
+  background: var(--window-color);
 }
 
 /* Asegurar que el #styleManager no herede este posicionamiento forzado */
