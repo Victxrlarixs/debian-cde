@@ -8,23 +8,23 @@
       Controlan colores, tipografía, bordes y efectos.
    ------------------------------------------------------------------ */
 :root {
-  /* Colores base de la interfaz */
-  --topbar-color: #c6bdb3;
-  --window-color: #dcd6cc;
-  --titlebar-color: #4a6c7a;
+  /* Colores base de la interfaz (Default: SkyRed) */
+  --topbar-color: #8b8ba5;
+  --window-color: #8b8ba5;
+  --titlebar-color: #a54a4a;
   --titlebar-text-color: #ffffff;
-  --terminal-bg-color: #070b0d;
-  --terminal-text-color: #c7fbe3;
-  --dock-color: #e6e1d8;
-  --menu-color: #bfb6aa;
-  --dock-icon-bg: #bfb9ad;
-  --dock-icon-hover: #e0dad0;
-  --dock-icon-active: #d8d1c6;
-  --button-bg: #bfb6aa;
-  --button-active: #d6cec4;
-  --separator-color: #8f877d;
-  --modal-bg: #dcd6cc;
-  --scrollbar-color: #00ff88;
+  --terminal-bg-color: #000000;
+  --terminal-text-color: #00ff00;
+  --dock-color: #8b8ba5;
+  --menu-color: #8b8ba5;
+  --dock-icon-bg: #7a7a9a;
+  --dock-icon-hover: #9a9ac5;
+  --dock-icon-active: #6a6a8a;
+  --button-bg: #8b8ba5;
+  --button-active: #6a6a8a;
+  --separator-color: #4a4a5a;
+  --modal-bg: #8b8ba5;
+  --scrollbar-color: #a54a4a;
 
   /* Bordes estilo CDE: bisel 3D fijo */
   --border-light: #ffffff;
@@ -45,7 +45,6 @@
 
   /* Efectos visuales */
   --shadow-color: rgba(0, 0, 0, 0.3);
-  --glow-color: rgba(0, 255, 136, 0.05);
 }
 
 /* ------------------------------------------------------------------
@@ -63,14 +62,18 @@ body {
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-normal);
   line-height: var(--line-height-base);
-
-  background-image: url('/backdrops/Marble.png');
   background-size: auto;
   background-repeat: repeat;
   background-position: center;
   background-attachment: fixed;
 
   overflow: hidden;
+
+  /* Renderizado de fuentes auténtico (Aliased / Sin suavizado) */
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+  font-smooth: never;
+  text-rendering: optimizeSpeed;
 }
 
 *,
@@ -253,10 +256,55 @@ body {
   background: var(--dock-icon-hover);
 }
 
-/* ----- Cursor personalizado (SVG) ----- */
+/* ----- Cursores contextuales estilo X11/CDE ----- */
+
+/* Cursor base: flecha CDE para todo */
 * {
-  cursor: url('/icons/cursor.svg'), auto;
+  cursor: url('/icons/cursor.svg') 0 0, default;
 }
+
+/* Cursor de movimiento: titlebar y elementos arrastrables */
+.titlebar,
+[data-draggable="true"],
+.cde-menu-btn {
+  cursor: url('/icons/cursor-move.svg') 12 12, move;
+}
+
+/* Cursor de redimensionado: esquinas de ventana */
+.window-resize-nw,
+.window-resize-se,
+[data-resize="nw"],
+[data-resize="se"] {
+  cursor: url('/icons/cursor-resize-nw.svg') 12 12, nw-resize;
+}
+
+/* Cursor de espera: boot screen y carga de apps */
+#debian-boot-screen,
+.cde-loading,
+[data-state="loading"] {
+  cursor: url('/icons/cursor-wait.svg') 12 12, wait;
+}
+
+/* Cursor de texto: inputs y áreas de texto */
+input[type="text"],
+input[type="color"],
+textarea,
+.fm-path,
+#cde-prompt-input {
+  cursor: text;
+}
+
+/* Botones interactivos: puntero por defecto (CDE no usaba "hand") */
+button,
+.cde-btn,
+.cde-icon,
+.menu-item,
+.cde-preset,
+.fm-item,
+.fm-file {
+  cursor: url('/icons/cursor.svg') 0 0, default;
+}
+
 
 #cde-prompt-input {
   width: 100%;

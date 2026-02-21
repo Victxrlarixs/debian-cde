@@ -9,6 +9,7 @@ import { settingsManager } from '../../core/settingsmanager';
 export interface ScreenSettings {
   saverTimeout: number; // minutes, 0 means disabled
   saverType: 'none' | 'black';
+  iconStyle: 'standard' | 'classic';
 }
 
 /**
@@ -18,6 +19,7 @@ export class ScreenModule {
   public settings: ScreenSettings = {
     saverTimeout: 0,
     saverType: 'none',
+    iconStyle: 'standard',
   };
 
   private idleTimer: any = null;
@@ -33,6 +35,7 @@ export class ScreenModule {
     }
     this.setupListeners();
     this.resetTimer();
+    this.applyIconStyle();
     logger.log('[ScreenModule] Loaded:', this.settings);
   }
 
@@ -96,8 +99,23 @@ export class ScreenModule {
   public update(key: keyof ScreenSettings, value: any): void {
     (this.settings as any)[key] = value;
     this.save();
-    this.resetTimer();
+    
+    if (key === 'iconStyle') {
+      this.applyIconStyle();
+    } else {
+      this.resetTimer();
+    }
+    
     logger.log(`[ScreenModule] "${key}" updated to ${value}`);
+  }
+
+  private applyIconStyle(): void {
+    const root = document.documentElement;
+    if (this.settings.iconStyle === 'classic') {
+      root.classList.add('cde-icon-style-classic');
+    } else {
+      root.classList.remove('cde-icon-style-classic');
+    }
   }
 
   private save(): void {
@@ -128,7 +146,12 @@ export class ScreenModule {
     const status = document.getElementById('screenStatus');
     if (status) {
       status.textContent =
-        this.settings.saverTimeout > 0 ? `Active (${this.settings.saverTimeout}m)` : 'Disabled';
+        this.settings.saverTimeout > 0 ? `Active (${this.settings.saverTimeout}m)` : 'Settings Loaded';
+    }
+
+    const styleSelect = panel.querySelector('select[data-key="iconStyle"]') as HTMLSelectElement;
+    if (styleSelect) {
+      styleSelect.value = this.settings.iconStyle;
     }
   }
 }

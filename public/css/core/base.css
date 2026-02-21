@@ -11,8 +11,6 @@ body {
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-normal);
   line-height: var(--line-height-base);
-
-  background-image: url('/backdrops/Marble.png');
   background-size: auto;
   background-repeat: repeat;
   background-position: center;

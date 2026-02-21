@@ -25,6 +25,9 @@ declare global {
 /**
  * Retrô Audio Manager for Debian CDE simulation.
  * Manages classic system sounds using the Web Audio API.
+ *
+ * FIX: AudioContext is now lazily created on the FIRST user gesture,
+ * which is required by modern browser autoplay policies.
  */
 export const AudioManager = (() => {
   let audioCtx: AudioContext | null = null;
@@ -43,9 +46,8 @@ export const AudioManager = (() => {
       audioCtx = new AudioContextClass();
       masterGain = audioCtx.createGain();
       masterGain.connect(audioCtx.destination);
-      
       masterGain.gain.value = CONFIG.AUDIO.BEEP_GAIN;
-      
+
       logger.log('[AudioManager] Audio system initialized');
     } catch (err) {
       logger.error('[AudioManager] Initialization failed:', err);
@@ -53,37 +55,42 @@ export const AudioManager = (() => {
   }
 
   async function ensureContext(): Promise<boolean> {
-    if (!audioCtx) init();
+    // Context does not exist yet — cannot create without user gesture
     if (!audioCtx) return false;
 
     if (audioCtx.state === 'suspended') {
       try {
         await audioCtx.resume();
       } catch (e) {
-        // Silent fail - browser policy blocked it
         return false;
       }
     }
-    return true;
+    return audioCtx.state === 'running';
   }
 
-  // Global "Unlock" on first user gesture
+  // ── Lazy unlock: AudioContext is created on the very first user interaction ──
   if (typeof window !== 'undefined') {
-    const unlock = () => {
-      if (audioCtx && audioCtx.state === 'suspended') {
-        audioCtx.resume().then(() => {
-          logger.log('[AudioManager] AudioContext unlocked via user gesture');
-          removeListeners();
-        }).catch(() => {});
-      } else if (audioCtx && audioCtx.state === 'running') {
-        removeListeners();
-      }
-    };
-
     const removeListeners = () => {
       window.removeEventListener('pointerdown', unlock);
       window.removeEventListener('keydown', unlock);
     };
+
+    function unlock() {
+      if (!audioCtx) {
+        // Create context INSIDE user gesture — browser allows this
+        init();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume()
+          .then(() => {
+            logger.log('[AudioManager] AudioContext unlocked via user gesture');
+            removeListeners();
+          })
+          .catch(() => {});
+      } else if (audioCtx && audioCtx.state === 'running') {
+        removeListeners();
+      }
+    }
 
     window.addEventListener('pointerdown', unlock);
     window.addEventListener('keydown', unlock);
@@ -96,8 +103,7 @@ export const AudioManager = (() => {
     }
 
     if (!masterGain) return;
-    
-    // Create nodes synchronously for immediate playback
+
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
 
@@ -171,21 +177,20 @@ export const AudioManager = (() => {
 
     playStartupChime(): void {
       this.playMelody([
-        { freq: 392.00, duration: 0.15, type: 'sine' }, // G4
+        { freq: 392.00, duration: 0.15, type: 'sine' },          // G4
         { freq: 523.25, duration: 0.15, type: 'sine', delay: 50 }, // C5
-        { freq: 659.25, duration: 0.3, type: 'sine', delay: 50 }, // E5
+        { freq: 659.25, duration: 0.3,  type: 'sine', delay: 50 }, // E5
       ]);
     },
 
     playThemeMelody(): void {
-      // A slightly more complex "8-bit" theme sequence
       this.playMelody([
-        { freq: 261.63, duration: 0.1, type: 'square' },    // C4
-        { freq: 329.63, duration: 0.1, type: 'square', delay: 100 }, // E4
-        { freq: 392.00, duration: 0.1, type: 'square', delay: 100 }, // G4
-        { freq: 523.25, duration: 0.2, type: 'square', delay: 100 }, // C5
-        { freq: 392.00, duration: 0.1, type: 'square', delay: 200 }, // G4
-        { freq: 523.25, duration: 0.4, type: 'square', delay: 100 }, // C5
+        { freq: 261.63, duration: 0.1, type: 'square' },              // C4
+        { freq: 329.63, duration: 0.1, type: 'square', delay: 100 },  // E4
+        { freq: 392.00, duration: 0.1, type: 'square', delay: 100 },  // G4
+        { freq: 523.25, duration: 0.2, type: 'square', delay: 100 },  // C5
+        { freq: 392.00, duration: 0.1, type: 'square', delay: 200 },  // G4
+        { freq: 523.25, duration: 0.4, type: 'square', delay: 100 },  // C5
       ]);
     }
   };

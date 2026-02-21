@@ -29,14 +29,14 @@ import WindowControls from '../../common/WindowControls.astro';
     </div>
 
     <div class="cde-modal-field">
-      <label class="cde-modal-label">Saver Type:</label>
+      <label class="cde-modal-label">Icon Style:</label>
       <select
         class="cde-modal-input"
-        data-key="saverType"
-        onchange="styleManager.screen.update('saverType', this.value); styleManager.screen.syncUI()"
+        data-key="iconStyle"
+        onchange="styleManager.screen.update('iconStyle', this.value); styleManager.screen.syncUI()"
       >
-        <option value="none">None</option>
-        <option value="black">Power Down (Black Screen)</option>
+        <option value="standard">Standard (High Detail)</option>
+        <option value="classic">Classic (Simulated 4-Bit)</option>
       </select>
     </div>
   </div>

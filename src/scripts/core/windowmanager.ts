@@ -179,6 +179,10 @@ const WindowManager = (() => {
     // Capture the pointer to keep receiving events even if the pointer leaves the element
     el.setPointerCapture(e.pointerId);
 
+    // X11-style move cursor while dragging
+    document.documentElement.style.setProperty('--cde-cursor-override', "url('/icons/cursor-move.svg') 12 12, move");
+    document.body.style.cursor = `url('/icons/cursor-move.svg') 12 12, move`;
+
     // Performance: Add will-change hint
     el.style.willChange = 'transform, left, top';
 
@@ -248,6 +252,9 @@ const WindowManager = (() => {
 
     // Performance: Clear will-change hint
     el.style.willChange = 'auto';
+
+    // Restore default CDE cursor
+    document.body.style.cursor = '';
 
     dragState.element.classList.remove('dragging-wireframe');
     dragState.isDragging = false;

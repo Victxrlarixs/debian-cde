@@ -135,6 +135,7 @@ export class StyleManager {
     const scheme = target.dataset.scheme;
     if (scheme) {
       this.theme.applyPreset(scheme);
+      this.theme.updateUI(); // REFRESH PICKERS
       this.highlightActivePreset(target, '[data-scheme]');
       this.saveColor();
       this.updateStatus(`Theme: ${scheme}`, 'colorStatus');
