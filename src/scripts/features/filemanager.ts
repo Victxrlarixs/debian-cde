@@ -5,6 +5,10 @@ import filesystemData from '../../data/filesystem.json';
 import { CDEModal } from '../ui/modals';
 import { logger } from '../utilities/logger';
 import readmeContent from '../../../README.md?raw';
+import tutorialData from '../../data/tutorial.json';
+import bashBibleContent from '../../data/pure-bash-bible.md?raw';
+import themesData from '../../data/themes.json';
+import fontsData from '../../data/fonts.json';
 
 declare global {
   interface Window {
@@ -142,6 +146,49 @@ if (rootNode) {
   if (readmeFile && readmeFile.type === 'file') {
     readmeFile.content = readmeContent;
     logger.log(`[FileManager] Synced ${readmePath} with real README.md content`);
+  }
+
+  // Sync linux-bible.md with tutorial.json content dynamically
+  const manPath = CONFIG.FS.HOME + 'man-pages/linux-bible.md';
+  const manFile = fsMap[manPath] as VirtualFile;
+  if (manFile && manFile.type === 'file') {
+    // Replicate tutorial formatting logic
+    let manContent = '# Linux Commands Reference\n\n';
+    tutorialData.forEach((sequence: any, seqIndex: number) => {
+      manContent += `\n${'='.repeat(60)}\n`;
+      manContent += `SEQUENCE ${seqIndex + 1}\n`;
+      manContent += `${'='.repeat(60)}\n\n`;
+      
+      sequence.forEach((step: any) => {
+        manContent += `${step.user}@Debian:~$ ${step.command}\n`;
+        manContent += `${step.output}\n\n`;
+      });
+    });
+    manFile.content = manContent;
+    logger.log(`[FileManager] Synced ${manPath} with tutorial.json content`);
+  }
+
+  // Sync bash-bible.md with real content
+  const bashPath = CONFIG.FS.HOME + 'man-pages/bash-bible.md';
+  const bashFile = fsMap[bashPath] as VirtualFile;
+  if (bashFile && bashFile.type === 'file') {
+    bashFile.content = bashBibleContent;
+    logger.log(`[FileManager] Synced ${bashPath} with pure-bash-bible.md content`);
+  }
+
+  // Sync themes.json and fonts.json in settings
+  const themesPath = CONFIG.FS.HOME + 'settings/themes.json';
+  const themesFile = fsMap[themesPath] as VirtualFile;
+  if (themesFile && themesFile.type === 'file') {
+    themesFile.content = JSON.stringify(themesData, null, 2);
+    logger.log(`[FileManager] Synced ${themesPath} with internal themes data`);
+  }
+
+  const fontsPath = CONFIG.FS.HOME + 'settings/fonts.json';
+  const fontsFile = fsMap[fontsPath] as VirtualFile;
+  if (fontsFile && fontsFile.type === 'file') {
+    fontsFile.content = JSON.stringify(fontsData, null, 2);
+    logger.log(`[FileManager] Synced ${fontsPath} with internal fonts data`);
   }
 
   logger.log('[FileManager] Filesystem flattened, entries:', Object.keys(fsMap).length);

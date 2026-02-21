@@ -2,22 +2,39 @@
   "/home/victxrlarixs/": {
     "type": "folder",
     "children": {
-      "Desktop": { "type": "folder", "children": {
-        "readme.md": { "type": "file", "content": "[Dinamic content: README.md]" }
-      } },
-      "tutorials": {
+      "Desktop": {
         "type": "folder",
         "children": {
-          "getting-started.txt": {
+          "readme.md": {
             "type": "file",
-            "content": "Use ls, cd, cat, mkdir, touch."
+            "content": "[Dinamic content: README.md]"
+          }
+        }
+      },
+      "man-pages": {
+        "type": "folder",
+        "children": {
+          "linux-bible.md": {
+            "type": "file",
+            "content": "[Dinamic content: tutorial.json]"
+          },
+          "bash-bible.md": {
+            "type": "file",
+            "content": "[Dinamic content: pure-bash-bible.md]"
           }
         }
       },
       "settings": {
         "type": "folder",
         "children": {
-          "theme.txt": { "type": "file", "content": "Current theme: CDE Retro" }
+          "themes.json": {
+            "type": "file",
+            "content": "[Dinamic content: themes.json]"
+          },
+          "fonts.json": {
+            "type": "file",
+            "content": "[Dinamic content: fonts.json]"
+          }
         }
       }
     }
