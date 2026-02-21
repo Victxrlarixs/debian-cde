@@ -1,0 +1,158 @@
+/* ------------------------------------------------------------------
+   2. RESET Y ESTILOS BASE
+   ------------------------------------------------------------------ */
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-base);
+
+  background-image: url('/backdrops/Marble.png');
+  background-size: auto;
+  background-repeat: repeat;
+  background-position: center;
+  background-attachment: fixed;
+
+  overflow: hidden;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+/* ----- Cursor personalizado (SVG) ----- */
+* {
+  cursor: url('/icons/cursor.svg'), auto;
+}
+
+/* ------------------------------------------------------------------
+   3. CLASES UTILITARIAS
+   ------------------------------------------------------------------ */
+.hidden {
+  display: none !important;
+}
+
+.visible {
+  display: flex !important;
+}
+
+/* ------------------------------------------------------------------
+   4. PANTALLA DE ARRANQUE (BOOT LOADER)
+   ------------------------------------------------------------------ */
+#debian-boot-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  color: #aaaaaa;
+  font-family: 'DejaVu Sans Mono', monospace;
+  font-size: 12px;
+  line-height: 1.1;
+  z-index: 99999;
+  padding: 10px;
+  box-sizing: border-box;
+  opacity: 1;
+  transition: opacity 0.5s ease-out;
+}
+
+#debian-boot-screen .header {
+  color: #00aa00;
+  border-bottom: 1px solid #333333;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+#boot-log-container {
+  height: calc(100% - 30px);
+  overflow-y: auto;
+  font-family: monospace;
+}
+
+.boot-logo {
+  color: #ff8888;
+  font-family: monospace;
+  white-space: pre;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  opacity: 1 !important;
+}
+
+@keyframes bootLineAppear {
+  to {
+    opacity: 1;
+  }
+}
+
+.boot-kernel { color: #cccccc; }
+.boot-cpu { color: #88aaff; }
+.boot-memory { color: #ffaa88; }
+.boot-fs { color: #ffff88; }
+.boot-systemd { color: #88ffff; }
+.boot-service { color: #00ff00; }
+.boot-drm { color: #ff8888; }
+.boot-desktop { color: #00ffaa; font-weight: bold; }
+.boot-default { color: #aaaaaa; }
+
+/* ------------------------------------------------------------------
+   5. COMPONENTES GLOBALES DE LA INTERFAZ
+   ------------------------------------------------------------------ */
+
+/* ----- Barra de desplazamiento (WebKit) ----- */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--button-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--titlebar-color);
+  border: 1px solid var(--border-dark);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--separator-color);
+}
+
+/* ----- Botones Globales (Biseles 3D) ----- */
+.cde-btn {
+  padding: 4px 16px;
+  background: var(--button-bg);
+  font-family: var(--font-family-base);
+  color: var(--text-color);
+  font-size: var(--font-size-small);
+  cursor: pointer;
+  min-width: 80px;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+}
+
+.cde-btn:hover {
+  background: var(--button-active);
+}
+
+.cde-btn:active {
+  border: 2px solid;
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+}
+
+.cde-btn-default {
+  background: var(--titlebar-color);
+  color: var(--titlebar-text-color);
+  font-weight: bold;
+}

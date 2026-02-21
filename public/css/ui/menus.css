@@ -1,0 +1,89 @@
+/* ------------------------------------------------------------------
+   MENÚS CDE (Globales y Contextuales)
+   ------------------------------------------------------------------ */
+.menu-item {
+  padding: 4px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: var(--font-family-base);
+}
+
+.menu-item:hover {
+  background: var(--titlebar-color);
+  color: var(--text-color);
+}
+
+.menu-separator {
+  height: 1px;
+  background: var(--separator-color);
+  margin: 4px 0;
+}
+
+/* Main Dropdown/Dropup Menu */
+#cde-menu {
+  position: fixed;
+  top: 26px;
+  left: 4px;
+  width: 220px;
+  background: var(--menu-color);
+  z-index: 9999;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+}
+
+/* Submenus */
+.has-submenu {
+  position: relative;
+}
+
+.submenu {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 200px;
+  background: var(--menu-color);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+}
+
+.has-submenu:hover .submenu {
+  display: block;
+}
+
+/* Global Dropdowns (TopBar context) */
+.dropdown-menu {
+  position: fixed;
+  background: var(--menu-color);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  box-shadow: 2px 2px 0 var(--shadow-color);
+  padding: 4px 0;
+  display: none;
+  z-index: 20000;
+  min-width: 140px;
+}
+
+/* Global Context Menus */
+.fm-contextmenu {
+  position: absolute;
+  background: var(--menu-color);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  box-shadow: 2px 2px 0 var(--shadow-color);
+  min-width: 160px;
+  padding: 4px 0;
+  z-index: 10000;
+}
