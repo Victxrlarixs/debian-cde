@@ -236,7 +236,8 @@
 
 /* Fila superior: botones de acción */
 .cde-icon-buttons {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(5, 36px);
   gap: 1px;
   height: 20px;
 }
@@ -268,16 +269,18 @@
   background: var(--button-active);
 }
 
-/* Botón con flecha desplegable (Utilities) */
-.cde-icon-btn.dropdown-btn {
-  position: relative;
-}
+/* CSS Grid Alignment for specific buttons */
+#terminalBtn { grid-column: 1; }
+#fileManagerBtn { grid-column: 2; }
+#styleManagerBtn { grid-column: 4; }
+#utilitiesBtn { grid-column: 5; }
 
 /* Fila inferior: iconos de aplicaciones */
 .cde-icons {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(5, 36px);
   gap: 1px;
-  height: 38px;
+  height: 48px;
 }
 
 .cde-icon {

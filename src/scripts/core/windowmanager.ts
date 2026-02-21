@@ -245,16 +245,16 @@ const WindowManager = (() => {
     }, true);
   }
 
-  function initDropdown(): void {
-    const dropdownBtn = document.getElementById('utilitiesBtn');
-    const dropdownMenu = document.getElementById('utilitiesDropdown');
+  function setupDropdown(btnId: string, menuId: string): void {
+    const dropdownBtn = document.getElementById(btnId);
+    const dropdownMenu = document.getElementById(menuId);
     
     if (!dropdownBtn || !dropdownMenu) {
-      logger.warn('[WindowManager] Dropdown elements not found!', { btn: !!dropdownBtn, menu: !!dropdownMenu });
+      logger.warn(`[WindowManager] Dropdown elements not found for ${btnId}/${menuId}!`, { btn: !!dropdownBtn, menu: !!dropdownMenu });
       return;
     }
 
-    logger.log('[WindowManager] Initializing dropdown menu (Floating mode)...');
+    logger.log(`[WindowManager] Initializing dropdown menu: ${menuId}...`);
     let lastToggleTime = 0;
 
     dropdownBtn.addEventListener('click', (e) => {
@@ -281,12 +281,12 @@ const WindowManager = (() => {
         dropdownMenu.style.bottom = window.innerHeight - rect.top + CONFIG.DROPDOWN.OFFSET + 'px';
         dropdownMenu.style.left = rect.left + (rect.width / 2) - (menuRect.width / 2) + 'px';
         
-        logger.log('[WindowManager] Dropdown opened at bottom:', dropdownMenu.style.bottom);
+        logger.log(`[WindowManager] Dropdown ${menuId} opened.`);
       } else {
         // CLOSING
         dropdownBtn.classList.remove('open');
         dropdownMenu.style.display = 'none';
-        logger.log('[WindowManager] Dropdown closed via button click');
+        logger.log(`[WindowManager] Dropdown ${menuId} closed via button click`);
       }
     });
 
@@ -298,12 +298,19 @@ const WindowManager = (() => {
         if (dropdownBtn.classList.contains('open')) {
           dropdownBtn.classList.remove('open');
           dropdownMenu.style.display = 'none';
-          logger.log('[WindowManager] Dropdown closed from outside click');
+          logger.log(`[WindowManager] Dropdown ${menuId} closed from outside click`);
         }
       }
     });
 
     dropdownMenu.style.display = 'none';
+  }
+
+  function initDropdowns(): void {
+    setupDropdown('utilitiesBtn', 'utilitiesDropdown');
+    setupDropdown('styleManagerBtn', 'styleManagerDropdown');
+    setupDropdown('terminalBtn', 'terminalDropdown');
+    setupDropdown('fileManagerBtn', 'fileManagerDropdown');
   }
 
   /**
@@ -369,7 +376,7 @@ const WindowManager = (() => {
 
   function init(): void {
     initWindows();
-    initDropdown();
+    initDropdowns();
     
     // Initial scan and start observer
     setTimeout(() => {
