@@ -7,6 +7,7 @@ import Terminal from '../components/features/Terminal.astro';
 import FileManager from '../components/features/FileManager.astro';
 import StyleManager from '../components/features/StyleManager.astro';
 import ProcessMonitor from '../components/features/ProcessMonitor.astro';
+import TextEditor from '../components/features/TextEditor.astro';
 ---
 
 <Layout title="Debian">
@@ -20,6 +21,7 @@ import ProcessMonitor from '../components/features/ProcessMonitor.astro';
     <!-- Terminal -->
     <Terminal />
 
+    <!-- FileManager -->
     <FileManager />
 
     <!-- Panel CDE -->
@@ -27,6 +29,9 @@ import ProcessMonitor from '../components/features/ProcessMonitor.astro';
 
     <!-- StyleManager -->
     <StyleManager />
+
+    <!-- TextEditor -->
+    <TextEditor />
 
     <!-- Process Monitor -->
     <ProcessMonitor />

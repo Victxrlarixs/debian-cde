@@ -289,7 +289,9 @@ const WindowManager = (() => {
     ------------------------------------------------------------------ */
 
   function initDraggableTitlebars(): void {
-    const styleManagerWindows = [
+    // Single source of truth for all draggable windows in the desktop
+    const allWindows = [
+      // Style Manager windows
       'styleManagerMain',
       'styleManagerColor',
       'styleManagerFont',
@@ -300,10 +302,12 @@ const WindowManager = (() => {
       'styleManagerScreen',
       'styleManagerBeep',
       'styleManagerStartup',
+      // Feature windows
+      'terminal',
+      'fm',
+      'process-monitor',
+      'text-editor',
     ];
-
-    const otherWindows = ['terminal', 'fm', 'process-monitor'];
-    const allWindows = [...styleManagerWindows, ...otherWindows];
     let draggableCount = 0;
 
     allWindows.forEach((id) => {
@@ -411,10 +415,6 @@ declare global {
     maximizeWindow: typeof maximizeWindow;
   }
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-  WindowManager.init();
-});
 
 window.drag = WindowManager.drag;
 window.focusWindow = WindowManager.focusWindow;

@@ -17,7 +17,6 @@ declare global {
     initDesktop: () => void;
     DebianRealBoot: typeof DebianRealBoot;
     initClock?: () => void; // Kept for backward compatibility
-    initWindowManager?: () => void;
     styleManager?: StyleManager;
   }
 }
@@ -62,7 +61,7 @@ class DebianRealBoot {
     logoDiv.className = 'boot-logo';
     logoDiv.style.whiteSpace = 'pre';
     logoDiv.style.fontFamily = 'monospace';
-    logoDiv.style.color = '#00AA00';
+    logoDiv.style.color = '#ff8888';
     logoDiv.style.marginBottom = '20px';
     logoDiv.style.lineHeight = '1.2';
     logoDiv.textContent = this.logo;
@@ -201,14 +200,13 @@ function initDesktop(): void {
     initClock();
     console.log('[initDesktop] Clock initialized');
 
+    // WindowManager owns drag for ALL windows (StyleManager, Terminal, FileManager, TextEditor).
+    // initDraggableTitlebars() runs after a 200ms delay to ensure the DOM is fully settled.
     WindowManager.init();
     console.log('[initDesktop] Window manager initialized');
 
-    if (typeof window.initWindowManager === 'function') {
-      window.initWindowManager();
-      console.log('[initDesktop] Window manager initialized');
-    }
-
+    // StyleManager.init() must run AFTER WindowManager so its windows exist when
+    // initDraggableTitlebars fires. StyleManager no longer registers its own drag handlers.
     if (window.styleManager) {
       window.styleManager.init();
       console.log('[initDesktop] Style manager initialized');

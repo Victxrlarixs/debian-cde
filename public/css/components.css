@@ -1738,3 +1738,24 @@
   gap: 8px;
   width: 100%;
 }
+
+
+  #text-editor {
+    width: 600px;
+    height: 400px;
+    display: none;
+    flex-direction: column;
+  }
+
+  #text-editor .titlebar {
+    flex-shrink: 0;
+  }
+
+  #text-editor .terminal-body {
+    flex: 1;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    padding: 10px;
+    margin: 0;
+  }

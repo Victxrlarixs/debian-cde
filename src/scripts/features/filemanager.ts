@@ -1,4 +1,4 @@
-// src/scripts/filemanager.ts
+// src/scripts/features/filemanager.ts
 
 import { CONFIG } from '../core/config';
 import filesystemData from '../../data/filesystem.json';
@@ -52,6 +52,16 @@ declare global {
      * Navigates to the home directory.
      */
     goHome: () => void;
+
+    /**
+     * Creates a new file with the given name and content (used by text editor).
+     */
+    createFile: (name: string, content: string) => Promise<void>;
+
+    /**
+     * Saves content to an existing file (used by text editor).
+     */
+    saveFile: (path: string, content: string) => void;
   }
 }
 
@@ -80,11 +90,45 @@ interface VirtualFolder {
 type VirtualFileSystemNode = VirtualFile | VirtualFolder;
 
 // ------------------------------------------------------------------
-// INTERNAL STATE
+// FLATTENED FILESYSTEM MAP
 // ------------------------------------------------------------------
 
-/** Virtual filesystem data loaded from JSON */
-const fs = filesystemData as Record<string, VirtualFolder>;
+/** Flattened map: full path => node (folder or file) */
+const fsMap: Record<string, VirtualFolder | VirtualFile> = {};
+
+/**
+ * Recursively flattens the nested filesystem structure.
+ * @param basePath - Current base path (e.g., "/home/victxrlarixs/").
+ * @param node - Current folder node.
+ */
+function flattenFilesystem(basePath: string, node: VirtualFolder): void {
+  // Store the folder itself
+  fsMap[basePath] = node;
+
+  // Process children
+  for (const [name, child] of Object.entries(node.children)) {
+    const fullPath = basePath + name + (child.type === 'folder' ? '/' : '');
+    if (child.type === 'folder') {
+      flattenFilesystem(fullPath, child);
+    } else {
+      fsMap[fullPath] = child;
+    }
+  }
+}
+
+// Initialize flattening from the root path
+const rootPath = CONFIG.FS.HOME;
+const rootNode = (filesystemData as Record<string, VirtualFolder>)[rootPath];
+if (rootNode) {
+  flattenFilesystem(rootPath, rootNode);
+  console.log('[FileManager] Filesystem flattened, entries:', Object.keys(fsMap).length);
+} else {
+  console.error('[FileManager] Root path not found in filesystem data');
+}
+
+// ------------------------------------------------------------------
+// INTERNAL STATE
+// ------------------------------------------------------------------
 
 /** Current working directory path */
 let currentPath: string = CONFIG.FS.HOME;
@@ -123,7 +167,11 @@ let activeContextMenu: HTMLElement | null = null;
  * @returns {Record<string, VirtualFileSystemNode> | null} The folder contents or null if not found
  */
 function getCurrentFolder(): Record<string, VirtualFileSystemNode> | null {
-  return fs[currentPath]?.children || null;
+  const current = fsMap[currentPath];
+  if (current?.type === 'folder') {
+    return current.children;
+  }
+  return null;
 }
 
 /**
@@ -203,8 +251,14 @@ function renderFiles(): void {
  * Does nothing if the path does not exist in the filesystem.
  */
 function openPath(path: string): void {
-  if (!fs[path]) {
+  if (!fsMap[path]) {
     console.warn(`[FileManager] openPath: path does not exist: ${path}`);
+    return;
+  }
+
+  // Avoid adding consecutive duplicates
+  if (history.length > 0 && history[historyIndex] === path) {
+    // Already at this path, no need to add to history
     return;
   }
 
@@ -250,7 +304,7 @@ function goForward(): void {
  */
 function goUp(): void {
   const parent = currentPath.split('/').slice(0, -2).join('/') + '/';
-  if (fs[parent]) {
+  if (fsMap[parent]) {
     console.log(`[FileManager] goUp: from ${currentPath} to ${parent}`);
     openPath(parent);
   } else {
@@ -280,6 +334,9 @@ async function touch(name: string): Promise<void> {
   const folder = getCurrentFolder();
   if (folder && name) {
     folder[name] = { type: 'file', content: '' } as VirtualFile;
+    // Also add to the flattened map
+    const filePath = currentPath + name;
+    fsMap[filePath] = folder[name] as VirtualFile;
     console.log(`[FileManager] touch: created file "${name}"`);
     renderFiles();
   }
@@ -294,7 +351,10 @@ async function touch(name: string): Promise<void> {
 async function mkdir(name: string): Promise<void> {
   const folder = getCurrentFolder();
   if (folder && name) {
-    folder[name] = { type: 'folder', children: {} } as VirtualFolder;
+    const newFolder: VirtualFolder = { type: 'folder', children: {} };
+    folder[name] = newFolder;
+    const folderPath = currentPath + name + '/';
+    fsMap[folderPath] = newFolder;
     console.log(`[FileManager] mkdir: created folder "${name}"`);
     renderFiles();
   }
@@ -315,6 +375,9 @@ async function rm(name: string): Promise<void> {
 
   const confirmed = await CDEModal.confirm(`Delete ${name}?`);
   if (confirmed) {
+    // Remove from flattened map if it's a file or folder
+    const fullPath = currentPath + name + (folder[name].type === 'folder' ? '/' : '');
+    delete fsMap[fullPath];
     delete folder[name];
     fmSelected = null;
     console.log(`[FileManager] rm: deleted "${name}"`);
@@ -332,8 +395,15 @@ async function rm(name: string): Promise<void> {
 async function rename(oldName: string, newName: string): Promise<void> {
   const folder = getCurrentFolder();
   if (folder && folder[oldName] && newName && newName !== oldName) {
-    folder[newName] = folder[oldName];
+    const item = folder[oldName];
+    const oldFullPath = currentPath + oldName + (item.type === 'folder' ? '/' : '');
+    const newFullPath = currentPath + newName + (item.type === 'folder' ? '/' : '');
+
+    folder[newName] = item;
     delete folder[oldName];
+    fsMap[newFullPath] = item;
+    delete fsMap[oldFullPath];
+
     fmSelected = null;
     console.log(`[FileManager] rename: renamed "${oldName}" to "${newName}"`);
     renderFiles();
@@ -341,28 +411,13 @@ async function rename(oldName: string, newName: string): Promise<void> {
 }
 
 /**
- * Opens a text file in a modal window.
+ * Opens a text file in the read-only text editor.
  *
  * @param name - The name of the file
  * @param content - The content of the file to display
  */
 function openTextWindow(name: string, content: string): void {
-  const win = document.getElementById('textWindow') as HTMLElement | null;
-  if (!win) {
-    console.warn('[FileManager] openTextWindow: #textWindow element not found');
-    return;
-  }
-
-  const titleEl = document.getElementById('textTitle') as HTMLElement | null;
-  const contentEl = document.getElementById('textContent') as HTMLElement | null;
-
-  if (titleEl) titleEl.textContent = name;
-  if (contentEl) contentEl.textContent = content;
-
-  win.style.display = 'block';
-  win.style.zIndex = String(++zIndex);
-
-  console.log(`[FileManager] openTextWindow: opened file "${name}"`);
+  window.openTextEditor(name, content);
 }
 
 /**
@@ -791,3 +846,43 @@ window.goBack = goBack;
 window.goForward = goForward;
 window.goUp = goUp;
 window.goHome = goHome;
+
+// ------------------------------------------------------------------
+// EDITOR INTEGRATION FUNCTIONS
+// ------------------------------------------------------------------
+
+/**
+ * Creates a new file with the given name and content.
+ * Used by the text editor when saving a new file.
+ *
+ * @param name - The file name.
+ * @param content - The file content.
+ */
+window.createFile = async (name: string, content: string): Promise<void> => {
+  const folder = getCurrentFolder();
+  if (folder && name) {
+    const newFile: VirtualFile = { type: 'file', content };
+    folder[name] = newFile;
+    const filePath = currentPath + name;
+    fsMap[filePath] = newFile;
+    renderFiles();
+    console.log(`[FileManager] Created file "${name}" from editor`);
+  }
+};
+
+/**
+ * Saves content to an existing file.
+ * Used by the text editor when saving an existing file.
+ *
+ * @param path - The file name or full path (simplified: we assume it's the name in the current folder).
+ * @param content - The new content.
+ */
+window.saveFile = (path: string, content: string): void => {
+  const folder = getCurrentFolder();
+  if (folder && folder[path]) {
+    (folder[path] as VirtualFile).content = content;
+    console.log(`[FileManager] Saved file "${path}"`);
+  } else {
+    console.warn(`[FileManager] saveFile: file "${path}" not found in current folder`);
+  }
+};
