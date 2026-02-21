@@ -1,5 +1,6 @@
 import { CONFIG } from './config';
 import { logger } from '../utilities/logger';
+import { settingsManager } from './settingsmanager';
 
 // ============================================================================
 // WindowManager: window control (focus, drag, clock, dropdown)
@@ -54,14 +55,10 @@ const WindowManager = (() => {
       return;
     }
 
-    // Only increment z-index if we are not dragging
     if (!dragState.isDragging) {
-      // Do not remove 'active' class from the main style manager window if the new window is not the main one.
       const elementsToRepaint = document.querySelectorAll('.window, .cde-retro-modal, #cde-panel');
       elementsToRepaint.forEach((el) => {
         const element = el as HTMLElement;
-
-        // Only remove 'active' class if it's not the main window and it is a window/modal
         if (
           element.id !== 'styleManagerMain' &&
           (element.classList.contains('window') || element.classList.contains('cde-retro-modal'))
@@ -70,94 +67,64 @@ const WindowManager = (() => {
         }
       });
 
-      // Add 'active' class to the new window if it's a window/modal
       if (win.classList.contains('window') || win.classList.contains('cde-retro-modal')) {
         win.classList.add('active');
       }
 
-      // Increment z-index
       zIndex++;
       win.style.zIndex = String(zIndex);
-      logger.log(
-        `[WindowManager] focusWindow: window "${id}" brought to front, new z-index ${zIndex}.`
-      );
+      logger.log(`[WindowManager] focusWindow: window "${id}" focus updated.`);
     }
   }
 
   /**
    * Normalizes a window's position to ensure it is draggable.
-   * Removes transform and sets absolute position with concrete values.
-   * @param win - The window to normalize
    */
   function normalizeWindowPosition(win: HTMLElement): void {
-    // Save the original transform style
-    const originalTransform = win.style.transform;
-
-    // Get the current position of the window (considering transform)
     const rect = win.getBoundingClientRect();
-
-    // Set absolute position with current values
     win.style.position = 'absolute';
     win.style.left = rect.left + 'px';
     win.style.top = rect.top + 'px';
     win.style.transform = 'none';
-
-    logger.log(
-      `[WindowManager] Normalized window position: left=${rect.left}px, top=${rect.top}px`
-    );
   }
 
   /**
-   * Initiates dragging of a window.
-   * @param e - The mousedown event.
-   * @param id - The ID of the window to drag.
+   * Initiates dragging of a window. Supports both mouse and touch via PointerEvent.
    */
-  function drag(e: MouseEvent, id: string): void {
-    e.preventDefault(); // Prevent text selection
-    e.stopPropagation(); // Prevent propagation
-
+  function drag(e: PointerEvent, id: string): void {
+    // Only handle primary pointer (usually left click or single touch)
+    if (!e.isPrimary) return;
+    
     const el = document.getElementById(id);
-    if (!el) {
-      console.warn(`[WindowManager] drag: window with id "${id}" not found.`);
-      return;
-    }
+    if (!el) return;
 
-    // If the window has transform, normalize it before dragging
-    const transform = window.getComputedStyle(el).transform;
-    if (transform !== 'none') {
+    // Prevent default actions like text selection or touch scrolling
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (window.getComputedStyle(el).transform !== 'none') {
       normalizeWindowPosition(el);
-    }
-
-    // Ensure absolute positioning
-    if (window.getComputedStyle(el).position !== 'absolute') {
-      el.style.position = 'absolute';
     }
 
     focusWindow(id);
 
     const rect = el.getBoundingClientRect();
-
     dragState.element = el;
     dragState.offsetX = e.clientX - rect.left;
     dragState.offsetY = e.clientY - rect.top;
-    dragState.startX = e.clientX;
-    dragState.startY = e.clientY;
-    dragState.startLeft = rect.left;
-    dragState.startTop = rect.top;
     dragState.isDragging = true;
 
-    // Use capture phase to ensure we capture all events
-    document.addEventListener('mousemove', move, true);
-    document.addEventListener('mouseup', stopDrag, true);
+    // Capture the pointer to keep receiving events even if the pointer leaves the element
+    el.setPointerCapture(e.pointerId);
 
-    logger.log(`[WindowManager] drag started for window "${id}".`);
+    el.addEventListener('pointermove', move);
+    el.addEventListener('pointerup', stopDrag);
+    el.addEventListener('pointercancel', stopDrag); // Handle touch cancellations
+
+    logger.log(`[WindowManager] pointer drag started for "${id}".`);
   }
 
-  /**
-   * Moves the window while dragging, with screen boundaries.
-   * @param e - MouseEvent
-   */
-  function move(e: MouseEvent): void {
+  function move(e: PointerEvent): void {
     if (!dragState.element || !dragState.isDragging) return;
 
     e.preventDefault();
@@ -178,71 +145,65 @@ const WindowManager = (() => {
     dragState.element.style.top = top + 'px';
   }
 
-  /** Ends dragging and cleans up event listeners. */
-  function stopDrag(e: MouseEvent): void {
+  function stopDrag(e: PointerEvent): void {
     if (!dragState.element || !dragState.isDragging) return;
 
     e.preventDefault();
     e.stopPropagation();
 
-    logger.log(`[WindowManager] drag stopped for window "${dragState.element.id}".`);
+    const el = dragState.element;
+    el.releasePointerCapture(e.pointerId);
+    el.removeEventListener('pointermove', move);
+    el.removeEventListener('pointerup', stopDrag);
+    el.removeEventListener('pointercancel', stopDrag);
 
     dragState.isDragging = false;
-    dragState.element = null;
+    
+    // Save session
+    settingsManager.updateWindowSession(el.id, {
+      left: el.style.left,
+      top: el.style.top,
+      maximized: el.classList.contains('maximized')
+    });
 
-    document.removeEventListener('mousemove', move, true);
-    document.removeEventListener('mouseup', stopDrag, true);
+    dragState.element = null;
+    logger.log(`[WindowManager] pointer drag stopped.`);
   }
 
-  /**
-   * Handler for titlebar mousedown events.
-   */
-  function titlebarDragHandler(e: MouseEvent): void {
+  function titlebarDragHandler(e: PointerEvent): void {
+    // IGNORE drag if clicking on buttons
+    const target = e.target as HTMLElement;
+    if (target.closest('.close-btn, .min-btn, .max-btn')) {
+      return;
+    }
+
     const titlebar = e.currentTarget as HTMLElement;
     const win = titlebar.parentElement;
-
     if (win && win.id) {
       drag(e, win.id);
-    } else {
-      console.warn('[WindowManager] Could not determine window ID for dragging');
     }
   }
 
-  /**
-   * Initializes click delegation to bring any clicked window to the front.
-   */
   function initWindows(): void {
-    document.addEventListener('mousedown', (e) => {
-      // Do not focus if we are dragging
+    document.addEventListener('pointerdown', (e) => {
       if (dragState.isDragging) return;
-
       const win = (e.target as Element).closest('.window, .cde-retro-modal');
       if (win) {
         focusWindow(win.id);
       }
     });
-    logger.log('[WindowManager] Initialized window focus delegation.');
   }
-
-  /* ------------------------------------------------------------------
-       Utilities dropdown menu
-    ------------------------------------------------------------------ */
 
   function initDropdown(): void {
     const dropdownBtn = document.getElementById('utilitiesBtn');
     const dropdownMenu = document.getElementById('utilitiesDropdown');
-
-    if (!dropdownBtn || !dropdownMenu) {
-      console.warn('[WindowManager] initDropdown: dropdown button or menu not found.');
-      return;
-    }
+    if (!dropdownBtn || !dropdownMenu) return;
 
     let clickJustOpened = false;
 
     dropdownBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       e.preventDefault();
-
       const willOpen = !dropdownBtn.classList.contains('open');
       dropdownBtn.classList.toggle('open');
 
@@ -252,115 +213,71 @@ const WindowManager = (() => {
         dropdownMenu.style.bottom = window.innerHeight - rect.top + 'px';
         dropdownMenu.style.left = rect.left + 'px';
         dropdownMenu.style.display = 'block';
-
         clickJustOpened = true;
-
-        setTimeout(() => {
-          clickJustOpened = false;
-        }, 200);
+        setTimeout(() => { clickJustOpened = false; }, 200);
       } else {
         dropdownMenu.style.display = 'none';
       }
-
-      logger.log(
-        `[WindowManager] Dropdown toggled: ${dropdownBtn.classList.contains('open') ? 'open' : 'closed'}`
-      );
     });
 
     document.addEventListener('click', (e) => {
       if (clickJustOpened) return;
-
       if (!dropdownBtn.contains(e.target as Node) && !dropdownMenu.contains(e.target as Node)) {
         dropdownBtn.classList.remove('open');
         dropdownMenu.style.display = 'none';
       }
     });
-
-    dropdownMenu.addEventListener('click', (e) => {
-      e.stopPropagation();
-    });
-
     dropdownMenu.style.display = 'none';
-
-    logger.log('[WindowManager] Dropdown initialized.');
   }
 
-  /* ------------------------------------------------------------------
-       Initialize draggable titlebars automatically
-    ------------------------------------------------------------------ */
-
   function initDraggableTitlebars(): void {
-    // Single source of truth for all draggable windows in the desktop
     const allWindows = [
-      // Style Manager windows
-      'styleManagerMain',
-      'styleManagerColor',
-      'styleManagerFont',
-      'styleManagerBackdrop',
-      'styleManagerMouse',
-      'styleManagerKeyboard',
-      'styleManagerWindow',
-      'styleManagerScreen',
-      'styleManagerBeep',
-      'styleManagerStartup',
-      // Feature windows
-      'terminal',
-      'fm',
-      'process-monitor',
-      'text-editor',
+      'styleManagerMain', 'styleManagerColor', 'styleManagerFont', 'styleManagerBackdrop',
+      'styleManagerMouse', 'styleManagerKeyboard', 'styleManagerWindow', 'styleManagerScreen',
+      'styleManagerBeep', 'styleManagerStartup', 'terminal', 'fm', 'process-monitor', 'text-editor',
     ];
-    let draggableCount = 0;
 
     allWindows.forEach((id) => {
       const win = document.getElementById(id);
       const titlebar = document.getElementById(`${id}Titlebar`);
 
       if (win && titlebar) {
-        // Normalize position at startup
-        setTimeout(() => {
-          normalizeWindowPosition(win);
-        }, 100);
-
-        titlebar.removeEventListener('mousedown', titlebarDragHandler);
-        titlebar.addEventListener('mousedown', titlebarDragHandler);
-        draggableCount++;
-
+        // Restore session position if available
+        const session = settingsManager.getSection('session').windows[id];
+        if (session) {
+          win.style.left = session.left;
+          win.style.top = session.top;
+          if (session.maximized) win.classList.add('maximized');
+          logger.log(`[WindowManager] Restored session for: ${id}`);
+        } else {
+          // Normalize position at startup only if no session
+          setTimeout(() => { normalizeWindowPosition(win); }, 100);
+        }
+        
+        // Essential for touch support: prevent browser default behavior
+        titlebar.style.touchAction = 'none';
+        
+        titlebar.removeEventListener('pointerdown', titlebarDragHandler as any);
+        titlebar.addEventListener('pointerdown', titlebarDragHandler as any);
         titlebar.setAttribute('data-draggable', 'true');
-        logger.log(`[WindowManager] Draggable initialized for: ${id}`);
+        logger.log(`[WindowManager] Unified drag initialized for: ${id}`);
       }
     });
-
-    logger.log(`[WindowManager] Initialized ${draggableCount} draggable titlebars.`);
   }
-
-  /* ------------------------------------------------------------------
-       General initialization
-    ------------------------------------------------------------------ */
 
   function init(): void {
     initWindows();
     initDropdown();
-
-    setTimeout(() => {
-      initDraggableTitlebars();
-    }, 200);
-
-    logger.log('[WindowManager] Fully initialized.');
+    setTimeout(() => { initDraggableTitlebars(); }, 200);
+    logger.log('[WindowManager] Unified PointerEvents initialized.');
   }
 
   return { init, drag, focusWindow };
 })();
 
-// ============================================================================
-// Minimize and maximize windows
-// ============================================================================
-
 function minimizeWindow(id: string): void {
   const win = document.getElementById(id);
-  if (!win) {
-    console.warn(`[WindowManager] minimizeWindow: window with id "${id}" not found.`);
-    return;
-  }
+  if (!win) return;
 
   if (win.style.display !== 'none') {
     windowStates[id] = {
@@ -374,15 +291,11 @@ function minimizeWindow(id: string): void {
   }
 
   win.style.display = 'none';
-  logger.log(`[WindowManager] minimizeWindow: window "${id}" minimized.`);
 }
 
 function maximizeWindow(id: string): void {
   const win = document.getElementById(id);
-  if (!win) {
-    console.warn(`[WindowManager] maximizeWindow: window with id "${id}" not found.`);
-    return;
-  }
+  if (!win) return;
 
   if (win.classList.contains('maximized')) {
     win.classList.remove('maximized');
@@ -392,7 +305,9 @@ function maximizeWindow(id: string): void {
       win.style.width = windowStates[id].width || '';
       win.style.height = windowStates[id].height || '';
     }
-    if (window.focusWindow) window.focusWindow(id);
+    WindowManager.focusWindow(id);
+    
+    settingsManager.updateWindowSession(id, { maximized: false });
     logger.log(`[WindowManager] maximizeWindow: window "${id}" restored.`);
   } else {
     windowStates[id] = {
@@ -403,21 +318,23 @@ function maximizeWindow(id: string): void {
       maximized: false,
     };
     win.classList.add('maximized');
-    if (window.focusWindow) window.focusWindow(id);
+    WindowManager.focusWindow(id);
+    
+    settingsManager.updateWindowSession(id, { maximized: true });
     logger.log(`[WindowManager] maximizeWindow: window "${id}" maximized.`);
   }
 }
 
 declare global {
   interface Window {
-    drag: (e: MouseEvent, id: string) => void;
+    drag: (e: PointerEvent, id: string) => void;
     focusWindow?: (id: string) => void;
     minimizeWindow: typeof minimizeWindow;
     maximizeWindow: typeof maximizeWindow;
   }
 }
 
-window.drag = WindowManager.drag;
+window.drag = WindowManager.drag as any;
 window.focusWindow = WindowManager.focusWindow;
 window.minimizeWindow = minimizeWindow;
 window.maximizeWindow = maximizeWindow;
