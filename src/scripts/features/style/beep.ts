@@ -22,6 +22,7 @@ export class BeepModule {
       Object.assign(this.settings, saved);
       logger.log('[BeepModule] Loaded from SettingsManager:', this.settings);
     }
+    this.apply();
   }
 
   public save(): void {
@@ -38,7 +39,7 @@ export class BeepModule {
 
   public testBeep(): void {
     if (window.AudioManager) {
-      window.AudioManager.beep();
+      window.AudioManager.beep(this.settings.pitch, this.settings.duration / 1000);
     }
   }
 
@@ -47,13 +48,38 @@ export class BeepModule {
       (this.settings as any)[key] = value;
       this.apply();
       this.save();
+      logger.log(`[BeepModule] ${key} updated to`, value);
     }
   }
 
   public syncUI(): void {
     const panel = document.getElementById('styleManagerBeep');
     if (!panel) return;
-    // ... logic for syncing sliders
+
+    // Volume Slider
+    const volSlider = panel.querySelector('#beep-volume') as HTMLInputElement;
+    const volDisplay = panel.querySelector('#beep-volume + .value-display') as HTMLElement;
+    if (volSlider && volDisplay) {
+      volSlider.value = String(this.settings.volume);
+      volDisplay.textContent = this.settings.volume + '%';
+    }
+
+    // Pitch Slider
+    const pitchSlider = panel.querySelector('#beep-pitch') as HTMLInputElement;
+    const pitchDisplay = panel.querySelector('#beep-pitch + .value-display') as HTMLElement;
+    if (pitchSlider && pitchDisplay) {
+      pitchSlider.value = String(this.settings.pitch);
+      pitchDisplay.textContent = this.settings.pitch + 'Hz';
+    }
+
+    // Duration Slider
+    const durSlider = panel.querySelector('#beep-duration') as HTMLInputElement;
+    const durDisplay = panel.querySelector('#beep-duration + .value-display') as HTMLElement;
+    if (durSlider && durDisplay) {
+      durSlider.value = String(this.settings.duration);
+      durDisplay.textContent = this.settings.duration + 'ms';
+    }
+
     logger.log('[BeepModule] UI synchronized');
   }
 }

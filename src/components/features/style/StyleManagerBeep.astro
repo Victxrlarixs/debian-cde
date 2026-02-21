@@ -1,0 +1,186 @@
+---
+import WindowControls from '../../common/WindowControls.astro';
+---
+
+<div class="cde-retro-modal style-manager-beep" id="styleManagerBeep">
+  <div
+    class="titlebar"
+    id="styleManagerBeepTitlebar"
+    onmousedown="window.drag(event, 'styleManagerBeep')"
+  >
+    <span class="titlebar-text">Style Manager - Audio & Beep</span>
+    <WindowControls
+      windowId="styleManagerBeep"
+      closeFunction="styleManager.closeBeep"
+      disableMaximize={true}
+    />
+  </div>
+
+  <div class="modal-body">
+    <div class="beep-content">
+      <div class="beep-icon-section">
+        <img src="/icons/multimedia-volume-control.png" alt="Audio" width="48" height="48" />
+        <div class="beep-test-buttons">
+            <button class="cde-btn" onclick="styleManager.beep.testBeep()">Test Beep</button>
+            <button class="cde-btn" onclick="AudioManager.playThemeMelody()">Play Theme</button>
+        </div>
+      </div>
+
+      <div class="beep-controls">
+        <div class="beep-group-title">Audio Settings</div>
+        
+        <div class="beep-control-row">
+            <label for="beep-volume">System Volume:</label>
+            <div class="slider-container">
+                <input 
+                    type="range" 
+                    id="beep-volume" 
+                    min="0" 
+                    max="100" 
+                    value="50"
+                    oninput="styleManager.beep.update('volume', parseInt(this.value)); this.nextElementSibling.textContent = this.value + '%'"
+                />
+                <span class="value-display">50%</span>
+            </div>
+        </div>
+
+        <div class="beep-control-row">
+            <label for="beep-pitch">Beep Pitch (Hz):</label>
+            <div class="slider-container">
+                <input 
+                    type="range" 
+                    id="beep-pitch" 
+                    min="200" 
+                    max="2000" 
+                    step="10"
+                    value="880"
+                    oninput="styleManager.beep.update('pitch', parseInt(this.value)); this.nextElementSibling.textContent = this.value + 'Hz'"
+                />
+                <span class="value-display">880Hz</span>
+            </div>
+        </div>
+
+        <div class="beep-control-row">
+            <label for="beep-duration">Beep Duration (ms):</label>
+            <div class="slider-container">
+                <input 
+                    type="range" 
+                    id="beep-duration" 
+                    min="10" 
+                    max="500" 
+                    step="10"
+                    value="100"
+                    oninput="styleManager.beep.update('duration', parseInt(this.value)); this.nextElementSibling.textContent = this.value + 'ms'"
+                />
+                <span class="value-display">100ms</span>
+            </div>
+        </div>
+
+        <div class="beep-group-title u-margin-top-sm">Melody Presets</div>
+        <div class="melody-grid">
+            <button class="cde-btn melody-btn" onclick="AudioManager.playStartupChime()">Startup</button>
+            <button class="cde-btn melody-btn" onclick="AudioManager.success()">Success</button>
+            <button class="cde-btn melody-btn" onclick="AudioManager.error()">Error</button>
+            <button class="cde-btn melody-btn" onclick="AudioManager.windowOpen()">Window</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cde-statusbar">
+    <div class="cde-statusleft">Audio Manager</div>
+    <div class="cde-statusright" id="beepStatus">Ready</div>
+  </div>
+
+  <div class="cde-actionbar">
+    <button class="cde-btn cde-btn-default" onclick="styleManager.closeBeep()">OK</button>
+    <button class="cde-btn" onclick="styleManager.closeBeep()">Cancel</button>
+  </div>
+</div>
+
+<style>
+  .style-manager-beep {
+    width: 420px;
+    display: none;
+    flex-direction: column;
+  }
+
+  .beep-content {
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+  }
+
+  .beep-icon-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 120px;
+  }
+
+  .beep-test-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .beep-controls {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .beep-group-title {
+    font-weight: bold;
+    border-bottom: 1px solid var(--border-light, #fff);
+    margin-bottom: 5px;
+    padding-bottom: 2px;
+    font-size: 11px;
+    color: var(--text-main, #000);
+  }
+
+  .beep-control-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .beep-control-row label {
+    font-size: 11px;
+  }
+
+  .slider-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .slider-container input {
+    flex: 1;
+  }
+
+  .value-display {
+    min-width: 45px;
+    font-family: var(--font-family-terminal, monospace);
+    font-size: 10px;
+    text-align: right;
+  }
+
+  .melody-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+  }
+
+  .melody-btn {
+    font-size: 10px;
+    padding: 4px;
+  }
+
+  .u-margin-top-sm {
+      margin-top: 10px;
+  }
+</style>

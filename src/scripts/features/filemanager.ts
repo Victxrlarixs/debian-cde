@@ -422,6 +422,10 @@ function initFileManager(): void {
   logger.log('[FileManager] Initialized');
 }
 
+// ------------------------------------------------------------------
+// EXPOSURE
+// ------------------------------------------------------------------
+
 window.openFileManager = () => {
   const win = document.getElementById('fm');
   if (win) {
@@ -436,7 +440,10 @@ window.openFileManager = () => {
 
 window.closeFileManager = () => {
   const win = document.getElementById('fm');
-  if (win) win.style.display = 'none';
+  if (win) {
+    win.style.display = 'none';
+    if (window.AudioManager) window.AudioManager.windowClose();
+  }
 };
 
 window.toggleFileManager = () => {
@@ -468,6 +475,15 @@ window.saveFile = (path, content) => {
     node.content = content;
     logger.log(`[FileManager] Saved: ${path}`);
   }
+};
+
+export const FileManager = {
+  init: initFileManager,
+  open: window.openFileManager,
+  close: window.closeFileManager,
+  toggle: window.toggleFileManager,
+  isOpen: window.isFileManagerOpen,
+  openPath: openPath
 };
 
 logger.log('[FileManager] Module loaded');

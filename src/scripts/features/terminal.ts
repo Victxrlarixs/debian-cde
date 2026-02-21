@@ -377,6 +377,7 @@ window.openTerminal = function openTerminal(): void {
       '[TerminalTutorial] openTerminal: terminal was hidden, displaying and starting tutorial'
     );
     terminal.style.display = 'block';
+    if (window.AudioManager) window.AudioManager.windowOpen();
     TerminalTutorial.start();
   } else {
     // If already visible, bring it to the front
@@ -401,6 +402,7 @@ window.closeTerminal = function closeTerminal(): void {
 
   if (terminal) {
     terminal.style.display = 'none';
+    if (window.AudioManager) window.AudioManager.windowClose();
     TerminalTutorial.stop();
     logger.log('[TerminalTutorial] closeTerminal: terminal closed');
   } else {
