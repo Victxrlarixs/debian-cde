@@ -8,8 +8,33 @@ import WindowControls from '../../common/WindowControls.astro';
     <WindowControls windowId="styleManagerScreen" closeFunction="styleManager.closeScreen" />
   </div>
 
-  <div class="modal-body" style="padding: 16px; text-align: center;">
-    <p>Screen settings will be available soon.</p>
+  <div class="modal-body">
+    <div class="cde-modal-field">
+      <label class="cde-modal-label">Saver Timeout (minutes):</label>
+      <select 
+        class="cde-modal-input"
+        data-key="saverTimeout"
+        onchange="styleManager.screen.update('saverTimeout', parseInt(this.value)); styleManager.screen.syncUI()"
+      >
+        <option value="0">Off (None)</option>
+        <option value="1">1 minute</option>
+        <option value="5">5 minutes</option>
+        <option value="15">15 minutes</option>
+        <option value="30">30 minutes</option>
+      </select>
+    </div>
+
+    <div class="cde-modal-field">
+      <label class="cde-modal-label">Saver Type:</label>
+      <select 
+        class="cde-modal-input"
+        data-key="saverType"
+        onchange="styleManager.screen.update('saverType', this.value); styleManager.screen.syncUI()"
+      >
+        <option value="none">None</option>
+        <option value="black">Power Down (Black Screen)</option>
+      </select>
+    </div>
   </div>
 
   <div class="cde-statusbar">

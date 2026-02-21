@@ -177,6 +177,12 @@ const WindowManager = (() => {
     left = Math.min(Math.max(left, MIN_VISIBLE - winWidth), maxX);
     top = Math.min(Math.max(top, MIN_VISIBLE - winHeight), maxY);
 
+    // Apply wireframe mode if opaqueDragging is false
+    const opaque = document.documentElement.getAttribute('data-opaque-drag') !== 'false';
+    if (!opaque) {
+      dragState.element.classList.add('dragging-wireframe');
+    }
+
     dragState.element.style.left = left + 'px';
     dragState.element.style.top = top + 'px';
   }
@@ -193,6 +199,7 @@ const WindowManager = (() => {
     el.removeEventListener('pointerup', stopDrag);
     el.removeEventListener('pointercancel', stopDrag);
 
+    dragState.element.classList.remove('dragging-wireframe');
     dragState.isDragging = false;
     
     // Save session
@@ -228,6 +235,17 @@ const WindowManager = (() => {
         focusWindow(win.id);
       }
     });
+
+    // Point to focus implementation
+    document.addEventListener('pointerenter', (e) => {
+      const mode = document.documentElement.getAttribute('data-focus-mode');
+      if (mode !== 'point') return;
+      
+      const win = (e.target as Element).closest('.window, .cde-retro-modal');
+      if (win) {
+        focusWindow(win.id);
+      }
+    }, true);
   }
 
   function initDropdown(): void {

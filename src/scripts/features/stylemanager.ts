@@ -8,6 +8,9 @@ import { MouseModule } from './style/mouse';
 import { KeyboardModule } from './style/keyboard';
 import { BeepModule } from './style/beep';
 import { BackdropModule } from './style/backdrop';
+import { WindowModule } from './style/windowmodule';
+import { ScreenModule } from './style/screen';
+import { StartupModule } from './style/startup';
 import { settingsManager } from '../core/settingsmanager';
 
 /**
@@ -21,6 +24,9 @@ export class StyleManager {
   public keyboard: KeyboardModule;
   public beep: BeepModule;
   public backdrop: BackdropModule;
+  public windowBehavior: WindowModule;
+  public screen: ScreenModule;
+  public startup: StartupModule;
 
   constructor() {
     this.theme = new ThemeModule();
@@ -29,6 +35,9 @@ export class StyleManager {
     this.keyboard = new KeyboardModule();
     this.beep = new BeepModule();
     this.backdrop = new BackdropModule();
+    this.windowBehavior = new WindowModule();
+    this.screen = new ScreenModule();
+    this.startup = new StartupModule();
   }
 
   // Getters for backward compatibility
@@ -49,6 +58,9 @@ export class StyleManager {
     this.keyboard.load();
     this.beep.load();
     this.backdrop.load();
+    this.windowBehavior.load();
+    this.screen.load();
+    this.startup.load();
 
     this.bindEvents();
     this.setupColorInputs();
@@ -169,13 +181,13 @@ export class StyleManager {
   public closeMouse(): void { this.hideWindow('styleManagerMouse'); }
   public openKeyboard(): void { this.showWindow('styleManagerKeyboard'); this.keyboard.syncUI(); }
   public closeKeyboard(): void { this.hideWindow('styleManagerKeyboard'); }
-  public openWindow(): void { this.showWindow('styleManagerWindow'); }
+  public openWindow(): void { this.showWindow('styleManagerWindow'); this.windowBehavior.syncUI(); }
   public closeWindow(): void { this.hideWindow('styleManagerWindow'); }
-  public openScreen(): void { this.showWindow('styleManagerScreen'); }
+  public openScreen(): void { this.showWindow('styleManagerScreen'); this.screen.syncUI(); }
   public closeScreen(): void { this.hideWindow('styleManagerScreen'); }
   public openBeep(): void { this.showWindow('styleManagerBeep'); this.beep.syncUI(); }
   public closeBeep(): void { this.hideWindow('styleManagerBeep'); }
-  public openStartup(): void { this.showWindow('styleManagerStartup'); }
+  public openStartup(): void { this.showWindow('styleManagerStartup'); this.startup.syncUI(); }
   public closeStartup(): void { this.hideWindow('styleManagerStartup'); }
 
   private showWindow(id: string): void {

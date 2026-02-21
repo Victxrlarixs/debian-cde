@@ -2103,11 +2103,11 @@
 }
 
 /* Backdrop Grid and Modal Specifics */
-#styleManagerBackdrop .modal-body {
+.cde-retro-modal .modal-body {
   padding: 16px;
 }
 
-#styleManagerBackdrop .modal-body p {
+.cde-retro-modal .modal-body p {
   margin-bottom: 12px;
   font-size: 11px;
 }
@@ -2129,3 +2129,47 @@
 .backdrop-preset-marble { background-image: url('/backdrops/Marble.png'); background-size: cover; }
 .backdrop-preset-toronto { background-image: url('/backdrops/Toronto.png'); background-size: cover; }
 .backdrop-preset-circuit { background-image: url('/backdrops/CircuitBoards.png'); background-size: cover; }
+
+/* Modal layout and form utilities */
+.cde-modal-field {
+  margin-bottom: 20px;
+}
+
+.cde-modal-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 11px;
+}
+
+.cde-modal-input {
+  width: 100%;
+  height: 24px;
+  background: var(--button-bg);
+  border: 2px solid;
+  border-top-color: var(--border-inset-dark);
+  border-left-color: var(--border-inset-dark);
+  border-right-color: var(--border-inset-light);
+  border-bottom-color: var(--border-inset-light);
+  font-family: inherit;
+  font-size: 11px;
+  padding: 0 4px;
+  box-sizing: border-box;
+}
+
+.cde-modal-row {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.u-margin-bottom-sm { margin-bottom: 8px; }
+.u-margin-bottom-md { margin-bottom: 16px; }
+.u-text-center { text-align: center; }
+
+/* Window Wireframe Dragging */
+.dragging-wireframe {
+  opacity: 0.5 !important;
+  border: 4px dashed var(--border-inset-dark) !important;
+  pointer-events: none;
+}
