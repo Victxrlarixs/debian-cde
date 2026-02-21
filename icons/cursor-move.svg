@@ -1,0 +1,11 @@
+<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <!-- Cross/Fleur cursor (X11 fleur - move) -->
+  <!-- Shadow layer -->
+  <polygon points="12,2 10,6 11,6 11,11 6,11 6,10 2,12 6,14 6,13 11,13 11,18 10,18 12,22 14,18 13,18 13,13 18,13 18,14 22,12 18,10 18,11 13,11 13,6 14,6" fill="#404040" transform="translate(1,1)"/>
+  <!-- Light highlight -->
+  <polygon points="12,2 10,6 11,6 11,11 6,11 6,10 2,12 6,14 6,13 11,13 11,18 10,18 12,22 14,18 13,18 13,13 18,13 18,14 22,12 18,10 18,11 13,11 13,6 14,6" fill="#E0E0E0" transform="translate(-0.5,-0.5)"/>
+  <!-- Main body -->
+  <polygon points="12,2 10,6 11,6 11,11 6,11 6,10 2,12 6,14 6,13 11,13 11,18 10,18 12,22 14,18 13,18 13,13 18,13 18,14 22,12 18,10 18,11 13,11 13,6 14,6" fill="#000000"/>
+  <!-- White center -->
+  <rect x="10" y="10" width="4" height="4" fill="#ffffff"/>
+</svg>

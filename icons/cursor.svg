@@ -1,0 +1,10 @@
+<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <!-- Sombra inferior derecha (bisel oscuro) -->
+  <polygon points="3,2 3,17 7,13 7,19 11,19 11,13 15,17 18,14 14,10 20,10 20,6 15,6 20,2" fill="#404040" />
+  <!-- Bisel claro superior izquierdo -->
+  <polygon points="2,1 2,16 6,12 6,18 10,18 10,12 14,16 17,13 13,9 19,9 19,5 14,5 19,1" fill="#E0E0E0" />
+  <!-- Relleno principal gris medio -->
+  <polygon points="4,3 4,15 7,12 7,17 9,17 9,12 13,15 15,13 12,10 18,10 18,7 13,7 18,3" fill="#808080" />
+  <!-- Punta de flecha negra -->
+  <polygon points="6,5 6,10 8,8 8,12 9,12 9,8 11,10 12,9 10,7 14,7 14,6 10,6 12,4" fill="#000000" />
+</svg>

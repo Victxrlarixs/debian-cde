@@ -1,0 +1,80 @@
+/* ------------------------------------------------------------------
+   VENTANAS CDE (General)
+   ------------------------------------------------------------------ */
+.window {
+  position: absolute;
+  background: var(--window-color);
+  z-index: 1000;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  box-shadow: 4px 4px 0 var(--shadow-color);
+  user-select: none;
+}
+
+.titlebar {
+  background: var(--titlebar-color);
+  color: var(--titlebar-text-color);
+  padding: 4px 8px;
+  cursor: move;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-size-title);
+  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-bold);
+  border-bottom: 2px solid var(--border-dark);
+}
+
+.window-controls {
+  display: flex;
+  gap: 2px;
+}
+
+/* Maximize State */
+.window.maximized,
+.cde-retro-modal.maximized {
+  top: 28px !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: calc(100% - 106px) !important;
+  max-width: none;
+  max-height: calc(100% - 106px) !important;
+  transform: none !important;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.window.maximized .modal-body,
+.cde-retro-modal.maximized .modal-body {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* Status Bar */
+.cde-statusbar {
+  background: var(--button-bg);
+  border-top: 1px solid var(--separator-color);
+  padding: 3px 8px;
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-small);
+  font-family: var(--font-family-base);
+  color: var(--separator-color);
+  height: 20px;
+}
+
+.cde-statusleft {
+  font-weight: bold;
+}
+
+/* Window Wireframe Dragging */
+.dragging-wireframe {
+  opacity: 0.5 !important;
+  border: 4px dashed var(--border-inset-dark) !important;
+  pointer-events: none;
+}
