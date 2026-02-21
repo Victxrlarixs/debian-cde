@@ -200,9 +200,7 @@ function runStep(): void {
         );
         pendingTimeout = setTimeout(runStep, POST_SEQUENCE_DELAY);
       } else {
-        logger.log(
-          `[TerminalTutorial] runStep: step complete, advancing to next step in sequence`
-        );
+        logger.log(`[TerminalTutorial] runStep: step complete, advancing to next step in sequence`);
         pendingTimeout = setTimeout(runStep, POST_COMMAND_DELAY);
       }
     }, POST_COMMAND_DELAY);

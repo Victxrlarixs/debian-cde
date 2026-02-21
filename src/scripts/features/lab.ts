@@ -4,8 +4,9 @@ import tutorialData from '../../data/tutorial.json';
 import filesystemData from '../../data/filesystem.json';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
-type FSNode  = { type: 'folder'; children: Record<string, FSNode> }
-             | { type: 'file';   content: string };
+type FSNode =
+  | { type: 'folder'; children: Record<string, FSNode> }
+  | { type: 'file'; content: string };
 
 type Lesson = Array<{ user: string; command: string; output: string }>;
 
@@ -55,10 +56,10 @@ class TerminalLabManager {
 
   private lessons: Lesson[] = tutorialData as Lesson[];
   private lessonIndex = 0;
-  private stepIndex   = 0;
-  private freeMode    = false;
+  private stepIndex = 0;
+  private freeMode = false;
   private history: string[] = [];
-  private historyPos  = -1;
+  private historyPos = -1;
 
   // Runtime virtual filesystem (mutable copy)
   private fs: Record<string, FSNode>;
@@ -69,7 +70,7 @@ class TerminalLabManager {
   private commandMap: Record<string, (args: string[]) => string>;
 
   constructor() {
-    this.fs  = JSON.parse(JSON.stringify(filesystemData)) as unknown as Record<string, FSNode>;
+    this.fs = JSON.parse(JSON.stringify(filesystemData)) as unknown as Record<string, FSNode>;
     this.cwd = '/home/victxrlarixs';
     this.commandMap = this.buildCommandMap();
   }
@@ -83,7 +84,7 @@ class TerminalLabManager {
     win.style.flexDirection = 'column';
     if (!win.style.left) {
       win.style.left = '12%';
-      win.style.top  = '5%';
+      win.style.top = '5%';
     }
     this.init();
     this.focus();
@@ -128,12 +129,12 @@ class TerminalLabManager {
   // ── Init ───────────────────────────────────────────────────────────────────
 
   private init(): void {
-    this.body          = document.getElementById('lab-terminal-body')!;
-    this.input         = document.getElementById('lab-input') as HTMLInputElement;
-    this.prompt        = document.getElementById('lab-prompt')!;
-    this.hintText      = document.getElementById('lab-hint-text')!;
-    this.lessonLabel   = document.getElementById('lab-lesson-label')!;
-    this.progressFill  = document.getElementById('lab-progress-fill')!;
+    this.body = document.getElementById('lab-terminal-body')!;
+    this.input = document.getElementById('lab-input') as HTMLInputElement;
+    this.prompt = document.getElementById('lab-prompt')!;
+    this.hintText = document.getElementById('lab-hint-text')!;
+    this.lessonLabel = document.getElementById('lab-lesson-label')!;
+    this.progressFill = document.getElementById('lab-progress-fill')!;
 
     if (!this.body) return;
 
@@ -142,7 +143,7 @@ class TerminalLabManager {
     this.input.dataset.initialized = '1';
 
     this.body.innerHTML = '';
-    this.input.value    = '';
+    this.input.value = '';
 
     this.input.addEventListener('keydown', (e) => this.onKeyDown(e));
     // Click anywhere in lab-terminal-body focuses input
@@ -176,16 +177,25 @@ class TerminalLabManager {
     if (this.freeMode) return;
     const step = this.currentStep();
     if (!step) return;
-    this.print(`<span class="lab-dim">next --&gt;</span> <span class="lab-cmd">${this.escHtml(step.command)}</span>`);
+    this.print(
+      `<span class="lab-dim">next --&gt;</span> <span class="lab-cmd">${this.escHtml(step.command)}</span>`
+    );
     this.updatePromptDisplay();
   }
 
-  private executeStep(step: NonNullable<ReturnType<typeof this.currentStep>>, skipped = false): void {
+  private executeStep(
+    step: NonNullable<ReturnType<typeof this.currentStep>>,
+    skipped = false
+  ): void {
     const promptStr = step.user === 'root' ? 'root@debian:~#' : `${step.user}@debian:~$`;
-    const prefix    = skipped ? '<span class="lab-dim">[skipped]</span> ' : '';
-    this.print(`<span class="lab-prompt-str">${promptStr}</span> ${prefix}${this.escHtml(step.command)}`);
+    const prefix = skipped ? '<span class="lab-dim">[skipped]</span> ' : '';
+    this.print(
+      `<span class="lab-prompt-str">${promptStr}</span> ${prefix}${this.escHtml(step.command)}`
+    );
     if (step.output) {
-      step.output.split('\\n').forEach(line => this.print(`<span class="lab-output">${this.escHtml(line)}</span>`));
+      step.output
+        .split('\\n')
+        .forEach((line) => this.print(`<span class="lab-output">${this.escHtml(line)}</span>`));
     }
     this.print(``);
     this.advance();
@@ -220,7 +230,9 @@ class TerminalLabManager {
     const title = LESSON_TITLES[this.lessonIndex] ?? `Lesson ${this.lessonIndex + 1}`;
     this.print(``);
     this.print(`<span class="lab-header">-------------------------------------------</span>`);
-    this.print(`<span class="lab-header">LESSON ${this.lessonIndex + 1}: ${title.toUpperCase()}</span>`);
+    this.print(
+      `<span class="lab-header">LESSON ${this.lessonIndex + 1}: ${title.toUpperCase()}</span>`
+    );
     this.print(`<span class="lab-header">-------------------------------------------</span>`);
     this.print(``);
   }
@@ -230,17 +242,19 @@ class TerminalLabManager {
     this.print(`<span class="lab-header">+-------------------------------------------+</span>`);
     this.print(`<span class="lab-header">|  ALL LESSONS COMPLETE                     |</span>`);
     this.print(`<span class="lab-header">+-------------------------------------------+</span>`);
-    this.print(`<span class="lab-dim">You have completed the Debian CDE Terminal Laboratory.</span>`);
+    this.print(
+      `<span class="lab-dim">You have completed the Debian CDE Terminal Laboratory.</span>`
+    );
     this.print(`<span class="lab-dim">Type "free" to switch to free exploration mode.</span>`);
   }
 
   private updateUI(): void {
-    const total   = this.lessons.length;
+    const total = this.lessons.length;
     const current = Math.min(this.lessonIndex + 1, total);
-    const pct     = Math.round((this.lessonIndex / total) * 100);
-    const title   = LESSON_TITLES[this.lessonIndex] ?? `Lesson ${current}`;
+    const pct = Math.round((this.lessonIndex / total) * 100);
+    const title = LESSON_TITLES[this.lessonIndex] ?? `Lesson ${current}`;
 
-    if (this.lessonLabel)  this.lessonLabel.textContent  = `LESSON ${current} / ${total} — ${title}`;
+    if (this.lessonLabel) this.lessonLabel.textContent = `LESSON ${current} / ${total} — ${title}`;
     if (this.progressFill) this.progressFill.style.width = `${pct}%`;
   }
 
@@ -278,14 +292,28 @@ class TerminalLabManager {
     // Print what user typed
     const promptStr = this.freeMode
       ? `${this.user}@debian:~$`
-      : (this.currentStep()?.user === 'root' ? 'root@debian:~#' : `${this.user}@debian:~$`);
+      : this.currentStep()?.user === 'root'
+        ? 'root@debian:~#'
+        : `${this.user}@debian:~$`;
     this.print(`<span class="lab-prompt-str">${promptStr}</span> ${this.escHtml(raw)}`);
 
     // Built-in meta-commands
-    if (raw === 'clear') { this.body.innerHTML = ''; return; }
-    if (raw === 'hint')  { this.showHint(); return; }
-    if (raw === 'skip')  { this.skip(); return; }
-    if (raw === 'free')  { this.toggleFreeMode(); return; }
+    if (raw === 'clear') {
+      this.body.innerHTML = '';
+      return;
+    }
+    if (raw === 'hint') {
+      this.showHint();
+      return;
+    }
+    if (raw === 'skip') {
+      this.skip();
+      return;
+    }
+    if (raw === 'free') {
+      this.toggleFreeMode();
+      return;
+    }
     if (raw === 'tutorial') {
       if (this.freeMode) this.toggleFreeMode();
       this.showCurrentPrompt();
@@ -310,9 +338,9 @@ class TerminalLabManager {
     if (normalize(raw) === normalize(step.command)) {
       // Correct!
       if (step.output) {
-        step.output.split('\\n').forEach(line =>
-          this.print(`<span class="lab-output">${this.escHtml(line)}</span>`)
-        );
+        step.output
+          .split('\\n')
+          .forEach((line) => this.print(`<span class="lab-output">${this.escHtml(line)}</span>`));
       }
       this.print(``);
       this.advance();
@@ -331,9 +359,14 @@ class TerminalLabManager {
     const handler = this.commandMap[cmd ?? ''];
     if (handler) {
       const out = handler(args);
-      if (out) out.split('\n').forEach(l => this.print(`<span class="lab-output">${this.escHtml(l)}</span>`));
+      if (out)
+        out
+          .split('\n')
+          .forEach((l) => this.print(`<span class="lab-output">${this.escHtml(l)}</span>`));
     } else {
-      this.print(`<span class="lab-error">bash: ${this.escHtml(cmd ?? '')}: command not found</span>`);
+      this.print(
+        `<span class="lab-error">bash: ${this.escHtml(cmd ?? '')}: command not found</span>`
+      );
     }
     this.print(``);
   }
@@ -346,8 +379,11 @@ class TerminalLabManager {
     const parts = p.split('/').filter(Boolean);
     const resolved: string[] = [];
     for (const part of parts) {
-      if (part === '.')  continue;
-      if (part === '..') { resolved.pop(); continue; }
+      if (part === '.') continue;
+      if (part === '..') {
+        resolved.pop();
+        continue;
+      }
       resolved.push(part);
     }
     return '/' + resolved.join('/');
@@ -375,13 +411,17 @@ class TerminalLabManager {
 
   private buildCommandMap(): Record<string, (args: string[]) => string> {
     return {
-      pwd:      ()     => this.cwd,
-      whoami:   ()     => this.user,
-      hostname: ()     => 'debian',
-      uname:    (a)    => a.includes('-a') ? 'Linux debian 5.10.0-20-amd64 #1 SMP Debian x86_64 GNU/Linux' : 'Linux',
-      date:     ()     => new Date().toString(),
-      echo:     (a)    => a.join(' '),
-      clear:    ()     => { this.body.innerHTML = ''; return ''; },
+      pwd: () => this.cwd,
+      whoami: () => this.user,
+      hostname: () => 'debian',
+      uname: (a) =>
+        a.includes('-a') ? 'Linux debian 5.10.0-20-amd64 #1 SMP Debian x86_64 GNU/Linux' : 'Linux',
+      date: () => new Date().toString(),
+      echo: (a) => a.join(' '),
+      clear: () => {
+        this.body.innerHTML = '';
+        return '';
+      },
 
       ls: (args) => {
         const showHidden = args.includes('-la') || args.includes('-a');
@@ -396,8 +436,12 @@ class TerminalLabManager {
         const target = args[0] ?? '~';
         const resolved = this.resolvePath(target);
         const node = this.getNode(resolved);
-        if (!node) { return `bash: cd: ${target}: No such file or directory`; }
-        if (node.type !== 'folder') { return `bash: cd: ${target}: Not a directory`; }
+        if (!node) {
+          return `bash: cd: ${target}: No such file or directory`;
+        }
+        if (node.type !== 'folder') {
+          return `bash: cd: ${target}: Not a directory`;
+        }
         this.cwd = resolved;
         if (this.prompt) this.prompt.textContent = `${this.user}@debian:${this.cwdShort()}$`;
         return '';
@@ -415,10 +459,16 @@ class TerminalLabManager {
       mkdir: (args) => {
         if (!args[0]) return 'mkdir: missing operand';
         const resolved = this.resolvePath(args[0]);
-        const parent   = this.getNode(resolved.split('/').slice(0, -1).join('/') || '/home/victxrlarixs');
-        if (!parent || parent.type !== 'folder') return `mkdir: cannot create directory '${args[0]}'`;
+        const parent = this.getNode(
+          resolved.split('/').slice(0, -1).join('/') || '/home/victxrlarixs'
+        );
+        if (!parent || parent.type !== 'folder')
+          return `mkdir: cannot create directory '${args[0]}'`;
         const name = args[0].split('/').pop()!;
-        (parent as { type: 'folder'; children: Record<string, FSNode> }).children[name] = { type: 'folder', children: {} };
+        (parent as { type: 'folder'; children: Record<string, FSNode> }).children[name] = {
+          type: 'folder',
+          children: {},
+        };
         return '';
       },
 
@@ -426,11 +476,16 @@ class TerminalLabManager {
         if (!args[0]) return 'touch: missing file operand';
         for (const f of args) {
           const resolved = this.resolvePath(f);
-          const parent   = this.getNode(resolved.split('/').slice(0, -1).join('/') || '/home/victxrlarixs');
+          const parent = this.getNode(
+            resolved.split('/').slice(0, -1).join('/') || '/home/victxrlarixs'
+          );
           if (!parent || parent.type !== 'folder') continue;
           const name = f.split('/').pop()!;
           if (!(parent as { type: 'folder'; children: Record<string, FSNode> }).children[name]) {
-            (parent as { type: 'folder'; children: Record<string, FSNode> }).children[name] = { type: 'file', content: '' };
+            (parent as { type: 'folder'; children: Record<string, FSNode> }).children[name] = {
+              type: 'file',
+              content: '',
+            };
           }
         }
         return '';
@@ -439,27 +494,39 @@ class TerminalLabManager {
       rm: (args) => {
         if (!args[0]) return 'rm: missing operand';
         const resolved = this.resolvePath(args[0]);
-        const parts    = resolved.split('/').filter(Boolean);
-        const name     = parts.pop()!;
-        const parent   = this.getNode('/' + parts.join('/'));
-        if (!parent || parent.type !== 'folder' || !(parent as { type: 'folder'; children: Record<string, FSNode> }).children[name]) {
+        const parts = resolved.split('/').filter(Boolean);
+        const name = parts.pop()!;
+        const parent = this.getNode('/' + parts.join('/'));
+        if (
+          !parent ||
+          parent.type !== 'folder' ||
+          !(parent as { type: 'folder'; children: Record<string, FSNode> }).children[name]
+        ) {
           return `rm: cannot remove '${args[0]}': No such file or directory`;
         }
         delete (parent as { type: 'folder'; children: Record<string, FSNode> }).children[name];
         return '';
       },
 
-      help: () => [
-        'Available commands (free mode):',
-        '  ls, cd, pwd, cat, mkdir, touch, rm, echo, clear',
-        '  whoami, hostname, uname, date, help',
-        '  history, man',
-        'Type "tutorial" to return to guided mode.',
-      ].join('\n'),
+      help: () =>
+        [
+          'Available commands (free mode):',
+          '  ls, cd, pwd, cat, mkdir, touch, rm, echo, clear',
+          '  whoami, hostname, uname, date, help',
+          '  history, man',
+          'Type "tutorial" to return to guided mode.',
+        ].join('\n'),
 
-      history: () => this.history.slice(0, 20).map((c, i) => `  ${i + 1}  ${c}`).join('\n'),
+      history: () =>
+        this.history
+          .slice(0, 20)
+          .map((c, i) => `  ${i + 1}  ${c}`)
+          .join('\n'),
 
-      man: (args) => args[0] ? `No manual entry for ${args[0]} in this lab. Try --help.` : 'What manual page do you want?',
+      man: (args) =>
+        args[0]
+          ? `No manual entry for ${args[0]} in this lab. Try --help.`
+          : 'What manual page do you want?',
     };
   }
 

@@ -21,7 +21,9 @@ body {
   overflow: hidden;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: inherit;
 }
 
@@ -91,15 +93,34 @@ body {
   }
 }
 
-.boot-kernel { color: #cccccc; }
-.boot-cpu { color: #88aaff; }
-.boot-memory { color: #ffaa88; }
-.boot-fs { color: #ffff88; }
-.boot-systemd { color: #88ffff; }
-.boot-service { color: #00ff00; }
-.boot-drm { color: #ff8888; }
-.boot-desktop { color: #00ffaa; font-weight: bold; }
-.boot-default { color: #aaaaaa; }
+.boot-kernel {
+  color: #cccccc;
+}
+.boot-cpu {
+  color: #88aaff;
+}
+.boot-memory {
+  color: #ffaa88;
+}
+.boot-fs {
+  color: #ffff88;
+}
+.boot-systemd {
+  color: #88ffff;
+}
+.boot-service {
+  color: #00ff00;
+}
+.boot-drm {
+  color: #ff8888;
+}
+.boot-desktop {
+  color: #00ffaa;
+  font-weight: bold;
+}
+.boot-default {
+  color: #aaaaaa;
+}
 
 /* ------------------------------------------------------------------
    5. COMPONENTES GLOBALES DE LA INTERFAZ

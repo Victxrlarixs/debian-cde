@@ -103,18 +103,20 @@ const WindowManager = (() => {
     const viewportHeight = window.innerHeight;
 
     win.style.position = 'absolute';
-    
+
     // Ensure window titlebar is not covered by TopBar
     const normalizedTop = Math.max(rect.top, TOP_BAR_HEIGHT);
     win.style.top = normalizedTop + 'px';
-    
+
     win.style.transform = 'none';
 
     if (rect.right < MIN_VISIBLE) win.style.left = '0px';
-    if (rect.left > viewportWidth - MIN_VISIBLE) win.style.left = `${viewportWidth - MIN_VISIBLE}px`;
+    if (rect.left > viewportWidth - MIN_VISIBLE)
+      win.style.left = `${viewportWidth - MIN_VISIBLE}px`;
     if (rect.bottom < MIN_VISIBLE) win.style.top = `${CONFIG.WINDOW.TOP_BAR_HEIGHT}px`;
-    if (rect.top > viewportHeight - MIN_VISIBLE) win.style.top = `${viewportHeight - MIN_VISIBLE}px`;
-    
+    if (rect.top > viewportHeight - MIN_VISIBLE)
+      win.style.top = `${viewportHeight - MIN_VISIBLE}px`;
+
     logger.log(`[WindowManager] Normalized "${win.id}" to top: ${win.style.top}`);
   }
 
@@ -132,7 +134,9 @@ const WindowManager = (() => {
     win.style.transform = 'none';
     win.style.margin = '0';
 
-    logger.log(`[WindowManager] Centered window "${win.id}" at ${win.style.left}, ${win.style.top}`);
+    logger.log(
+      `[WindowManager] Centered window "${win.id}" at ${win.style.left}, ${win.style.top}`
+    );
   }
 
   /**
@@ -141,7 +145,7 @@ const WindowManager = (() => {
   function drag(e: PointerEvent, id: string): void {
     // Only handle primary pointer (usually left click or single touch)
     if (!e.isPrimary) return;
-    
+
     const el = document.getElementById(id);
     if (!el) return;
 
@@ -180,7 +184,9 @@ const WindowManager = (() => {
     e.stopPropagation();
 
     // Get acceleration from CSS variable
-    const accelStr = getComputedStyle(document.documentElement).getPropertyValue('--mouse-acceleration');
+    const accelStr = getComputedStyle(document.documentElement).getPropertyValue(
+      '--mouse-acceleration'
+    );
     const acceleration = parseFloat(accelStr) || 1;
 
     // Movement delta since last event
@@ -191,8 +197,8 @@ const WindowManager = (() => {
     let currentLeft = parseFloat(dragState.element.style.left || '0');
     let currentTop = parseFloat(dragState.element.style.top || '0');
 
-    let left = currentLeft + (deltaX * acceleration);
-    let top = currentTop + (deltaY * acceleration);
+    let left = currentLeft + deltaX * acceleration;
+    let top = currentTop + deltaY * acceleration;
 
     // Update last position
     dragState.lastX = e.clientX;
@@ -230,12 +236,12 @@ const WindowManager = (() => {
 
     dragState.element.classList.remove('dragging-wireframe');
     dragState.isDragging = false;
-    
+
     // Save session
     settingsManager.updateWindowSession(el.id, {
       left: el.style.left,
       top: el.style.top,
-      maximized: el.classList.contains('maximized')
+      maximized: el.classList.contains('maximized'),
     });
 
     dragState.element = null;
@@ -266,23 +272,30 @@ const WindowManager = (() => {
     });
 
     // Point to focus implementation
-    document.addEventListener('pointerenter', (e) => {
-      const mode = document.documentElement.getAttribute('data-focus-mode');
-      if (mode !== 'point') return;
-      
-      const win = (e.target as Element).closest('.window, .cde-retro-modal');
-      if (win) {
-        focusWindow(win.id);
-      }
-    }, true);
+    document.addEventListener(
+      'pointerenter',
+      (e) => {
+        const mode = document.documentElement.getAttribute('data-focus-mode');
+        if (mode !== 'point') return;
+
+        const win = (e.target as Element).closest('.window, .cde-retro-modal');
+        if (win) {
+          focusWindow(win.id);
+        }
+      },
+      true
+    );
   }
 
   function setupDropdown(btnId: string, menuId: string): void {
     const dropdownBtn = document.getElementById(btnId);
     const dropdownMenu = document.getElementById(menuId);
-    
+
     if (!dropdownBtn || !dropdownMenu) {
-      logger.warn(`[WindowManager] Dropdown elements not found for ${btnId}/${menuId}!`, { btn: !!dropdownBtn, menu: !!dropdownMenu });
+      logger.warn(`[WindowManager] Dropdown elements not found for ${btnId}/${menuId}!`, {
+        btn: !!dropdownBtn,
+        menu: !!dropdownMenu,
+      });
       return;
     }
 
@@ -292,18 +305,18 @@ const WindowManager = (() => {
     dropdownBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       e.preventDefault();
-      
+
       const now = Date.now();
       if (now - lastToggleTime < 300) return;
       lastToggleTime = now;
 
       const isOpen = dropdownBtn.classList.contains('open');
-      
+
       if (!isOpen) {
         // OPENING
         dropdownBtn.classList.add('open');
         const rect = dropdownBtn.getBoundingClientRect();
-        
+
         dropdownMenu.style.position = 'fixed';
         dropdownMenu.style.zIndex = String(CONFIG.DROPDOWN.Z_INDEX);
         dropdownMenu.style.display = 'block';
@@ -311,8 +324,8 @@ const WindowManager = (() => {
         // Calculate position based on the button
         const menuRect = dropdownMenu.getBoundingClientRect();
         dropdownMenu.style.bottom = window.innerHeight - rect.top + CONFIG.DROPDOWN.OFFSET + 'px';
-        dropdownMenu.style.left = rect.left + (rect.width / 2) - (menuRect.width / 2) + 'px';
-        
+        dropdownMenu.style.left = rect.left + rect.width / 2 - menuRect.width / 2 + 'px';
+
         logger.log(`[WindowManager] Dropdown ${menuId} opened.`);
       } else {
         // CLOSING
@@ -365,27 +378,29 @@ const WindowManager = (() => {
       } else {
         // Only normalize if it's already visible, otherwise wait for normalization on drag
         if (window.getComputedStyle(win).display !== 'none') {
-          setTimeout(() => { normalizeWindowPosition(win); }, CONFIG.TIMINGS.NORMALIZATION_DELAY);
+          setTimeout(() => {
+            normalizeWindowPosition(win);
+          }, CONFIG.TIMINGS.NORMALIZATION_DELAY);
         }
       }
-      
+
       // Essential for touch support: prevent browser default behavior
       (titlebar as HTMLElement).style.touchAction = 'none';
-      
+
       titlebar.addEventListener('pointerdown', titlebarDragHandler as any);
       titlebar.setAttribute('data-draggable', 'true');
       win.setAttribute('data-cde-registered', 'true');
-      
+
       // Assign to current workspace if not specified
       if (!win.getAttribute('data-workspace')) {
         win.setAttribute('data-workspace', currentWorkspace);
         // If it's a fresh registration without a workspace, it's likely a new window or modal
         // Center it if it's visible, or wait for it to be shown
         if (window.getComputedStyle(win).display !== 'none') {
-           requestAnimationFrame(() => centerWindow(win));
+          requestAnimationFrame(() => centerWindow(win));
         }
       }
-      
+
       const ws = win.getAttribute('data-workspace') || currentWorkspace;
       if (ws !== currentWorkspace) {
         win.style.display = 'none';
@@ -397,11 +412,11 @@ const WindowManager = (() => {
 
   function switchWorkspace(id: string): void {
     if (id === currentWorkspace) return;
-    
+
     logger.log(`[WindowManager] Switching to workspace: ${id}`);
-    
+
     const windows = document.querySelectorAll('.window, .cde-retro-modal');
-    
+
     // Hide all windows of current workspace and remember which ones were open
     windows.forEach((win) => {
       const el = win as HTMLElement;
@@ -517,7 +532,7 @@ function maximizeWindow(id: string): void {
       win.style.height = windowStates[id].height || '';
     }
     WindowManager.focusWindow(id);
-    
+
     settingsManager.updateWindowSession(id, { maximized: false });
     logger.log(`[WindowManager] maximizeWindow: window "${id}" restored.`);
   } else {
@@ -530,7 +545,7 @@ function maximizeWindow(id: string): void {
     };
     win.classList.add('maximized');
     WindowManager.focusWindow(id);
-    
+
     settingsManager.updateWindowSession(id, { maximized: true });
     logger.log(`[WindowManager] maximizeWindow: window "${id}" maximized.`);
   }

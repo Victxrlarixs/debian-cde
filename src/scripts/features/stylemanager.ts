@@ -41,10 +41,18 @@ export class StyleManager {
   }
 
   // Getters for backward compatibility
-  public get styles() { return this.theme.styles; }
-  public get fontStyles() { return this.font.fontStyles; }
-  public get presets() { return this.theme.presets; }
-  public get fontPresets() { return this.font.fontPresets; }
+  public get styles() {
+    return this.theme.styles;
+  }
+  public get fontStyles() {
+    return this.font.fontStyles;
+  }
+  public get presets() {
+    return this.theme.presets;
+  }
+  public get fontPresets() {
+    return this.font.fontPresets;
+  }
 
   /**
    * Initializes the Style Manager and all its modules.
@@ -53,7 +61,7 @@ export class StyleManager {
     const themeSettings = settingsManager.getSection('theme');
     this.theme.loadSavedColors(themeSettings.colors || {});
     this.font.loadSavedFonts(themeSettings.fonts || {});
-    
+
     this.mouse.load();
     this.keyboard.load();
     this.beep.load();
@@ -71,7 +79,9 @@ export class StyleManager {
   }
 
   private bindEvents(): void {
-    const styleManagerIcon = document.querySelector('.cde-icon img[src*="appearance"]')?.parentElement;
+    const styleManagerIcon = document.querySelector(
+      '.cde-icon img[src*="appearance"]'
+    )?.parentElement;
     if (styleManagerIcon) {
       styleManagerIcon.addEventListener('click', (e) => {
         e.preventDefault();
@@ -144,7 +154,9 @@ export class StyleManager {
   };
 
   private highlightActivePreset(activeButton: HTMLElement, selector: string): void {
-    document.querySelectorAll(`.cde-preset${selector}`).forEach((btn) => btn.classList.remove('active'));
+    document
+      .querySelectorAll(`.cde-preset${selector}`)
+      .forEach((btn) => btn.classList.remove('active'));
     activeButton.classList.add('active');
   }
 
@@ -163,39 +175,89 @@ export class StyleManager {
   }
 
   private setupFontControls(): void {
-    document.querySelectorAll('#styleManagerFont select, #styleManagerFont input').forEach((ctrl) => {
-      ctrl.addEventListener('input', () => this.font.updateFontPreview());
-    });
+    document
+      .querySelectorAll('#styleManagerFont select, #styleManagerFont input')
+      .forEach((ctrl) => {
+        ctrl.addEventListener('input', () => this.font.updateFontPreview());
+      });
   }
 
   // Windows
-  public openMain(): void { this.showWindow('styleManagerMain'); }
-  public closeMain(): void { this.hideWindow('styleManagerMain'); }
-  public openColor(): void { this.showWindow('styleManagerColor'); this.theme.updateUI(); }
-  public closeColor(): void { this.hideWindow('styleManagerColor'); }
-  public openFont(): void { this.showWindow('styleManagerFont'); }
-  public closeFont(): void { this.hideWindow('styleManagerFont'); }
-  public openBackdrop(): void { this.showWindow('styleManagerBackdrop'); this.backdrop.syncUI(); }
-  public closeBackdrop(): void { this.hideWindow('styleManagerBackdrop'); }
-  public openMouse(): void { this.showWindow('styleManagerMouse'); this.mouse.syncUI(); }
-  public closeMouse(): void { this.hideWindow('styleManagerMouse'); }
-  public openKeyboard(): void { this.showWindow('styleManagerKeyboard'); this.keyboard.syncUI(); }
-  public closeKeyboard(): void { this.hideWindow('styleManagerKeyboard'); }
-  public openWindow(): void { this.showWindow('styleManagerWindow'); this.windowBehavior.syncUI(); }
-  public closeWindow(): void { this.hideWindow('styleManagerWindow'); }
-  public openScreen(): void { this.showWindow('styleManagerScreen'); this.screen.syncUI(); }
-  public closeScreen(): void { this.hideWindow('styleManagerScreen'); }
-  public openBeep(): void { this.showWindow('styleManagerBeep'); this.beep.syncUI(); }
-  public closeBeep(): void { this.hideWindow('styleManagerBeep'); }
-  public openStartup(): void { this.showWindow('styleManagerStartup'); this.startup.syncUI(); }
-  public closeStartup(): void { this.hideWindow('styleManagerStartup'); }
+  public openMain(): void {
+    this.showWindow('styleManagerMain');
+  }
+  public closeMain(): void {
+    this.hideWindow('styleManagerMain');
+  }
+  public openColor(): void {
+    this.showWindow('styleManagerColor');
+    this.theme.updateUI();
+  }
+  public closeColor(): void {
+    this.hideWindow('styleManagerColor');
+  }
+  public openFont(): void {
+    this.showWindow('styleManagerFont');
+  }
+  public closeFont(): void {
+    this.hideWindow('styleManagerFont');
+  }
+  public openBackdrop(): void {
+    this.showWindow('styleManagerBackdrop');
+    this.backdrop.syncUI();
+  }
+  public closeBackdrop(): void {
+    this.hideWindow('styleManagerBackdrop');
+  }
+  public openMouse(): void {
+    this.showWindow('styleManagerMouse');
+    this.mouse.syncUI();
+  }
+  public closeMouse(): void {
+    this.hideWindow('styleManagerMouse');
+  }
+  public openKeyboard(): void {
+    this.showWindow('styleManagerKeyboard');
+    this.keyboard.syncUI();
+  }
+  public closeKeyboard(): void {
+    this.hideWindow('styleManagerKeyboard');
+  }
+  public openWindow(): void {
+    this.showWindow('styleManagerWindow');
+    this.windowBehavior.syncUI();
+  }
+  public closeWindow(): void {
+    this.hideWindow('styleManagerWindow');
+  }
+  public openScreen(): void {
+    this.showWindow('styleManagerScreen');
+    this.screen.syncUI();
+  }
+  public closeScreen(): void {
+    this.hideWindow('styleManagerScreen');
+  }
+  public openBeep(): void {
+    this.showWindow('styleManagerBeep');
+    this.beep.syncUI();
+  }
+  public closeBeep(): void {
+    this.hideWindow('styleManagerBeep');
+  }
+  public openStartup(): void {
+    this.showWindow('styleManagerStartup');
+    this.startup.syncUI();
+  }
+  public closeStartup(): void {
+    this.hideWindow('styleManagerStartup');
+  }
 
   private showWindow(id: string): void {
     const win = document.getElementById(id);
     if (win) {
       win.style.display = 'flex';
       win.style.zIndex = '10000';
-      
+
       // Center on next frame to ensure dimensions are calculated after display: flex
       requestAnimationFrame(() => {
         if (window.centerWindow) {
@@ -211,10 +273,24 @@ export class StyleManager {
     if (win) win.style.display = 'none';
   }
 
-  public applyColor(): void { this.theme.applyColor(); this.showMessage('Colors applied.'); }
-  public applyFont(): void { this.font.applyFont(); this.showMessage('Fonts applied.'); }
-  public resetColor(): void { this.theme.resetColor(); this.theme.updateUI(); this.saveColor(); }
-  public resetFont(): void { this.font.resetFont(); this.font.updateFontControls(); this.saveFont(); }
+  public applyColor(): void {
+    this.theme.applyColor();
+    this.showMessage('Colors applied.');
+  }
+  public applyFont(): void {
+    this.font.applyFont();
+    this.showMessage('Fonts applied.');
+  }
+  public resetColor(): void {
+    this.theme.resetColor();
+    this.theme.updateUI();
+    this.saveColor();
+  }
+  public resetFont(): void {
+    this.font.resetFont();
+    this.font.updateFontControls();
+    this.saveFont();
+  }
 
   public saveColor(): void {
     const theme = settingsManager.getSection('theme');

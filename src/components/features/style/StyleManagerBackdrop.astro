@@ -10,12 +10,33 @@ import WindowControls from '../../common/WindowControls.astro';
 
   <div class="modal-body">
     <p>Select a backdrop pattern or image:</p>
-    
+
     <div class="backdrop-grid">
       <!-- Images Only -->
-      <div class="backdrop-preset backdrop-preset-marble" data-type="image" data-value="/backdrops/Marble.png" onclick="styleManager.backdrop.update('image', '/backdrops/Marble.png'); styleManager.backdrop.syncUI()" title="Marble"></div>
-      <div class="backdrop-preset backdrop-preset-toronto" data-type="image" data-value="/backdrops/Toronto.png" onclick="styleManager.backdrop.update('image', '/backdrops/Toronto.png'); styleManager.backdrop.syncUI()" title="Toronto"></div>
-      <div class="backdrop-preset backdrop-preset-circuit" data-type="image" data-value="/backdrops/CircuitBoards.png" onclick="styleManager.backdrop.update('image', '/backdrops/CircuitBoards.png'); styleManager.backdrop.syncUI()" title="Circuit"></div>
+      <div
+        class="backdrop-preset backdrop-preset-marble"
+        data-type="image"
+        data-value="/backdrops/Marble.png"
+        onclick="styleManager.backdrop.update('image', '/backdrops/Marble.png'); styleManager.backdrop.syncUI()"
+        title="Marble"
+      >
+      </div>
+      <div
+        class="backdrop-preset backdrop-preset-toronto"
+        data-type="image"
+        data-value="/backdrops/Toronto.png"
+        onclick="styleManager.backdrop.update('image', '/backdrops/Toronto.png'); styleManager.backdrop.syncUI()"
+        title="Toronto"
+      >
+      </div>
+      <div
+        class="backdrop-preset backdrop-preset-circuit"
+        data-type="image"
+        data-value="/backdrops/CircuitBoards.png"
+        onclick="styleManager.backdrop.update('image', '/backdrops/CircuitBoards.png'); styleManager.backdrop.syncUI()"
+        title="Circuit"
+      >
+      </div>
     </div>
   </div>
 

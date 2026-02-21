@@ -10,8 +10,18 @@ export const CalendarManager = (() => {
   let initialized = false;
 
   const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
 
   function init(): void {
@@ -41,8 +51,8 @@ export const CalendarManager = (() => {
     monthYearEl.textContent = `${months[month]} ${year}`;
 
     if (statusEl) {
-        const today = new Date();
-        statusEl.textContent = `Today: ${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
+      const today = new Date();
+      statusEl.textContent = `Today: ${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
     }
 
     // Clear days
@@ -67,7 +77,7 @@ export const CalendarManager = (() => {
       const dayEl = document.createElement('div');
       dayEl.className = 'cal-day';
       dayEl.textContent = day.toString();
-      
+
       if (isCurrentMonth && day === today.getDate()) {
         dayEl.classList.add('today');
       }

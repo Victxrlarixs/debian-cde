@@ -43,9 +43,12 @@ export class WindowModule {
    */
   public apply(): void {
     // Expose settings via CSS variables or global flags if needed
-    document.documentElement.setAttribute('data-focus-mode', this.settings.pointToFocus ? 'point' : 'click');
+    document.documentElement.setAttribute(
+      'data-focus-mode',
+      this.settings.pointToFocus ? 'point' : 'click'
+    );
     document.documentElement.setAttribute('data-opaque-drag', String(this.settings.opaqueDragging));
-    
+
     logger.log('[WindowModule] Applied settings to document attributes');
   }
 
@@ -82,7 +85,7 @@ export class WindowModule {
       'window-click': 'clickToFocus',
       'window-raise': 'raiseOnActive',
       'window-show': 'opaqueDragging',
-      'window-iconbox': 'useIconBox'
+      'window-iconbox': 'useIconBox',
     };
 
     Object.entries(mapping).forEach(([id, settingKey]) => {

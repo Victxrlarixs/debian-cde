@@ -36,7 +36,10 @@ export class MouseModule {
   public apply(): void {
     logger.log('[MouseModule] Applied settings:', this.settings);
     // Expose acceleration as a CSS variable for other modules to use
-    document.documentElement.style.setProperty('--mouse-acceleration', String(this.settings.acceleration));
+    document.documentElement.style.setProperty(
+      '--mouse-acceleration',
+      String(this.settings.acceleration)
+    );
   }
 
   public update(key: string, value: any): void {
@@ -55,16 +58,24 @@ export class MouseModule {
     if (!panel) return;
 
     // Handedness
-    const handednessRight = panel.querySelector('input[name="handedness"][value="right"]') as HTMLInputElement;
-    const handednessLeft = panel.querySelector('input[name="handedness"][value="left"]') as HTMLInputElement;
+    const handednessRight = panel.querySelector(
+      'input[name="handedness"][value="right"]'
+    ) as HTMLInputElement;
+    const handednessLeft = panel.querySelector(
+      'input[name="handedness"][value="left"]'
+    ) as HTMLInputElement;
     if (handednessRight && handednessLeft) {
       handednessRight.checked = this.settings.handedness === 'right';
       handednessLeft.checked = this.settings.handedness === 'left';
     }
 
     // Button2
-    const button2Transfer = panel.querySelector('input[name="button2"][value="transfer"]') as HTMLInputElement;
-    const button2Adjust = panel.querySelector('input[name="button2"][value="adjust"]') as HTMLInputElement;
+    const button2Transfer = panel.querySelector(
+      'input[name="button2"][value="transfer"]'
+    ) as HTMLInputElement;
+    const button2Adjust = panel.querySelector(
+      'input[name="button2"][value="adjust"]'
+    ) as HTMLInputElement;
     if (button2Transfer && button2Adjust) {
       button2Transfer.checked = this.settings.button2 === 'transfer';
       button2Adjust.checked = this.settings.button2 === 'adjust';
@@ -79,7 +90,9 @@ export class MouseModule {
   }
 
   private syncSlider(panel: HTMLElement, index: number, value: number): void {
-    const slider = panel.querySelector(`.mouse-slider-row:nth-child(${index}) input`) as HTMLInputElement;
+    const slider = panel.querySelector(
+      `.mouse-slider-row:nth-child(${index}) input`
+    ) as HTMLInputElement;
     const span = panel.querySelector(`.mouse-slider-row:nth-child(${index}) span:last-child`);
     if (slider && span) {
       slider.value = String(value);

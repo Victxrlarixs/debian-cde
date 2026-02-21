@@ -84,21 +84,24 @@ export class FontModule {
   }
 
   public updateFontControls(): void {
-     const baseFont = this.fontStyles['--font-family-base'] || CONFIG.DEFAULT_STYLES.FONTS['--font-family-base'];
-     const terminalFont = this.fontStyles['--font-family-terminal'] || CONFIG.DEFAULT_STYLES.FONTS['--font-family-terminal'];
-     const fontSize = parseInt(this.fontStyles['--font-size-base'] || '12');
-     const titleSize = parseInt(this.fontStyles['--font-size-title'] || '13');
-     const lineHeight = parseFloat(this.fontStyles['--line-height-base'] || '1.45');
-     const fontWeight = this.fontStyles['--font-weight-normal'] || '400';
+    const baseFont =
+      this.fontStyles['--font-family-base'] || CONFIG.DEFAULT_STYLES.FONTS['--font-family-base'];
+    const terminalFont =
+      this.fontStyles['--font-family-terminal'] ||
+      CONFIG.DEFAULT_STYLES.FONTS['--font-family-terminal'];
+    const fontSize = parseInt(this.fontStyles['--font-size-base'] || '12');
+    const titleSize = parseInt(this.fontStyles['--font-size-title'] || '13');
+    const lineHeight = parseFloat(this.fontStyles['--line-height-base'] || '1.45');
+    const fontWeight = this.fontStyles['--font-weight-normal'] || '400';
 
-     this.setSelectValue('font-family-base', baseFont);
-     this.setSelectValue('font-family-terminal', terminalFont);
-     this.setSliderValue('font-size-base', fontSize, 'font-size-value', 'px');
-     this.setSliderValue('font-size-title', titleSize, 'font-size-title-value', 'px');
-     this.setSliderValue('line-height-base', lineHeight, 'line-height-value', '');
-     this.setSelectValue('font-weight', fontWeight);
+    this.setSelectValue('font-family-base', baseFont);
+    this.setSelectValue('font-family-terminal', terminalFont);
+    this.setSliderValue('font-size-base', fontSize, 'font-size-value', 'px');
+    this.setSliderValue('font-size-title', titleSize, 'font-size-title-value', 'px');
+    this.setSliderValue('line-height-base', lineHeight, 'line-height-value', '');
+    this.setSelectValue('font-weight', fontWeight);
 
-     this.updateFontPreview();
+    this.updateFontPreview();
   }
 
   private setSelectValue(id: string, value: string): void {

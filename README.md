@@ -13,25 +13,28 @@
 This isn't just a website; it's a living desktop. From the moment the terminal scrolls past your eyes, you're not just a "visitor"—you're a "user" of a classic Unix system.
 
 ### 🎨 Your Desktop, Your Rules
-Open the **Style Manager** to instantly repaint your environment. Whether it's the professional *Platinum*, the high-contrast *Midnight*, or the vibrant *Sunset*, the entire OS follows your lead without a single reload.
+
+Open the **Style Manager** to instantly repaint your environment. Whether it's the professional _Platinum_, the high-contrast _Midnight_, or the vibrant _Sunset_, the entire OS follows your lead without a single reload.
 
 ### 📁 A Responsive World
+
 Everything reacts to you. Drag windows by their title bars, hover over icons to see them glow, and explore a **Virtual Filesystem** where you can create your own digital corner. It's the tactile feel of the 90s with the speed of today.
 
 ---
 
 ## 🎯 Iconic Experiences
 
-| 🖥️ The Component | 🌟 The Feeling |
-| :--- | :--- |
-| **Terminal Emulator** | Watch commands type themselves out in a mesmerizing tutorial loop. |
-| **Process Monitor** | Manage the "soul" of the machine. Move between tasks with your keyboard. |
-| **File Manager** | Real context menus, renaming, and folder navigation that feels "real". |
-| **Screenshot Tool** | Capture your personalized setup with a single click in the system tray. |
+| 🖥️ The Component      | 🌟 The Feeling                                                           |
+| :-------------------- | :----------------------------------------------------------------------- |
+| **Terminal Emulator** | Watch commands type themselves out in a mesmerizing tutorial loop.       |
+| **Process Monitor**   | Manage the "soul" of the machine. Move between tasks with your keyboard. |
+| **File Manager**      | Real context menus, renaming, and folder navigation that feels "real".   |
+| **Screenshot Tool**   | Capture your personalized setup with a single click in the system tray.  |
 
 ---
 
 ## 📱 Mobile-First Nostalgia
+
 We've spent months ensuring that the retro experience doesn't break on modern hardware. Our **Responsive Engine** ensures that whether you're on a 4K monitor or a smartphone, the CDE layout remains proportional and usable. No horizontal scroll, no broken icons—just clean, retro computing.
 
 ---

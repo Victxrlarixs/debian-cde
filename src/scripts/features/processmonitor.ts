@@ -207,9 +207,15 @@ const ProcessMonitor = (() => {
    */
   function updateRowText(row: HTMLElement, p: ProcessInfo, isSelected: boolean): void {
     const user = p.elementId ? 'user' : 'system';
-    const virt = Math.floor(Math.random() * 200 + 100).toString().padStart(5);
-    const res = Math.floor(Math.random() * 50 + 20).toString().padStart(4);
-    const shr = Math.floor(Math.random() * 30 + 10).toString().padStart(4);
+    const virt = Math.floor(Math.random() * 200 + 100)
+      .toString()
+      .padStart(5);
+    const res = Math.floor(Math.random() * 50 + 20)
+      .toString()
+      .padStart(4);
+    const shr = Math.floor(Math.random() * 30 + 10)
+      .toString()
+      .padStart(4);
     const status = p.visible ? 'R' : 'S';
     const selector = isSelected ? '▶' : ' ';
     row.textContent = `${selector} ${p.pid.toString().padStart(5)} ${user.padEnd(8)} 20   0 ${virt} ${res} ${shr} ${status}  ${p.cpu.padStart(4)} ${p.mem.padStart(5)} 0:00.0 ${p.name}`;
@@ -290,7 +296,9 @@ const ProcessMonitor = (() => {
     const load1 = (Math.random() * 0.5 + 0.05).toFixed(2);
     const load5 = (Math.random() * 0.4 + 0.1).toFixed(2);
     const load15 = (Math.random() * 0.3 + 0.1).toFixed(2);
-    const cpuCores = Array(4).fill(0).map(() => Math.random() * 100);
+    const cpuCores = Array(4)
+      .fill(0)
+      .map(() => Math.random() * 100);
     const memTotal = 7985.5;
     const memUsed = Math.random() * 3000 + 1000;
     const memPercent = (memUsed / memTotal) * 100;
@@ -364,7 +372,9 @@ const ProcessMonitor = (() => {
     const load1 = (Math.random() * 0.5 + 0.05).toFixed(2);
     const load5 = (Math.random() * 0.4 + 0.1).toFixed(2);
     const load15 = (Math.random() * 0.3 + 0.1).toFixed(2);
-    const cpuCores = Array(4).fill(0).map(() => Math.random() * 100);
+    const cpuCores = Array(4)
+      .fill(0)
+      .map(() => Math.random() * 100);
     const memTotal = 7985.5;
     const memUsed = Math.random() * 3000 + 1000;
     const memPercent = (memUsed / memTotal) * 100;
@@ -374,8 +384,10 @@ const ProcessMonitor = (() => {
     const running = Math.floor(Math.random() * 3) + 1;
     const sleeping = processes.length - running;
 
-    if (timeLoadLine) timeLoadLine.textContent = `${timeStr} up 1 day, load: ${load1}, ${load5}, ${load15}`;
-    if (tasksLine) tasksLine.textContent = `Tasks: ${processes.length} total, ${running} running, ${sleeping} sleeping`;
+    if (timeLoadLine)
+      timeLoadLine.textContent = `${timeStr} up 1 day, load: ${load1}, ${load5}, ${load15}`;
+    if (tasksLine)
+      tasksLine.textContent = `Tasks: ${processes.length} total, ${running} running, ${sleeping} sleeping`;
 
     const cpuLines = contentDiv.querySelectorAll('div:has(.cpu-bar-fill)');
     cpuLines.forEach((line, i) => {
@@ -389,7 +401,8 @@ const ProcessMonitor = (() => {
     if (memTextSpan) memTextSpan.textContent = ` ${memUsed.toFixed(1)}/${memTotal.toFixed(1)} MB`;
 
     if (swapBarFill) swapBarFill.style.width = `${swapPercent}%`;
-    if (swapTextSpan) swapTextSpan.textContent = ` ${swapUsed.toFixed(1)}/${swapTotal.toFixed(1)} MB`;
+    if (swapTextSpan)
+      swapTextSpan.textContent = ` ${swapUsed.toFixed(1)}/${swapTotal.toFixed(1)} MB`;
   }
 
   /**
@@ -411,7 +424,7 @@ const ProcessMonitor = (() => {
 
     rowElements.forEach((row, idx) => {
       const p = processes[idx];
-      const isSelected = (idx === selectedIndex);
+      const isSelected = idx === selectedIndex;
       updateRowText(row, p, isSelected);
     });
   }
@@ -451,7 +464,7 @@ const ProcessMonitor = (() => {
     rowElements = [];
     processes.forEach((p, idx) => {
       const row = document.createElement('div');
-      const isSelected = (idx === selectedIndex);
+      const isSelected = idx === selectedIndex;
       updateRowText(row, p, isSelected);
       contentDiv!.appendChild(row);
       rowElements.push(row);

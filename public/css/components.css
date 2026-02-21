@@ -21,17 +21,11 @@
   color: #aaaaaa;
 }
 
-#boot-progress-label {
-  color: #aaaaaa;
-  margin-bottom: 2px;
-  white-space: nowrap;
-}
-
 #boot-progress-track {
   width: 100%;
   height: 16px;
-  background: #000000;
-  border: 1px solid #444444;
+  background: #ffff88;
+  border: 1px solid #ffaa88;
   display: flex;
   align-items: stretch;
   overflow: hidden;
@@ -40,16 +34,8 @@
 #boot-progress-bar {
   height: 100%;
   width: 0%;
-  background: #aaaaaa;
+  background: #cc4444;
   transition: width 0.25s steps(20, end);
-}
-
-#boot-progress-percent {
-  color: #aaaaaa;
-  font-size: 12px;
-  margin-top: 2px;
-  text-align: right;
-  font-variant-numeric: tabular-nums;
 }
 
 /* ------------------------------------------------------------------
@@ -318,10 +304,18 @@
 }
 
 /* CSS Grid Alignment for specific buttons */
-#terminalBtn { grid-column: 1; }
-#fileManagerBtn { grid-column: 2; }
-#styleManagerBtn { grid-column: 4; }
-#utilitiesBtn { grid-column: 5; }
+#terminalBtn {
+  grid-column: 1;
+}
+#fileManagerBtn {
+  grid-column: 2;
+}
+#styleManagerBtn {
+  grid-column: 4;
+}
+#utilitiesBtn {
+  grid-column: 5;
+}
 
 /* Fila inferior: iconos de aplicaciones */
 .cde-icons {
@@ -900,8 +894,6 @@
   z-index: 10000;
   background: var(--window-color);
 }
-
-
 
 /* ------------------------------------------------------------------
    CDE MODAL – Estilos globales para ventanas modales
@@ -1961,26 +1953,25 @@
   width: 100%;
 }
 
+#text-editor {
+  width: 600px;
+  height: 400px;
+  display: none;
+  flex-direction: column;
+}
 
-  #text-editor {
-    width: 600px;
-    height: 400px;
-    display: none;
-    flex-direction: column;
-  }
+#text-editor .titlebar {
+  flex-shrink: 0;
+}
 
-  #text-editor .titlebar {
-    flex-shrink: 0;
-  }
-
-  #text-editor .terminal-body {
-    flex: 1;
-    overflow-y: auto;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    padding: 10px;
-    margin: 0;
-  }
+#text-editor .terminal-body {
+  flex: 1;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  padding: 10px;
+  margin: 0;
+}
 
 /* ----- Desktop Icons System ----- */
 #desktop-icons-container {
@@ -2010,7 +2001,7 @@
 .cde-desktop-icon img {
   width: 32px;
   height: 32px;
-  filter: drop-shadow(1px 1px 0 rgba(0,0,0,0.5));
+  filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.5));
 }
 
 .cde-desktop-icon span {
@@ -2051,7 +2042,9 @@
   overflow-y: auto;
 }
 
-.markdown-body h1, .markdown-body h2, .markdown-body h3 {
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3 {
   margin-top: 24px;
   margin-bottom: 16px;
   font-weight: 600;
@@ -2060,9 +2053,15 @@
   padding-bottom: 0.3em;
 }
 
-.markdown-body h1 { font-size: 2em; }
-.markdown-body h2 { font-size: 1.5em; }
-.markdown-body h3 { font-size: 1.25em; }
+.markdown-body h1 {
+  font-size: 2em;
+}
+.markdown-body h2 {
+  font-size: 1.5em;
+}
+.markdown-body h3 {
+  font-size: 1.25em;
+}
 
 .markdown-body p {
   margin-top: 0;
@@ -2074,7 +2073,8 @@
   text-decoration: underline;
 }
 
-.markdown-body ul, .markdown-body ol {
+.markdown-body ul,
+.markdown-body ol {
   padding-left: 2em;
   margin-bottom: 16px;
 }
@@ -2083,7 +2083,7 @@
   padding: 0.2em 0.4em;
   margin: 0;
   font-size: 85%;
-  background-color: rgba(0,0,0,0.05);
+  background-color: rgba(0, 0, 0, 0.05);
   border-radius: 3px;
   font-family: 'Courier New', Courier, monospace;
 }
@@ -2164,9 +2164,18 @@
 }
 
 /* Specific Image Presets */
-.backdrop-preset-marble { background-image: url('/backdrops/Marble.png'); background-size: cover; }
-.backdrop-preset-toronto { background-image: url('/backdrops/Toronto.png'); background-size: cover; }
-.backdrop-preset-circuit { background-image: url('/backdrops/CircuitBoards.png'); background-size: cover; }
+.backdrop-preset-marble {
+  background-image: url('/backdrops/Marble.png');
+  background-size: cover;
+}
+.backdrop-preset-toronto {
+  background-image: url('/backdrops/Toronto.png');
+  background-size: cover;
+}
+.backdrop-preset-circuit {
+  background-image: url('/backdrops/CircuitBoards.png');
+  background-size: cover;
+}
 
 /* Modal layout and form utilities */
 .cde-modal-field {
@@ -2201,9 +2210,15 @@
   gap: 8px;
 }
 
-.u-margin-bottom-sm { margin-bottom: 8px; }
-.u-margin-bottom-md { margin-bottom: 16px; }
-.u-text-center { text-align: center; }
+.u-margin-bottom-sm {
+  margin-bottom: 8px;
+}
+.u-margin-bottom-md {
+  margin-bottom: 16px;
+}
+.u-text-center {
+  text-align: center;
+}
 
 /* Window Wireframe Dragging */
 .dragging-wireframe {
@@ -2469,4 +2484,3 @@
   outline: none;
   caret-color: var(--terminal-text-color);
 }
-

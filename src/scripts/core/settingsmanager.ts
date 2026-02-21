@@ -11,12 +11,15 @@ export interface SystemSettings {
   keyboard: Record<string, any>;
   beep: Record<string, any>;
   session: {
-    windows: Record<string, {
-      top: string;
-      left: string;
-      display: string;
-      maximized: boolean;
-    }>;
+    windows: Record<
+      string,
+      {
+        top: string;
+        left: string;
+        display: string;
+        maximized: boolean;
+      }
+    >;
   };
   desktop: Record<string, any>;
 }
@@ -46,7 +49,7 @@ class SettingsManager {
       keyboard: {},
       beep: {},
       session: { windows: {} },
-      desktop: {}
+      desktop: {},
     };
   }
 
@@ -72,7 +75,7 @@ class SettingsManager {
    */
   private migrateLegacySettings(): void {
     logger.log('[SettingsManager] Attempting migration from legacy settings...');
-    
+
     // Migration for Style/Theme (cde-styles)
     const oldStyles = localStorage.getItem('cde-styles');
     if (oldStyles) {

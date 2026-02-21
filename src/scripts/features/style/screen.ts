@@ -65,7 +65,7 @@ export class ScreenModule {
    */
   private showSaver(): void {
     if (this.settings.saverType === 'none') return;
-    
+
     if (!this.overlay) {
       this.overlay = document.createElement('div');
       this.overlay.id = 'cde-screensaver';
@@ -76,7 +76,7 @@ export class ScreenModule {
       `;
       document.body.appendChild(this.overlay);
     }
-    
+
     this.overlay.style.display = 'block';
     logger.log('[ScreenModule] Screensaver activated');
   }
@@ -113,7 +113,9 @@ export class ScreenModule {
     const panel = document.getElementById('styleManagerScreen');
     if (!panel) return;
 
-    const timeoutSelect = panel.querySelector('select[data-key="saverTimeout"]') as HTMLSelectElement;
+    const timeoutSelect = panel.querySelector(
+      'select[data-key="saverTimeout"]'
+    ) as HTMLSelectElement;
     if (timeoutSelect) {
       timeoutSelect.value = String(this.settings.saverTimeout);
     }
@@ -125,7 +127,8 @@ export class ScreenModule {
 
     const status = document.getElementById('screenStatus');
     if (status) {
-      status.textContent = this.settings.saverTimeout > 0 ? `Active (${this.settings.saverTimeout}m)` : 'Disabled';
+      status.textContent =
+        this.settings.saverTimeout > 0 ? `Active (${this.settings.saverTimeout}m)` : 'Disabled';
     }
   }
 }

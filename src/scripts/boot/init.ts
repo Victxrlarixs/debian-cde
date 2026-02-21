@@ -39,8 +39,6 @@ class DebianRealBoot {
   private container: HTMLElement | null;
   private bootScreen: HTMLElement | null;
   private progressBar: HTMLElement | null;
-  private progressPercent: HTMLElement | null;
-  private progressLabel: HTMLElement | null;
 
   constructor() {
     this.logo = CONFIG.BOOT.LOGO;
@@ -48,9 +46,6 @@ class DebianRealBoot {
     this.container = document.getElementById('boot-log-container');
     this.bootScreen = document.getElementById('debian-boot-screen');
     this.progressBar = document.getElementById('boot-progress-bar');
-    this.progressPercent = document.getElementById('boot-progress-percent');
-    this.progressLabel = document.getElementById('boot-progress-label');
-
     if (!this.container) {
       console.error('[DebianRealBoot] Boot container #boot-log-container not found');
     }
@@ -107,7 +102,6 @@ class DebianRealBoot {
     const total = this.bootSequence.length;
     const pct = Math.round((this.currentStep / total) * 100);
     if (this.progressBar) this.progressBar.style.width = `${pct}%`;
-    if (this.progressPercent) this.progressPercent.textContent = `${pct}%`;
   }
 
   private startBootSequence(): void {
@@ -116,11 +110,6 @@ class DebianRealBoot {
       if (this.currentStep >= this.bootSequence.length) {
         logger.log('[DebianRealBoot] Boot sequence completed, waiting for final delay');
         if (this.progressBar) this.progressBar.style.width = '100%';
-        if (this.progressPercent) this.progressPercent.textContent = '100%';
-        if (this.progressLabel) {
-          this.progressLabel.textContent = 'LOADING CDE DESKTOP ENVIRONMENT...';
-          this.progressLabel.style.color = '#00ff00';
-        }
         setTimeout(() => this.completeBoot(), CONFIG.BOOT.FINAL_DELAY);
         return;
       }
@@ -243,7 +232,7 @@ function initDesktop(): void {
       window.styleManager.init();
       logger.log('[initDesktop] Style manager initialized');
     }
- 
+
     desktopInitialized = true;
     logger.log('[initDesktop] Desktop initialization completed successfully');
   } catch (error) {

@@ -24,7 +24,6 @@ function initElements(): boolean {
   return !!(winElement && titleElement && contentElement);
 }
 
-
 /**
  * Opens the text editor with specified content.
  * @param {string} title - Window title (usually filename)
@@ -38,7 +37,7 @@ export async function openTextEditor(title: string, content: string): Promise<vo
 
   const displayTitle = title?.trim() || 'Untitled';
   titleElement!.textContent = displayTitle;
-  
+
   const isMarkdown = displayTitle.toLowerCase().endsWith('.md');
 
   if (isMarkdown && content) {
@@ -94,18 +93,18 @@ export function closeTextEditor(): void {
  */
 function formatTutorial(data: any[]): string {
   let result = '';
-  
+
   data.forEach((sequence, seqIndex) => {
     result += `\n${'='.repeat(60)}\n`;
     result += `SEQUENCE ${seqIndex + 1}\n`;
     result += `${'='.repeat(60)}\n\n`;
-    
+
     sequence.forEach((step: any) => {
       result += `${step.user}@Debian:~$ ${step.command}\n`;
       result += `${step.output}\n\n`;
     });
   });
-  
+
   return result;
 }
 
