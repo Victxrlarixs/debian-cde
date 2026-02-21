@@ -31,6 +31,15 @@ export class BeepModule {
 
   public apply(): void {
     logger.log('[BeepModule] Applied settings:', this.settings);
+    if (window.AudioManager) {
+      window.AudioManager.setVolume(this.settings.volume / 100);
+    }
+  }
+
+  public testBeep(): void {
+    if (window.AudioManager) {
+      window.AudioManager.beep();
+    }
   }
 
   public update(key: string, value: any): void {

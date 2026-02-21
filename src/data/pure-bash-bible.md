@@ -2,16 +2,10 @@
 <h1 align="center">pure bash bible</h1> <p
 align="center">A collection of pure bash alternatives to external
 processes.</p>
-
 <p align="center"> <a
 href="https://travis-ci.com/dylanaraps/pure-bash-bible"><img
 src="https://travis-ci.com/dylanaraps/pure-bash-bible.svg?branch=master"></a>
-<a href="./LICENSE.md"><img
-src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
-</p>
-
 <br>
-
 <a href="https://leanpub.com/bash/">
 <img src="https://s3.amazonaws.com/titlepages.leanpub.com/bash/hero" width="40%" align="right">
 </a>

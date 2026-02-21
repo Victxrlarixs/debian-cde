@@ -1,13 +1,9 @@
 // src/scripts/features/lab.ts
 // Terminal Laboratory — guided tutorial engine + virtual filesystem
 import tutorialData from '../../data/tutorial.json';
-import filesystemData from '../../data/filesystem.json';
+import { VFS, type VFSNode, type VFSFile, type VFSFolder } from '../core/vfs';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
-type FSNode =
-  | { type: 'folder'; children: Record<string, FSNode> }
-  | { type: 'file'; content: string };
-
 type Lesson = Array<{ user: string; command: string; output: string }>;
 
 // ─── LESSON METADATA ─────────────────────────────────────────────────────────
@@ -61,17 +57,14 @@ class TerminalLabManager {
   private history: string[] = [];
   private historyPos = -1;
 
-  // Runtime virtual filesystem (mutable copy)
-  private fs: Record<string, FSNode>;
   private cwd: string;
   private user = 'victxrlarixs';
 
   // Commands map for free mode
-  private commandMap: Record<string, (args: string[]) => string>;
+  private commandMap: Record<string, (args: string[]) => string | Promise<string>>;
 
   constructor() {
-    this.fs = JSON.parse(JSON.stringify(filesystemData)) as unknown as Record<string, FSNode>;
-    this.cwd = '/home/victxrlarixs';
+    this.cwd = '/home/victxrlarixs/';
     this.commandMap = this.buildCommandMap();
   }
 
@@ -87,12 +80,16 @@ class TerminalLabManager {
       win.style.top = '5%';
     }
     this.init();
+    if (window.AudioManager) window.AudioManager.windowOpen();
     this.focus();
   }
 
   public close(): void {
     const win = document.getElementById('terminal-lab');
-    if (win) win.style.display = 'none';
+    if (win) {
+      win.style.display = 'none';
+      if (window.AudioManager) window.AudioManager.windowClose();
+    }
   }
 
   public showHint(): void {
@@ -286,10 +283,9 @@ class TerminalLabManager {
     }
   }
 
-  private handleInput(raw: string): void {
+  private async handleInput(raw: string): Promise<void> {
     if (!raw) return;
 
-    // Print what user typed
     const promptStr = this.freeMode
       ? `${this.user}@debian:~$`
       : this.currentStep()?.user === 'root'
@@ -297,7 +293,6 @@ class TerminalLabManager {
         : `${this.user}@debian:~$`;
     this.print(`<span class="lab-prompt-str">${promptStr}</span> ${this.escHtml(raw)}`);
 
-    // Built-in meta-commands
     if (raw === 'clear') {
       this.body.innerHTML = '';
       return;
@@ -321,7 +316,7 @@ class TerminalLabManager {
     }
 
     if (this.freeMode) {
-      this.runFreeModeCommand(raw);
+      await this.runFreeModeCommand(raw);
     } else {
       this.runTutorialCommand(raw);
     }
@@ -336,29 +331,30 @@ class TerminalLabManager {
     const normalize = (s: string) => s.replace(/\s+/g, ' ').trim().toLowerCase();
 
     if (normalize(raw) === normalize(step.command)) {
-      // Correct!
       if (step.output) {
         step.output
           .split('\\n')
           .forEach((line) => this.print(`<span class="lab-output">${this.escHtml(line)}</span>`));
       }
+      if (window.AudioManager) window.AudioManager.success();
       this.print(``);
       this.advance();
     } else {
       this.print(`<span class="lab-error">error: expected -- ${this.escHtml(step.command)}</span>`);
       this.print(`<span class="lab-dim">       type "hint" or "skip" to continue.</span>`);
+      if (window.AudioManager) window.AudioManager.error();
       this.print(``);
       this.showCurrentPrompt();
     }
   }
 
-  private runFreeModeCommand(raw: string): void {
+  private async runFreeModeCommand(raw: string): Promise<void> {
     const [cmd, ...argParts] = raw.split(' ');
     const args = argParts.filter(Boolean);
 
     const handler = this.commandMap[cmd ?? ''];
     if (handler) {
-      const out = handler(args);
+      const out = await handler(args);
       if (out)
         out
           .split('\n')
@@ -367,49 +363,14 @@ class TerminalLabManager {
       this.print(
         `<span class="lab-error">bash: ${this.escHtml(cmd ?? '')}: command not found</span>`
       );
+      if (window.AudioManager) window.AudioManager.error();
     }
     this.print(``);
   }
 
-  // ── Virtual Filesystem helpers ─────────────────────────────────────────────
-
-  private resolvePath(p: string): string {
-    if (p.startsWith('~')) p = '/home/victxrlarixs' + p.slice(1);
-    if (!p.startsWith('/')) p = this.cwd + '/' + p;
-    const parts = p.split('/').filter(Boolean);
-    const resolved: string[] = [];
-    for (const part of parts) {
-      if (part === '.') continue;
-      if (part === '..') {
-        resolved.pop();
-        continue;
-      }
-      resolved.push(part);
-    }
-    return '/' + resolved.join('/');
-  }
-
-  private getNode(path: string): FSNode | undefined {
-    const parts = path.split('/').filter(Boolean);
-    let cur: FSNode | undefined = this.fs['/home/victxrlarixs/'] as FSNode;
-    // Root of FS is /home/victxrlarixs
-    if (parts.length === 0) return cur;
-
-    // Skip "home/victxrlarixs" prefix
-    const relParts = path.startsWith('/home/victxrlarixs')
-      ? path.slice('/home/victxrlarixs'.length).split('/').filter(Boolean)
-      : parts;
-
-    for (const part of relParts) {
-      if (!cur || cur.type !== 'folder') return undefined;
-      cur = (cur as { type: 'folder'; children: Record<string, FSNode> }).children[part];
-    }
-    return cur;
-  }
-
   // ── Free-mode command map ──────────────────────────────────────────────────
 
-  private buildCommandMap(): Record<string, (args: string[]) => string> {
+  private buildCommandMap(): Record<string, (args: string[]) => string | Promise<string>> {
     return {
       pwd: () => this.cwd,
       whoami: () => this.user,
@@ -425,8 +386,9 @@ class TerminalLabManager {
 
       ls: (args) => {
         const showHidden = args.includes('-la') || args.includes('-a');
-        const node = this.getNode(this.cwd);
+        const node = VFS.getNode(this.cwd);
         if (!node || node.type !== 'folder') return 'ls: cannot access directory';
+        
         const children = Object.keys(node.children);
         const base = showHidden ? ['.', '..', ...children] : children;
         return base.join('  ');
@@ -434,14 +396,11 @@ class TerminalLabManager {
 
       cd: (args) => {
         const target = args[0] ?? '~';
-        const resolved = this.resolvePath(target);
-        const node = this.getNode(resolved);
-        if (!node) {
-          return `bash: cd: ${target}: No such file or directory`;
-        }
-        if (node.type !== 'folder') {
-          return `bash: cd: ${target}: Not a directory`;
-        }
+        const resolved = VFS.resolvePath(this.cwd, target);
+        const node = VFS.getNode(resolved);
+        if (!node) return `bash: cd: ${target}: No such file or directory`;
+        if (node.type !== 'folder') return `bash: cd: ${target}: Not a directory`;
+        
         this.cwd = resolved;
         if (this.prompt) this.prompt.textContent = `${this.user}@debian:${this.cwdShort()}$`;
         return '';
@@ -449,63 +408,46 @@ class TerminalLabManager {
 
       cat: (args) => {
         if (!args[0]) return 'cat: missing operand';
-        const resolved = this.resolvePath(args[0]);
-        const node = this.getNode(resolved);
+        const resolved = VFS.resolvePath(this.cwd, args[0]);
+        const node = VFS.getNode(resolved);
         if (!node) return `cat: ${args[0]}: No such file or directory`;
         if (node.type !== 'file') return `cat: ${args[0]}: Is a directory`;
         return node.content;
       },
 
-      mkdir: (args) => {
+      mkdir: async (args) => {
         if (!args[0]) return 'mkdir: missing operand';
-        const resolved = this.resolvePath(args[0]);
-        const parent = this.getNode(
-          resolved.split('/').slice(0, -1).join('/') || '/home/victxrlarixs'
-        );
-        if (!parent || parent.type !== 'folder')
-          return `mkdir: cannot create directory '${args[0]}'`;
-        const name = args[0].split('/').pop()!;
-        (parent as { type: 'folder'; children: Record<string, FSNode> }).children[name] = {
-          type: 'folder',
-          children: {},
-        };
-        return '';
-      },
-
-      touch: (args) => {
-        if (!args[0]) return 'touch: missing file operand';
-        for (const f of args) {
-          const resolved = this.resolvePath(f);
-          const parent = this.getNode(
-            resolved.split('/').slice(0, -1).join('/') || '/home/victxrlarixs'
-          );
-          if (!parent || parent.type !== 'folder') continue;
-          const name = f.split('/').pop()!;
-          if (!(parent as { type: 'folder'; children: Record<string, FSNode> }).children[name]) {
-            (parent as { type: 'folder'; children: Record<string, FSNode> }).children[name] = {
-              type: 'file',
-              content: '',
-            };
-          }
-        }
-        return '';
-      },
-
-      rm: (args) => {
-        if (!args[0]) return 'rm: missing operand';
-        const resolved = this.resolvePath(args[0]);
+        const resolved = VFS.resolvePath(this.cwd, args[0]);
         const parts = resolved.split('/').filter(Boolean);
         const name = parts.pop()!;
-        const parent = this.getNode('/' + parts.join('/'));
-        if (
-          !parent ||
-          parent.type !== 'folder' ||
-          !(parent as { type: 'folder'; children: Record<string, FSNode> }).children[name]
-        ) {
-          return `rm: cannot remove '${args[0]}': No such file or directory`;
-        }
-        delete (parent as { type: 'folder'; children: Record<string, FSNode> }).children[name];
+        const parentPath = '/' + parts.join('/') + (parts.length > 0 ? '/' : '');
+        
+        await VFS.mkdir(parentPath, name);
         return '';
+      },
+
+      touch: async (args) => {
+        if (!args[0]) return 'touch: missing file operand';
+        for (const f of args) {
+          const resolved = VFS.resolvePath(this.cwd, f);
+          const parts = resolved.split('/').filter(Boolean);
+          const name = parts.pop()!;
+          const parentPath = '/' + parts.join('/') + (parts.length > 0 ? '/' : '');
+          
+          await VFS.touch(parentPath, name);
+        }
+        return '';
+      },
+
+      rm: async (args) => {
+        if (!args[0]) return 'rm: missing operand';
+        const resolved = VFS.resolvePath(this.cwd, args[0]);
+        const parts = resolved.split('/').filter(Boolean);
+        const name = parts.pop()!;
+        const parentPath = '/' + parts.join('/') + (parts.length > 0 ? '/' : '');
+        
+        const ok = await VFS.rm(parentPath, name);
+        return ok ? '' : `rm: cannot remove '${args[0]}': No such file or directory`;
       },
 
       help: () =>

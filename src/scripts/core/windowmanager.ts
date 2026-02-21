@@ -1,6 +1,7 @@
 import { CONFIG } from './config';
 import { logger } from '../utilities/logger';
 import { settingsManager } from './settingsmanager';
+import { AudioManager } from './audiomanager';
 
 // ============================================================================
 // WindowManager: window control (focus, drag, clock, dropdown)
@@ -84,6 +85,7 @@ const WindowManager = (() => {
 
       zIndex++;
       win.style.zIndex = String(zIndex);
+      AudioManager.click();
       logger.log(`[WindowManager] focusWindow: window "${id}" focus updated.`);
     }
   }
@@ -413,6 +415,7 @@ const WindowManager = (() => {
   function switchWorkspace(id: string): void {
     if (id === currentWorkspace) return;
 
+    AudioManager.click();
     logger.log(`[WindowManager] Switching to workspace: ${id}`);
 
     const windows = document.querySelectorAll('.window, .cde-retro-modal');
@@ -517,6 +520,7 @@ function minimizeWindow(id: string): void {
   }
 
   win.style.display = 'none';
+  AudioManager.windowClose();
 }
 
 function maximizeWindow(id: string): void {
@@ -525,6 +529,7 @@ function maximizeWindow(id: string): void {
 
   if (win.classList.contains('maximized')) {
     win.classList.remove('maximized');
+    AudioManager.click();
     if (windowStates[id]) {
       win.style.left = windowStates[id].left || '';
       win.style.top = windowStates[id].top || '';
@@ -544,6 +549,7 @@ function maximizeWindow(id: string): void {
       maximized: false,
     };
     win.classList.add('maximized');
+    AudioManager.click();
     WindowManager.focusWindow(id);
 
     settingsManager.updateWindowSession(id, { maximized: true });

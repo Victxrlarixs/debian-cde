@@ -1,6 +1,8 @@
+// src/scripts/features/desktop.ts
 import { CONFIG } from '../core/config';
 import { logger } from '../utilities/logger';
 import { settingsManager } from '../core/settingsmanager';
+import { VFS, type IVFS } from '../core/vfs';
 
 /**
  * Interface for stored icon positions.
@@ -57,11 +59,11 @@ export const DesktopManager = (() => {
     container.innerHTML = '';
 
     // Get positions from settings
-    const savedPositions = settingsManager.getSection('desktop') || {};
+    const savedPositions = (settingsManager.getSection('desktop') as IconPositions) || {};
 
     // Get files from the virtual Desktop folder
     const desktopPath = CONFIG.FS.DESKTOP;
-    const desktopChildren = window.VirtualFS ? window.VirtualFS.getChildren(desktopPath) : null;
+    const desktopChildren = VFS.getChildren(desktopPath);
 
     if (!desktopChildren) {
       logger.warn('[DesktopManager] Desktop folder empty or VirtualFS not ready.');
@@ -69,7 +71,7 @@ export const DesktopManager = (() => {
     }
 
     Object.entries(desktopChildren).forEach(([name, node], index) => {
-      const type = (node as any).type as 'file' | 'folder';
+      const type = node.type;
       const pos = savedPositions[name] || {
         left: 20,
         top: 15 + index * CONFIG.DESKTOP_ICONS.GRID_SIZE,
@@ -91,13 +93,6 @@ export const DesktopManager = (() => {
 
   /**
    * Creates a single desktop icon element.
-   * @param name - Display name
-   * @param type - File or folder
-   * @param left - X position
-   * @param top - Y position
-   * @param isSystem - Whether this is a protected system icon
-   * @param id - Specific ID for system icons
-   * @param customIcon - Path to a custom icon image
    */
   function createIcon(
     name: string,
@@ -236,9 +231,9 @@ export const DesktopManager = (() => {
         if (window.openPath) window.openPath(path);
       }
     } else {
-      if (window.openTextEditor && window.VirtualFS) {
-        const node = window.VirtualFS.getNode(path);
-        const content = node && 'content' in node ? (node as any).content : '';
+      if (window.openTextEditor) {
+        const node = VFS.getNode(path);
+        const content = node && node.type === 'file' ? node.content : '';
         await window.openTextEditor(name, content);
       }
     }
@@ -260,6 +255,21 @@ export const DesktopManager = (() => {
       }
     });
 
+    // Global UI Sound Feedback
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (
+        target.closest('.cde-icon') ||
+        target.closest('.cde-icon-btn') ||
+        target.closest('.menu-item') ||
+        target.closest('.cde-btn') ||
+        target.closest('.pager-workspace') ||
+        target.closest('.titlebar-btn')
+      ) {
+        if (window.AudioManager) window.AudioManager.click();
+      }
+    });
+
     // Right-click on desktop background
     if (container) {
       container.addEventListener('contextmenu', (e) => {
@@ -273,9 +283,11 @@ export const DesktopManager = (() => {
     }
 
     // Listen for filesystem changes to refresh icons
-    window.addEventListener('cde-fs-change', () => {
-      logger.log('[DesktopManager] Filesystem change detected, syncing icons...');
-      syncIcons();
+    window.addEventListener('cde-fs-change', (e: any) => {
+      if (e.detail?.path === CONFIG.FS.DESKTOP) {
+        logger.log('[DesktopManager] Filesystem change detected, syncing icons...');
+        syncIcons();
+      }
     });
   }
 
@@ -307,9 +319,9 @@ export const DesktopManager = (() => {
             action: async () => {
               if (isSystem) return;
               const name = targetIcon.dataset.name;
-              if (!name || !window.VirtualFS) return;
+              if (!name) return;
               const newName = await (window as any).CDEModal.prompt('New name:', name);
-              if (newName) await window.VirtualFS.rename(name, newName, CONFIG.FS.DESKTOP);
+              if (newName) await VFS.rename(CONFIG.FS.DESKTOP, name, newName);
             },
           },
           {
@@ -318,8 +330,8 @@ export const DesktopManager = (() => {
             action: async () => {
               if (isSystem) return;
               const name = targetIcon.dataset.name;
-              if (!name || !window.VirtualFS) return;
-              await window.VirtualFS.rm(name, CONFIG.FS.DESKTOP);
+              if (!name) return;
+              await VFS.rm(CONFIG.FS.DESKTOP, name);
             },
           },
         ]
@@ -327,17 +339,15 @@ export const DesktopManager = (() => {
           {
             label: 'New File',
             action: async () => {
-              if (!window.VirtualFS) return;
               const name = await (window as any).CDEModal.prompt('File name:');
-              if (name) await window.VirtualFS.touch(name, CONFIG.FS.DESKTOP);
+              if (name) await VFS.touch(CONFIG.FS.DESKTOP, name);
             },
           },
           {
             label: 'New Folder',
             action: async () => {
-              if (!window.VirtualFS) return;
               const name = await (window as any).CDEModal.prompt('Folder name:');
-              if (name) await window.VirtualFS.mkdir(name, CONFIG.FS.DESKTOP);
+              if (name) await VFS.mkdir(CONFIG.FS.DESKTOP, name);
             },
           },
           {
@@ -384,7 +394,7 @@ export const DesktopManager = (() => {
     const id = icon.dataset.id || icon.dataset.name;
     if (!id) return;
 
-    const savedPositions = settingsManager.getSection('desktop') || {};
+    const savedPositions = (settingsManager.getSection('desktop') as IconPositions) || {};
     savedPositions[id] = {
       left: parseInt(icon.style.left),
       top: parseInt(icon.style.top),
@@ -399,17 +409,4 @@ export const DesktopManager = (() => {
 })();
 
 // Expose globally
-declare global {
-  interface Window {
-    VirtualFS: {
-      getNode: (path: string) => any;
-      getChildren: (path: string) => any;
-      touch: (name: string, targetPath?: string) => Promise<void>;
-      mkdir: (name: string, targetPath?: string) => Promise<void>;
-      rm: (name: string, targetPath?: string) => Promise<void>;
-      rename: (oldName: string, newName: string, targetPath?: string) => Promise<void>;
-    };
-  }
-}
-
 export default DesktopManager;
