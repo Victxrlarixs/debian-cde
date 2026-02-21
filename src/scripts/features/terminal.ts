@@ -1,5 +1,6 @@
 import { CONFIG } from '../core/config';
 import tutorialSequences from '../../data/tutorial.json';
+import { logger } from '../utilities/logger';
 
 // ------------------------------------------------------------------
 // CONSTANTS AND CONFIGURATION (from CONFIG)
@@ -114,7 +115,7 @@ function print(text: string = '', className: string = ''): void {
  */
 function typeLine(line: string, callback: () => void): void {
   if (!terminalBody || !tutorialActive) {
-    console.log('[TerminalTutorial] typeLine: aborted - terminal unavailable or tutorial inactive');
+    logger.log('[TerminalTutorial] typeLine: aborted - terminal unavailable or tutorial inactive');
     if (callback) setTimeout(callback, 0);
     return;
   }
@@ -125,7 +126,7 @@ function typeLine(line: string, callback: () => void): void {
   const interval = setInterval(
     () => {
       if (!tutorialActive) {
-        console.log('[TerminalTutorial] typeLine: typing interrupted - tutorial deactivated');
+        logger.log('[TerminalTutorial] typeLine: typing interrupted - tutorial deactivated');
         clearInterval(interval);
         typingActive = false;
         return;
@@ -139,7 +140,7 @@ function typeLine(line: string, callback: () => void): void {
         clearInterval(interval);
         terminalBody!.innerHTML += '\n';
         typingActive = false;
-        console.log(`[TerminalTutorial] typeLine: completed typing "${line}"`);
+        logger.log(`[TerminalTutorial] typeLine: completed typing "${line}"`);
         if (callback) callback();
       }
     },
@@ -157,7 +158,7 @@ function typeLine(line: string, callback: () => void): void {
  */
 function runStep(): void {
   if (!tutorialActive || !terminalBody) {
-    console.log('[TerminalTutorial] runStep: aborted - tutorial inactive or terminal unavailable');
+    logger.log('[TerminalTutorial] runStep: aborted - tutorial inactive or terminal unavailable');
     return;
   }
 
@@ -166,20 +167,20 @@ function runStep(): void {
   const relativePath = currentPath.replace(HOME_PATH, '~');
   const prompt = `${step.user}@Debian:${relativePath}$ `;
 
-  console.log(
+  logger.log(
     `[TerminalTutorial] runStep: executing sequence ${sequenceIndex + 1}/${TUTORIAL_SEQUENCES.length}, step ${stepIndex + 1}/${sequence.length}`
   );
-  console.log(`[TerminalTutorial] runStep: command "${step.command}"`);
+  logger.log(`[TerminalTutorial] runStep: command "${step.command}"`);
 
   typeLine(prompt + step.command, () => {
     if (!tutorialActive) {
-      console.log('[TerminalTutorial] runStep: callback aborted - tutorial inactive');
+      logger.log('[TerminalTutorial] runStep: callback aborted - tutorial inactive');
       return;
     }
 
     setTimeout(() => {
       if (!tutorialActive) {
-        console.log('[TerminalTutorial] runStep: delayed execution aborted - tutorial inactive');
+        logger.log('[TerminalTutorial] runStep: delayed execution aborted - tutorial inactive');
         return;
       }
 
@@ -194,12 +195,12 @@ function runStep(): void {
         sequenceIndex = (sequenceIndex + 1) % TUTORIAL_SEQUENCES.length;
         stepIndex = 0;
 
-        console.log(
+        logger.log(
           `[TerminalTutorial] runStep: sequence complete, advancing to sequence ${sequenceIndex + 1}`
         );
         pendingTimeout = setTimeout(runStep, POST_SEQUENCE_DELAY);
       } else {
-        console.log(
+        logger.log(
           `[TerminalTutorial] runStep: step complete, advancing to next step in sequence`
         );
         pendingTimeout = setTimeout(runStep, POST_COMMAND_DELAY);
@@ -224,7 +225,7 @@ function cleanupTerminal(): void {
   const lines = terminalBody.innerHTML.split('\n');
   if (lines.length > MAX_LINES) {
     terminalBody.innerHTML = lines.slice(-MAX_LINES).join('\n');
-    console.log(`[TerminalTutorial] cleanupTerminal: truncated to ${MAX_LINES} lines`);
+    logger.log(`[TerminalTutorial] cleanupTerminal: truncated to ${MAX_LINES} lines`);
   }
 }
 
@@ -262,11 +263,11 @@ export const TerminalTutorial = {
    */
   start(containerId: string = 'terminalBody'): void {
     if (tutorialActive) {
-      console.log('[TerminalTutorial] start: tutorial already active, ignoring request');
+      logger.log('[TerminalTutorial] start: tutorial already active, ignoring request');
       return;
     }
 
-    console.log('[TerminalTutorial] start: initializing terminal tutorial');
+    logger.log('[TerminalTutorial] start: initializing terminal tutorial');
     terminalBody = document.getElementById(containerId);
 
     if (!terminalBody) {
@@ -300,7 +301,7 @@ export const TerminalTutorial = {
     scrollInterval = setInterval(keepScrollBottom, SCROLL_INTERVAL);
 
     print('Linux Man References');
-    console.log('[TerminalTutorial] start: tutorial initialized, starting first step in 1 second');
+    logger.log('[TerminalTutorial] start: tutorial initialized, starting first step in 1 second');
 
     pendingTimeout = setTimeout(runStep, 1000);
   },
@@ -313,7 +314,7 @@ export const TerminalTutorial = {
    * It does not clear the terminal content.
    */
   stop(): void {
-    console.log('[TerminalTutorial] stop: stopping tutorial');
+    logger.log('[TerminalTutorial] stop: stopping tutorial');
     tutorialActive = false;
 
     if (cleanupInterval) {
@@ -329,7 +330,7 @@ export const TerminalTutorial = {
       pendingTimeout = undefined;
     }
 
-    console.log('[TerminalTutorial] stop: tutorial stopped successfully');
+    logger.log('[TerminalTutorial] stop: tutorial stopped successfully');
   },
 };
 
@@ -364,7 +365,7 @@ declare global {
  * If already visible, it is brought to the front using focusWindow.
  */
 window.openTerminal = function openTerminal(): void {
-  console.log('[TerminalTutorial] openTerminal: opening terminal window');
+  logger.log('[TerminalTutorial] openTerminal: opening terminal window');
   const terminal = document.getElementById('terminal');
 
   if (!terminal) {
@@ -374,14 +375,14 @@ window.openTerminal = function openTerminal(): void {
 
   // If the window is hidden, show it and start the tutorial
   if (terminal.style.display === 'none' || !terminal.style.display) {
-    console.log(
+    logger.log(
       '[TerminalTutorial] openTerminal: terminal was hidden, displaying and starting tutorial'
     );
     terminal.style.display = 'block';
     TerminalTutorial.start();
   } else {
     // If already visible, bring it to the front
-    console.log('[TerminalTutorial] openTerminal: terminal already visible, bringing to front');
+    logger.log('[TerminalTutorial] openTerminal: terminal already visible, bringing to front');
     if (window.focusWindow) {
       window.focusWindow('terminal');
     } else {
@@ -397,13 +398,13 @@ window.openTerminal = function openTerminal(): void {
  * Hides the terminal element and stops the tutorial.
  */
 window.closeTerminal = function closeTerminal(): void {
-  console.log('[TerminalTutorial] closeTerminal: closing terminal window');
+  logger.log('[TerminalTutorial] closeTerminal: closing terminal window');
   const terminal = document.getElementById('terminal');
 
   if (terminal) {
     terminal.style.display = 'none';
     TerminalTutorial.stop();
-    console.log('[TerminalTutorial] closeTerminal: terminal closed');
+    logger.log('[TerminalTutorial] closeTerminal: terminal closed');
   } else {
     console.error('[TerminalTutorial] closeTerminal: terminal element not found');
   }

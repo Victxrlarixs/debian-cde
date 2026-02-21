@@ -1,6 +1,7 @@
 // src/scripts/ui/external-link.ts
 
 import { CDEModal } from './modals';
+import { logger } from '../utilities/logger';
 
 /**
  * Displays a confirmation dialog before opening an external link.
@@ -9,7 +10,7 @@ import { CDEModal } from './modals';
  * @param url - The external URL to open
  */
 export function confirmExternalLink(url: string): void {
-  console.log(`[ExternalLink] Confirming navigation to: ${url}`);
+  logger.log(`[ExternalLink] Confirming navigation to: ${url}`);
 
   // Thoroughly clean up modal before use
   const modal = document.getElementById('cde-modal-global');
@@ -17,13 +18,13 @@ export function confirmExternalLink(url: string): void {
     const menuItems = modal.querySelectorAll('.cde-menu-item');
     menuItems.forEach((item) => item.remove());
     if (menuItems.length > 0) {
-      console.log(`[ExternalLink] Removed ${menuItems.length} menu items from modal`);
+      logger.log(`[ExternalLink] Removed ${menuItems.length} menu items from modal`);
     }
 
     const menubar = modal.querySelector('.cde-menubar');
     if (menubar) {
       menubar.remove();
-      console.log('[ExternalLink] Removed menubar from modal');
+      logger.log('[ExternalLink] Removed menubar from modal');
     }
 
     const titleEl = modal.querySelector('.titlebar-text');
@@ -52,10 +53,10 @@ export function confirmExternalLink(url: string): void {
     { label: 'Cancel', value: false },
   ]).then((confirmed: boolean) => {
     if (confirmed) {
-      console.log(`[ExternalLink] User confirmed, opening: ${url}`);
+      logger.log(`[ExternalLink] User confirmed, opening: ${url}`);
       window.open(url, '_blank');
     } else {
-      console.log('[ExternalLink] User cancelled');
+      logger.log('[ExternalLink] User cancelled');
     }
   });
 }
@@ -69,4 +70,4 @@ declare global {
 
 window.confirmExternalLink = confirmExternalLink;
 
-console.log('[ExternalLink] Module loaded');
+logger.log('[ExternalLink] Module loaded');

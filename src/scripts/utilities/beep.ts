@@ -1,4 +1,5 @@
 import { CONFIG } from '../core/config';
+import { logger } from './logger';
 
 // ============================================================================
 // Sound utilities (retro beep)
@@ -37,7 +38,7 @@ declare global {
  *         but will not throw exceptions to the caller.
  */
 export function retroBeep(): void {
-  console.log('[Beep] retroBeep function called');
+  logger.log('[Beep] retroBeep function called');
 
   try {
     // Get the appropriate AudioContext constructor (standard or webkit prefixed)
@@ -52,22 +53,22 @@ export function retroBeep(): void {
 
     // Handle suspended audio context (autoplay policy)
     if (audioCtx.state === 'suspended') {
-      console.log('[Beep] Audio context suspended, resuming...');
+      logger.log('[Beep] Audio context suspended, resuming...');
       audioCtx
         .resume()
         .then(() => {
-          console.log('[Beep] Audio context resumed, playing beep');
+          logger.log('[Beep] Audio context resumed, playing beep');
           playBeep(audioCtx);
         })
         .catch((error) => {
           console.error('[Beep] Failed to resume audio context:', error);
         });
     } else {
-      console.log('[Beep] Audio context ready, playing beep');
+      logger.log('[Beep] Audio context ready, playing beep');
       playBeep(audioCtx);
     }
 
-    console.log('[Beep] Beep played successfully');
+    logger.log('[Beep] Beep played successfully');
   } catch (error) {
     console.error('[Beep] Error playing beep:', error);
   }
@@ -102,7 +103,7 @@ function playBeep(audioCtx: AudioContext): void {
     oscillator.start();
     oscillator.stop(audioCtx.currentTime + CONFIG.AUDIO.BEEP_DURATION);
 
-    console.log(
+    logger.log(
       `[Beep] Playing: freq=${CONFIG.AUDIO.BEEP_FREQUENCY}Hz, duration=${CONFIG.AUDIO.BEEP_DURATION}s, gain=${CONFIG.AUDIO.BEEP_GAIN}`
     );
   } catch (error) {

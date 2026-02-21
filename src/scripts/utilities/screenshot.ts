@@ -1,5 +1,6 @@
 import { CONFIG } from '../core/config';
 import { CDEModal } from '../ui/modals';
+import { logger } from './logger';
 
 // ============================================================================
 // Screenshot capture
@@ -40,12 +41,12 @@ declare function html2canvas(element: HTMLElement, options?: any): Promise<HTMLC
  * ```
  */
 export function captureFullPageScreenshot(): void {
-  console.log('[Screenshot] captureFullPageScreenshot: starting screenshot capture');
+  logger.log('[Screenshot] captureFullPageScreenshot: starting screenshot capture');
 
   const btn = document.getElementById('screenshot-btn') as HTMLElement | null;
 
   if (btn) {
-    console.log('[Screenshot] Setting button to loading state');
+    logger.log('[Screenshot] Setting button to loading state');
     btn.style.opacity = '0.5';
     btn.style.cursor = 'wait';
   }
@@ -55,7 +56,7 @@ export function captureFullPageScreenshot(): void {
   toast.textContent = CONFIG.SCREENSHOT.TOAST_MESSAGE;
   toast.className = 'screenshot-toast';
   document.body.appendChild(toast);
-  console.log('[Screenshot] Toast notification displayed');
+  logger.log('[Screenshot] Toast notification displayed');
 
   const options = {
     scale: CONFIG.SCREENSHOT.SCALE,
@@ -66,20 +67,20 @@ export function captureFullPageScreenshot(): void {
     windowWidth: window.innerWidth,
     windowHeight: window.innerHeight,
     onclone: (clonedDoc: Document) => {
-      console.log('[Screenshot] Processing cloned document for capture');
+      logger.log('[Screenshot] Processing cloned document for capture');
       const clonedToast = clonedDoc.querySelector('.screenshot-toast');
       if (clonedToast) {
         (clonedToast as HTMLElement).style.display = 'none';
-        console.log('[Screenshot] Toast hidden in cloned document');
+        logger.log('[Screenshot] Toast hidden in cloned document');
       }
     },
   };
 
-  console.log(`[Screenshot] Capture options: scale=${CONFIG.SCREENSHOT.SCALE}, useCORS=true`);
+  logger.log(`[Screenshot] Capture options: scale=${CONFIG.SCREENSHOT.SCALE}, useCORS=true`);
 
   html2canvas(document.documentElement, options)
     .then((canvas: HTMLCanvasElement) => {
-      console.log('[Screenshot] Canvas generated successfully');
+      logger.log('[Screenshot] Canvas generated successfully');
 
       // Generate timestamp-based filename
       const now = new Date();
@@ -95,26 +96,26 @@ export function captureFullPageScreenshot(): void {
         .toString()
         .padStart(2, '0')}.png`;
 
-      console.log(`[Screenshot] Generated filename: ${filename}`);
+      logger.log(`[Screenshot] Generated filename: ${filename}`);
 
       // Create download link
       const link = document.createElement('a');
       link.download = filename;
       link.href = canvas.toDataURL('image/png');
       link.click();
-      console.log('[Screenshot] Download triggered');
+      logger.log('[Screenshot] Download triggered');
 
       // Clean up
       document.body.removeChild(toast);
-      console.log('[Screenshot] Toast removed');
+      logger.log('[Screenshot] Toast removed');
 
       if (btn) {
         btn.style.opacity = '1';
         btn.style.cursor = 'pointer';
-        console.log('[Screenshot] Button restored to normal state');
+        logger.log('[Screenshot] Button restored to normal state');
       }
 
-      console.log(`[Screenshot] Capture complete: saved as ${filename}`);
+      logger.log(`[Screenshot] Capture complete: saved as ${filename}`);
     })
     .catch((error: any) => {
       console.error('[Screenshot] Error during capture:', error);
@@ -122,18 +123,18 @@ export function captureFullPageScreenshot(): void {
       // Clean up on error
       if (document.body.contains(toast)) {
         document.body.removeChild(toast);
-        console.log('[Screenshot] Toast removed after error');
+        logger.log('[Screenshot] Toast removed after error');
       }
 
       if (btn) {
         btn.style.opacity = '1';
         btn.style.cursor = 'pointer';
-        console.log('[Screenshot] Button restored after error');
+        logger.log('[Screenshot] Button restored after error');
       }
 
       // Show error to user
       CDEModal.alert('Error capturing screenshot.').then(() => {
-        console.log('[Screenshot] Error alert displayed to user');
+        logger.log('[Screenshot] Error alert displayed to user');
       });
     });
 }
@@ -161,4 +162,4 @@ declare global {
 window.captureFullPageScreenshot = captureFullPageScreenshot;
 
 // Log module load
-console.log('[Screenshot] Module loaded and ready');
+logger.log('[Screenshot] Module loaded and ready');

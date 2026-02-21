@@ -2,6 +2,7 @@
 
 import themesData from '../../data/themes.json';
 import fontsData from '../../data/fonts.json';
+import { logger } from '../utilities/logger';
 
 /**
  * Global configuration for the CDE project.
@@ -189,12 +190,12 @@ const { __default__: defaultFonts, ...fontPresets } = fontsData;
  * import { CONFIG } from './config';
  *
  * // Access configuration values
- * console.log(CONFIG.TERMINAL.MAX_LINES);
- * console.log(CONFIG.DEFAULT_STYLES.COLORS['--window-color']);
+ * logger.log(CONFIG.TERMINAL.MAX_LINES);
+ * logger.log(CONFIG.DEFAULT_STYLES.COLORS['--window-color']);
  *
  * // Iterate through available themes
  * Object.keys(CONFIG.THEMES).forEach(theme => {
- *   console.log(`Theme available: ${theme}`);
+ *   logger.log(`Theme available: ${theme}`);
  * });
  * ```
  */
@@ -335,7 +336,7 @@ export const CONFIG: Config = {
 // Expose configuration globally for debugging and legacy compatibility
 if (typeof window !== 'undefined') {
   (window as any).CONFIG = CONFIG;
-  console.log('[Config] Configuration loaded and attached to window');
+  logger.log('[Config] Configuration loaded and attached to window');
 }
 
 export default CONFIG;

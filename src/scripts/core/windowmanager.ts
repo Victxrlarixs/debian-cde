@@ -1,4 +1,5 @@
 import { CONFIG } from './config';
+import { logger } from '../utilities/logger';
 
 // ============================================================================
 // WindowManager: window control (focus, drag, clock, dropdown)
@@ -77,7 +78,7 @@ const WindowManager = (() => {
       // Increment z-index
       zIndex++;
       win.style.zIndex = String(zIndex);
-      console.log(
+      logger.log(
         `[WindowManager] focusWindow: window "${id}" brought to front, new z-index ${zIndex}.`
       );
     }
@@ -101,7 +102,7 @@ const WindowManager = (() => {
     win.style.top = rect.top + 'px';
     win.style.transform = 'none';
 
-    console.log(
+    logger.log(
       `[WindowManager] Normalized window position: left=${rect.left}px, top=${rect.top}px`
     );
   }
@@ -149,7 +150,7 @@ const WindowManager = (() => {
     document.addEventListener('mousemove', move, true);
     document.addEventListener('mouseup', stopDrag, true);
 
-    console.log(`[WindowManager] drag started for window "${id}".`);
+    logger.log(`[WindowManager] drag started for window "${id}".`);
   }
 
   /**
@@ -184,7 +185,7 @@ const WindowManager = (() => {
     e.preventDefault();
     e.stopPropagation();
 
-    console.log(`[WindowManager] drag stopped for window "${dragState.element.id}".`);
+    logger.log(`[WindowManager] drag stopped for window "${dragState.element.id}".`);
 
     dragState.isDragging = false;
     dragState.element = null;
@@ -220,7 +221,7 @@ const WindowManager = (() => {
         focusWindow(win.id);
       }
     });
-    console.log('[WindowManager] Initialized window focus delegation.');
+    logger.log('[WindowManager] Initialized window focus delegation.');
   }
 
   /* ------------------------------------------------------------------
@@ -261,7 +262,7 @@ const WindowManager = (() => {
         dropdownMenu.style.display = 'none';
       }
 
-      console.log(
+      logger.log(
         `[WindowManager] Dropdown toggled: ${dropdownBtn.classList.contains('open') ? 'open' : 'closed'}`
       );
     });
@@ -281,7 +282,7 @@ const WindowManager = (() => {
 
     dropdownMenu.style.display = 'none';
 
-    console.log('[WindowManager] Dropdown initialized.');
+    logger.log('[WindowManager] Dropdown initialized.');
   }
 
   /* ------------------------------------------------------------------
@@ -325,11 +326,11 @@ const WindowManager = (() => {
         draggableCount++;
 
         titlebar.setAttribute('data-draggable', 'true');
-        console.log(`[WindowManager] Draggable initialized for: ${id}`);
+        logger.log(`[WindowManager] Draggable initialized for: ${id}`);
       }
     });
 
-    console.log(`[WindowManager] Initialized ${draggableCount} draggable titlebars.`);
+    logger.log(`[WindowManager] Initialized ${draggableCount} draggable titlebars.`);
   }
 
   /* ------------------------------------------------------------------
@@ -344,7 +345,7 @@ const WindowManager = (() => {
       initDraggableTitlebars();
     }, 200);
 
-    console.log('[WindowManager] Fully initialized.');
+    logger.log('[WindowManager] Fully initialized.');
   }
 
   return { init, drag, focusWindow };
@@ -373,7 +374,7 @@ function minimizeWindow(id: string): void {
   }
 
   win.style.display = 'none';
-  console.log(`[WindowManager] minimizeWindow: window "${id}" minimized.`);
+  logger.log(`[WindowManager] minimizeWindow: window "${id}" minimized.`);
 }
 
 function maximizeWindow(id: string): void {
@@ -392,7 +393,7 @@ function maximizeWindow(id: string): void {
       win.style.height = windowStates[id].height || '';
     }
     if (window.focusWindow) window.focusWindow(id);
-    console.log(`[WindowManager] maximizeWindow: window "${id}" restored.`);
+    logger.log(`[WindowManager] maximizeWindow: window "${id}" restored.`);
   } else {
     windowStates[id] = {
       left: win.style.left,
@@ -403,7 +404,7 @@ function maximizeWindow(id: string): void {
     };
     win.classList.add('maximized');
     if (window.focusWindow) window.focusWindow(id);
-    console.log(`[WindowManager] maximizeWindow: window "${id}" maximized.`);
+    logger.log(`[WindowManager] maximizeWindow: window "${id}" maximized.`);
   }
 }
 

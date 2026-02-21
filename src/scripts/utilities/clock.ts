@@ -2,6 +2,8 @@
        System clock (24h format) - Optimized version
     ------------------------------------------------------------------ */
 
+import { logger } from './logger';
+
 // Store interval ID to be able to clear it if needed
 let clockInterval: number | null = null;
 let lastTimeString: string = '';
@@ -40,7 +42,7 @@ function updateClock(): void {
   if (timeString !== lastTimeString) {
     clockEl.textContent = timeString;
     lastTimeString = timeString;
-    console.log(`[Clock] updateClock: time updated to ${timeString}`);
+    logger.log(`[Clock] updateClock: time updated to ${timeString}`);
   }
 }
 
@@ -59,12 +61,12 @@ function updateClock(): void {
  * ```
  */
 function initClock(): void {
-  console.log('[Clock] initClock: initializing system clock');
+  logger.log('[Clock] initClock: initializing system clock');
 
   // Clear any existing interval first (prevents duplicates)
   if (clockInterval !== null) {
     clearInterval(clockInterval);
-    console.log('[Clock] initClock: cleared previous interval');
+    logger.log('[Clock] initClock: cleared previous interval');
   }
 
   // Initial update
@@ -102,11 +104,11 @@ function initClock(): void {
         clearInterval(clockInterval);
       }
       clockInterval = null;
-      console.log('[Clock] cleanupClock: clock interval cleared');
+      logger.log('[Clock] cleanupClock: clock interval cleared');
     }
   };
 
-  console.log('[Clock] initClock: clock fully initialized with performance optimizations');
+  logger.log('[Clock] initClock: clock fully initialized with performance optimizations');
 }
 
 /**
@@ -121,7 +123,7 @@ function cleanupClock(): void {
       clearInterval(clockInterval);
     }
     clockInterval = null;
-    console.log('[Clock] cleanupClock: clock resources cleaned up');
+    logger.log('[Clock] cleanupClock: clock resources cleaned up');
   }
 }
 

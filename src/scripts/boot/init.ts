@@ -8,6 +8,7 @@ import { retroBeep } from '../utilities/beep';
 import { captureFullPageScreenshot } from '../utilities/screenshot';
 import '../ui/external-links';
 import { ProcessMonitor } from '../features/processmonitor';
+import { logger } from '../utilities/logger';
 /**
  * Global interface declarations for CDE desktop environment.
  */
@@ -68,7 +69,7 @@ class DebianRealBoot {
 
     this.container.appendChild(logoDiv);
     this.bootLog.push('[LOGO] Debian ASCII art');
-    console.log('[DebianRealBoot] Logo inserted');
+    logger.log('[DebianRealBoot] Logo inserted');
   }
 
   /**
@@ -86,7 +87,7 @@ class DebianRealBoot {
 
     this.container.innerHTML = '';
     this.insertLogo();
-    console.log('[DebianRealBoot] Boot sequence started');
+    logger.log('[DebianRealBoot] Boot sequence started');
     this.startBootSequence();
   }
 
@@ -97,7 +98,7 @@ class DebianRealBoot {
   private startBootSequence(): void {
     const showNextStep = () => {
       if (this.currentStep >= this.bootSequence.length) {
-        console.log('[DebianRealBoot] Boot sequence completed, waiting for final delay');
+        logger.log('[DebianRealBoot] Boot sequence completed, waiting for final delay');
         setTimeout(() => this.completeBoot(), CONFIG.BOOT.FINAL_DELAY);
         return;
       }
@@ -116,7 +117,7 @@ class DebianRealBoot {
       this.container!.scrollTop = this.container!.scrollHeight;
       this.bootLog.push(step.text);
 
-      console.log(
+      logger.log(
         `[DebianRealBoot] Step ${this.currentStep + 1}/${this.bootSequence.length}: ${step.type} - ${step.text.substring(0, 50)}${step.text.length > 50 ? '...' : ''}`
       );
 
@@ -151,7 +152,7 @@ class DebianRealBoot {
    * @private
    */
   private completeBoot(): void {
-    console.log('[DebianRealBoot] Completing boot process');
+    logger.log('[DebianRealBoot] Completing boot process');
 
     if (this.bootScreen) {
       this.bootScreen.style.transition = 'opacity 0.5s ease-out';
@@ -162,7 +163,7 @@ class DebianRealBoot {
         const desktop = document.getElementById('desktop-ui');
         if (desktop) {
           desktop.style.display = 'block';
-          console.log('[DebianRealBoot] Desktop UI revealed');
+          logger.log('[DebianRealBoot] Desktop UI revealed');
         } else {
           console.warn('[DebianRealBoot] Desktop UI element not found');
         }
@@ -179,43 +180,43 @@ class DebianRealBoot {
  */
 function initDesktop(): void {
   if (desktopInitialized) {
-    console.log('[initDesktop] Desktop already initialized, skipping');
+    logger.log('[initDesktop] Desktop already initialized, skipping');
     return;
   }
-  console.log('[initDesktop] Initializing desktop modules...');
+  logger.log('[initDesktop] Initializing desktop modules...');
   if (typeof window.retroBeep === 'function') {
-    console.log('[Init] Beep utility available');
+    logger.log('[Init] Beep utility available');
   }
   if (typeof window.captureFullPageScreenshot === 'function') {
-    console.log('[Init] Screenshot utility available');
+    logger.log('[Init] Screenshot utility available');
   }
   if (ProcessMonitor) {
-    console.log('[Init] ProcessMonitor module loaded');
+    logger.log('[Init] ProcessMonitor module loaded');
     if (typeof ProcessMonitor.open === 'function' && typeof ProcessMonitor.close === 'function') {
-      console.log('[Init]   - ProcessMonitor API ready (open/close)');
+      logger.log('[Init]   - ProcessMonitor API ready (open/close)');
     }
   }
 
   try {
     initClock();
-    console.log('[initDesktop] Clock initialized');
+    logger.log('[initDesktop] Clock initialized');
 
     // WindowManager owns drag for ALL windows (StyleManager, Terminal, FileManager, TextEditor).
     // initDraggableTitlebars() runs after a 200ms delay to ensure the DOM is fully settled.
     WindowManager.init();
-    console.log('[initDesktop] Window manager initialized');
+    logger.log('[initDesktop] Window manager initialized');
 
     // StyleManager.init() must run AFTER WindowManager so its windows exist when
     // initDraggableTitlebars fires. StyleManager no longer registers its own drag handlers.
     if (window.styleManager) {
       window.styleManager.init();
-      console.log('[initDesktop] Style manager initialized');
+      logger.log('[initDesktop] Style manager initialized');
     } else {
       console.warn('[initDesktop] Style manager not available');
     }
 
     desktopInitialized = true;
-    console.log('[initDesktop] Desktop initialization completed successfully');
+    logger.log('[initDesktop] Desktop initialization completed successfully');
   } catch (error) {
     console.error('[initDesktop] Error during desktop initialization:', error);
   }
@@ -225,12 +226,12 @@ function initDesktop(): void {
 // Automatic boot start
 // ---------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('[Boot] DOM Content Loaded, starting boot sequence');
+  logger.log('[Boot] DOM Content Loaded, starting boot sequence');
 
   try {
     window.debianBoot = new DebianRealBoot();
     window.debianBoot.start();
-    console.log('[Boot] Boot sequence initiated');
+    logger.log('[Boot] Boot sequence initiated');
   } catch (error) {
     console.error('[Boot] Failed to start boot sequence:', error);
     // Fallback: try to initialize desktop directly
