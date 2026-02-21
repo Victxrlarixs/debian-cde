@@ -49,6 +49,15 @@ const WindowManager = (() => {
   };
   const MIN_VISIBLE = CONFIG.WINDOW.MIN_VISIBLE;
 
+  // Workspace state
+  let currentWorkspace = '1';
+  const workspaceWindows: Record<string, string[]> = {
+    '1': [],
+    '2': [],
+    '3': [],
+    '4': [],
+  };
+
   /**
    * Brings a window to the front (max z-index) and marks it as active.
    * @param id - The ID of the window element.
@@ -344,8 +353,73 @@ const WindowManager = (() => {
       titlebar.setAttribute('data-draggable', 'true');
       win.setAttribute('data-cde-registered', 'true');
       
-      logger.log(`[WindowManager] Window registered: ${id || 'anonymous'}`);
+      // Assign to current workspace if not specified
+      if (!win.getAttribute('data-workspace')) {
+        win.setAttribute('data-workspace', currentWorkspace);
+      }
+      
+      const ws = win.getAttribute('data-workspace') || currentWorkspace;
+      if (ws !== currentWorkspace) {
+        win.style.display = 'none';
+      }
+
+      logger.log(`[WindowManager] Window registered: ${id || 'anonymous'} in WS ${ws}`);
     }
+  }
+
+  function switchWorkspace(id: string): void {
+    if (id === currentWorkspace) return;
+    
+    logger.log(`[WindowManager] Switching to workspace: ${id}`);
+    
+    const windows = document.querySelectorAll('.window, .cde-retro-modal');
+    
+    // Hide all windows of current workspace and remember which ones were open
+    windows.forEach((win) => {
+      const el = win as HTMLElement;
+      if (el.getAttribute('data-workspace') === currentWorkspace) {
+        const isVisible = window.getComputedStyle(el).display !== 'none';
+        if (isVisible) {
+          el.setAttribute('data-was-opened', 'true');
+          el.style.display = 'none';
+        } else {
+          el.removeAttribute('data-was-opened');
+        }
+      }
+    });
+
+    // Update state
+    currentWorkspace = id;
+
+    // Show windows of new workspace only if they were opened
+    windows.forEach((win) => {
+      const el = win as HTMLElement;
+      if (el.getAttribute('data-workspace') === currentWorkspace) {
+        if (el.getAttribute('data-was-opened') === 'true') {
+          el.style.display = 'flex';
+        }
+      }
+    });
+
+    // Update UI
+    const pagerItems = document.querySelectorAll('.pager-workspace');
+    pagerItems.forEach((item) => {
+      if ((item as HTMLElement).dataset.workspace === id) {
+        item.classList.add('active');
+      } else {
+        item.classList.remove('active');
+      }
+    });
+  }
+
+  function initPager(): void {
+    const pagerItems = document.querySelectorAll('.pager-workspace');
+    pagerItems.forEach((item) => {
+      item.addEventListener('click', () => {
+        const ws = (item as HTMLElement).dataset.workspace;
+        if (ws) switchWorkspace(ws);
+      });
+    });
   }
 
   function initDynamicScanning(): void {
@@ -375,15 +449,10 @@ const WindowManager = (() => {
   }
 
   function init(): void {
-    initWindows();
+    initDynamicScanning();
     initDropdowns();
-    
-    // Initial scan and start observer
-    setTimeout(() => {
-      initDynamicScanning();
-    }, CONFIG.TIMINGS.SCANNING_DELAY);
-
-    logger.log('[WindowManager] Dynamic system initialized.');
+    initPager();
+    logger.log('[WindowManager] Initialized');
   }
 
   return { init, drag, focusWindow, registerWindow };
