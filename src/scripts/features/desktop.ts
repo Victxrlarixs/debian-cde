@@ -327,6 +327,14 @@ export const DesktopManager = (() => {
           const name = await (window as any).CDEModal.prompt('Folder name:');
           if (name) await window.VirtualFS.mkdir(name, CONFIG.FS.DESKTOP);
         }
+      },
+      {
+        label: 'Change Backdrop',
+        action: async () => {
+          if (window.styleManager) {
+            window.styleManager.openBackdrop();
+          }
+        }
       }
     ];
 

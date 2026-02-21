@@ -730,59 +730,84 @@ async function handleContextMenu(e: MouseEvent): Promise<void> {
 
   const target = e.target as HTMLElement;
   const fileEl = target.closest('.fm-file') as HTMLElement | null;
-  if (!fileEl) return;
-
-  const name = fileEl.dataset.name;
-  if (!name) return;
-
-  fmSelected = name;
-
-  document.querySelectorAll('.fm-file').forEach((el) => el.classList.remove('selected'));
-  fileEl.classList.add('selected');
-
+  
   const menu = document.createElement('div');
   menu.className = 'fm-contextmenu';
   menu.style.zIndex = String(CONFIG.DROPDOWN.Z_INDEX);
 
-  const items: MenuItem[] = [
-    {
-      label: 'Open',
-      action: () => {
-        const folder = getCurrentFolder();
-        if (!folder) return;
-        const item = folder[name];
-        if (item) {
-          if (item.type === 'folder') {
-            openPath(currentPath + name + '/');
-          } else {
-            openTextWindow(name, (item as VirtualFile).content);
+  let items: MenuItem[] = [];
+
+  if (fileEl) {
+    const name = fileEl.dataset.name;
+    if (!name) return;
+
+    fmSelected = name;
+    document.querySelectorAll('.fm-file').forEach((el) => el.classList.remove('selected'));
+    fileEl.classList.add('selected');
+
+    items = [
+      {
+        label: 'Open',
+        action: () => {
+          const folder = getCurrentFolder();
+          if (!folder) return;
+          const item = folder[name];
+          if (item) {
+            if (item.type === 'folder') {
+              openPath(currentPath + name + '/');
+            } else {
+              openTextWindow(name, (item as VirtualFile).content);
+            }
           }
-        }
+        },
       },
-    },
-    {
-      label: 'Rename',
-      action: async () => {
-        const newName = await CDEModal.prompt('New name:', name);
-        if (newName) await rename(name, newName);
+      {
+        label: 'Rename',
+        action: async () => {
+          const newName = await CDEModal.prompt('New name:', name);
+          if (newName) await rename(name, newName);
+        },
       },
-    },
-    {
-      label: 'Delete',
-      action: async () => await rm(name),
-    },
-    {
-      label: 'Properties',
-      action: async () => {
-        const folder = getCurrentFolder();
-        if (!folder) return;
-        const item = folder[name];
-        if (item) {
-          await CDEModal.alert(`Name: ${name}\nType: ${item.type}\nPath: ${currentPath}${name}`);
-        }
+      {
+        label: 'Delete',
+        action: async () => await rm(name),
       },
-    },
-  ];
+      {
+        label: 'Properties',
+        action: async () => {
+          const folder = getCurrentFolder();
+          if (!folder) return;
+          const item = folder[name];
+          if (item) {
+            const path = currentPath + name + (item.type === 'folder' ? '/' : '');
+            await CDEModal.alert(`Name: ${name}\nType: ${item.type.toUpperCase()}\nPath: ${path}`);
+          }
+        },
+      },
+    ];
+  } else {
+    // Background menu
+    items = [
+      {
+        label: 'New File',
+        action: async () => {
+          const name = await CDEModal.prompt('File name:');
+          if (name) await touch(name);
+        },
+      },
+      {
+        label: 'New Folder',
+        action: async () => {
+          const name = await CDEModal.prompt('Folder name:');
+          if (name) await mkdir(name);
+        },
+      },
+      {
+        label: 'Refresh',
+        action: () => renderFiles(),
+      },
+    ];
+  }
 
   items.forEach((item) => {
     const div = document.createElement('div');
@@ -816,7 +841,7 @@ async function handleContextMenu(e: MouseEvent): Promise<void> {
   }
 
   activeContextMenu = menu;
-  logger.log(`[FileManager] handleContextMenu: opened context menu for "${name}"`);
+  logger.log(`[FileManager] handleContextMenu: opened context menu`);
 }
 
 // ------------------------------------------------------------------

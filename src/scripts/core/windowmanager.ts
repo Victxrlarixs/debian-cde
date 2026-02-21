@@ -99,17 +99,40 @@ const WindowManager = (() => {
 
     const rect = win.getBoundingClientRect();
     const TOP_BAR_HEIGHT = CONFIG.WINDOW.TOP_BAR_HEIGHT;
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
 
     win.style.position = 'absolute';
-    win.style.left = rect.left + 'px';
     
     // Ensure window titlebar is not covered by TopBar
     const normalizedTop = Math.max(rect.top, TOP_BAR_HEIGHT);
     win.style.top = normalizedTop + 'px';
     
     win.style.transform = 'none';
+
+    if (rect.right < MIN_VISIBLE) win.style.left = '0px';
+    if (rect.left > viewportWidth - MIN_VISIBLE) win.style.left = `${viewportWidth - MIN_VISIBLE}px`;
+    if (rect.bottom < MIN_VISIBLE) win.style.top = `${CONFIG.WINDOW.TOP_BAR_HEIGHT}px`;
+    if (rect.top > viewportHeight - MIN_VISIBLE) win.style.top = `${viewportHeight - MIN_VISIBLE}px`;
     
     logger.log(`[WindowManager] Normalized "${win.id}" to top: ${win.style.top}`);
+  }
+
+  function centerWindow(win: HTMLElement): void {
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const rect = win.getBoundingClientRect();
+
+    const left = (viewportWidth - rect.width) / 2;
+    const top = (viewportHeight - rect.height) / 2;
+
+    win.style.position = 'absolute';
+    win.style.left = `${Math.max(0, left)}px`;
+    win.style.top = `${Math.max(CONFIG.WINDOW.TOP_BAR_HEIGHT, top)}px`;
+    win.style.transform = 'none';
+    win.style.margin = '0';
+
+    logger.log(`[WindowManager] Centered window "${win.id}" at ${win.style.left}, ${win.style.top}`);
   }
 
   /**
@@ -356,6 +379,11 @@ const WindowManager = (() => {
       // Assign to current workspace if not specified
       if (!win.getAttribute('data-workspace')) {
         win.setAttribute('data-workspace', currentWorkspace);
+        // If it's a fresh registration without a workspace, it's likely a new window or modal
+        // Center it if it's visible, or wait for it to be shown
+        if (window.getComputedStyle(win).display !== 'none') {
+           requestAnimationFrame(() => centerWindow(win));
+        }
       }
       
       const ws = win.getAttribute('data-workspace') || currentWorkspace;
@@ -455,7 +483,7 @@ const WindowManager = (() => {
     logger.log('[WindowManager] Initialized');
   }
 
-  return { init, drag, focusWindow, registerWindow };
+  return { init, drag, focusWindow, registerWindow, centerWindow };
 })();
 
 function minimizeWindow(id: string): void {
@@ -512,6 +540,7 @@ declare global {
   interface Window {
     drag: (e: PointerEvent, id: string) => void;
     focusWindow?: (id: string) => void;
+    centerWindow: (win: HTMLElement) => void;
     minimizeWindow: typeof minimizeWindow;
     maximizeWindow: typeof maximizeWindow;
   }
@@ -519,6 +548,7 @@ declare global {
 
 window.drag = WindowManager.drag as any;
 window.focusWindow = WindowManager.focusWindow;
+window.centerWindow = WindowManager.centerWindow;
 window.minimizeWindow = minimizeWindow;
 window.maximizeWindow = maximizeWindow;
 
