@@ -80,12 +80,16 @@ class TerminalLabManager {
       win.style.top = '5%';
     }
     this.init();
+    if (window.AudioManager) window.AudioManager.windowOpen();
     this.focus();
   }
 
   public close(): void {
     const win = document.getElementById('terminal-lab');
-    if (win) win.style.display = 'none';
+    if (win) {
+      win.style.display = 'none';
+      if (window.AudioManager) window.AudioManager.windowClose();
+    }
   }
 
   public showHint(): void {
@@ -332,11 +336,13 @@ class TerminalLabManager {
           .split('\\n')
           .forEach((line) => this.print(`<span class="lab-output">${this.escHtml(line)}</span>`));
       }
+      if (window.AudioManager) window.AudioManager.success();
       this.print(``);
       this.advance();
     } else {
       this.print(`<span class="lab-error">error: expected -- ${this.escHtml(step.command)}</span>`);
       this.print(`<span class="lab-dim">       type "hint" or "skip" to continue.</span>`);
+      if (window.AudioManager) window.AudioManager.error();
       this.print(``);
       this.showCurrentPrompt();
     }
@@ -357,6 +363,7 @@ class TerminalLabManager {
       this.print(
         `<span class="lab-error">bash: ${this.escHtml(cmd ?? '')}: command not found</span>`
       );
+      if (window.AudioManager) window.AudioManager.error();
     }
     this.print(``);
   }

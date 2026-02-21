@@ -255,6 +255,21 @@ export const DesktopManager = (() => {
       }
     });
 
+    // Global UI Sound Feedback
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (
+        target.closest('.cde-icon') ||
+        target.closest('.cde-icon-btn') ||
+        target.closest('.menu-item') ||
+        target.closest('.cde-btn') ||
+        target.closest('.pager-workspace') ||
+        target.closest('.titlebar-btn')
+      ) {
+        if (window.AudioManager) window.AudioManager.click();
+      }
+    });
+
     // Right-click on desktop background
     if (container) {
       container.addEventListener('contextmenu', (e) => {

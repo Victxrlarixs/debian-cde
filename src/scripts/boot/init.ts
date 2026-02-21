@@ -218,6 +218,11 @@ function initDesktop(): void {
     initClock();
     logger.log('[initDesktop] Clock initialized');
 
+    // Play startup sound
+    if (window.AudioManager) {
+      window.AudioManager.success();
+    }
+
     // WindowManager owns drag for ALL windows (StyleManager, Terminal, FileManager, TextEditor).
     // initDraggableTitlebars() runs after a 200ms delay to ensure the DOM is fully settled.
     WindowManager.init();

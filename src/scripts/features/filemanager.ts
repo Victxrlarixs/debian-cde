@@ -427,6 +427,7 @@ window.openFileManager = () => {
   if (win) {
     win.style.display = 'flex';
     win.style.zIndex = String(++zIndex);
+    if (window.AudioManager) window.AudioManager.windowOpen();
     initFileManager();
     openPath(currentPath);
     if (window.focusWindow) window.focusWindow('fm');
