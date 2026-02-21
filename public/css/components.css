@@ -5,6 +5,54 @@
    ------------------------------------------------ */
 
 /* ------------------------------------------------------------------
+   0. BOOT PROGRESS BAR (estilo BIOS retro)
+   ------------------------------------------------------------------ */
+#boot-progress-wrapper {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  max-width: 640px;
+  text-align: left;
+  z-index: 100000;
+  font-family: 'Courier New', 'DejaVu Sans Mono', monospace;
+  font-size: 12px;
+  color: #aaaaaa;
+}
+
+#boot-progress-label {
+  color: #aaaaaa;
+  margin-bottom: 2px;
+  white-space: nowrap;
+}
+
+#boot-progress-track {
+  width: 100%;
+  height: 16px;
+  background: #000000;
+  border: 1px solid #444444;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+#boot-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: #aaaaaa;
+  transition: width 0.25s steps(20, end);
+}
+
+#boot-progress-percent {
+  color: #aaaaaa;
+  font-size: 12px;
+  margin-top: 2px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------------------------------------------------
    1. BARRA SUPERIOR (TOPBAR)
       Fija en la parte superior, contiene indicadores de sistema.
    ------------------------------------------------------------------ */
@@ -2234,3 +2282,191 @@
   min-width: 120px;
   text-align: center;
 }
+
+/* ------------------------------------------------------------------
+   TERMINAL LABORATORY
+   ------------------------------------------------------------------ */
+#terminal-lab {
+  width: 820px;
+  min-height: 520px;
+  display: none;
+  flex-direction: column;
+  font-family: var(--font-family-terminal);
+  font-size: var(--font-size-base);
+}
+
+/* ----- Lesson progress bar ----- */
+#lab-progress-bar-wrapper {
+  background: var(--dock-color);
+  border-bottom: 2px solid;
+  border-bottom-color: var(--border-dark);
+  padding: 3px 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-family-terminal);
+  font-size: var(--font-size-small);
+  color: var(--text-color);
+}
+
+#lab-lesson-label {
+  white-space: nowrap;
+  flex: 1;
+}
+
+#lab-progress-track {
+  width: 180px;
+  height: 10px;
+  background: var(--window-color);
+  border: 2px solid;
+  border-top-color: var(--border-inset-dark);
+  border-left-color: var(--border-inset-dark);
+  border-right-color: var(--border-inset-light);
+  border-bottom-color: var(--border-inset-light);
+  flex-shrink: 0;
+}
+
+#lab-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--titlebar-color);
+  transition: width 0.3s steps(12, end);
+}
+
+/* ----- Hint banner ----- */
+#lab-hint-banner {
+  background: var(--button-bg);
+  border-bottom: 2px solid;
+  border-bottom-color: var(--border-dark);
+  padding: 3px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-family-terminal);
+  font-size: var(--font-size-small);
+  color: var(--text-color);
+  gap: 8px;
+}
+
+#lab-hint-text {
+  flex: 1;
+}
+
+#lab-hint-controls {
+  display: flex;
+  gap: 3px;
+}
+
+#lab-hint-controls button {
+  padding: 1px 8px;
+  background: var(--button-bg);
+  color: var(--text-color);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-small);
+  cursor: pointer;
+}
+
+#lab-hint-controls button:active,
+#lab-hint-controls button.lab-btn-active {
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+  background: var(--button-active);
+}
+
+/* ----- Terminal output ----- */
+#terminal-lab .terminal-body {
+  flex: 1;
+  background: var(--terminal-bg-color);
+  color: var(--terminal-text-color);
+  font-family: var(--font-family-terminal);
+  font-size: var(--font-size-base);
+  padding: 8px 10px;
+  overflow-y: auto;
+  min-height: 300px;
+  line-height: var(--line-height-base);
+}
+
+/* Semantic text classes — all derived from CDE vars */
+.lab-line {
+  white-space: pre-wrap;
+  word-break: break-all;
+  font-family: var(--font-family-terminal);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  min-height: 1.45em;
+  color: var(--terminal-text-color);
+}
+
+/* Prompt string: same green as the scrollbar accent in the theme */
+.lab-prompt-str {
+  color: var(--scrollbar-color);
+}
+
+/* Subdued helper text */
+.lab-dim {
+  opacity: 0.55;
+}
+
+/* Section headers (ASCII boxes, lesson titles) */
+.lab-header {
+  color: var(--titlebar-color);
+}
+
+/* The command to type next */
+.lab-cmd {
+  color: var(--terminal-text-color);
+  font-weight: var(--font-weight-bold);
+  text-decoration: underline;
+}
+
+/* Command output text */
+.lab-output {
+  opacity: 0.85;
+}
+
+/* Error message */
+.lab-error {
+  color: #cc4444;
+}
+
+/* Hint response */
+.lab-hint {
+  color: var(--titlebar-color);
+}
+
+/* ----- Input line ----- */
+#lab-input-line {
+  display: flex;
+  align-items: center;
+  background: var(--terminal-bg-color);
+  color: var(--terminal-text-color);
+  font-family: var(--font-family-terminal);
+  font-size: var(--font-size-base);
+  padding: 4px 10px;
+  border-top: 2px solid var(--border-dark);
+}
+
+#lab-prompt {
+  color: var(--scrollbar-color);
+  margin-right: 6px;
+  white-space: nowrap;
+}
+
+#lab-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--terminal-text-color);
+  font-family: var(--font-family-terminal);
+  font-size: var(--font-size-base);
+  outline: none;
+  caret-color: var(--terminal-text-color);
+}
+

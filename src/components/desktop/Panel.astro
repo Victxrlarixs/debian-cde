@@ -85,10 +85,10 @@ import { CONFIG } from '../../scripts/core/config';
 
   <div
     class="tray-icon"
-    onclick="openTutorial()"
-    title="Linux Tutorial (gedit)"
+    onclick="TerminalLab.open()"
+    title="Terminal Laboratory"
   >
-    <img src="/icons/gedit.png" alt="Gedit" />
+    <img src="/icons/computer.png" alt="Terminal Laboratory" />
   </div>
 </div>
 
@@ -132,10 +132,14 @@ import { CONFIG } from '../../scripts/core/config';
 
 <div class="dropdown-menu" id="terminalDropdown">
   <div class="menu-item" onclick="openTerminal()">
-    <img src="/icons/konsole.png" alt="" /> Terminal
+    <img src="/icons/konsole.png" alt="" /> Terminal Automated
   </div>
   <div class="menu-item" onclick="openTaskManagerInTerminal()">
     <img src="/icons/org.xfce.taskmanager.png" alt="" /> Process Monitor
+  </div>
+  <div class="menu-separator"></div>
+  <div class="menu-item" onclick="TerminalLab.open()">
+    <img src="/icons/computer.png" alt="" /> Terminal Laboratory
   </div>
 </div>
 

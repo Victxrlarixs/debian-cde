@@ -1,0 +1,46 @@
+---
+// src/components/features/TerminalLab.astro
+import WindowControls from '../common/WindowControls.astro';
+---
+
+<div class="window" id="terminal-lab">
+  <div class="titlebar" onmousedown="drag(event, 'terminal-lab')">
+    <span class="titlebar-text">Terminal Laboratory — victxrlarixs@debian</span>
+    <WindowControls windowId="terminal-lab" closeFunction="TerminalLab.close" />
+  </div>
+
+  <!-- Tutorial progress bar -->
+  <div id="lab-progress-bar-wrapper">
+    <div id="lab-lesson-label">LESSON 1 / 25 — Navigation Basics</div>
+    <div id="lab-progress-track">
+      <div id="lab-progress-fill"></div>
+    </div>
+  </div>
+
+  <!-- Hint banner -->
+  <div id="lab-hint-banner">
+    <span id="lab-hint-text">Type the command shown below to proceed. Type "hint" or "skip" for help.</span>
+    <div id="lab-hint-controls">
+      <button id="lab-btn-hint" onclick="TerminalLab.showHint()">Hint</button>
+      <button id="lab-btn-skip" onclick="TerminalLab.skip()">Skip</button>
+      <button id="lab-btn-free" onclick="TerminalLab.toggleFreeMode()">Free Mode</button>
+    </div>
+  </div>
+
+  <!-- Terminal output area -->
+  <div class="terminal-body" id="lab-terminal-body"></div>
+
+  <!-- Input line -->
+  <div class="terminal-line" id="lab-input-line">
+    <span class="prompt" id="lab-prompt">victxrlarixs@debian:~$</span>
+    <input
+      type="text"
+      id="lab-input"
+      autocomplete="off"
+      autocorrect="off"
+      autocapitalize="off"
+      spellcheck="false"
+      placeholder=""
+    />
+  </div>
+</div>

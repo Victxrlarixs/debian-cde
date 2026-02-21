@@ -6,3 +6,4 @@ import '../features/filemanager';
 import '../features/terminal';
 import '../features/stylemanager';
 import '../features/texteditor';
+import '../features/lab';
