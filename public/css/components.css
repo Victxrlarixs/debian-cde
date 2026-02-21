@@ -864,9 +864,6 @@
 #cde-modal-global,
 .cde-retro-modal.cde-modal-global {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   width: 400px;
   max-width: 90vw;
   background: var(--modal-bg);
@@ -2165,4 +2162,75 @@
   opacity: 0.5 !important;
   border: 4px dashed var(--border-inset-dark) !important;
   pointer-events: none;
+}
+
+/* Calendar Window */
+#calendar-window {
+  width: 320px;
+  display: none;
+  flex-direction: column;
+}
+
+.calendar-container {
+  background: var(--window-color);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  font-family: var(--font-family-base);
+  margin-bottom: 5px;
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-weight: bold;
+  border-bottom: 1px solid var(--border-dark);
+  padding-bottom: 5px;
+  font-size: 12px;
+}
+
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+/* Calendar specific styles */
+.calendar-days .cal-day {
+  padding: 8px 5px;
+  text-align: center;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-family: var(--font-family-base);
+  font-size: 11px;
+}
+
+.calendar-days .cal-day:hover:not(.empty) {
+  background: var(--dock-icon-hover);
+  border-color: var(--border-light);
+}
+
+.calendar-days .cal-day.today {
+  background: var(--titlebar-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-dark);
+  font-weight: bold;
+}
+
+.calendar-days .cal-day.empty {
+  cursor: default;
+}
+
+#cal-month-year {
+  min-width: 120px;
+  text-align: center;
 }
