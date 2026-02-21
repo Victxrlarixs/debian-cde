@@ -321,12 +321,8 @@
 }
 
 /* ----- Menú desplegable hacia arriba (dropdown) ----- */
-.cde-icon-btn.dropdown-btn .dropdown-menu {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  min-width: 140px;
+.dropdown-menu {
+  position: fixed;
   background: var(--menu-color);
   border: 2px solid;
   border-top-color: var(--border-light);
@@ -336,11 +332,11 @@
   box-shadow: 2px 2px 0 var(--shadow-color);
   padding: 4px 0;
   display: none;
-  z-index: 10000;
-  margin-bottom: 4px;
+  z-index: 20000;
+  min-width: 140px;
 }
 
-.cde-icon-btn.dropdown-btn .dropdown-menu .menu-item {
+.dropdown-menu .menu-item {
   padding: 6px 12px;
   font-size: 11px;
   color: black;
@@ -355,17 +351,18 @@
   text-align: left;
 }
 
-.cde-icon-btn.dropdown-btn .dropdown-menu .menu-item:hover {
+.dropdown-menu .menu-item:hover {
   background: var(--titlebar-color);
   color: var(--text-color);
 }
 
-.cde-icon-btn.dropdown-btn .dropdown-menu .menu-item img {
+.dropdown-menu .menu-item img {
   width: 16px;
   height: 16px;
 }
 
-.cde-icon-btn.dropdown-btn.open .dropdown-menu {
+/* Remove specific toggle rule as JS handles it, but keep for fallback */
+.open + .dropdown-menu {
   display: block;
 }
 
@@ -586,6 +583,180 @@
   display: block;
 }
 
+/* Estructura del Administrador de Archivos (FileManager) */
+#fm {
+  width: 600px;
+  height: 400px;
+  display: none;
+  flex-direction: column;
+}
+
+.fm-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.fm-menubar {
+  display: flex;
+  gap: 10px;
+  padding: 4px 10px;
+  background: var(--button-bg);
+  border-bottom: 1px solid var(--separator-color);
+  font-size: 11px;
+}
+
+.fm-menubar span {
+  cursor: pointer;
+}
+
+.fm-menubar span:hover {
+  color: var(--titlebar-color);
+}
+
+.fm-menubar a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.fm-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  background: var(--dock-color);
+  border-bottom: 1px solid var(--border-dark);
+}
+
+.fm-btn {
+  width: 24px;
+  height: 22px;
+  padding: 0;
+  background: var(--button-bg);
+  border: 1px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.fm-btn:active {
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+}
+
+.fm-btn img {
+  width: 14px;
+  height: 14px;
+}
+
+.fm-path {
+  flex: 1;
+  height: 20px;
+  padding: 0 6px;
+  background: white;
+  border: 1px solid var(--border-inset-dark);
+  font-family: var(--font-family-base);
+  font-size: 11px;
+}
+
+.fm-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  background: white;
+}
+
+.fm-sidebar {
+  width: 160px;
+  background: var(--dock-color);
+  border-right: 1px solid var(--border-dark);
+  padding: 4px;
+  overflow-y: auto;
+  font-size: 11px;
+}
+
+.fm-section {
+  font-weight: bold;
+  padding: 4px 2px;
+  margin-top: 6px;
+  border-bottom: 1px solid var(--separator-color);
+}
+
+.fm-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 2px;
+  cursor: pointer;
+}
+
+.fm-item:hover {
+  background: var(--button-active);
+}
+
+.fm-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.fm-files {
+  flex: 1;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  grid-auto-rows: min-content;
+  gap: 15px;
+  overflow-y: auto;
+  align-content: start;
+}
+
+.fm-file {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+  padding: 6px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.fm-file img {
+  width: 32px;
+  height: 32px;
+}
+
+.fm-file span {
+  font-size: 11px;
+  word-break: break-all;
+  max-width: 100%;
+}
+
+.fm-file:hover {
+  background: var(--dock-icon-hover);
+  border-color: var(--border-light);
+}
+
+.fm-file.selected {
+  background: var(--titlebar-color);
+  color: white;
+  border-color: var(--border-light);
+}
+
+.fm-status {
+  padding: 2px 10px;
+  background: var(--dock-color);
+  border-top: 1px solid var(--border-dark);
+  font-size: 10px;
+}
+
 /* ------------------------------------------------------------------
    FILE MANAGER — MENÚS DESPLEGABLES Y CONTEXTUALES
    Estilo CDE para barras de menú y clic derecho.
@@ -653,6 +824,18 @@
   color: var(--text-color);
 }
 
+.fm-context-item.disabled {
+  color: #888;
+  cursor: default;
+  font-style: italic;
+  opacity: 0.6;
+}
+
+.fm-context-item.disabled:hover {
+  background: transparent;
+  color: #888;
+}
+
 /* ------------------------------------------------------------------
    MODAL CDE GLOBAL – Posicionamiento fijo y centrado
    Se aplica a cualquier modal creado por CDEModal
@@ -667,6 +850,7 @@
   display: none;
   flex-direction: column;
   z-index: 10000;
+  background: var(--window-color);
 }
 
 /* Asegurar que el #styleManager no herede este posicionamiento forzado */
@@ -1759,3 +1943,140 @@
     padding: 10px;
     margin: 0;
   }
+
+/* ----- Desktop Icons System ----- */
+#desktop-icons-container {
+  position: absolute;
+  top: 60px; /* Below TopBar (31px) */
+  left: 0;
+  width: 100%;
+  height: calc(100% - 130px);
+  pointer-events: auto;
+  z-index: 50; /* Above backdrop, but below windows (10000) */
+  padding: 20px 10px 10px 10px;
+}
+
+.cde-desktop-icon {
+  position: absolute;
+  width: 74px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  pointer-events: auto;
+  user-select: none;
+  padding: 4px;
+}
+
+.cde-desktop-icon img {
+  width: 32px;
+  height: 32px;
+  filter: drop-shadow(1px 1px 0 rgba(0,0,0,0.5));
+}
+
+.cde-desktop-icon span {
+  font-size: 11px;
+  color: white;
+  text-shadow: 1px 1px 1px black;
+  text-align: center;
+  word-break: break-all;
+  padding: 1px 4px;
+  background: rgba(0, 0, 0, 0);
+  border: 1px solid transparent;
+}
+
+.cde-desktop-icon:hover span {
+  background: var(--dock-icon-bg);
+  border-color: var(--border-light);
+}
+
+.cde-desktop-icon.selected span {
+  background: var(--titlebar-color);
+  color: white;
+  border-color: var(--border-light);
+  box-shadow: 1px 1px 0 black;
+}
+
+.cde-desktop-icon:active img {
+  transform: translate(1px, 1px);
+}
+
+/* ------------------------------------------------------------------
+   MARKDOWN RENDERING STYLES
+   ------------------------------------------------------------------ */
+.markdown-body {
+  padding: 20px !important;
+  line-height: 1.6;
+  font-family: var(--font-family-base) !important;
+  color: var(--text-color);
+  overflow-y: auto;
+}
+
+.markdown-body h1, .markdown-body h2, .markdown-body h3 {
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  line-height: 1.25;
+  border-bottom: 1px solid var(--separator-color);
+  padding-bottom: 0.3em;
+}
+
+.markdown-body h1 { font-size: 2em; }
+.markdown-body h2 { font-size: 1.5em; }
+.markdown-body h3 { font-size: 1.25em; }
+
+.markdown-body p {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.markdown-body a {
+  color: #0000ee;
+  text-decoration: underline;
+}
+
+.markdown-body ul, .markdown-body ol {
+  padding-left: 2em;
+  margin-bottom: 16px;
+}
+
+.markdown-body code {
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(0,0,0,0.05);
+  border-radius: 3px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.markdown-body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f6f8fa;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  margin-bottom: 16px;
+}
+
+.markdown-body blockquote {
+  padding: 0 1em;
+  color: #636b74;
+  border-left: 0.25em solid #d0d7de;
+  margin: 0 0 16px 0;
+}
+
+.markdown-body hr {
+  height: 0.25em;
+  padding: 0;
+  margin: 24px 0;
+  background-color: var(--separator-color);
+  border: 0;
+}
+
+.markdown-body img {
+  max-width: 100%;
+  box-sizing: border-box;
+}

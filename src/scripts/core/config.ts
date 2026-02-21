@@ -17,6 +17,8 @@ export interface WindowConfig {
   MIN_VISIBLE: number;
   /** Base z-index value for windows */
   BASE_Z_INDEX: number;
+  /** Height of the top bar (in pixels) */
+  TOP_BAR_HEIGHT: number;
 }
 
 /**
@@ -142,6 +144,50 @@ export type Theme = Record<string, string>;
 export type FontPreset = Record<string, string>;
 
 /**
+ * Configuration for Desktop Icons.
+ */
+export interface DesktopIconsConfig {
+  /** Base z-index for desktop icons (behind windows) */
+  BASE_Z_INDEX: number;
+  /** Key used in SettingsManager for icon positions */
+  STORAGE_KEY: string;
+  /** Grid cell size (width/height) for snapping if implemented */
+  GRID_SIZE: number;
+  /** Gap between icons */
+  ICON_GAP: number;
+}
+
+/**
+ * Configuration for the dropdown utilities menu.
+ */
+export interface DropdownConfig {
+  /** Z-index for floating menus */
+  Z_INDEX: number;
+  /** Vertical offset from the button (in pixels) */
+  OFFSET: number;
+}
+
+/**
+ * Project metadata and external URLs.
+ */
+export interface MetaConfig {
+  /** Main project repository URL */
+  GITHUB_REPO: string;
+  /** Issues tracking URL */
+  ISSUES_URL: string;
+}
+
+/**
+ * Global timings and delays for various system operations.
+ */
+export interface TimingsConfig {
+  /** Delay before scanning for dynamic windows (ms) */
+  SCANNING_DELAY: number;
+  /** Delay before normalizing window positions (ms) */
+  NORMALIZATION_DELAY: number;
+}
+
+/**
  * Root configuration interface for the entire CDE application.
  */
 export interface Config {
@@ -167,6 +213,14 @@ export interface Config {
   THEMES: Record<string, Theme>;
   /** Available font presets */
   FONT_PRESETS: Record<string, FontPreset>;
+  /** Dropdown menu configuration */
+  DROPDOWN: DropdownConfig;
+  /** Project metadata */
+  META: MetaConfig;
+  /** System timings */
+  TIMINGS: TimingsConfig;
+  /** Desktop icons configuration */
+  DESKTOP_ICONS: DesktopIconsConfig;
 }
 
 // Extract data from JSON files
@@ -202,7 +256,8 @@ const { __default__: defaultFonts, ...fontPresets } = fontsData;
 export const CONFIG: Config = {
   WINDOW: {
     MIN_VISIBLE: 20,
-    BASE_Z_INDEX: 100,
+    BASE_Z_INDEX: 10000,
+    TOP_BAR_HEIGHT: 30,
   },
   AUDIO: {
     BEEP_FREQUENCY: 880,
@@ -215,7 +270,7 @@ export const CONFIG: Config = {
     FILENAME_PREFIX: 'CDE',
   },
   FILEMANAGER: {
-    BASE_Z_INDEX: 1000,
+    BASE_Z_INDEX: 10000,
   },
   FS: {
     HOME: '/home/victxrlarixs/',
@@ -323,7 +378,7 @@ export const CONFIG: Config = {
   TASK_MANAGER: {
     BUTTON_ID: 'taskmanager-btn',
     WINDOW_ID: 'taskmanager',
-    BASE_Z_INDEX: 2000,
+    BASE_Z_INDEX: 10000,
   },
   DEFAULT_STYLES: {
     COLORS: defaultColors,
@@ -331,6 +386,24 @@ export const CONFIG: Config = {
   },
   THEMES: themes,
   FONT_PRESETS: fontPresets,
+  DROPDOWN: {
+    Z_INDEX: 20000,
+    OFFSET: 6,
+  },
+  META: {
+    GITHUB_REPO: 'https://github.com/Victxrlarixs/debian-cde',
+    ISSUES_URL: 'https://github.com/Victxrlarixs/debian-cde/issues',
+  },
+  TIMINGS: {
+    SCANNING_DELAY: 200,
+    NORMALIZATION_DELAY: 100,
+  },
+  DESKTOP_ICONS: {
+    BASE_Z_INDEX: 10,
+    STORAGE_KEY: 'cde_desktop_icons',
+    GRID_SIZE: 80,
+    ICON_GAP: 20,
+  },
 };
 
 // Expose configuration globally for debugging and legacy compatibility

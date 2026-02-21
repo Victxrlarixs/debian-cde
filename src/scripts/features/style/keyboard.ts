@@ -1,6 +1,7 @@
 // src/scripts/features/style/keyboard.ts
 
 import { logger } from '../../utilities/logger';
+import { settingsManager } from '../../core/settingsmanager';
 
 export interface KeyboardSettings {
   repeatRate: number;
@@ -16,20 +17,16 @@ export class KeyboardModule {
   };
 
   public load(): void {
-    try {
-      const saved = localStorage.getItem('cde-keyboard-settings');
-      if (saved) {
-        Object.assign(this.settings, JSON.parse(saved));
-        logger.log('[KeyboardModule] Loaded from localStorage:', this.settings);
-      }
-    } catch (e) {
-      console.warn('[KeyboardModule] Failed to load from localStorage:', e);
+    const saved = settingsManager.getSection('keyboard');
+    if (Object.keys(saved).length > 0) {
+      Object.assign(this.settings, saved);
+      logger.log('[KeyboardModule] Loaded from SettingsManager:', this.settings);
     }
   }
 
   public save(): void {
-    localStorage.setItem('cde-keyboard-settings', JSON.stringify(this.settings));
-    logger.log('[KeyboardModule] Saved to localStorage:', this.settings);
+    settingsManager.setSection('keyboard', this.settings);
+    logger.log('[KeyboardModule] Saved to SettingsManager:', this.settings);
   }
 
   public apply(): void {

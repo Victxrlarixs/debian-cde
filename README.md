@@ -1,56 +1,52 @@
-# 🖥️ CDE Simulation on Debian
+# 📟 The Nostalgic Portal: CDE Time Capsule
+
+![CDE Banner](https://img.shields.io/badge/Experience-Retro_Power-2a4a6a?style=for-the-badge)
+[![Launch Desktop](https://img.shields.io/badge/🖱️_Enter-Simulation-ff5a03?style=for-the-badge)](https://debian.com.mx)
+![User Rating](https://img.shields.io/badge/Vibe-1996_Nostalgia-blue?style=for-the-badge)
+
+> Ever wonder what it felt like to sit in front of a $20,000 Unix workstation in 1996? Welcome to a pixel-perfect recreation of the **Common Desktop Environment (CDE)**—living right inside your modern browser.
+
+---
+
+## ✨ A Journey Through Time
+
+This isn't just a website; it's a living desktop. From the moment the terminal scrolls past your eyes, you're not just a "visitor"—you're a "user" of a classic Unix system.
+
+### 🎨 Your Desktop, Your Rules
+Open the **Style Manager** to instantly repaint your environment. Whether it's the professional *Platinum*, the high-contrast *Midnight*, or the vibrant *Sunset*, the entire OS follows your lead without a single reload.
+
+### 📁 A Responsive World
+Everything reacts to you. Drag windows by their title bars, hover over icons to see them glow, and explore a **Virtual Filesystem** where you can create your own digital corner. It's the tactile feel of the 90s with the speed of today.
+
+---
+
+## 🎯 Iconic Experiences
+
+| 🖥️ The Component | 🌟 The Feeling |
+| :--- | :--- |
+| **Terminal Emulator** | Watch commands type themselves out in a mesmerizing tutorial loop. |
+| **Process Monitor** | Manage the "soul" of the machine. Move between tasks with your keyboard. |
+| **File Manager** | Real context menus, renaming, and folder navigation that feels "real". |
+| **Screenshot Tool** | Capture your personalized setup with a single click in the system tray. |
+
+---
+
+## 📱 Mobile-First Nostalgia
+We've spent months ensuring that the retro experience doesn't break on modern hardware. Our **Responsive Engine** ensures that whether you're on a 4K monitor or a smartphone, the CDE layout remains proportional and usable. No horizontal scroll, no broken icons—just clean, retro computing.
+
+---
+
+## 🚀 Step Inside
+
+You don't need to install anything. No clones, no builds, just a window to the past.
+
+1.  **Visit [debian.com.mx](https://debian.com.mx)**
+2.  **Double-click `readme.md`** on the desktop.
+3.  **Lose yourself** in the scanlines and dithered gradients.
+
+---
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Astro-ff5a03?logo=astro&logoColor=fff" alt="Astro">
-  <img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff" alt="TypeScript">
-  <img src="https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=fff" alt="CSS3">
-  <img src="https://img.shields.io/badge/Debian-A81D33?logo=debian&logoColor=fff" alt="Debian">
-  <img src="https://img.shields.io/badge/CDE-Classic-2a4a6a?logo=unix&logoColor=fff" alt="CDE">
-  <img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License">
-  <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome">
+  Experience the legend. Built with passion for the pixel.<br />
+  <a href="https://debian.com.mx">debian.com.mx</a>
 </p>
-
-> Step back in time and experience the Common Desktop Environment (CDE) — the classic Unix desktop — recreated in your browser with pixel‑perfect nostalgia and modern interactivity.
-
----
-
-## 🌟 Experience the Magic
-
-From the moment you land on **[debian.com.mx](https://debian.com.mx)** , you're transported to the mid‑90s. Watch a vintage‑style boot sequence unfold, then find yourself in a fully functional simulation of the legendary CDE desktop. Every detail has been lovingly crafted to evoke the spirit of early Unix workstations.
-
----
-
-## ✨ Features
-
-## 🎯 What You Can Do
-
-- **🖱️ Live Theme Customization**  
-  Open the **Style Manager** and switch between ten classic CDE themes (Platinum, Olive, Marine, Sand, Midnight, Cobalt, Forest, Sunset, Amber, Monochrome). Colors update instantly — no reload, no waiting.
-
-- **🔤 Personalize Typography**  
-  Adjust font family, size, weight and line height in real time. A live preview shows exactly how your changes will look.
-
-- **💻 Explore the Terminal**  
-  Launch the auto‑mode terminal and watch it type out a continuous tutorial of Unix/Linux commands (`ls`, `cd`, `mkdir`, `git`, `docker` …). It feels like an old‑school instructional video, right in your browser.
-
-- **📁 Navigate a Virtual Filesystem**  
-  Use the **File Manager** to browse, create, rename, and delete files and folders. Right‑click for a context menu, use the menu bar, and experience a fully interactive file system.
-
-- **📸 Capture the Moment**  
-  Click the camera icon in the system tray and instantly download a screenshot of your entire desktop — perfect for sharing or just keeping a memory.
-
-- **📊 Peek Under the Hood**  
-  Open the **Process Monitor** for a real‑time, keyboard‑navigable list of simulated processes. Move with arrow keys, “kill” a process with `k`, and watch colorful CPU/memory bars change dynamically.
-
-- **🧩 Discover Subtle Details**  
-  Hover over icons, drag windows, and notice the careful attention to retro UI behavior — every click and movement feels authentic.
-
----
-
-## 🚀 Getting Started
-
-Just visit **[debian.com.mx](https://debian.com.mx)** and start exploring.
-
----
-
-<p align="center"> Made with ☕️ and 🖥️ nostalgia<br /> <a href="https://debian.com.mx">debian.com.mx</a> </p>

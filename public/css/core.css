@@ -58,6 +58,7 @@ body {
   margin: 0;
   width: 100%;
   height: 100%;
+  box-sizing: border-box;
   font-family: var(--font-family-base);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-normal);
@@ -72,6 +73,10 @@ body {
   overflow: hidden;
 }
 
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
 /* ------------------------------------------------------------------
    3. CLASES UTILITARIAS
       Control rápido de visibilidad y estados.
@@ -84,7 +89,7 @@ body {
   display: flex !important;
 }
 
-.active {
+.cde-icon.active {
   background: var(--dock-icon-active) !important;
 }
 

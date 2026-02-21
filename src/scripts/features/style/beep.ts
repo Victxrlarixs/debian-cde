@@ -1,6 +1,7 @@
 // src/scripts/features/style/beep.ts
 
 import { logger } from '../../utilities/logger';
+import { settingsManager } from '../../core/settingsmanager';
 
 export interface BeepSettings {
   volume: number;
@@ -16,20 +17,16 @@ export class BeepModule {
   };
 
   public load(): void {
-    try {
-      const saved = localStorage.getItem('cde-beep-settings');
-      if (saved) {
-        Object.assign(this.settings, JSON.parse(saved));
-        logger.log('[BeepModule] Loaded from localStorage:', this.settings);
-      }
-    } catch (e) {
-      console.warn('[BeepModule] Failed to load from localStorage:', e);
+    const saved = settingsManager.getSection('beep');
+    if (Object.keys(saved).length > 0) {
+      Object.assign(this.settings, saved);
+      logger.log('[BeepModule] Loaded from SettingsManager:', this.settings);
     }
   }
 
   public save(): void {
-    localStorage.setItem('cde-beep-settings', JSON.stringify(this.settings));
-    logger.log('[BeepModule] Saved to localStorage:', this.settings);
+    settingsManager.setSection('beep', this.settings);
+    logger.log('[BeepModule] Saved to SettingsManager:', this.settings);
   }
 
   public apply(): void {
