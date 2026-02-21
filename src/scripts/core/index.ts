@@ -7,3 +7,5 @@ import '../features/terminal';
 import '../features/stylemanager';
 import '../features/texteditor';
 import '../features/lab';
+import '../features/appmanager';
+import '../features/timemanager';
