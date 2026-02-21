@@ -192,15 +192,14 @@ function renderFiles(): void {
     return;
   }
 
-  container.innerHTML = '';
   pathInput.value = currentPath;
-
   const folder = getCurrentFolder();
   if (!folder) {
     console.warn(`[FileManager] renderFiles: path not found: ${currentPath}`);
     return;
   }
 
+  const fragment = document.createDocumentFragment();
   let count = 0;
 
   Object.entries(folder).forEach(([name, item]) => {
@@ -235,9 +234,10 @@ function renderFiles(): void {
       }
     });
 
-    container.appendChild(div);
+    fragment.appendChild(div);
   });
 
+  container.replaceChildren(fragment);
   status.textContent = `${count} ${count === 1 ? 'item' : 'items'}`;
   logger.log(`[FileManager] renderFiles: displayed ${count} items at path ${currentPath}`);
 }
