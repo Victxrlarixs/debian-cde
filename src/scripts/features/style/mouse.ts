@@ -35,7 +35,8 @@ export class MouseModule {
 
   public apply(): void {
     logger.log('[MouseModule] Applied settings:', this.settings);
-    // Here you would add logic to actually change cursor behavior if needed
+    // Expose acceleration as a CSS variable for other modules to use
+    document.documentElement.style.setProperty('--mouse-acceleration', String(this.settings.acceleration));
   }
 
   public update(key: string, value: any): void {

@@ -7,6 +7,7 @@ import { FontModule } from './style/font';
 import { MouseModule } from './style/mouse';
 import { KeyboardModule } from './style/keyboard';
 import { BeepModule } from './style/beep';
+import { BackdropModule } from './style/backdrop';
 import { settingsManager } from '../core/settingsmanager';
 
 /**
@@ -19,6 +20,7 @@ export class StyleManager {
   public mouse: MouseModule;
   public keyboard: KeyboardModule;
   public beep: BeepModule;
+  public backdrop: BackdropModule;
 
   constructor() {
     this.theme = new ThemeModule();
@@ -26,6 +28,7 @@ export class StyleManager {
     this.mouse = new MouseModule();
     this.keyboard = new KeyboardModule();
     this.beep = new BeepModule();
+    this.backdrop = new BackdropModule();
   }
 
   // Getters for backward compatibility
@@ -45,6 +48,7 @@ export class StyleManager {
     this.mouse.load();
     this.keyboard.load();
     this.beep.load();
+    this.backdrop.load();
 
     this.bindEvents();
     this.setupColorInputs();
@@ -159,7 +163,7 @@ export class StyleManager {
   public closeColor(): void { this.hideWindow('styleManagerColor'); }
   public openFont(): void { this.showWindow('styleManagerFont'); }
   public closeFont(): void { this.hideWindow('styleManagerFont'); }
-  public openBackdrop(): void { this.showWindow('styleManagerBackdrop'); }
+  public openBackdrop(): void { this.showWindow('styleManagerBackdrop'); this.backdrop.syncUI(); }
   public closeBackdrop(): void { this.hideWindow('styleManagerBackdrop'); }
   public openMouse(): void { this.showWindow('styleManagerMouse'); this.mouse.syncUI(); }
   public closeMouse(): void { this.hideWindow('styleManagerMouse'); }

@@ -35,6 +35,8 @@ export const DesktopManager = (() => {
   let dragTarget: HTMLElement | null = null;
   let offsetX = 0;
   let offsetY = 0;
+  let lastX = 0;
+  let lastY = 0;
 
   /**
    * Initializes the desktop icons.
@@ -155,6 +157,8 @@ export const DesktopManager = (() => {
     const rect = icon.getBoundingClientRect();
     offsetX = e.clientX - rect.left;
     offsetY = e.clientY - rect.top;
+    lastX = e.clientX;
+    lastY = e.clientY;
     
     icon.setPointerCapture(e.pointerId);
     icon.addEventListener('pointermove', onPointerMove);
@@ -170,8 +174,21 @@ export const DesktopManager = (() => {
     if (!container) return;
     const containerRect = container.getBoundingClientRect();
 
-    let newX = e.clientX - containerRect.left - offsetX;
-    let newY = e.clientY - containerRect.top - offsetY;
+    // Get acceleration from CSS variable
+    const accelStr = getComputedStyle(document.documentElement).getPropertyValue('--mouse-acceleration');
+    const acceleration = parseFloat(accelStr) || 1;
+
+    const deltaX = e.clientX - lastX;
+    const deltaY = e.clientY - lastY;
+
+    let currentLeft = parseFloat(dragTarget.style.left || '0');
+    let currentTop = parseFloat(dragTarget.style.top || '0');
+
+    let newX = currentLeft + (deltaX * acceleration);
+    let newY = currentTop + (deltaY * acceleration);
+
+    lastX = e.clientX;
+    lastY = e.clientY;
 
     // Aggressive safety margin: icon cannot go near the edges (15px buffer)
     newX = Math.max(15, Math.min(newX, containerRect.width - dragTarget.offsetWidth - 15));
