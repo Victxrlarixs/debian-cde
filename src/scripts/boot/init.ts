@@ -216,10 +216,8 @@ function initDesktop(): void {
     if (window.styleManager) {
       window.styleManager.init();
       logger.log('[initDesktop] Style manager initialized');
-    } else {
-      console.warn('[initDesktop] Style manager not available');
     }
-
+ 
     desktopInitialized = true;
     logger.log('[initDesktop] Desktop initialization completed successfully');
   } catch (error) {

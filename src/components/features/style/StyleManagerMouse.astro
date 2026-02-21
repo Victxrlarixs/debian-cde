@@ -3,7 +3,7 @@ import WindowControls from '../../common/WindowControls.astro';
 ---
 
 <div class="cde-retro-modal style-manager-mouse" id="styleManagerMouse">
-  <div class="titlebar" id="styleManagerMouseTitlebar">
+  <div class="titlebar" id="styleManagerMouseTitlebar" onmousedown="window.drag(event, 'styleManagerMouse')">
     <span class="titlebar-text">Style Manager - Mouse</span>
     <WindowControls
       windowId="styleManagerMouse"

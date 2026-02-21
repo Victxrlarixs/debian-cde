@@ -67,7 +67,9 @@
     height: 50px;
   }
   .cde-icon-buttons {
+    display: grid;
     height: 16px;
+    grid-template-columns: repeat(5, 28px);
   }
   .cde-icon-btn {
     width: 28px;
@@ -75,6 +77,7 @@
     font-size: 8px;
   }
   .cde-icons {
+    grid-template-columns: repeat(5, 28px);
     height: 30px;
   }
   .cde-icon {
@@ -85,20 +88,11 @@
     width: 18px;
     height: 18px;
   }
-  .cde-tray {
-    height: 50px;
-  }
   .tray-icon {
-    width: 26px;
-    height: 30px;
+    display: none;
   }
-  .tray-icon img {
-    width: 22px;
-    height: 22px;
-  }
-  .tray-icon-btn {
-    width: 26px;
-    height: 16px;
+  #cde-panel .cde-sep:last-of-type {
+    display: none;
   }
   .cde-exit-btn {
     padding: 0 4px;
@@ -369,8 +363,10 @@
     height: 22px;
   }
   .tray-icon {
-    width: 30px;
-    height: 34px;
+    display: none;
+  }
+  #cde-panel .cde-sep:last-of-type {
+    display: none;
   }
 
   /* Ventanas */

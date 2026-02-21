@@ -8,8 +8,28 @@ import WindowControls from '../../common/WindowControls.astro';
     <WindowControls windowId="styleManagerStartup" closeFunction="styleManager.closeStartup" />
   </div>
 
-  <div class="modal-body" style="padding: 16px; text-align: center;">
-    <p>Startup settings will be available soon.</p>
+  <div class="modal-body">
+    <div class="cde-modal-row u-margin-bottom-md">
+      <input 
+        type="checkbox" 
+        id="restore-check" 
+        data-key="restoreSession" 
+        onclick="styleManager.startup.update('restoreSession', this.checked); styleManager.startup.syncUI()"
+      />
+      <label for="restore-check">Restore Session on Login</label>
+    </div>
+
+    <div class="window-section-title">At Startup:</div>
+    <div class="u-margin-bottom-sm">
+      <label><input type="radio" name="startup-mode" value="home" onclick="styleManager.startup.update('onStartup', 'home')" /> Show Home Directory</label>
+    </div>
+    <div class="cde-modal-field">
+      <label><input type="radio" name="startup-mode" value="session" onclick="styleManager.startup.update('onStartup', 'session')" /> Resume Current Session</label>
+    </div>
+
+    <div class="u-text-center">
+      <button class="cde-btn" onclick="styleManager.startup.clearSession()">Clear Current Session Now</button>
+    </div>
   </div>
 
   <div class="cde-statusbar">

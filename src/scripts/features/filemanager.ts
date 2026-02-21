@@ -626,6 +626,20 @@ const fmMenus: Record<string, MenuItem[]> = {
     { label: 'Up', action: goUp },
     { label: 'Home', action: goHome },
   ],
+  Places: [
+    {
+      label: 'Settings',
+      action: () => openPath('/home/victxrlarixs/settings/'),
+    },
+    {
+      label: 'Manual Pages',
+      action: () => openPath('/home/victxrlarixs/man-pages/'),
+    },
+    {
+      label: 'Desktop',
+      action: () => openPath('/home/victxrlarixs/Desktop/'),
+    },
+  ],
 };
 
 /**

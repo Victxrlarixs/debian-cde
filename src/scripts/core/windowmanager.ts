@@ -49,6 +49,15 @@ const WindowManager = (() => {
   };
   const MIN_VISIBLE = CONFIG.WINDOW.MIN_VISIBLE;
 
+  // Workspace state
+  let currentWorkspace = '1';
+  const workspaceWindows: Record<string, string[]> = {
+    '1': [],
+    '2': [],
+    '3': [],
+    '4': [],
+  };
+
   /**
    * Brings a window to the front (max z-index) and marks it as active.
    * @param id - The ID of the window element.
@@ -64,10 +73,7 @@ const WindowManager = (() => {
       const elementsToRepaint = document.querySelectorAll('.window, .cde-retro-modal, #cde-panel');
       elementsToRepaint.forEach((el) => {
         const element = el as HTMLElement;
-        if (
-          element.id !== 'styleManagerMain' &&
-          (element.classList.contains('window') || element.classList.contains('cde-retro-modal'))
-        ) {
+        if (element.classList.contains('window') || element.classList.contains('cde-retro-modal')) {
           element.classList.remove('active');
         }
       });
@@ -177,6 +183,12 @@ const WindowManager = (() => {
     left = Math.min(Math.max(left, MIN_VISIBLE - winWidth), maxX);
     top = Math.min(Math.max(top, MIN_VISIBLE - winHeight), maxY);
 
+    // Apply wireframe mode if opaqueDragging is false
+    const opaque = document.documentElement.getAttribute('data-opaque-drag') !== 'false';
+    if (!opaque) {
+      dragState.element.classList.add('dragging-wireframe');
+    }
+
     dragState.element.style.left = left + 'px';
     dragState.element.style.top = top + 'px';
   }
@@ -193,6 +205,7 @@ const WindowManager = (() => {
     el.removeEventListener('pointerup', stopDrag);
     el.removeEventListener('pointercancel', stopDrag);
 
+    dragState.element.classList.remove('dragging-wireframe');
     dragState.isDragging = false;
     
     // Save session
@@ -228,18 +241,29 @@ const WindowManager = (() => {
         focusWindow(win.id);
       }
     });
+
+    // Point to focus implementation
+    document.addEventListener('pointerenter', (e) => {
+      const mode = document.documentElement.getAttribute('data-focus-mode');
+      if (mode !== 'point') return;
+      
+      const win = (e.target as Element).closest('.window, .cde-retro-modal');
+      if (win) {
+        focusWindow(win.id);
+      }
+    }, true);
   }
 
-  function initDropdown(): void {
-    const dropdownBtn = document.getElementById('utilitiesBtn');
-    const dropdownMenu = document.getElementById('utilitiesDropdown');
+  function setupDropdown(btnId: string, menuId: string): void {
+    const dropdownBtn = document.getElementById(btnId);
+    const dropdownMenu = document.getElementById(menuId);
     
     if (!dropdownBtn || !dropdownMenu) {
-      logger.warn('[WindowManager] Dropdown elements not found!', { btn: !!dropdownBtn, menu: !!dropdownMenu });
+      logger.warn(`[WindowManager] Dropdown elements not found for ${btnId}/${menuId}!`, { btn: !!dropdownBtn, menu: !!dropdownMenu });
       return;
     }
 
-    logger.log('[WindowManager] Initializing dropdown menu (Floating mode)...');
+    logger.log(`[WindowManager] Initializing dropdown menu: ${menuId}...`);
     let lastToggleTime = 0;
 
     dropdownBtn.addEventListener('click', (e) => {
@@ -266,12 +290,12 @@ const WindowManager = (() => {
         dropdownMenu.style.bottom = window.innerHeight - rect.top + CONFIG.DROPDOWN.OFFSET + 'px';
         dropdownMenu.style.left = rect.left + (rect.width / 2) - (menuRect.width / 2) + 'px';
         
-        logger.log('[WindowManager] Dropdown opened at bottom:', dropdownMenu.style.bottom);
+        logger.log(`[WindowManager] Dropdown ${menuId} opened.`);
       } else {
         // CLOSING
         dropdownBtn.classList.remove('open');
         dropdownMenu.style.display = 'none';
-        logger.log('[WindowManager] Dropdown closed via button click');
+        logger.log(`[WindowManager] Dropdown ${menuId} closed via button click`);
       }
     });
 
@@ -283,12 +307,19 @@ const WindowManager = (() => {
         if (dropdownBtn.classList.contains('open')) {
           dropdownBtn.classList.remove('open');
           dropdownMenu.style.display = 'none';
-          logger.log('[WindowManager] Dropdown closed from outside click');
+          logger.log(`[WindowManager] Dropdown ${menuId} closed from outside click`);
         }
       }
     });
 
     dropdownMenu.style.display = 'none';
+  }
+
+  function initDropdowns(): void {
+    setupDropdown('utilitiesBtn', 'utilitiesDropdown');
+    setupDropdown('styleManagerBtn', 'styleManagerDropdown');
+    setupDropdown('terminalBtn', 'terminalDropdown');
+    setupDropdown('fileManagerBtn', 'fileManagerDropdown');
   }
 
   /**
@@ -322,8 +353,73 @@ const WindowManager = (() => {
       titlebar.setAttribute('data-draggable', 'true');
       win.setAttribute('data-cde-registered', 'true');
       
-      logger.log(`[WindowManager] Window registered: ${id || 'anonymous'}`);
+      // Assign to current workspace if not specified
+      if (!win.getAttribute('data-workspace')) {
+        win.setAttribute('data-workspace', currentWorkspace);
+      }
+      
+      const ws = win.getAttribute('data-workspace') || currentWorkspace;
+      if (ws !== currentWorkspace) {
+        win.style.display = 'none';
+      }
+
+      logger.log(`[WindowManager] Window registered: ${id || 'anonymous'} in WS ${ws}`);
     }
+  }
+
+  function switchWorkspace(id: string): void {
+    if (id === currentWorkspace) return;
+    
+    logger.log(`[WindowManager] Switching to workspace: ${id}`);
+    
+    const windows = document.querySelectorAll('.window, .cde-retro-modal');
+    
+    // Hide all windows of current workspace and remember which ones were open
+    windows.forEach((win) => {
+      const el = win as HTMLElement;
+      if (el.getAttribute('data-workspace') === currentWorkspace) {
+        const isVisible = window.getComputedStyle(el).display !== 'none';
+        if (isVisible) {
+          el.setAttribute('data-was-opened', 'true');
+          el.style.display = 'none';
+        } else {
+          el.removeAttribute('data-was-opened');
+        }
+      }
+    });
+
+    // Update state
+    currentWorkspace = id;
+
+    // Show windows of new workspace only if they were opened
+    windows.forEach((win) => {
+      const el = win as HTMLElement;
+      if (el.getAttribute('data-workspace') === currentWorkspace) {
+        if (el.getAttribute('data-was-opened') === 'true') {
+          el.style.display = 'flex';
+        }
+      }
+    });
+
+    // Update UI
+    const pagerItems = document.querySelectorAll('.pager-workspace');
+    pagerItems.forEach((item) => {
+      if ((item as HTMLElement).dataset.workspace === id) {
+        item.classList.add('active');
+      } else {
+        item.classList.remove('active');
+      }
+    });
+  }
+
+  function initPager(): void {
+    const pagerItems = document.querySelectorAll('.pager-workspace');
+    pagerItems.forEach((item) => {
+      item.addEventListener('click', () => {
+        const ws = (item as HTMLElement).dataset.workspace;
+        if (ws) switchWorkspace(ws);
+      });
+    });
   }
 
   function initDynamicScanning(): void {
@@ -353,15 +449,10 @@ const WindowManager = (() => {
   }
 
   function init(): void {
-    initWindows();
-    initDropdown();
-    
-    // Initial scan and start observer
-    setTimeout(() => {
-      initDynamicScanning();
-    }, CONFIG.TIMINGS.SCANNING_DELAY);
-
-    logger.log('[WindowManager] Dynamic system initialized.');
+    initDynamicScanning();
+    initDropdowns();
+    initPager();
+    logger.log('[WindowManager] Initialized');
   }
 
   return { init, drag, focusWindow, registerWindow };

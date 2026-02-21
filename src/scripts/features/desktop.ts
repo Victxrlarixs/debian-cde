@@ -13,14 +13,7 @@ interface IconPositions {
 /**
  * System icons that are always present and cannot be deleted.
  */
-const SYSTEM_ICONS = [
-  {
-    name: 'src code',
-    icon: '/icons/konqueror.png',
-    action: () => window.open(CONFIG.META.GITHUB_REPO, '_blank'),
-    id: 'sys-konqueror'
-  }
-];
+const SYSTEM_ICONS: any[] = [];
 
 /**
  * Desktop Manager: Handles icons, shortcuts and desktop background interactions.

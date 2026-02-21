@@ -11,10 +11,15 @@ import { CONFIG } from '../../scripts/core/config';
 
   <div class="cde-icon-block">
     <div class="cde-icon-buttons">
-      <div class="cde-icon-btn"></div>
-      <div class="cde-icon-btn"></div>
-      <div class="cde-icon-btn"></div>
-      <div class="cde-icon-btn"></div>
+      <div class="cde-icon-btn dropdown-btn" id="terminalBtn">
+        <img src="/icons/go-up.png" alt="arrow" class="arrow-icon" />
+      </div>
+      <div class="cde-icon-btn dropdown-btn" id="fileManagerBtn">
+        <img src="/icons/go-up.png" alt="arrow" class="arrow-icon" />
+      </div>
+      <div class="cde-icon-btn dropdown-btn" id="styleManagerBtn">
+        <img src="/icons/go-up.png" alt="arrow" class="arrow-icon" />
+      </div>
       <div class="cde-icon-btn dropdown-btn" id="utilitiesBtn">
         <img src="/icons/go-up.png" alt="arrow" class="arrow-icon" />
       </div>
@@ -47,10 +52,10 @@ import { CONFIG } from '../../scripts/core/config';
   <div class="cde-sep"></div>
 
   <div class="cde-pager">
-    <div class="pager-workspace active">One</div>
-    <div class="pager-workspace">Two</div>
-    <div class="pager-workspace">Three</div>
-    <div class="pager-workspace">Four</div>
+    <div class="pager-workspace active" data-workspace="1">One</div>
+    <div class="pager-workspace" data-workspace="2">Two</div>
+    <div class="pager-workspace" data-workspace="3">Three</div>
+    <div class="pager-workspace" data-workspace="4">Four</div>
   </div>
 
   <div class="cde-scroll">
@@ -68,13 +73,7 @@ import { CONFIG } from '../../scripts/core/config';
   >
     <img src="/icons/org.xfce.screenshooter.png" alt="Camera" />
   </div>
-  <div
-    class="tray-icon"
-    title="Linux Tutorial"
-    onclick="openTutorial()"
-  >
-    <img src="/icons/gedit.png" alt="Tutorial" />
-  </div>
+
   <div
     class="tray-icon"
     id="taskmanager-btn"
@@ -82,6 +81,14 @@ import { CONFIG } from '../../scripts/core/config';
     title="Process Monitor (top)"
   >
     <img src="/icons/org.xfce.taskmanager.png" alt="TaskManager" />
+  </div>
+
+  <div
+    class="tray-icon"
+    onclick="openTutorial()"
+    title="Linux Tutorial (gedit)"
+  >
+    <img src="/icons/gedit.png" alt="Gedit" />
   </div>
 </div>
 
@@ -96,4 +103,51 @@ import { CONFIG } from '../../scripts/core/config';
   <div class="menu-item" onclick="openTaskManagerInTerminal()">
     <img src="/icons/org.xfce.taskmanager.png" alt="" /> Process Monitor
   </div>
+</div><div class="dropdown-menu" id="styleManagerDropdown">
+  <div class="menu-item" onclick="styleManager.openColor()">
+    <img src="/icons/org.xfce.settings.appearance.png" alt="" /> Color
+  </div>
+  <div class="menu-item" onclick="styleManager.openFont()">
+    <img src="/icons/font-x-generic.png" alt="" /> Font
+  </div>
+  <div class="menu-item" onclick="styleManager.openBackdrop()">
+    <img src="/icons/org.xfce.PanelProfiles.png" alt="" /> Backdrop
+  </div>
+  <div class="menu-item" onclick="styleManager.openKeyboard()">
+    <img src="/icons/org.xfce.settings.keyboard.png" alt="" /> Keyboard
+  </div>
+  <div class="menu-item" onclick="styleManager.openMouse()">
+    <img src="/icons/org.xfce.settings.mouse.png" alt="" /> Mouse
+  </div>
+  <div class="menu-item" onclick="styleManager.openWindow()">
+    <img src="/icons/org.xfce.xfwm4.png" alt="" /> Window
+  </div>
+  <div class="menu-item" onclick="styleManager.openScreen()">
+    <img src="/icons/display.png" alt="" /> Screen
+  </div>
+  <div class="menu-item" onclick="styleManager.openStartup()">
+    <img src="/icons/gcr-key.png" alt="" /> Startup
+  </div>
 </div>
+
+<div class="dropdown-menu" id="terminalDropdown">
+  <div class="menu-item" onclick="openTerminal()">
+    <img src="/icons/konsole.png" alt="" /> Terminal
+  </div>
+  <div class="menu-item" onclick="openTaskManagerInTerminal()">
+    <img src="/icons/org.xfce.taskmanager.png" alt="" /> Process Monitor
+  </div>
+</div>
+
+<div class="dropdown-menu" id="fileManagerDropdown">
+  <div class="menu-item" onclick="openPath('/home/victxrlarixs/settings/')">
+    <img src="/icons/filemanager.png" alt="" /> Settings
+  </div>
+  <div class="menu-item" onclick="openPath('/home/victxrlarixs/man-pages/')">
+    <img src="/icons/filemanager.png" alt="" /> Manual Pages
+  </div>
+  <div class="menu-item" onclick="openPath('/home/victxrlarixs/Desktop/')">
+    <img src="/icons/filemanager.png" alt="" /> Desktop
+  </div>
+</div>
+

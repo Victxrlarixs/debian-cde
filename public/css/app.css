@@ -225,30 +225,7 @@
       Ventana modal para personalizar colores y tipografía.
       Diseño fijo, centrado, con paneles y controles estilo CDE.
    ------------------------------------------------------------------ */
-#styleManager {
-  width: 600px;
-  height: 480px;
-  display: none;
-  position: fixed !important;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: var(--modal-bg);
-  font-family: var(--font-family-base);
-  color: var(--text-color);
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-base);
-  z-index: 10000;
-  border: 2px solid;
-  border-top-color: var(--border-light);
-  border-left-color: var(--border-light);
-  border-right-color: var(--border-dark);
-  border-bottom-color: var(--border-dark);
-  box-shadow: 4px 4px 0 var(--shadow-color);
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
+
 
 /* Barra de título (arrastrable) */
 #styleManager .titlebar {
