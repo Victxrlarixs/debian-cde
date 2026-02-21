@@ -31,7 +31,8 @@ interface WindowState {
 const windowStates: Record<string, WindowState> = {};
 
 const WindowManager = (() => {
-  let zIndex = CONFIG.WINDOW.BASE_Z_INDEX;
+  // Start z-index higher than TopBar (9998) to ensure focused windows are on top
+  let zIndex = 10000;
   const dragState: DragState = {
     element: null,
     offsetX: 0,
@@ -81,11 +82,24 @@ const WindowManager = (() => {
    * Normalizes a window's position to ensure it is draggable.
    */
   function normalizeWindowPosition(win: HTMLElement): void {
+    // If hidden, don't normalize yet because getBoundingClientRect will be 0,0
+    if (window.getComputedStyle(win).display === 'none') {
+      return;
+    }
+
     const rect = win.getBoundingClientRect();
+    const TOP_BAR_HEIGHT = 30; // 28px + safety margin
+
     win.style.position = 'absolute';
     win.style.left = rect.left + 'px';
-    win.style.top = rect.top + 'px';
+    
+    // Ensure window titlebar is not covered by TopBar
+    const normalizedTop = Math.max(rect.top, TOP_BAR_HEIGHT);
+    win.style.top = normalizedTop + 'px';
+    
     win.style.transform = 'none';
+    
+    logger.log(`[WindowManager] Normalized "${win.id}" to top: ${win.style.top}`);
   }
 
   /**
@@ -230,49 +244,80 @@ const WindowManager = (() => {
     dropdownMenu.style.display = 'none';
   }
 
-  function initDraggableTitlebars(): void {
-    const allWindows = [
-      'styleManagerMain', 'styleManagerColor', 'styleManagerFont', 'styleManagerBackdrop',
-      'styleManagerMouse', 'styleManagerKeyboard', 'styleManagerWindow', 'styleManagerScreen',
-      'styleManagerBeep', 'styleManagerStartup', 'terminal', 'fm', 'process-monitor', 'text-editor',
-    ];
+  /**
+   * Registers a single window element to make it draggable and interactive.
+   */
+  function registerWindow(win: HTMLElement): void {
+    if (win.hasAttribute('data-cde-registered')) return;
 
-    allWindows.forEach((id) => {
-      const win = document.getElementById(id);
-      const titlebar = document.getElementById(`${id}Titlebar`);
+    const id = win.id;
+    const titlebar = document.getElementById(`${id}Titlebar`) || win.querySelector('.titlebar');
 
-      if (win && titlebar) {
-        // Restore session position if available
-        const session = settingsManager.getSection('session').windows[id];
-        if (session) {
-          win.style.left = session.left;
-          win.style.top = session.top;
-          if (session.maximized) win.classList.add('maximized');
-          logger.log(`[WindowManager] Restored session for: ${id}`);
-        } else {
-          // Normalize position at startup only if no session
+    if (titlebar) {
+      // Restore session position if available
+      const session = settingsManager.getSection('session').windows[id];
+      if (session && session.left && session.top) {
+        win.style.left = session.left;
+        win.style.top = session.top;
+        if (session.maximized) win.classList.add('maximized');
+        logger.log(`[WindowManager] Restored session for: ${id}`);
+      } else {
+        // Only normalize if it's already visible, otherwise wait for normalization on drag
+        if (window.getComputedStyle(win).display !== 'none') {
           setTimeout(() => { normalizeWindowPosition(win); }, 100);
         }
-        
-        // Essential for touch support: prevent browser default behavior
-        titlebar.style.touchAction = 'none';
-        
-        titlebar.removeEventListener('pointerdown', titlebarDragHandler as any);
-        titlebar.addEventListener('pointerdown', titlebarDragHandler as any);
-        titlebar.setAttribute('data-draggable', 'true');
-        logger.log(`[WindowManager] Unified drag initialized for: ${id}`);
       }
+      
+      // Essential for touch support: prevent browser default behavior
+      (titlebar as HTMLElement).style.touchAction = 'none';
+      
+      titlebar.addEventListener('pointerdown', titlebarDragHandler as any);
+      titlebar.setAttribute('data-draggable', 'true');
+      win.setAttribute('data-cde-registered', 'true');
+      
+      logger.log(`[WindowManager] Window registered: ${id || 'anonymous'}`);
+    }
+  }
+
+  function initDynamicScanning(): void {
+    // Scan existing windows
+    const windows = document.querySelectorAll('.window, .cde-retro-modal');
+    windows.forEach((el) => registerWindow(el as HTMLElement));
+
+    // Observe for new windows added to the DOM
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((node) => {
+          if (node instanceof HTMLElement) {
+            if (node.classList.contains('window') || node.classList.contains('cde-retro-modal')) {
+              registerWindow(node);
+            }
+            // Also scan children in case a wrapper was added
+            node.querySelectorAll('.window, .cde-retro-modal').forEach((el) => {
+              registerWindow(el as HTMLElement);
+            });
+          }
+        });
+      });
     });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+    logger.log('[WindowManager] MutationObserver active for dynamic windows.');
   }
 
   function init(): void {
     initWindows();
     initDropdown();
-    setTimeout(() => { initDraggableTitlebars(); }, 200);
-    logger.log('[WindowManager] Unified PointerEvents initialized.');
+    
+    // Initial scan and start observer
+    setTimeout(() => {
+      initDynamicScanning();
+    }, 200);
+
+    logger.log('[WindowManager] Dynamic system initialized.');
   }
 
-  return { init, drag, focusWindow };
+  return { init, drag, focusWindow, registerWindow };
 })();
 
 function minimizeWindow(id: string): void {
