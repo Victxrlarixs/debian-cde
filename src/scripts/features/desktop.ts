@@ -22,7 +22,7 @@ export const DesktopManager = (() => {
   const container = document.getElementById('desktop-icons-container');
   let icons: HTMLElement[] = [];
   let selectedIcon: HTMLElement | null = null;
-  
+
   // Drag state
   let isDragging = false;
   let dragTarget: HTMLElement | null = null;
@@ -55,7 +55,7 @@ export const DesktopManager = (() => {
 
     // Clear current icons
     container.innerHTML = '';
-    
+
     // Get positions from settings
     const savedPositions = settingsManager.getSection('desktop') || {};
 
@@ -72,19 +72,19 @@ export const DesktopManager = (() => {
       const type = (node as any).type as 'file' | 'folder';
       const pos = savedPositions[name] || {
         left: 20,
-        top: 15 + (index * CONFIG.DESKTOP_ICONS.GRID_SIZE)
+        top: 15 + index * CONFIG.DESKTOP_ICONS.GRID_SIZE,
       };
-      
+
       createIcon(name, type, pos.left, pos.top);
     });
 
     // Add System Icons
     SYSTEM_ICONS.forEach((sys) => {
       const pos = savedPositions[sys.id] || {
-        left: Math.round((container.clientWidth / 2) - 37),
-        top: Math.round((container.clientHeight / 2) - 40)
+        left: Math.round(container.clientWidth / 2 - 37),
+        top: Math.round(container.clientHeight / 2 - 40),
       };
-      
+
       createIcon(sys.name, 'file', pos.left, pos.top, true, sys.id, sys.icon);
     });
   }
@@ -99,7 +99,15 @@ export const DesktopManager = (() => {
    * @param id - Specific ID for system icons
    * @param customIcon - Path to a custom icon image
    */
-  function createIcon(name: string, type: 'file' | 'folder', left: number, top: number, isSystem: boolean = false, id?: string, customIcon?: string): void {
+  function createIcon(
+    name: string,
+    type: 'file' | 'folder',
+    left: number,
+    top: number,
+    isSystem: boolean = false,
+    id?: string,
+    customIcon?: string
+  ): void {
     const container = document.getElementById('desktop-icons-container');
     if (!container) return;
 
@@ -109,7 +117,7 @@ export const DesktopManager = (() => {
     icon.dataset.type = type;
     if (isSystem) icon.dataset.system = 'true';
     if (id) icon.dataset.id = id;
-    
+
     icon.style.left = left + 'px';
     icon.style.top = top + 'px';
 
@@ -138,7 +146,7 @@ export const DesktopManager = (() => {
 
   function onIconPointerDown(e: PointerEvent, icon: HTMLElement): void {
     e.stopPropagation();
-    
+
     // Select icon
     deselectAll();
     icon.classList.add('selected');
@@ -152,23 +160,25 @@ export const DesktopManager = (() => {
     offsetY = e.clientY - rect.top;
     lastX = e.clientX;
     lastY = e.clientY;
-    
+
     icon.setPointerCapture(e.pointerId);
     icon.addEventListener('pointermove', onPointerMove);
     icon.addEventListener('pointerup', onPointerUp, { once: true });
-    
+
     logger.log(`[DesktopManager] Started dragging icon: ${icon.dataset.name}`);
   }
 
   function onPointerMove(e: PointerEvent): void {
     if (!isDragging || !dragTarget) return;
-    
+
     const container = document.getElementById('desktop-icons-container');
     if (!container) return;
     const containerRect = container.getBoundingClientRect();
 
     // Get acceleration from CSS variable
-    const accelStr = getComputedStyle(document.documentElement).getPropertyValue('--mouse-acceleration');
+    const accelStr = getComputedStyle(document.documentElement).getPropertyValue(
+      '--mouse-acceleration'
+    );
     const acceleration = parseFloat(accelStr) || 1;
 
     const deltaX = e.clientX - lastX;
@@ -177,8 +187,8 @@ export const DesktopManager = (() => {
     let currentLeft = parseFloat(dragTarget.style.left || '0');
     let currentTop = parseFloat(dragTarget.style.top || '0');
 
-    let newX = currentLeft + (deltaX * acceleration);
-    let newY = currentTop + (deltaY * acceleration);
+    let newX = currentLeft + deltaX * acceleration;
+    let newY = currentTop + deltaY * acceleration;
 
     lastX = e.clientX;
     lastY = e.clientY;
@@ -193,13 +203,13 @@ export const DesktopManager = (() => {
 
   function onPointerUp(e: PointerEvent): void {
     if (!isDragging || !dragTarget) return;
-    
+
     dragTarget.releasePointerCapture(e.pointerId);
     dragTarget.removeEventListener('pointermove', onPointerMove);
-    
+
     // Save position
     savePosition(dragTarget);
-    
+
     isDragging = false;
     dragTarget = null;
     logger.log('[DesktopManager] Icon drag finished and position saved.');
@@ -209,7 +219,7 @@ export const DesktopManager = (() => {
     // Check if it's a system icon
     if (selectedIcon && selectedIcon.dataset.system === 'true') {
       const sysId = selectedIcon.dataset.id;
-      const sys = SYSTEM_ICONS.find(s => s.id === sysId);
+      const sys = SYSTEM_ICONS.find((s) => s.id === sysId);
       if (sys) {
         logger.log(`[DesktopManager] Launching system icon: ${sys.name}`);
         sys.action();
@@ -228,20 +238,20 @@ export const DesktopManager = (() => {
     } else {
       if (window.openTextEditor && window.VirtualFS) {
         const node = window.VirtualFS.getNode(path);
-        const content = (node && 'content' in node) ? (node as any).content : '';
+        const content = node && 'content' in node ? (node as any).content : '';
         await window.openTextEditor(name, content);
       }
     }
   }
 
   function deselectAll(): void {
-    document.querySelectorAll('.cde-desktop-icon').forEach(el => el.classList.remove('selected'));
+    document.querySelectorAll('.cde-desktop-icon').forEach((el) => el.classList.remove('selected'));
     selectedIcon = null;
   }
 
   function setupGlobalEvents(): void {
     const container = document.getElementById('desktop-icons-container');
-    
+
     document.addEventListener('pointerdown', (e) => {
       const target = e.target as HTMLElement;
       if (!target.closest('.cde-desktop-icon') && !target.closest('.fm-contextmenu')) {
@@ -289,56 +299,58 @@ export const DesktopManager = (() => {
 
     const isSystem = targetIcon?.dataset.system === 'true';
 
-    const items: ContextMenuItem[] = targetIcon ? [
-      {
-        label: 'Rename',
-        disabled: isSystem,
-        action: async () => {
-          if (isSystem) return;
-          const name = targetIcon.dataset.name;
-          if (!name || !window.VirtualFS) return;
-          const newName = await (window as any).CDEModal.prompt('New name:', name);
-          if (newName) await window.VirtualFS.rename(name, newName, CONFIG.FS.DESKTOP);
-        }
-      },
-      {
-        label: 'Delete',
-        disabled: isSystem,
-        action: async () => {
-          if (isSystem) return;
-          const name = targetIcon.dataset.name;
-          if (!name || !window.VirtualFS) return;
-          await window.VirtualFS.rm(name, CONFIG.FS.DESKTOP);
-        }
-      }
-    ] : [
-      {
-        label: 'New File',
-        action: async () => {
-          if (!window.VirtualFS) return;
-          const name = await (window as any).CDEModal.prompt('File name:');
-          if (name) await window.VirtualFS.touch(name, CONFIG.FS.DESKTOP);
-        }
-      },
-      {
-        label: 'New Folder',
-        action: async () => {
-          if (!window.VirtualFS) return;
-          const name = await (window as any).CDEModal.prompt('Folder name:');
-          if (name) await window.VirtualFS.mkdir(name, CONFIG.FS.DESKTOP);
-        }
-      },
-      {
-        label: 'Change Backdrop',
-        action: async () => {
-          if (window.styleManager) {
-            window.styleManager.openBackdrop();
-          }
-        }
-      }
-    ];
+    const items: ContextMenuItem[] = targetIcon
+      ? [
+          {
+            label: 'Rename',
+            disabled: isSystem,
+            action: async () => {
+              if (isSystem) return;
+              const name = targetIcon.dataset.name;
+              if (!name || !window.VirtualFS) return;
+              const newName = await (window as any).CDEModal.prompt('New name:', name);
+              if (newName) await window.VirtualFS.rename(name, newName, CONFIG.FS.DESKTOP);
+            },
+          },
+          {
+            label: 'Delete',
+            disabled: isSystem,
+            action: async () => {
+              if (isSystem) return;
+              const name = targetIcon.dataset.name;
+              if (!name || !window.VirtualFS) return;
+              await window.VirtualFS.rm(name, CONFIG.FS.DESKTOP);
+            },
+          },
+        ]
+      : [
+          {
+            label: 'New File',
+            action: async () => {
+              if (!window.VirtualFS) return;
+              const name = await (window as any).CDEModal.prompt('File name:');
+              if (name) await window.VirtualFS.touch(name, CONFIG.FS.DESKTOP);
+            },
+          },
+          {
+            label: 'New Folder',
+            action: async () => {
+              if (!window.VirtualFS) return;
+              const name = await (window as any).CDEModal.prompt('Folder name:');
+              if (name) await window.VirtualFS.mkdir(name, CONFIG.FS.DESKTOP);
+            },
+          },
+          {
+            label: 'Change Backdrop',
+            action: async () => {
+              if (window.styleManager) {
+                window.styleManager.openBackdrop();
+              }
+            },
+          },
+        ];
 
-    items.forEach(item => {
+    items.forEach((item) => {
       const div = document.createElement('div');
       div.className = 'fm-context-item' + (item.disabled ? ' disabled' : '');
       div.textContent = item.label;
@@ -356,8 +368,9 @@ export const DesktopManager = (() => {
 
     // Prevent menu from going off-screen
     const rect = menu.getBoundingClientRect();
-    if (rect.right > window.innerWidth) menu.style.left = (window.innerWidth - rect.width - 5) + 'px';
-    if (rect.bottom > window.innerHeight) menu.style.top = (window.innerHeight - rect.height - 5) + 'px';
+    if (rect.right > window.innerWidth) menu.style.left = window.innerWidth - rect.width - 5 + 'px';
+    if (rect.bottom > window.innerHeight)
+      menu.style.top = window.innerHeight - rect.height - 5 + 'px';
   }
 
   function closeContextMenu(): void {
@@ -374,14 +387,14 @@ export const DesktopManager = (() => {
     const savedPositions = settingsManager.getSection('desktop') || {};
     savedPositions[id] = {
       left: parseInt(icon.style.left),
-      top: parseInt(icon.style.top)
+      top: parseInt(icon.style.top),
     };
 
     settingsManager.setSection('desktop', savedPositions);
   }
 
   return {
-    init
+    init,
   };
 })();
 

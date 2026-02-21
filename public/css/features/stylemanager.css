@@ -74,8 +74,23 @@
 }
 
 /* Feature Specific Style Manager Panels (Fonts, Colors, Mouse, etc.) */
-#styleManagerFont .modal-body { padding: 12px; height: calc(100% - 70px); }
-#styleManagerColor .color-palette-scroll { max-height: 150px; overflow-y: auto; }
-#styleManagerMouse .mouse-icon-btn { width: 120px; height: 150px; }
-#styleManagerKeyboard .keyboard-icon img { width: 48px; height: 48px; }
-#styleManagerWindow .window-content { display: flex; gap: 16px; }
+#styleManagerFont .modal-body {
+  padding: 12px;
+  height: calc(100% - 70px);
+}
+#styleManagerColor .color-palette-scroll {
+  max-height: 150px;
+  overflow-y: auto;
+}
+#styleManagerMouse .mouse-icon-btn {
+  width: 120px;
+  height: 150px;
+}
+#styleManagerKeyboard .keyboard-icon img {
+  width: 48px;
+  height: 48px;
+}
+#styleManagerWindow .window-content {
+  display: flex;
+  gap: 16px;
+}

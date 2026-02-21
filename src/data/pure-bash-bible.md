@@ -34,148 +34,150 @@ See something incorrectly described, buggy or outright wrong? Open an issue or s
 
 <!-- vim-markdown-toc GFM -->
 
-* [FOREWORD](#foreword)
-* [STRINGS](#strings)
-    * [Trim leading and trailing white-space from string](#trim-leading-and-trailing-white-space-from-string)
-    * [Trim all white-space from string and truncate spaces](#trim-all-white-space-from-string-and-truncate-spaces)
-    * [Use regex on a string](#use-regex-on-a-string)
-    * [Split a string on a delimiter](#split-a-string-on-a-delimiter)
-    * [Change a string to lowercase](#change-a-string-to-lowercase)
-    * [Change a string to uppercase](#change-a-string-to-uppercase)
-    * [Reverse a string case](#reverse-a-string-case)
-    * [Trim quotes from a string](#trim-quotes-from-a-string)
-    * [Strip all instances of pattern from string](#strip-all-instances-of-pattern-from-string)
-    * [Strip first occurrence of pattern from string](#strip-first-occurrence-of-pattern-from-string)
-    * [Strip pattern from start of string](#strip-pattern-from-start-of-string)
-    * [Strip pattern from end of string](#strip-pattern-from-end-of-string)
-    * [Percent-encode a string](#percent-encode-a-string)
-    * [Decode a percent-encoded string](#decode-a-percent-encoded-string)
-    * [Check if string contains a sub-string](#check-if-string-contains-a-sub-string)
-    * [Check if string starts with sub-string](#check-if-string-starts-with-sub-string)
-    * [Check if string ends with sub-string](#check-if-string-ends-with-sub-string)
-* [ARRAYS](#arrays)
-    * [Reverse an array](#reverse-an-array)
-    * [Remove duplicate array elements](#remove-duplicate-array-elements)
-    * [Random array element](#random-array-element)
-    * [Cycle through an array](#cycle-through-an-array)
-    * [Toggle between two values](#toggle-between-two-values)
-* [LOOPS](#loops)
-    * [Loop over a range of numbers](#loop-over-a-range-of-numbers)
-    * [Loop over a variable range of numbers](#loop-over-a-variable-range-of-numbers)
-    * [Loop over an array](#loop-over-an-array)
-    * [Loop over an array with an index](#loop-over-an-array-with-an-index)
-    * [Loop over the contents of a file](#loop-over-the-contents-of-a-file)
-    * [Loop over files and directories](#loop-over-files-and-directories)
-* [FILE HANDLING](#file-handling)
-    * [Read a file to a string](#read-a-file-to-a-string)
-    * [Read a file to an array (*by line*)](#read-a-file-to-an-array-by-line)
-    * [Get the first N lines of a file](#get-the-first-n-lines-of-a-file)
-    * [Get the last N lines of a file](#get-the-last-n-lines-of-a-file)
-    * [Get the number of lines in a file](#get-the-number-of-lines-in-a-file)
-    * [Count files or directories in directory](#count-files-or-directories-in-directory)
-    * [Create an empty file](#create-an-empty-file)
-    * [Extract lines between two markers](#extract-lines-between-two-markers)
-* [FILE PATHS](#file-paths)
-    * [Get the directory name of a file path](#get-the-directory-name-of-a-file-path)
-    * [Get the base-name of a file path](#get-the-base-name-of-a-file-path)
-* [VARIABLES](#variables)
-    * [Assign and access a variable using a variable](#assign-and-access-a-variable-using-a-variable)
-    * [Name a variable based on another variable](#name-a-variable-based-on-another-variable)
-* [ESCAPE SEQUENCES](#escape-sequences)
-    * [Text Colors](#text-colors)
-    * [Text Attributes](#text-attributes)
-    * [Cursor Movement](#cursor-movement)
-    * [Erasing Text](#erasing-text)
-* [PARAMETER EXPANSION](#parameter-expansion)
-    * [Indirection](#indirection)
-    * [Replacement](#replacement)
-    * [Length](#length)
-    * [Expansion](#expansion)
-    * [Case Modification](#case-modification)
-    * [Default Value](#default-value)
-* [BRACE EXPANSION](#brace-expansion)
-    * [Ranges](#ranges)
-    * [String Lists](#string-lists)
-* [CONDITIONAL EXPRESSIONS](#conditional-expressions)
-    * [File Conditionals](#file-conditionals)
-    * [File Comparisons](#file-comparisons)
-    * [Variable Conditionals](#variable-conditionals)
-    * [Variable Comparisons](#variable-comparisons)
-* [ARITHMETIC OPERATORS](#arithmetic-operators)
-    * [Assignment](#assignment)
-    * [Arithmetic](#arithmetic)
-    * [Bitwise](#bitwise)
-    * [Logical](#logical)
-    * [Miscellaneous](#miscellaneous)
-* [ARITHMETIC](#arithmetic-1)
-    * [Simpler syntax to set variables](#simpler-syntax-to-set-variables)
-    * [Ternary Tests](#ternary-tests)
-* [TRAPS](#traps)
-    * [Do something on script exit](#do-something-on-script-exit)
-    * [Ignore terminal interrupt (CTRL+C, SIGINT)](#ignore-terminal-interrupt-ctrlc-sigint)
-    * [React to window resize](#react-to-window-resize)
-    * [Do something before every command](#do-something-before-every-command)
-    * [Do something when a shell function or a sourced file finishes executing](#do-something-when-a-shell-function-or-a-sourced-file-finishes-executing)
-* [PERFORMANCE](#performance)
-    * [Disable Unicode](#disable-unicode)
-* [OBSOLETE SYNTAX](#obsolete-syntax)
-    * [Shebang](#shebang)
-    * [Command Substitution](#command-substitution)
-    * [Function Declaration](#function-declaration)
-* [INTERNAL VARIABLES](#internal-variables)
-    * [Get the location to the `bash` binary](#get-the-location-to-the-bash-binary)
-    * [Get the version of the current running `bash` process](#get-the-version-of-the-current-running-bash-process)
-    * [Open the user's preferred text editor](#open-the-users-preferred-text-editor)
-    * [Get the name of the current function](#get-the-name-of-the-current-function)
-    * [Get the host-name of the system](#get-the-host-name-of-the-system)
-    * [Get the architecture of the Operating System](#get-the-architecture-of-the-operating-system)
-    * [Get the name of the Operating System / Kernel](#get-the-name-of-the-operating-system--kernel)
-    * [Get the current working directory](#get-the-current-working-directory)
-    * [Get the number of seconds the script has been running](#get-the-number-of-seconds-the-script-has-been-running)
-    * [Get a pseudorandom integer](#get-a-pseudorandom-integer)
-* [INFORMATION ABOUT THE TERMINAL](#information-about-the-terminal)
-    * [Get the terminal size in lines and columns (*from a script*)](#get-the-terminal-size-in-lines-and-columns-from-a-script)
-    * [Get the terminal size in pixels](#get-the-terminal-size-in-pixels)
-    * [Get the current cursor position](#get-the-current-cursor-position)
-* [CONVERSION](#conversion)
-    * [Convert a hex color to RGB](#convert-a-hex-color-to-rgb)
-    * [Convert an RGB color to hex](#convert-an-rgb-color-to-hex)
-* [CODE GOLF](#code-golf)
-    * [Shorter `for` loop syntax](#shorter-for-loop-syntax)
-    * [Shorter infinite loops](#shorter-infinite-loops)
-    * [Shorter function declaration](#shorter-function-declaration)
-    * [Shorter `if` syntax](#shorter-if-syntax)
-    * [Simpler `case` statement to set variable](#simpler-case-statement-to-set-variable)
-* [OTHER](#other)
-    * [Use `read` as an alternative to the `sleep` command](#use-read-as-an-alternative-to-the-sleep-command)
-    * [Check if a program is in the user's PATH](#check-if-a-program-is-in-the-users-path)
-    * [Get the current date using `strftime`](#get-the-current-date-using-strftime)
-    * [Get the username of the current user](#get-the-username-of-the-current-user)
-    * [Generate a UUID V4](#generate-a-uuid-v4)
-    * [Progress bars](#progress-bars)
-    * [Get the list of functions in a script](#get-the-list-of-functions-in-a-script)
-    * [Bypass shell aliases](#bypass-shell-aliases)
-    * [Bypass shell functions](#bypass-shell-functions)
-    * [Run a command in the background](#run-a-command-in-the-background)
-    * [Capture function return without command substitution](#capture-the-return-value-of-a-function-without-command-substitution)
-* [AFTERWORD](#afterword)
+- [FOREWORD](#foreword)
+- [STRINGS](#strings)
+  - [Trim leading and trailing white-space from string](#trim-leading-and-trailing-white-space-from-string)
+  - [Trim all white-space from string and truncate spaces](#trim-all-white-space-from-string-and-truncate-spaces)
+  - [Use regex on a string](#use-regex-on-a-string)
+  - [Split a string on a delimiter](#split-a-string-on-a-delimiter)
+  - [Change a string to lowercase](#change-a-string-to-lowercase)
+  - [Change a string to uppercase](#change-a-string-to-uppercase)
+  - [Reverse a string case](#reverse-a-string-case)
+  - [Trim quotes from a string](#trim-quotes-from-a-string)
+  - [Strip all instances of pattern from string](#strip-all-instances-of-pattern-from-string)
+  - [Strip first occurrence of pattern from string](#strip-first-occurrence-of-pattern-from-string)
+  - [Strip pattern from start of string](#strip-pattern-from-start-of-string)
+  - [Strip pattern from end of string](#strip-pattern-from-end-of-string)
+  - [Percent-encode a string](#percent-encode-a-string)
+  - [Decode a percent-encoded string](#decode-a-percent-encoded-string)
+  - [Check if string contains a sub-string](#check-if-string-contains-a-sub-string)
+  - [Check if string starts with sub-string](#check-if-string-starts-with-sub-string)
+  - [Check if string ends with sub-string](#check-if-string-ends-with-sub-string)
+- [ARRAYS](#arrays)
+  - [Reverse an array](#reverse-an-array)
+  - [Remove duplicate array elements](#remove-duplicate-array-elements)
+  - [Random array element](#random-array-element)
+  - [Cycle through an array](#cycle-through-an-array)
+  - [Toggle between two values](#toggle-between-two-values)
+- [LOOPS](#loops)
+  - [Loop over a range of numbers](#loop-over-a-range-of-numbers)
+  - [Loop over a variable range of numbers](#loop-over-a-variable-range-of-numbers)
+  - [Loop over an array](#loop-over-an-array)
+  - [Loop over an array with an index](#loop-over-an-array-with-an-index)
+  - [Loop over the contents of a file](#loop-over-the-contents-of-a-file)
+  - [Loop over files and directories](#loop-over-files-and-directories)
+- [FILE HANDLING](#file-handling)
+  - [Read a file to a string](#read-a-file-to-a-string)
+  - [Read a file to an array (_by line_)](#read-a-file-to-an-array-by-line)
+  - [Get the first N lines of a file](#get-the-first-n-lines-of-a-file)
+  - [Get the last N lines of a file](#get-the-last-n-lines-of-a-file)
+  - [Get the number of lines in a file](#get-the-number-of-lines-in-a-file)
+  - [Count files or directories in directory](#count-files-or-directories-in-directory)
+  - [Create an empty file](#create-an-empty-file)
+  - [Extract lines between two markers](#extract-lines-between-two-markers)
+- [FILE PATHS](#file-paths)
+  - [Get the directory name of a file path](#get-the-directory-name-of-a-file-path)
+  - [Get the base-name of a file path](#get-the-base-name-of-a-file-path)
+- [VARIABLES](#variables)
+  - [Assign and access a variable using a variable](#assign-and-access-a-variable-using-a-variable)
+  - [Name a variable based on another variable](#name-a-variable-based-on-another-variable)
+- [ESCAPE SEQUENCES](#escape-sequences)
+  - [Text Colors](#text-colors)
+  - [Text Attributes](#text-attributes)
+  - [Cursor Movement](#cursor-movement)
+  - [Erasing Text](#erasing-text)
+- [PARAMETER EXPANSION](#parameter-expansion)
+  - [Indirection](#indirection)
+  - [Replacement](#replacement)
+  - [Length](#length)
+  - [Expansion](#expansion)
+  - [Case Modification](#case-modification)
+  - [Default Value](#default-value)
+- [BRACE EXPANSION](#brace-expansion)
+  - [Ranges](#ranges)
+  - [String Lists](#string-lists)
+- [CONDITIONAL EXPRESSIONS](#conditional-expressions)
+  - [File Conditionals](#file-conditionals)
+  - [File Comparisons](#file-comparisons)
+  - [Variable Conditionals](#variable-conditionals)
+  - [Variable Comparisons](#variable-comparisons)
+- [ARITHMETIC OPERATORS](#arithmetic-operators)
+  - [Assignment](#assignment)
+  - [Arithmetic](#arithmetic)
+  - [Bitwise](#bitwise)
+  - [Logical](#logical)
+  - [Miscellaneous](#miscellaneous)
+- [ARITHMETIC](#arithmetic-1)
+  - [Simpler syntax to set variables](#simpler-syntax-to-set-variables)
+  - [Ternary Tests](#ternary-tests)
+- [TRAPS](#traps)
+  - [Do something on script exit](#do-something-on-script-exit)
+  - [Ignore terminal interrupt (CTRL+C, SIGINT)](#ignore-terminal-interrupt-ctrlc-sigint)
+  - [React to window resize](#react-to-window-resize)
+  - [Do something before every command](#do-something-before-every-command)
+  - [Do something when a shell function or a sourced file finishes executing](#do-something-when-a-shell-function-or-a-sourced-file-finishes-executing)
+- [PERFORMANCE](#performance)
+  - [Disable Unicode](#disable-unicode)
+- [OBSOLETE SYNTAX](#obsolete-syntax)
+  - [Shebang](#shebang)
+  - [Command Substitution](#command-substitution)
+  - [Function Declaration](#function-declaration)
+- [INTERNAL VARIABLES](#internal-variables)
+  - [Get the location to the `bash` binary](#get-the-location-to-the-bash-binary)
+  - [Get the version of the current running `bash` process](#get-the-version-of-the-current-running-bash-process)
+  - [Open the user's preferred text editor](#open-the-users-preferred-text-editor)
+  - [Get the name of the current function](#get-the-name-of-the-current-function)
+  - [Get the host-name of the system](#get-the-host-name-of-the-system)
+  - [Get the architecture of the Operating System](#get-the-architecture-of-the-operating-system)
+  - [Get the name of the Operating System / Kernel](#get-the-name-of-the-operating-system--kernel)
+  - [Get the current working directory](#get-the-current-working-directory)
+  - [Get the number of seconds the script has been running](#get-the-number-of-seconds-the-script-has-been-running)
+  - [Get a pseudorandom integer](#get-a-pseudorandom-integer)
+- [INFORMATION ABOUT THE TERMINAL](#information-about-the-terminal)
+  - [Get the terminal size in lines and columns (_from a script_)](#get-the-terminal-size-in-lines-and-columns-from-a-script)
+  - [Get the terminal size in pixels](#get-the-terminal-size-in-pixels)
+  - [Get the current cursor position](#get-the-current-cursor-position)
+- [CONVERSION](#conversion)
+  - [Convert a hex color to RGB](#convert-a-hex-color-to-rgb)
+  - [Convert an RGB color to hex](#convert-an-rgb-color-to-hex)
+- [CODE GOLF](#code-golf)
+  - [Shorter `for` loop syntax](#shorter-for-loop-syntax)
+  - [Shorter infinite loops](#shorter-infinite-loops)
+  - [Shorter function declaration](#shorter-function-declaration)
+  - [Shorter `if` syntax](#shorter-if-syntax)
+  - [Simpler `case` statement to set variable](#simpler-case-statement-to-set-variable)
+- [OTHER](#other)
+  - [Use `read` as an alternative to the `sleep` command](#use-read-as-an-alternative-to-the-sleep-command)
+  - [Check if a program is in the user's PATH](#check-if-a-program-is-in-the-users-path)
+  - [Get the current date using `strftime`](#get-the-current-date-using-strftime)
+  - [Get the username of the current user](#get-the-username-of-the-current-user)
+  - [Generate a UUID V4](#generate-a-uuid-v4)
+  - [Progress bars](#progress-bars)
+  - [Get the list of functions in a script](#get-the-list-of-functions-in-a-script)
+  - [Bypass shell aliases](#bypass-shell-aliases)
+  - [Bypass shell functions](#bypass-shell-functions)
+  - [Run a command in the background](#run-a-command-in-the-background)
+  - [Capture function return without command substitution](#capture-the-return-value-of-a-function-without-command-substitution)
+- [AFTERWORD](#afterword)
 
 <!-- vim-markdown-toc -->
 
 <br>
 
 <!-- CHAPTER START -->
+
 # FOREWORD
 
 A collection of pure `bash` alternatives to external processes and programs. The `bash` scripting language is more powerful than people realise and most tasks can be accomplished without depending on external programs.
 
-Calling an external process in `bash` is expensive and excessive use will cause a noticeable slowdown. Scripts and programs written using built-in methods (*where applicable*) will be faster, require fewer dependencies and afford a better understanding of the language itself.
+Calling an external process in `bash` is expensive and excessive use will cause a noticeable slowdown. Scripts and programs written using built-in methods (_where applicable_) will be faster, require fewer dependencies and afford a better understanding of the language itself.
 
 The contents of this book provide a reference for solving problems encountered when writing programs and scripts in `bash`. Examples are in function formats showcasing how to incorporate these solutions into code.
 
 <!-- CHAPTER END -->
 
 <!-- CHAPTER START -->
+
 # STRINGS
 
 ## Trim leading and trailing white-space from string
@@ -205,7 +207,6 @@ $ name="   John Black  "
 $ trim_string "$name"
 John Black
 ```
-
 
 ## Trim all white-space from string and truncate spaces
 
@@ -291,7 +292,6 @@ is_hex_color "$color" || color="#FFFFFF"
 
 # Do stuff.
 ```
-
 
 ## Split a string on a delimiter
 
@@ -631,6 +631,7 @@ fi
 <!-- CHAPTER END -->
 
 <!-- CHAPTER START -->
+
 # ARRAYS
 
 ## Reverse an array
@@ -749,7 +750,6 @@ cycle() {
 }
 ```
 
-
 ## Toggle between two values
 
 This works the same as above, this is just a different use case.
@@ -766,6 +766,7 @@ cycle() {
 <!-- CHAPTER END -->
 
 <!-- CHAPTER START -->
+
 # LOOPS
 
 ## Loop over a range of numbers
@@ -862,6 +863,7 @@ shopt -u globstar
 <!-- CHAPTER END -->
 
 <!-- CHAPTER START -->
+
 # FILE HANDLING
 
 **CAVEAT:** `bash` does not handle binary data properly in versions `< 4.4`.
@@ -874,7 +876,7 @@ Alternative to the `cat` command.
 file_data="$(<"file")"
 ```
 
-## Read a file to an array (*by line*)
+## Read a file to an array (_by line_)
 
 Alternative to the `cat` command.
 
@@ -1047,15 +1049,16 @@ extract() {
 
 **Example Usage:**
 
-```shell
+````shell
 # Extract code blocks from MarkDown file.
 $ extract ~/projects/pure-bash/README.md '```sh' '```'
 # Output here...
-```
+````
 
 <!-- CHAPTER END -->
 
 <!-- CHAPTER START -->
+
 # FILE PATHS
 
 ## Get the directory name of a file path
@@ -1133,6 +1136,7 @@ Downloads
 <!-- CHAPTER END -->
 
 <!-- CHAPTER START -->
+
 # VARIABLES
 
 ## Assign and access a variable using a variable
@@ -1174,140 +1178,137 @@ value
 <!-- CHAPTER END -->
 
 <!-- CHAPTER START -->
+
 # ESCAPE SEQUENCES
 
-Contrary to popular belief, there is no issue in utilizing raw escape sequences. Using `tput` abstracts the same ANSI sequences as if printed manually. Worse still, `tput` is not actually portable. There are a number of `tput` variants each with different commands and syntaxes (*try `tput setaf 3` on a FreeBSD system*). Raw sequences are fine.
+Contrary to popular belief, there is no issue in utilizing raw escape sequences. Using `tput` abstracts the same ANSI sequences as if printed manually. Worse still, `tput` is not actually portable. There are a number of `tput` variants each with different commands and syntaxes (_try `tput setaf 3` on a FreeBSD system_). Raw sequences are fine.
 
 ## Text Colors
 
 **NOTE:** Sequences requiring RGB values only work in True-Color Terminal Emulators.
 
-| Sequence | What does it do? | Value |
-| -------- | ---------------- | ----- |
-| `\e[38;5;<NUM>m` | Set text foreground color. | `0-255`
-| `\e[48;5;<NUM>m` | Set text background color. | `0-255`
-| `\e[38;2;<R>;<G>;<B>m` | Set text foreground color to RGB color. | `R`, `G`, `B`
-| `\e[48;2;<R>;<G>;<B>m` | Set text background color to RGB color. | `R`, `G`, `B`
+| Sequence               | What does it do?                        | Value         |
+| ---------------------- | --------------------------------------- | ------------- |
+| `\e[38;5;<NUM>m`       | Set text foreground color.              | `0-255`       |
+| `\e[48;5;<NUM>m`       | Set text background color.              | `0-255`       |
+| `\e[38;2;<R>;<G>;<B>m` | Set text foreground color to RGB color. | `R`, `G`, `B` |
+| `\e[48;2;<R>;<G>;<B>m` | Set text background color to RGB color. | `R`, `G`, `B` |
 
 ## Text Attributes
 
 **NOTE:** Prepend 2 to any code below to turn it's effect off
 (examples: 21=bold text off, 22=faint text off, 23=italic text off).
 
-| Sequence | What does it do? |
-| -------- | ---------------- |
-| `\e[m` | Reset text formatting and colors. |
-| `\e[1m` | Bold text. |
-| `\e[2m` | Faint text. |
-| `\e[3m` | Italic text. |
-| `\e[4m` | Underline text. |
-| `\e[5m` | Blinking text. |
-| `\e[7m` | Highlighted text. |
-| `\e[8m` | Hidden text. |
-| `\e[9m` | Strike-through text. |
-
+| Sequence | What does it do?                  |
+| -------- | --------------------------------- |
+| `\e[m`   | Reset text formatting and colors. |
+| `\e[1m`  | Bold text.                        |
+| `\e[2m`  | Faint text.                       |
+| `\e[3m`  | Italic text.                      |
+| `\e[4m`  | Underline text.                   |
+| `\e[5m`  | Blinking text.                    |
+| `\e[7m`  | Highlighted text.                 |
+| `\e[8m`  | Hidden text.                      |
+| `\e[9m`  | Strike-through text.              |
 
 ## Cursor Movement
 
-| Sequence | What does it do? | Value |
-| -------- | ---------------- | ----- |
-| `\e[<LINE>;<COLUMN>H` | Move cursor to absolute position. | `line`, `column`
-| `\e[H` | Move cursor to home position (`0,0`). |
-| `\e[<NUM>A` | Move cursor up N lines. | `num`
-| `\e[<NUM>B` | Move cursor down N lines. | `num`
-| `\e[<NUM>C` | Move cursor right N columns. | `num`
-| `\e[<NUM>D` | Move cursor left N columns. | `num`
-| `\e[s` | Save cursor position. |
-| `\e[u` | Restore cursor position. |
-
+| Sequence              | What does it do?                      | Value            |
+| --------------------- | ------------------------------------- | ---------------- |
+| `\e[<LINE>;<COLUMN>H` | Move cursor to absolute position.     | `line`, `column` |
+| `\e[H`                | Move cursor to home position (`0,0`). |
+| `\e[<NUM>A`           | Move cursor up N lines.               | `num`            |
+| `\e[<NUM>B`           | Move cursor down N lines.             | `num`            |
+| `\e[<NUM>C`           | Move cursor right N columns.          | `num`            |
+| `\e[<NUM>D`           | Move cursor left N columns.           | `num`            |
+| `\e[s`                | Save cursor position.                 |
+| `\e[u`                | Restore cursor position.              |
 
 ## Erasing Text
 
-| Sequence | What does it do? |
-| -------- | ---------------- |
-| `\e[K` | Erase from cursor position to end of line.
-| `\e[1K` | Erase from cursor position to start of line.
-| `\e[2K` | Erase the entire current line.
-| `\e[J` | Erase from the current line to the bottom of the screen.
-| `\e[1J` | Erase from the current line to the top of the screen.
-| `\e[2J` | Clear the screen.
-| `\e[2J\e[H` | Clear the screen and move cursor to `0,0`.
-
+| Sequence    | What does it do?                                         |
+| ----------- | -------------------------------------------------------- |
+| `\e[K`      | Erase from cursor position to end of line.               |
+| `\e[1K`     | Erase from cursor position to start of line.             |
+| `\e[2K`     | Erase the entire current line.                           |
+| `\e[J`      | Erase from the current line to the bottom of the screen. |
+| `\e[1J`     | Erase from the current line to the top of the screen.    |
+| `\e[2J`     | Clear the screen.                                        |
+| `\e[2J\e[H` | Clear the screen and move cursor to `0,0`.               |
 
 <!-- CHAPTER END -->
 
 <!-- CHAPTER START -->
+
 # PARAMETER EXPANSION
 
 ## Indirection
 
-| Parameter | What does it do? |
-| --------- | ---------------- |
-| `${!VAR}` | Access a variable based on the value of `VAR`.
-| `${!VAR*}` | Expand to `IFS` separated list of variable names starting with `VAR`. |
+| Parameter  | What does it do?                                                                                                                       |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `${!VAR}`  | Access a variable based on the value of `VAR`.                                                                                         |
+| `${!VAR*}` | Expand to `IFS` separated list of variable names starting with `VAR`.                                                                  |
 | `${!VAR@}` | Expand to `IFS` separated list of variable names starting with `VAR`. If double-quoted, each variable name expands to a separate word. |
-
 
 ## Replacement
 
-| Parameter | What does it do? |
-| --------- | ---------------- |
-| `${VAR#PATTERN}` | Remove shortest match of pattern from start of string. |
-| `${VAR##PATTERN}` | Remove longest match of pattern from start of string. |
-| `${VAR%PATTERN}` | Remove shortest match of pattern from end of string. |
-| `${VAR%%PATTERN}` | Remove longest match of pattern from end of string. |
-| `${VAR/PATTERN/REPLACE}` | Replace first match with string.
-| `${VAR//PATTERN/REPLACE}` | Replace all matches with string.
-| `${VAR/PATTERN}` | Remove first match.
-| `${VAR//PATTERN}` | Remove all matches.
+| Parameter                 | What does it do?                                       |
+| ------------------------- | ------------------------------------------------------ |
+| `${VAR#PATTERN}`          | Remove shortest match of pattern from start of string. |
+| `${VAR##PATTERN}`         | Remove longest match of pattern from start of string.  |
+| `${VAR%PATTERN}`          | Remove shortest match of pattern from end of string.   |
+| `${VAR%%PATTERN}`         | Remove longest match of pattern from end of string.    |
+| `${VAR/PATTERN/REPLACE}`  | Replace first match with string.                       |
+| `${VAR//PATTERN/REPLACE}` | Replace all matches with string.                       |
+| `${VAR/PATTERN}`          | Remove first match.                                    |
+| `${VAR//PATTERN}`         | Remove all matches.                                    |
 
 ## Length
 
-| Parameter | What does it do? |
-| --------- | ---------------- |
-| `${#VAR}` | Length of var in characters.
-| `${#ARR[@]}` | Length of array in elements.
+| Parameter    | What does it do?             |
+| ------------ | ---------------------------- |
+| `${#VAR}`    | Length of var in characters. |
+| `${#ARR[@]}` | Length of array in elements. |
 
 ## Expansion
 
-| Parameter | What does it do? |
-| --------- | ---------------- |
-| `${VAR:OFFSET}` | Remove first `N` chars from variable.
-| `${VAR:OFFSET:LENGTH}` | Get substring from `N` character to `N` character. <br> (`${VAR:10:10}`: Get sub-string from char `10` to char `20`)
-| `${VAR:: OFFSET}` | Get first `N` chars from variable.
-| `${VAR:: -OFFSET}` | Remove last `N` chars from variable.
-| `${VAR: -OFFSET}` | Get last `N` chars from variable.
-| `${VAR:OFFSET:-OFFSET}` | Cut first `N` chars and last `N` chars. | `bash 4.2+` |
+| Parameter               | What does it do?                                                                                                     |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `${VAR:OFFSET}`         | Remove first `N` chars from variable.                                                                                |
+| `${VAR:OFFSET:LENGTH}`  | Get substring from `N` character to `N` character. <br> (`${VAR:10:10}`: Get sub-string from char `10` to char `20`) |
+| `${VAR:: OFFSET}`       | Get first `N` chars from variable.                                                                                   |
+| `${VAR:: -OFFSET}`      | Remove last `N` chars from variable.                                                                                 |
+| `${VAR: -OFFSET}`       | Get last `N` chars from variable.                                                                                    |
+| `${VAR:OFFSET:-OFFSET}` | Cut first `N` chars and last `N` chars.                                                                              | `bash 4.2+` |
 
 ## Case Modification
 
-| Parameter | What does it do? | CAVEAT |
-| --------- | ---------------- | ------ |
-| `${VAR^}` | Uppercase first character. | `bash 4+` |
-| `${VAR^^}` | Uppercase all characters. | `bash 4+` |
-| `${VAR,}` | Lowercase first character. | `bash 4+` |
-| `${VAR,,}` | Lowercase all characters. | `bash 4+` |
-| `${VAR~}` | Reverse case of first character. | `bash 4+` |
-| `${VAR~~}` | Reverse case of all characters. | `bash 4+` |
-
+| Parameter  | What does it do?                 | CAVEAT    |
+| ---------- | -------------------------------- | --------- |
+| `${VAR^}`  | Uppercase first character.       | `bash 4+` |
+| `${VAR^^}` | Uppercase all characters.        | `bash 4+` |
+| `${VAR,}`  | Lowercase first character.       | `bash 4+` |
+| `${VAR,,}` | Lowercase all characters.        | `bash 4+` |
+| `${VAR~}`  | Reverse case of first character. | `bash 4+` |
+| `${VAR~~}` | Reverse case of all characters.  | `bash 4+` |
 
 ## Default Value
 
-| Parameter | What does it do? |
-| --------- | ---------------- |
-| `${VAR:-STRING}` | If `VAR` is empty or unset, use `STRING` as its value.
-| `${VAR-STRING}` | If `VAR` is unset, use `STRING` as its value.
-| `${VAR:=STRING}` | If `VAR` is empty or unset, set the value of `VAR` to `STRING`.
-| `${VAR=STRING}` | If `VAR` is unset, set the value of `VAR` to `STRING`.
-| `${VAR:+STRING}` | If `VAR` is not empty, use `STRING` as its value.
-| `${VAR+STRING}` | If `VAR` is set, use `STRING` as its value.
-| `${VAR:?STRING}` | Display an error if empty or unset.
-| `${VAR?STRING}` | Display an error if unset.
-
+| Parameter        | What does it do?                                                |
+| ---------------- | --------------------------------------------------------------- |
+| `${VAR:-STRING}` | If `VAR` is empty or unset, use `STRING` as its value.          |
+| `${VAR-STRING}`  | If `VAR` is unset, use `STRING` as its value.                   |
+| `${VAR:=STRING}` | If `VAR` is empty or unset, set the value of `VAR` to `STRING`. |
+| `${VAR=STRING}`  | If `VAR` is unset, set the value of `VAR` to `STRING`.          |
+| `${VAR:+STRING}` | If `VAR` is not empty, use `STRING` as its value.               |
+| `${VAR+STRING}`  | If `VAR` is set, use `STRING` as its value.                     |
+| `${VAR:?STRING}` | Display an error if empty or unset.                             |
+| `${VAR?STRING}`  | Display an error if unset.                                      |
 
 <!-- CHAPTER END -->
 
 <!-- CHAPTER START -->
+
 # BRACE EXPANSION
 
 ## Ranges
@@ -1350,64 +1351,63 @@ rm -rf ~/Downloads/{Movies,Music,ISOS}
 
 <!-- CHAPTER END -->
 
-
 <!-- CHAPTER START -->
 
 # CONDITIONAL EXPRESSIONS
 
 ## File Conditionals
 
-| Expression | Value  | What does it do? |
-| ---------- | ------ | ---------------- |
-| `-a`       | `file` | If file exists.
-| `-b`       | `file` | If file exists and is a block special file.
-| `-c`       | `file` | If file exists and is a character special file.
-| `-d`       | `file` | If file exists and is a directory.
-| `-e`       | `file` | If file exists.
-| `-f`       | `file` | If file exists and is a regular file.
-| `-g`       | `file` | If file exists and its set-group-id bit is set.
-| `-h`       | `file` | If file exists and is a symbolic link.
-| `-k`       | `file` | If file exists and its sticky-bit is set
-| `-p`       | `file` | If file exists and is a named pipe (*FIFO*).
-| `-r`       | `file` | If file exists and is readable.
-| `-s`       | `file` | If file exists and its size is greater than zero.
-| `-t`       | `fd`   | If file descriptor is open and refers to a terminal.
-| `-u`       | `file` | If file exists and its set-user-id bit is set.
-| `-w`       | `file` | If file exists and is writable.
-| `-x`       | `file` | If file exists and is executable.
-| `-G`       | `file` | If file exists and is owned by the effective group ID.
-| `-L`       | `file` | If file exists and is a symbolic link.
-| `-N`       | `file` | If file exists and has been modified since last read.
-| `-O`       | `file` | If file exists and is owned by the effective user ID.
-| `-S`       | `file` | If file exists and is a socket.
+| Expression | Value  | What does it do?                                       |
+| ---------- | ------ | ------------------------------------------------------ |
+| `-a`       | `file` | If file exists.                                        |
+| `-b`       | `file` | If file exists and is a block special file.            |
+| `-c`       | `file` | If file exists and is a character special file.        |
+| `-d`       | `file` | If file exists and is a directory.                     |
+| `-e`       | `file` | If file exists.                                        |
+| `-f`       | `file` | If file exists and is a regular file.                  |
+| `-g`       | `file` | If file exists and its set-group-id bit is set.        |
+| `-h`       | `file` | If file exists and is a symbolic link.                 |
+| `-k`       | `file` | If file exists and its sticky-bit is set               |
+| `-p`       | `file` | If file exists and is a named pipe (_FIFO_).           |
+| `-r`       | `file` | If file exists and is readable.                        |
+| `-s`       | `file` | If file exists and its size is greater than zero.      |
+| `-t`       | `fd`   | If file descriptor is open and refers to a terminal.   |
+| `-u`       | `file` | If file exists and its set-user-id bit is set.         |
+| `-w`       | `file` | If file exists and is writable.                        |
+| `-x`       | `file` | If file exists and is executable.                      |
+| `-G`       | `file` | If file exists and is owned by the effective group ID. |
+| `-L`       | `file` | If file exists and is a symbolic link.                 |
+| `-N`       | `file` | If file exists and has been modified since last read.  |
+| `-O`       | `file` | If file exists and is owned by the effective user ID.  |
+| `-S`       | `file` | If file exists and is a socket.                        |
 
 ## File Comparisons
 
-| Expression | What does it do? |
-| ---------- | ---------------- |
-| `file -ef file2` | If both files refer to the same inode and device numbers.
-| `file -nt file2` | If `file` is newer than `file2` (*uses modification time*) or `file` exists and `file2` does not.
-| `file -ot file2` | If `file` is older than `file2` (*uses modification time*) or `file2` exists and `file` does not.
+| Expression       | What does it do?                                                                                  |
+| ---------------- | ------------------------------------------------------------------------------------------------- |
+| `file -ef file2` | If both files refer to the same inode and device numbers.                                         |
+| `file -nt file2` | If `file` is newer than `file2` (_uses modification time_) or `file` exists and `file2` does not. |
+| `file -ot file2` | If `file` is older than `file2` (_uses modification time_) or `file2` exists and `file` does not. |
 
 ## Variable Conditionals
 
-| Expression | Value | What does it do? |
-| ---------- | ----- | ---------------- |
-| `-o`       | `opt` | If shell option is enabled.
-| `-v`       | `var` | If variable has a value assigned.
-| `-R`       | `var` | If variable is a name reference.
-| `-z`       | `var` | If the length of string is zero.
-| `-n`       | `var` | If the length of string is non-zero.
+| Expression | Value | What does it do?                     |
+| ---------- | ----- | ------------------------------------ |
+| `-o`       | `opt` | If shell option is enabled.          |
+| `-v`       | `var` | If variable has a value assigned.    |
+| `-R`       | `var` | If variable is a name reference.     |
+| `-z`       | `var` | If the length of string is zero.     |
+| `-n`       | `var` | If the length of string is non-zero. |
 
 ## Variable Comparisons
 
-| Expression | What does it do? |
-| ---------- | ---------------- |
-| `var = var2` | Equal to.
-| `var == var2` | Equal to (*synonym for `=`*).
-| `var != var2` | Not equal to.
-| `var < var2` | Less than (*in ASCII alphabetical order.*)
-| `var > var2` | Greater than (*in ASCII alphabetical order.*)
+| Expression    | What does it do?                              |
+| ------------- | --------------------------------------------- |
+| `var = var2`  | Equal to.                                     |
+| `var == var2` | Equal to (_synonym for `=`_).                 |
+| `var != var2` | Not equal to.                                 |
+| `var < var2`  | Less than (_in ASCII alphabetical order._)    |
+| `var > var2`  | Greater than (_in ASCII alphabetical order._) |
 
 <!-- CHAPTER END -->
 
@@ -1417,60 +1417,60 @@ rm -rf ~/Downloads/{Movies,Music,ISOS}
 
 ## Assignment
 
-| Operators | What does it do? |
-| --------- | ---------------- |
-| `=`       | Initialize or change the value of a variable.
+| Operators | What does it do?                              |
+| --------- | --------------------------------------------- |
+| `=`       | Initialize or change the value of a variable. |
 
 ## Arithmetic
 
-| Operators | What does it do? |
-| --------- | ---------------- |
-| `+` | Addition
-| `-` | Subtraction
-| `*` | Multiplication
-| `/` | Division
-| `**` | Exponentiation
-| `%` | Modulo
-| `+=` | Plus-Equal (*Increment a variable.*)
-| `-=` | Minus-Equal (*Decrement a variable.*)
-| `*=` | Times-Equal (*Multiply a variable.*)
-| `/=` | Slash-Equal (*Divide a variable.*)
-| `%=` | Mod-Equal (*Remainder of dividing a variable.*)
+| Operators | What does it do?                                |
+| --------- | ----------------------------------------------- |
+| `+`       | Addition                                        |
+| `-`       | Subtraction                                     |
+| `*`       | Multiplication                                  |
+| `/`       | Division                                        |
+| `**`      | Exponentiation                                  |
+| `%`       | Modulo                                          |
+| `+=`      | Plus-Equal (_Increment a variable._)            |
+| `-=`      | Minus-Equal (_Decrement a variable._)           |
+| `*=`      | Times-Equal (_Multiply a variable._)            |
+| `/=`      | Slash-Equal (_Divide a variable._)              |
+| `%=`      | Mod-Equal (_Remainder of dividing a variable._) |
 
 ## Bitwise
 
-| Operators | What does it do? |
-| --------- | ---------------- |
-| `<<` | Bitwise Left Shift
-| `<<=` | Left-Shift-Equal
-| `>>` | Bitwise Right Shift
-| `>>=` | Right-Shift-Equal
-| `&` | Bitwise AND
-| `&=` | Bitwise AND-Equal
-| `\|` | Bitwise OR
-| `\|=` | Bitwise OR-Equal
-| `~` | Bitwise NOT
-| `^` | Bitwise XOR
-| `^=` | Bitwise XOR-Equal
+| Operators | What does it do?    |
+| --------- | ------------------- |
+| `<<`      | Bitwise Left Shift  |
+| `<<=`     | Left-Shift-Equal    |
+| `>>`      | Bitwise Right Shift |
+| `>>=`     | Right-Shift-Equal   |
+| `&`       | Bitwise AND         |
+| `&=`      | Bitwise AND-Equal   |
+| `\|`      | Bitwise OR          |
+| `\|=`     | Bitwise OR-Equal    |
+| `~`       | Bitwise NOT         |
+| `^`       | Bitwise XOR         |
+| `^=`      | Bitwise XOR-Equal   |
 
 ## Logical
 
 | Operators | What does it do? |
 | --------- | ---------------- |
-| `!` | NOT
-| `&&` | AND
-| `\|\|` | OR
+| `!`       | NOT              |
+| `&&`      | AND              |
+| `\|\|`    | OR               |
 
 ## Miscellaneous
 
-| Operators | What does it do? | Example |
-| --------- | ---------------- | ------- |
-| `,` | Comma Separator | `((a=1,b=2,c=3))`
-
+| Operators | What does it do? | Example           |
+| --------- | ---------------- | ----------------- |
+| `,`       | Comma Separator  | `((a=1,b=2,c=3))` |
 
 <!-- CHAPTER END -->
 
 <!-- CHAPTER START -->
+
 # ARITHMETIC
 
 ## Simpler syntax to set variables
@@ -1503,14 +1503,14 @@ rm -rf ~/Downloads/{Movies,Music,ISOS}
 <!-- CHAPTER END -->
 
 <!-- CHAPTER START -->
+
 # TRAPS
 
-Traps allow a script to execute code on various signals. In [pxltrm](https://github.com/dylanaraps/pxltrm) (*a pixel art editor written in bash*)  traps are used to redraw the user interface on window resize. Another use case is cleaning up temporary files on script exit.
+Traps allow a script to execute code on various signals. In [pxltrm](https://github.com/dylanaraps/pxltrm) (_a pixel art editor written in bash_) traps are used to redraw the user interface on window resize. Another use case is cleaning up temporary files on script exit.
 
 Traps should be added near the start of scripts so any early errors are also caught.
 
 **NOTE:** For a full list of signals, see `trap -l`.
-
 
 ## Do something on script exit
 
@@ -1547,6 +1547,7 @@ trap 'code_here' RETURN
 <!-- CHAPTER END -->
 
 <!-- CHAPTER START -->
+
 # PERFORMANCE
 
 ## Disable Unicode
@@ -1562,6 +1563,7 @@ LANG=C
 <!-- CHAPTER END -->
 
 <!-- CHAPTER START -->
+
 # OBSOLETE SYNTAX
 
 ## Shebang
@@ -1572,7 +1574,6 @@ Use `#!/usr/bin/env bash` instead of `#!/bin/bash`.
 - The latter assumes it is always installed to `/bin/` which can cause issues.
 
 **NOTE**: There are times when one may have a good reason for using `#!/bin/bash` or another direct path to the binary.
-
 
 ```shell
 # Right:
@@ -1618,6 +1619,7 @@ function do_something() {
 <!-- CHAPTER END -->
 
 <!-- CHAPTER START -->
+
 # INTERNAL VARIABLES
 
 ## Get the location to the `bash` binary
@@ -1703,8 +1705,7 @@ This is an alternative to the `pwd` built-in.
 
 ## Get a pseudorandom integer
 
-Each time `$RANDOM` is used, a different integer between `0` and `32767` is returned. This variable should not be used for anything related to security (*this includes encryption keys etc*).
-
+Each time `$RANDOM` is used, a different integer between `0` and `32767` is returned. This variable should not be used for anything related to security (_this includes encryption keys etc_).
 
 ```shell
 "$RANDOM"
@@ -1713,9 +1714,10 @@ Each time `$RANDOM` is used, a different integer between `0` and `32767` is retu
 <!-- CHAPTER END -->
 
 <!-- CHAPTER START -->
+
 # INFORMATION ABOUT THE TERMINAL
 
-## Get the terminal size in lines and columns (*from a script*)
+## Get the terminal size in lines and columns (_from a script_)
 
 This is handy when writing scripts in pure bash and `stty`/`tput` can’t be
 called.
@@ -1793,6 +1795,7 @@ $ get_cursor_pos
 <!-- CHAPTER END -->
 
 <!-- CHAPTER START -->
+
 # CONVERSION
 
 ## Convert a hex color to RGB
@@ -1816,7 +1819,6 @@ $ hex_to_rgb "#FFFFFF"
 255 255 255
 ```
 
-
 ## Convert an RGB color to hex
 
 **Example Function:**
@@ -1834,7 +1836,6 @@ rgb_to_hex() {
 $ rgb_to_hex "255" "255" "255"
 #FFFFFF
 ```
-
 
 # CODE GOLF
 
@@ -1941,6 +1942,7 @@ os="$_"
 <!-- CHAPTER END -->
 
 <!-- CHAPTER START -->
+
 # OTHER
 
 ## Use `read` as an alternative to the `sleep` command

@@ -1,0 +1,571 @@
+// src/scripts/features/lab.ts
+// Terminal Laboratory — guided tutorial engine + virtual filesystem
+import tutorialData from '../../data/tutorial.json';
+import filesystemData from '../../data/filesystem.json';
+
+// ─── Types ───────────────────────────────────────────────────────────────────
+type FSNode =
+  | { type: 'folder'; children: Record<string, FSNode> }
+  | { type: 'file'; content: string };
+
+type Lesson = Array<{ user: string; command: string; output: string }>;
+
+// ─── LESSON METADATA ─────────────────────────────────────────────────────────
+const LESSON_TITLES: string[] = [
+  'Navigation Basics',
+  'Working with Directories',
+  'File Operations',
+  'Permissions & Search',
+  'Processes & Resources',
+  'Package Management & Networking',
+  'Git Basics',
+  'Docker Basics',
+  'Shell Tricks & History',
+  'System Information',
+  'User Management (Part 1)',
+  'User Management (Part 2)',
+  'Getting Help',
+  'Archiving Files',
+  'System Services & Logs',
+  'Process Signals',
+  'Network Interfaces',
+  'DNS & Remote Files',
+  'Disk & Filesystem',
+  'Text Processing (Part 1)',
+  'Text Processing (Part 2)',
+  'Environment Variables',
+  'Symbolic Links & File Info',
+  'Advanced Permissions (ACL)',
+  'Utilities & Job Control',
+  'SSH Keys',
+  'File Sync & Downloads',
+  'Git Branching',
+  'Docker Advanced',
+  'Web Server Setup',
+  'Monitoring & Firewall',
+];
+
+// ─── CLASS ───────────────────────────────────────────────────────────────────
+class TerminalLabManager {
+  private body!: HTMLElement;
+  private input!: HTMLInputElement;
+  private prompt!: HTMLElement;
+  private hintText!: HTMLElement;
+  private lessonLabel!: HTMLElement;
+  private progressFill!: HTMLElement;
+
+  private lessons: Lesson[] = tutorialData as Lesson[];
+  private lessonIndex = 0;
+  private stepIndex = 0;
+  private freeMode = false;
+  private history: string[] = [];
+  private historyPos = -1;
+
+  // Runtime virtual filesystem (mutable copy)
+  private fs: Record<string, FSNode>;
+  private cwd: string;
+  private user = 'victxrlarixs';
+
+  // Commands map for free mode
+  private commandMap: Record<string, (args: string[]) => string>;
+
+  constructor() {
+    this.fs = JSON.parse(JSON.stringify(filesystemData)) as unknown as Record<string, FSNode>;
+    this.cwd = '/home/victxrlarixs';
+    this.commandMap = this.buildCommandMap();
+  }
+
+  // ── Public API ─────────────────────────────────────────────────────────────
+
+  public open(): void {
+    const win = document.getElementById('terminal-lab');
+    if (!win) return;
+    win.style.display = 'flex';
+    win.style.flexDirection = 'column';
+    if (!win.style.left) {
+      win.style.left = '12%';
+      win.style.top = '5%';
+    }
+    this.init();
+    this.focus();
+  }
+
+  public close(): void {
+    const win = document.getElementById('terminal-lab');
+    if (win) win.style.display = 'none';
+  }
+
+  public showHint(): void {
+    if (this.freeMode) return;
+    const step = this.currentStep();
+    if (!step) return;
+    this.print(`<span class="lab-hint">HINT: type --&gt; ${this.escHtml(step.command)}</span>`);
+    this.scrollBottom();
+  }
+
+  public skip(): void {
+    if (this.freeMode) return;
+    const step = this.currentStep();
+    if (step) this.executeStep(step, true);
+  }
+
+  public toggleFreeMode(): void {
+    this.freeMode = !this.freeMode;
+    const btn = document.getElementById('lab-btn-free');
+    if (btn) {
+      btn.classList.toggle('lab-btn-active', this.freeMode);
+    }
+    const banner = document.getElementById('lab-hint-banner');
+    if (banner) {
+      if (this.freeMode) {
+        this.setHint('[FREE MODE] Type any command. Type "tutorial" to return to guided mode.');
+      } else {
+        this.setHint('Type the command shown below to proceed. Type "hint" or "skip" for help.');
+        this.showCurrentPrompt();
+      }
+    }
+  }
+
+  // ── Init ───────────────────────────────────────────────────────────────────
+
+  private init(): void {
+    this.body = document.getElementById('lab-terminal-body')!;
+    this.input = document.getElementById('lab-input') as HTMLInputElement;
+    this.prompt = document.getElementById('lab-prompt')!;
+    this.hintText = document.getElementById('lab-hint-text')!;
+    this.lessonLabel = document.getElementById('lab-lesson-label')!;
+    this.progressFill = document.getElementById('lab-progress-fill')!;
+
+    if (!this.body) return;
+
+    // Don't re-initialize if already done
+    if (this.input.dataset.initialized) return;
+    this.input.dataset.initialized = '1';
+
+    this.body.innerHTML = '';
+    this.input.value = '';
+
+    this.input.addEventListener('keydown', (e) => this.onKeyDown(e));
+    // Click anywhere in lab-terminal-body focuses input
+    this.body.addEventListener('click', () => this.focus());
+
+    this.printWelcome();
+    this.updateUI();
+    this.showCurrentPrompt();
+  }
+
+  private printWelcome(): void {
+    this.print(`<span class="lab-header">+--------------------------------------------+</span>`);
+    this.print(`<span class="lab-header">|  DEBIAN CDE -- TERMINAL LABORATORY         |</span>`);
+    this.print(`<span class="lab-header">+--------------------------------------------+</span>`);
+    this.print(`<span class="lab-dim">Guided lessons: type each command to advance.</span>`);
+    this.print(`<span class="lab-dim">Meta-commands: hint  skip  free  tutorial  clear</span>`);
+    this.print(``);
+  }
+
+  // ── Tutorial flow ──────────────────────────────────────────────────────────
+
+  private currentLesson(): Lesson | undefined {
+    return this.lessons[this.lessonIndex];
+  }
+
+  private currentStep() {
+    return this.currentLesson()?.[this.stepIndex];
+  }
+
+  private showCurrentPrompt(): void {
+    if (this.freeMode) return;
+    const step = this.currentStep();
+    if (!step) return;
+    this.print(
+      `<span class="lab-dim">next --&gt;</span> <span class="lab-cmd">${this.escHtml(step.command)}</span>`
+    );
+    this.updatePromptDisplay();
+  }
+
+  private executeStep(
+    step: NonNullable<ReturnType<typeof this.currentStep>>,
+    skipped = false
+  ): void {
+    const promptStr = step.user === 'root' ? 'root@debian:~#' : `${step.user}@debian:~$`;
+    const prefix = skipped ? '<span class="lab-dim">[skipped]</span> ' : '';
+    this.print(
+      `<span class="lab-prompt-str">${promptStr}</span> ${prefix}${this.escHtml(step.command)}`
+    );
+    if (step.output) {
+      step.output
+        .split('\\n')
+        .forEach((line) => this.print(`<span class="lab-output">${this.escHtml(line)}</span>`));
+    }
+    this.print(``);
+    this.advance();
+  }
+
+  private advance(): void {
+    const lesson = this.currentLesson();
+    if (!lesson) return;
+
+    this.stepIndex++;
+
+    if (this.stepIndex >= lesson.length) {
+      // Lesson complete
+      this.lessonIndex++;
+      this.stepIndex = 0;
+      this.updateUI();
+
+      if (this.lessonIndex >= this.lessons.length) {
+        this.printCongratulations();
+        return;
+      }
+      this.printLessonIntro();
+    } else {
+      this.updateUI();
+    }
+
+    this.showCurrentPrompt();
+    this.scrollBottom();
+  }
+
+  private printLessonIntro(): void {
+    const title = LESSON_TITLES[this.lessonIndex] ?? `Lesson ${this.lessonIndex + 1}`;
+    this.print(``);
+    this.print(`<span class="lab-header">-------------------------------------------</span>`);
+    this.print(
+      `<span class="lab-header">LESSON ${this.lessonIndex + 1}: ${title.toUpperCase()}</span>`
+    );
+    this.print(`<span class="lab-header">-------------------------------------------</span>`);
+    this.print(``);
+  }
+
+  private printCongratulations(): void {
+    this.print(``);
+    this.print(`<span class="lab-header">+-------------------------------------------+</span>`);
+    this.print(`<span class="lab-header">|  ALL LESSONS COMPLETE                     |</span>`);
+    this.print(`<span class="lab-header">+-------------------------------------------+</span>`);
+    this.print(
+      `<span class="lab-dim">You have completed the Debian CDE Terminal Laboratory.</span>`
+    );
+    this.print(`<span class="lab-dim">Type "free" to switch to free exploration mode.</span>`);
+  }
+
+  private updateUI(): void {
+    const total = this.lessons.length;
+    const current = Math.min(this.lessonIndex + 1, total);
+    const pct = Math.round((this.lessonIndex / total) * 100);
+    const title = LESSON_TITLES[this.lessonIndex] ?? `Lesson ${current}`;
+
+    if (this.lessonLabel) this.lessonLabel.textContent = `LESSON ${current} / ${total} — ${title}`;
+    if (this.progressFill) this.progressFill.style.width = `${pct}%`;
+  }
+
+  private updatePromptDisplay(): void {
+    const step = this.currentStep();
+    const user = step?.user === 'root' ? 'root@debian:~#' : `${this.user}@debian:~$`;
+    if (this.prompt) this.prompt.textContent = user;
+  }
+
+  // ── Input handling ─────────────────────────────────────────────────────────
+
+  private onKeyDown(e: KeyboardEvent): void {
+    if (e.key === 'Enter') {
+      const raw = this.input.value.trim();
+      this.input.value = '';
+      this.history.unshift(raw);
+      this.historyPos = -1;
+      this.handleInput(raw);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      this.historyPos = Math.min(this.historyPos + 1, this.history.length - 1);
+      this.input.value = this.history[this.historyPos] ?? '';
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      this.historyPos = Math.max(this.historyPos - 1, -1);
+      this.input.value = this.historyPos >= 0 ? (this.history[this.historyPos] ?? '') : '';
+    } else if (e.key === 'Tab') {
+      e.preventDefault();
+    }
+  }
+
+  private handleInput(raw: string): void {
+    if (!raw) return;
+
+    // Print what user typed
+    const promptStr = this.freeMode
+      ? `${this.user}@debian:~$`
+      : this.currentStep()?.user === 'root'
+        ? 'root@debian:~#'
+        : `${this.user}@debian:~$`;
+    this.print(`<span class="lab-prompt-str">${promptStr}</span> ${this.escHtml(raw)}`);
+
+    // Built-in meta-commands
+    if (raw === 'clear') {
+      this.body.innerHTML = '';
+      return;
+    }
+    if (raw === 'hint') {
+      this.showHint();
+      return;
+    }
+    if (raw === 'skip') {
+      this.skip();
+      return;
+    }
+    if (raw === 'free') {
+      this.toggleFreeMode();
+      return;
+    }
+    if (raw === 'tutorial') {
+      if (this.freeMode) this.toggleFreeMode();
+      this.showCurrentPrompt();
+      return;
+    }
+
+    if (this.freeMode) {
+      this.runFreeModeCommand(raw);
+    } else {
+      this.runTutorialCommand(raw);
+    }
+
+    this.scrollBottom();
+  }
+
+  private runTutorialCommand(raw: string): void {
+    const step = this.currentStep();
+    if (!step) return;
+
+    const normalize = (s: string) => s.replace(/\s+/g, ' ').trim().toLowerCase();
+
+    if (normalize(raw) === normalize(step.command)) {
+      // Correct!
+      if (step.output) {
+        step.output
+          .split('\\n')
+          .forEach((line) => this.print(`<span class="lab-output">${this.escHtml(line)}</span>`));
+      }
+      this.print(``);
+      this.advance();
+    } else {
+      this.print(`<span class="lab-error">error: expected -- ${this.escHtml(step.command)}</span>`);
+      this.print(`<span class="lab-dim">       type "hint" or "skip" to continue.</span>`);
+      this.print(``);
+      this.showCurrentPrompt();
+    }
+  }
+
+  private runFreeModeCommand(raw: string): void {
+    const [cmd, ...argParts] = raw.split(' ');
+    const args = argParts.filter(Boolean);
+
+    const handler = this.commandMap[cmd ?? ''];
+    if (handler) {
+      const out = handler(args);
+      if (out)
+        out
+          .split('\n')
+          .forEach((l) => this.print(`<span class="lab-output">${this.escHtml(l)}</span>`));
+    } else {
+      this.print(
+        `<span class="lab-error">bash: ${this.escHtml(cmd ?? '')}: command not found</span>`
+      );
+    }
+    this.print(``);
+  }
+
+  // ── Virtual Filesystem helpers ─────────────────────────────────────────────
+
+  private resolvePath(p: string): string {
+    if (p.startsWith('~')) p = '/home/victxrlarixs' + p.slice(1);
+    if (!p.startsWith('/')) p = this.cwd + '/' + p;
+    const parts = p.split('/').filter(Boolean);
+    const resolved: string[] = [];
+    for (const part of parts) {
+      if (part === '.') continue;
+      if (part === '..') {
+        resolved.pop();
+        continue;
+      }
+      resolved.push(part);
+    }
+    return '/' + resolved.join('/');
+  }
+
+  private getNode(path: string): FSNode | undefined {
+    const parts = path.split('/').filter(Boolean);
+    let cur: FSNode | undefined = this.fs['/home/victxrlarixs/'] as FSNode;
+    // Root of FS is /home/victxrlarixs
+    if (parts.length === 0) return cur;
+
+    // Skip "home/victxrlarixs" prefix
+    const relParts = path.startsWith('/home/victxrlarixs')
+      ? path.slice('/home/victxrlarixs'.length).split('/').filter(Boolean)
+      : parts;
+
+    for (const part of relParts) {
+      if (!cur || cur.type !== 'folder') return undefined;
+      cur = (cur as { type: 'folder'; children: Record<string, FSNode> }).children[part];
+    }
+    return cur;
+  }
+
+  // ── Free-mode command map ──────────────────────────────────────────────────
+
+  private buildCommandMap(): Record<string, (args: string[]) => string> {
+    return {
+      pwd: () => this.cwd,
+      whoami: () => this.user,
+      hostname: () => 'debian',
+      uname: (a) =>
+        a.includes('-a') ? 'Linux debian 5.10.0-20-amd64 #1 SMP Debian x86_64 GNU/Linux' : 'Linux',
+      date: () => new Date().toString(),
+      echo: (a) => a.join(' '),
+      clear: () => {
+        this.body.innerHTML = '';
+        return '';
+      },
+
+      ls: (args) => {
+        const showHidden = args.includes('-la') || args.includes('-a');
+        const node = this.getNode(this.cwd);
+        if (!node || node.type !== 'folder') return 'ls: cannot access directory';
+        const children = Object.keys(node.children);
+        const base = showHidden ? ['.', '..', ...children] : children;
+        return base.join('  ');
+      },
+
+      cd: (args) => {
+        const target = args[0] ?? '~';
+        const resolved = this.resolvePath(target);
+        const node = this.getNode(resolved);
+        if (!node) {
+          return `bash: cd: ${target}: No such file or directory`;
+        }
+        if (node.type !== 'folder') {
+          return `bash: cd: ${target}: Not a directory`;
+        }
+        this.cwd = resolved;
+        if (this.prompt) this.prompt.textContent = `${this.user}@debian:${this.cwdShort()}$`;
+        return '';
+      },
+
+      cat: (args) => {
+        if (!args[0]) return 'cat: missing operand';
+        const resolved = this.resolvePath(args[0]);
+        const node = this.getNode(resolved);
+        if (!node) return `cat: ${args[0]}: No such file or directory`;
+        if (node.type !== 'file') return `cat: ${args[0]}: Is a directory`;
+        return node.content;
+      },
+
+      mkdir: (args) => {
+        if (!args[0]) return 'mkdir: missing operand';
+        const resolved = this.resolvePath(args[0]);
+        const parent = this.getNode(
+          resolved.split('/').slice(0, -1).join('/') || '/home/victxrlarixs'
+        );
+        if (!parent || parent.type !== 'folder')
+          return `mkdir: cannot create directory '${args[0]}'`;
+        const name = args[0].split('/').pop()!;
+        (parent as { type: 'folder'; children: Record<string, FSNode> }).children[name] = {
+          type: 'folder',
+          children: {},
+        };
+        return '';
+      },
+
+      touch: (args) => {
+        if (!args[0]) return 'touch: missing file operand';
+        for (const f of args) {
+          const resolved = this.resolvePath(f);
+          const parent = this.getNode(
+            resolved.split('/').slice(0, -1).join('/') || '/home/victxrlarixs'
+          );
+          if (!parent || parent.type !== 'folder') continue;
+          const name = f.split('/').pop()!;
+          if (!(parent as { type: 'folder'; children: Record<string, FSNode> }).children[name]) {
+            (parent as { type: 'folder'; children: Record<string, FSNode> }).children[name] = {
+              type: 'file',
+              content: '',
+            };
+          }
+        }
+        return '';
+      },
+
+      rm: (args) => {
+        if (!args[0]) return 'rm: missing operand';
+        const resolved = this.resolvePath(args[0]);
+        const parts = resolved.split('/').filter(Boolean);
+        const name = parts.pop()!;
+        const parent = this.getNode('/' + parts.join('/'));
+        if (
+          !parent ||
+          parent.type !== 'folder' ||
+          !(parent as { type: 'folder'; children: Record<string, FSNode> }).children[name]
+        ) {
+          return `rm: cannot remove '${args[0]}': No such file or directory`;
+        }
+        delete (parent as { type: 'folder'; children: Record<string, FSNode> }).children[name];
+        return '';
+      },
+
+      help: () =>
+        [
+          'Available commands (free mode):',
+          '  ls, cd, pwd, cat, mkdir, touch, rm, echo, clear',
+          '  whoami, hostname, uname, date, help',
+          '  history, man',
+          'Type "tutorial" to return to guided mode.',
+        ].join('\n'),
+
+      history: () =>
+        this.history
+          .slice(0, 20)
+          .map((c, i) => `  ${i + 1}  ${c}`)
+          .join('\n'),
+
+      man: (args) =>
+        args[0]
+          ? `No manual entry for ${args[0]} in this lab. Try --help.`
+          : 'What manual page do you want?',
+    };
+  }
+
+  private cwdShort(): string {
+    if (this.cwd === '/home/victxrlarixs') return '~';
+    if (this.cwd.startsWith('/home/victxrlarixs/')) {
+      return '~/' + this.cwd.slice('/home/victxrlarixs/'.length);
+    }
+    return this.cwd;
+  }
+
+  // ── Print / util ───────────────────────────────────────────────────────────
+
+  private print(html: string): void {
+    if (!this.body) return;
+    const div = document.createElement('div');
+    div.className = 'lab-line';
+    div.innerHTML = html;
+    this.body.appendChild(div);
+  }
+
+  private scrollBottom(): void {
+    if (this.body) this.body.scrollTop = this.body.scrollHeight;
+  }
+
+  private focus(): void {
+    if (this.input) this.input.focus();
+  }
+
+  private setHint(text: string): void {
+    if (this.hintText) this.hintText.innerHTML = text;
+  }
+
+  private escHtml(s: string): string {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+}
+
+// ─── Singleton + Global exposure ─────────────────────────────────────────────
+const TerminalLab = new TerminalLabManager();
+(window as unknown as Record<string, unknown>)['TerminalLab'] = TerminalLab;
+export { TerminalLab };

@@ -26,17 +26,14 @@ import { CONFIG } from '../../scripts/core/config';
     </div>
 
     <div class="cde-icons">
-      <div class="cde-icon" onclick="openTerminal()" title="Open Terminal">
-        <img src="/icons/konsole.png" alt="Terminal" />
+      <div class="cde-icon" onclick="TerminalLab.open()" title="Open Terminal">
+        <img src="/icons/konsole.png" alt="Terminal Lab" />
       </div>
       <div class="cde-icon" onclick="toggleFileManager()" title="File Manager">
         <img src="/icons/filemanager.png" alt="File Manager" />
       </div>
       <div class="cde-icon" title="Github Repo">
-        <div
-          onclick={`confirmExternalLink('${CONFIG.META.GITHUB_REPO}')`}
-          style="cursor: pointer;"
-        >
+        <div onclick={`confirmExternalLink('${CONFIG.META.GITHUB_REPO}')`} style="cursor: pointer;">
           <img src="/icons/konqueror.png" alt="Browser" />
         </div>
       </div>
@@ -83,25 +80,17 @@ import { CONFIG } from '../../scripts/core/config';
     <img src="/icons/org.xfce.taskmanager.png" alt="TaskManager" />
   </div>
 
-  <div
-    class="tray-icon"
-    onclick="openTutorial()"
-    title="Linux Tutorial (gedit)"
-  >
-    <img src="/icons/gedit.png" alt="Gedit" />
+  <div class="tray-icon" onclick="TerminalLab.open()" title="Terminal Laboratory">
+    <img src="/icons/computer.png" alt="Terminal Laboratory" />
   </div>
 </div>
 
-<!-- Dropdown menu moved outside to avoid clipping by panel overflow/transform -->
 <div class="dropdown-menu" id="utilitiesDropdown">
   <div class="menu-item" onclick="captureFullPageScreenshot()">
     <img src="/icons/org.xfce.screenshooter.png" alt="" /> Screenshot
   </div>
   <div class="menu-item" onclick="openTutorial()">
     <img src="/icons/gedit.png" alt="" /> Linux Tutorial
-  </div>
-  <div class="menu-item" onclick="openTaskManagerInTerminal()">
-    <img src="/icons/org.xfce.taskmanager.png" alt="" /> Process Monitor
   </div>
 </div><div class="dropdown-menu" id="styleManagerDropdown">
   <div class="menu-item" onclick="styleManager.openColor()">
@@ -132,10 +121,14 @@ import { CONFIG } from '../../scripts/core/config';
 
 <div class="dropdown-menu" id="terminalDropdown">
   <div class="menu-item" onclick="openTerminal()">
-    <img src="/icons/konsole.png" alt="" /> Terminal
+    <img src="/icons/konsole.png" alt="" /> Terminal Automated
   </div>
   <div class="menu-item" onclick="openTaskManagerInTerminal()">
     <img src="/icons/org.xfce.taskmanager.png" alt="" /> Process Monitor
+  </div>
+  <div class="menu-separator"></div>
+  <div class="menu-item" onclick="TerminalLab.open()">
+    <img src="/icons/computer.png" alt="" /> Terminal Laboratory
   </div>
 </div>
 
@@ -150,4 +143,3 @@ import { CONFIG } from '../../scripts/core/config';
     <img src="/icons/filemanager.png" alt="" /> Desktop
   </div>
 </div>
-

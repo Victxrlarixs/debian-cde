@@ -3,17 +3,14 @@
    Dominio: debian.com.mx
    ------------------------------------------------------------------ */
 
-/* CORE - Variables and Base Reset */
 @import './core/variables.css';
 @import './core/base.css';
 @import './core/layout.css';
 
-/* UI - Shared Components */
 @import './ui/windows.css';
 @import './ui/menus.css';
 @import './ui/modals.css';
 
-/* FEATURES - App Specific Styles */
 @import './features/terminal.css';
 @import './features/filemanager.css';
 @import './features/stylemanager.css';

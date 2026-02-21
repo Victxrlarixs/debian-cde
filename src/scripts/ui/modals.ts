@@ -205,13 +205,13 @@ class CDEModalClass {
       modal.style.display = 'flex';
       const newZIndex = ++this.zIndex;
       modal.style.zIndex = String(newZIndex);
-      
+
       requestAnimationFrame(() => {
         if (window.centerWindow) {
           window.centerWindow(modal);
         }
       });
-      
+
       logger.log(`[CDEModal] Modal displayed with z-index: ${newZIndex}`);
     });
   }

@@ -139,7 +139,7 @@ const rootPath = CONFIG.FS.HOME;
 const rootNode = (filesystemData as Record<string, VirtualFolder>)[rootPath];
 if (rootNode) {
   flattenFilesystem(rootPath, rootNode);
-  
+
   // Sync readme.md with README.md content dynamically
   const readmePath = CONFIG.FS.DESKTOP + 'readme.md';
   const readmeFile = fsMap[readmePath] as VirtualFile;
@@ -158,7 +158,7 @@ if (rootNode) {
       manContent += `\n${'='.repeat(60)}\n`;
       manContent += `SEQUENCE ${seqIndex + 1}\n`;
       manContent += `${'='.repeat(60)}\n\n`;
-      
+
       sequence.forEach((step: any) => {
         manContent += `${step.user}@Debian:~$ ${step.command}\n`;
         manContent += `${step.output}\n\n`;
@@ -206,7 +206,7 @@ window.VirtualFS = {
   touch,
   mkdir,
   rm,
-  rename
+  rename,
 };
 
 // ------------------------------------------------------------------
@@ -244,9 +244,11 @@ let activeContextMenu: HTMLElement | null = null;
  * Dispatches a custom event to notify other modules of filesystem changes.
  */
 function dispatchFsChange(): void {
-  window.dispatchEvent(new CustomEvent('cde-fs-change', { 
-    detail: { path: currentPath } 
-  }));
+  window.dispatchEvent(
+    new CustomEvent('cde-fs-change', {
+      detail: { path: currentPath },
+    })
+  );
 }
 
 // ------------------------------------------------------------------
@@ -430,7 +432,7 @@ async function touch(name: string, targetPath: string = currentPath): Promise<vo
     const folder = (node as any).children || node; // Handle both structures if needed, but VirtualFolder uses .children
     const children = (node as VirtualFolder).children;
     children[name] = { type: 'file', content: '' } as VirtualFile;
-    
+
     // Also add to the flattened map
     const filePath = path + name;
     fsMap[filePath] = children[name] as VirtualFile;
@@ -454,7 +456,7 @@ async function mkdir(name: string, targetPath: string = currentPath): Promise<vo
     const children = (node as VirtualFolder).children;
     const newFolder: VirtualFolder = { type: 'folder', children: {} };
     children[name] = newFolder;
-    
+
     const folderPath = path + name + '/';
     fsMap[folderPath] = newFolder;
     logger.log(`[FileManager] mkdir: created folder "${name}" at ${path}`);
@@ -484,7 +486,7 @@ async function rm(name: string, targetPath: string = currentPath): Promise<void>
     const fullPath = path + name + (item.type === 'folder' ? '/' : '');
     delete fsMap[fullPath];
     delete children[name];
-    
+
     if (path === currentPath) {
       fmSelected = null;
       renderFiles();
@@ -502,7 +504,11 @@ async function rm(name: string, targetPath: string = currentPath): Promise<void>
  * @param targetPath - Optional target path (defaults to currentPath)
  * @returns Promise that resolves when the rename is complete
  */
-async function rename(oldName: string, newName: string, targetPath: string = currentPath): Promise<void> {
+async function rename(
+  oldName: string,
+  newName: string,
+  targetPath: string = currentPath
+): Promise<void> {
   const path = targetPath.endsWith('/') ? targetPath : targetPath + '/';
   const node = window.VirtualFS.getNode(path);
   if (!node || node.type !== 'folder') return;
@@ -730,7 +736,7 @@ async function handleContextMenu(e: MouseEvent): Promise<void> {
 
   const target = e.target as HTMLElement;
   const fileEl = target.closest('.fm-file') as HTMLElement | null;
-  
+
   const menu = document.createElement('div');
   menu.className = 'fm-contextmenu';
   menu.style.zIndex = String(CONFIG.DROPDOWN.Z_INDEX);

@@ -84,9 +84,15 @@
 }
 
 /* Process bars */
-#process-monitor .cpu-bar { color: #0f0; }
-#process-monitor .mem-bar { color: #ff0; }
-#process-monitor .swap-bar { color: #f0f; }
+#process-monitor .cpu-bar {
+  color: #0f0;
+}
+#process-monitor .mem-bar {
+  color: #ff0;
+}
+#process-monitor .swap-bar {
+  color: #f0f;
+}
 
 #process-monitor .cpu-bar-container,
 #process-monitor .mem-bar-container,
@@ -100,9 +106,24 @@
   vertical-align: middle;
 }
 
-#process-monitor .cpu-bar-fill { display: block; height: 100%; background-color: yellowgreen; width: 0%; }
-#process-monitor .mem-bar-fill { display: block; height: 100%; background-color: green; width: 0%; }
-#process-monitor .swap-bar-fill { display: block; height: 100%; background-color: gold; width: 0%; }
+#process-monitor .cpu-bar-fill {
+  display: block;
+  height: 100%;
+  background-color: yellowgreen;
+  width: 0%;
+}
+#process-monitor .mem-bar-fill {
+  display: block;
+  height: 100%;
+  background-color: green;
+  width: 0%;
+}
+#process-monitor .swap-bar-fill {
+  display: block;
+  height: 100%;
+  background-color: gold;
+  width: 0%;
+}
 
 #process-monitor .selected {
   background-color: #ff0;

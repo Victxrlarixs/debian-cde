@@ -11,7 +11,8 @@
     padding: 0 4px;
     font-size: 10px;
   }
-  .top-left, .top-right {
+  .top-left,
+  .top-right {
     gap: 4px;
   }
   .top-center {
@@ -102,7 +103,8 @@
   }
 
   /* Ventanas en general */
-  .window, .cde-retro-modal {
+  .window,
+  .cde-retro-modal {
     max-width: 95vw !important;
     max-height: 80vh !important;
   }
@@ -290,17 +292,22 @@
   }
 
   /* Menús desplegables */
-  .fm-dropdown, .fm-contextmenu, #utilitiesDropdown {
+  .fm-dropdown,
+  .fm-contextmenu,
+  #utilitiesDropdown {
     min-width: 140px;
     font-size: 10px;
   }
-  .fm-dropdown-item, .fm-context-item, #utilitiesDropdown .menu-item {
+  .fm-dropdown-item,
+  .fm-context-item,
+  #utilitiesDropdown .menu-item {
     padding: 4px 8px;
     font-size: 10px;
   }
 
   /* Modales globales */
-  #cde-modal-global, .cde-retro-modal.cde-modal-global {
+  #cde-modal-global,
+  .cde-retro-modal.cde-modal-global {
     width: 90vw !important;
   }
   #cde-modal-global .modal-body {
@@ -326,7 +333,8 @@
   #topbar {
     padding: 0 6px;
   }
-  .top-left, .top-right {
+  .top-left,
+  .top-right {
     gap: 6px;
   }
 
@@ -370,7 +378,8 @@
   }
 
   /* Ventanas */
-  .window, .cde-retro-modal {
+  .window,
+  .cde-retro-modal {
     max-width: 90vw !important;
   }
 
@@ -425,7 +434,8 @@
 
 /* Orientación horizontal en móviles */
 @media (max-height: 480px) and (orientation: landscape) {
-  .window, .cde-retro-modal {
+  .window,
+  .cde-retro-modal {
     max-height: 85vh !important;
   }
   #terminal {
@@ -467,11 +477,11 @@
   }
 
   .boot-logo {
-    font-size: 8px;             /* Scale down ASCII art */
+    font-size: 8px; /* Scale down ASCII art */
     line-height: 1.1;
     margin-bottom: 10px;
-    white-space: pre-wrap;       /* Allow wrapping if too wide */
-    word-break: break-all;       /* Prevent horizontal overflow */
+    white-space: pre-wrap; /* Allow wrapping if too wide */
+    word-break: break-all; /* Prevent horizontal overflow */
   }
 
   /* Boot message lines */

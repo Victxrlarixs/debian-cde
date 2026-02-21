@@ -3,7 +3,11 @@ import WindowControls from '../../common/WindowControls.astro';
 ---
 
 <div class="cde-retro-modal style-manager-window" id="styleManagerWindow">
-  <div class="titlebar" id="styleManagerWindowTitlebar" onmousedown="window.drag(event, 'styleManagerWindow')">
+  <div
+    class="titlebar"
+    id="styleManagerWindowTitlebar"
+    onmousedown="window.drag(event, 'styleManagerWindow')"
+  >
     <span class="titlebar-text">Style Manager - Window</span>
     <WindowControls
       windowId="styleManagerWindow"
@@ -20,29 +24,49 @@ import WindowControls from '../../common/WindowControls.astro';
     <div class="window-section-title">Window Behavior</div>
 
     <div class="window-row">
-      <input type="checkbox" id="window-point" onclick="styleManager.windowBehavior.update('pointToFocus', this.checked); styleManager.windowBehavior.syncUI()" />
+      <input
+        type="checkbox"
+        id="window-point"
+        onclick="styleManager.windowBehavior.update('pointToFocus', this.checked); styleManager.windowBehavior.syncUI()"
+      />
       <label for="window-point">Point In Window To Make Active</label>
     </div>
 
     <div class="window-row">
-      <input type="checkbox" id="window-click" onclick="styleManager.windowBehavior.update('clickToFocus', this.checked); styleManager.windowBehavior.syncUI()" />
+      <input
+        type="checkbox"
+        id="window-click"
+        onclick="styleManager.windowBehavior.update('clickToFocus', this.checked); styleManager.windowBehavior.syncUI()"
+      />
       <label for="window-click">Click In Window To Make Active</label>
     </div>
 
     <div class="window-row">
-      <input type="checkbox" id="window-raise" onclick="styleManager.windowBehavior.update('raiseOnActive', this.checked); styleManager.windowBehavior.syncUI()" />
+      <input
+        type="checkbox"
+        id="window-raise"
+        onclick="styleManager.windowBehavior.update('raiseOnActive', this.checked); styleManager.windowBehavior.syncUI()"
+      />
       <label for="window-raise">Raise Window When Made Active</label>
     </div>
 
     <div class="window-section-title">Window Icons</div>
 
     <div class="window-row">
-      <input type="checkbox" id="window-show" onclick="styleManager.windowBehavior.update('opaqueDragging', this.checked); styleManager.windowBehavior.syncUI()" />
+      <input
+        type="checkbox"
+        id="window-show"
+        onclick="styleManager.windowBehavior.update('opaqueDragging', this.checked); styleManager.windowBehavior.syncUI()"
+      />
       <label for="window-show">Opaque Dragging (Show Contents)</label>
     </div>
 
     <div class="window-row">
-      <input type="checkbox" id="window-iconbox" onclick="styleManager.windowBehavior.update('useIconBox', this.checked); styleManager.windowBehavior.syncUI()" />
+      <input
+        type="checkbox"
+        id="window-iconbox"
+        onclick="styleManager.windowBehavior.update('useIconBox', this.checked); styleManager.windowBehavior.syncUI()"
+      />
       <label for="window-iconbox">Use Icon Box</label>
     </div>
   </div>

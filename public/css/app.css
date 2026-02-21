@@ -226,7 +226,6 @@
       Diseño fijo, centrado, con paneles y controles estilo CDE.
    ------------------------------------------------------------------ */
 
-
 /* Barra de título (arrastrable) */
 #styleManager .titlebar {
   background: var(--titlebar-color);

@@ -63,13 +63,17 @@ export class StartupModule {
     const panel = document.getElementById('styleManagerStartup');
     if (!panel) return;
 
-    const restoreCheck = panel.querySelector('input[data-key="restoreSession"]') as HTMLInputElement;
+    const restoreCheck = panel.querySelector(
+      'input[data-key="restoreSession"]'
+    ) as HTMLInputElement;
     if (restoreCheck) {
       restoreCheck.checked = this.settings.restoreSession;
     }
 
-    const startupRadios = panel.querySelectorAll('input[name="startup-mode"]') as NodeListOf<HTMLInputElement>;
-    startupRadios.forEach(radio => {
+    const startupRadios = panel.querySelectorAll(
+      'input[name="startup-mode"]'
+    ) as NodeListOf<HTMLInputElement>;
+    startupRadios.forEach((radio) => {
       radio.checked = radio.value === this.settings.onStartup;
     });
   }

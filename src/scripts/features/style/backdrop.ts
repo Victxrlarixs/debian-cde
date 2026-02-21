@@ -18,7 +18,7 @@ export interface BackdropSettings {
 export class BackdropModule {
   private settings: BackdropSettings = {
     type: 'image',
-    value: '/backdrops/Marble.png'
+    value: '/backdrops/Marble.png',
   };
 
   /**
@@ -38,9 +38,9 @@ export class BackdropModule {
    */
   public apply(): void {
     const body = document.body;
-    
+
     // Clear previous dynamic body styles if any (from old patterns)
-    body.classList.forEach(cls => {
+    body.classList.forEach((cls) => {
       if (cls.startsWith('backdrop-')) body.classList.remove(cls);
     });
 
@@ -90,7 +90,7 @@ export class BackdropModule {
     }
 
     // Highlight active preset in UI
-    document.querySelectorAll('.backdrop-preset').forEach(btn => {
+    document.querySelectorAll('.backdrop-preset').forEach((btn) => {
       const bType = (btn as HTMLElement).dataset.type;
       const bValue = (btn as HTMLElement).dataset.value;
       if (bType === this.settings.type && bValue === this.settings.value) {

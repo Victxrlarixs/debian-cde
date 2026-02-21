@@ -3,7 +3,11 @@ import WindowControls from '../../common/WindowControls.astro';
 ---
 
 <div class="cde-retro-modal" id="styleManagerScreen">
-  <div class="titlebar" id="styleManagerScreenTitlebar" onmousedown="window.drag(event, 'styleManagerScreen')">
+  <div
+    class="titlebar"
+    id="styleManagerScreenTitlebar"
+    onmousedown="window.drag(event, 'styleManagerScreen')"
+  >
     <span class="titlebar-text">Style Manager - Screen</span>
     <WindowControls windowId="styleManagerScreen" closeFunction="styleManager.closeScreen" />
   </div>
@@ -11,7 +15,7 @@ import WindowControls from '../../common/WindowControls.astro';
   <div class="modal-body">
     <div class="cde-modal-field">
       <label class="cde-modal-label">Saver Timeout (minutes):</label>
-      <select 
+      <select
         class="cde-modal-input"
         data-key="saverTimeout"
         onchange="styleManager.screen.update('saverTimeout', parseInt(this.value)); styleManager.screen.syncUI()"
@@ -26,7 +30,7 @@ import WindowControls from '../../common/WindowControls.astro';
 
     <div class="cde-modal-field">
       <label class="cde-modal-label">Saver Type:</label>
-      <select 
+      <select
         class="cde-modal-input"
         data-key="saverType"
         onchange="styleManager.screen.update('saverType', this.value); styleManager.screen.syncUI()"

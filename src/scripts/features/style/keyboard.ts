@@ -34,7 +34,7 @@ export class KeyboardModule {
   }
 
   public update(key: string, value: any): void {
-     if (key in this.settings) {
+    if (key in this.settings) {
       (this.settings as any)[key] = value;
       this.apply();
       this.save();
