@@ -10,6 +10,7 @@ import '../ui/external-links';
 import { ProcessMonitor } from '../features/processmonitor';
 import { logger } from '../utilities/logger';
 import { DesktopManager } from '../features/desktop';
+import { CalendarManager } from '../features/calendar';
 /**
  * Global interface declarations for CDE desktop environment.
  */
@@ -210,6 +211,10 @@ function initDesktop(): void {
     // Desktop Icons initialization
     DesktopManager.init();
     logger.log('[initDesktop] Desktop icons initialized');
+
+    // Calendar initialization
+    CalendarManager.init();
+    logger.log('[initDesktop] Calendar initialized');
 
     // StyleManager.init() must run AFTER WindowManager so its windows exist when
     // initDraggableTitlebars fires. StyleManager no longer registers its own drag handlers.

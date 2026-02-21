@@ -1,0 +1,27 @@
+---
+// src/components/features/Calendar.astro
+import WindowControls from '../common/WindowControls.astro';
+---
+
+<div class="window" id="calendar-window">
+  <div class="titlebar" onmousedown="drag(event, 'calendar-window')">
+    <span class="titlebar-text">Calendar</span>
+    <WindowControls windowId="calendar-window" closeFunction="calendarManager.close" />
+  </div>
+  <div class="calendar-container">
+    <div class="calendar-header">
+      <button class="cde-btn sm" id="cal-prev">&lt;</button>
+      <span id="cal-month-year">Month Year</span>
+      <button class="cde-btn sm" id="cal-next">&gt;</button>
+    </div>
+    <div class="calendar-weekdays">
+      <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
+    </div>
+    <div class="calendar-days" id="cal-days">
+      <!-- Days injected by JS -->
+    </div>
+  </div>
+  <div class="cde-statusbar">
+    <div class="cde-statusleft" id="cal-status">Today: --/--/----</div>
+  </div>
+</div>
