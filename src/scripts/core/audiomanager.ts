@@ -89,9 +89,15 @@ export const AudioManager = (() => {
     window.addEventListener('keydown', unlock);
   }
 
-  async function playTone(freq: number, duration: number, type: OscillatorType = 'sine', volume: number = 1.0): Promise<void> {
-    if (!(await ensureContext()) || !audioCtx || !masterGain) return;
+  function playTone(freq: number, duration: number, type: OscillatorType = 'sine', volume: number = 1.0): void {
+    if (!audioCtx || audioCtx.state !== 'running') {
+      ensureContext();
+      return;
+    }
 
+    if (!masterGain) return;
+    
+    // Create nodes synchronously for immediate playback
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
 

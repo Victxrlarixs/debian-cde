@@ -2,10 +2,10 @@
 import WindowControls from '../common/WindowControls.astro';
 ---
 
-<div class="cde-retro-modal app-manager-window" id="appManager">
+<div class="cde-retro-modal app-manager-window" id="appManager" data-no-maximize="true">
   <div class="titlebar" id="appManagerTitlebar" onmousedown="window.drag(event, 'appManager')">
     <span class="titlebar-text">Application Manager - /usr/dt/appconfig/appmanager</span>
-    <WindowControls windowId="appManager" closeFunction="appManager.close" />
+    <WindowControls windowId="appManager" closeFunction="appManager.close" disableMaximize={true} />
   </div>
 
 

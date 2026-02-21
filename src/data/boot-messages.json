@@ -1,0 +1,57 @@
+{
+  "phases": [
+    {
+      "name": "kernel",
+      "min": 5,
+      "max": 8,
+      "messages": [
+        { "text": "Linux version 2.0.36 (root@debian) (gcc version 2.7.2.3)", "type": "kernel" },
+        { "text": "Console: colour VGA+ 80x25", "type": "kernel" },
+        { "text": "Calibrating delay loop.. 66.56 BogoMIPS", "type": "kernel" },
+        { "text": "Memory: 65536k/65536k available (772k kernel code, 384k reserved, 512k data)", "type": "kernel" },
+        { "text": "Checking 'hlt' instruction... OK.", "type": "kernel" },
+        { "text": "Intel Pentium with F0 0F bug - fixing.", "type": "cpu" },
+        { "text": "PCI: Probing PCI hardware", "type": "kernel" },
+        { "text": "NET4: Linux TCP/IP 1.0 for NET4.0", "type": "kernel" },
+        { "text": "eth0: NE2000 found at 0x300, using IRQ 10.", "type": "kernel" },
+        { "text": "Partition check: hda: hda1 hda2", "type": "fs" },
+        { "text": "VFS: Mounted root (ext2 filesystem) readonly.", "type": "fs" },
+        { "text": "Soundblaster audio driver (c) 1995 Hannu Savolainen", "type": "kernel" },
+        { "text": "scsi0 : SCSI host adapter emulation for IDE ATAPI devices", "type": "kernel" },
+        { "text": "Keyboard initialization... XT layout detected", "type": "cpu" }
+      ]
+    },
+    {
+      "name": "services",
+      "min": 4,
+      "max": 6,
+      "messages": [
+        { "text": "INIT: Entering runlevel: 2", "type": "systemd" },
+        { "text": "Starting system logger: syslogd", "type": "service" },
+        { "text": "Starting kernel log daemon: klogd", "type": "service" },
+        { "text": "Checking for hardware changes... udevd", "type": "service" },
+        { "text": "Mounting local filesystems...", "type": "fs" },
+        { "text": "Starting ToolTalk database server: rpc.ttdbserverd", "type": "service" },
+        { "text": "Starting portmap daemon: portmap", "type": "service" },
+        { "text": "Starting NFS services: statd lockd nfsd", "type": "service" },
+        { "text": "Starting internet superserver: inetd", "type": "service" },
+        { "text": "Loading X11 Font Server... xfs", "type": "service" },
+        { "text": "Initializing retro CRT CRT filter engine", "type": "drm" }
+      ]
+    },
+    {
+      "name": "desktop",
+      "min": 3,
+      "max": 5,
+      "messages": [
+        { "text": "Starting Common Desktop Environment session manager: dtlogin", "type": "desktop" },
+        { "text": "dtwm: Window manager initialized (Motif 1.2)", "type": "desktop" },
+        { "text": "Loading CDE Panel assets: FrontPanel, WorkspaceManager", "type": "desktop" },
+        { "text": "Loading user profile: victxrlarixs", "type": "desktop" },
+        { "text": "Desktop icons registered and aligned to grid", "type": "desktop" },
+        { "text": "Starting File Manager: dtfile", "type": "desktop" },
+        { "text": "System Ready - Workspace One active", "type": "desktop" }
+      ]
+    }
+  ]
+}

@@ -109,8 +109,8 @@ export interface BootSequenceItem {
 export interface BootConfig {
   /** ASCII art logo displayed during boot */
   LOGO: string;
-  /** Array of boot sequence steps */
-  SEQUENCE: BootSequenceItem[];
+  /** Array of boot sequence steps (optional if generated dynamically) */
+  SEQUENCE?: BootSequenceItem[];
   /** Final delay after boot completion in milliseconds */
   FINAL_DELAY: number;
 }
@@ -324,55 +324,6 @@ export const CONFIG: Config = {
 #>         ______( (_  / \\______
 #>       ,'  ,-----'   |        \\
 #>       \`--{__________)        \\/`,
-    SEQUENCE: [
-      {
-        delay: 177,
-        text: '[    0.000000] Starting Debian CDE simulation [debian.com.mx]',
-        type: 'kernel',
-      },
-      {
-        delay: 221,
-        text: '[    0.227156] smpboot: CPU0: Retro Render Engine (1995 compatibility)',
-        type: 'cpu',
-      },
-      {
-        delay: 310,
-        text: '[    0.789123] Memory: 64MB of 90s nostalgia available',
-        type: 'memory',
-      },
-      { delay: 354, text: '[    1.012345] Mounting /usr/share/cde/icons ...', type: 'fs' },
-      { delay: 399, text: '[    1.123456] Loading themes: Platinum, Olive, Marine...', type: 'fs' },
-      {
-        delay: 372,
-        text: '[    1.345678] Starting Style Manager (color schemes)',
-        type: 'systemd',
-      },
-      {
-        delay: 443,
-        text: '[    1.789012] Starting Workspace Manager: pager ready',
-        type: 'systemd',
-      },
-      { delay: 337, text: '[    2.112345] i915: Initializing retro CRT filter', type: 'drm' },
-      {
-        delay: 461,
-        text: '[    2.667890] Starting dtlogin: CDE session manager (auto-login: victxrlarixs)',
-        type: 'service',
-      },
-      {
-        delay: 487,
-        text: '[    2.778901] Loading CDE Panel: workspace switcher, icons, tray',
-        type: 'service',
-      },
-      { delay: 461, text: '[    3.123456] Starting File Manager', type: 'service' },
-      { delay: 638, text: '[    4.111111] dtwm: Window manager initialized', type: 'desktop' },
-      { delay: 664, text: '[    4.222222] Workspace One: active', type: 'desktop' },
-      {
-        delay: 647,
-        text: '[    4.444444] Style Manager: listening for color changes',
-        type: 'desktop',
-      },
-      { delay: 700, text: '[    5.000000] CDE Desktop ready ....', type: 'desktop' },
-    ],
     FINAL_DELAY: 443,
   },
   TASK_MANAGER: {

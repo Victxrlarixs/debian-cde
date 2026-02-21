@@ -39,12 +39,22 @@ let initialized: boolean = false;
 let activeMenu: HTMLElement | null = null;
 let activeContextMenu: HTMLElement | null = null;
 
+// debounce for re-renders
+let renderTimeout: number | null = null;
+function debouncedRender(): void {
+  if (renderTimeout) window.clearTimeout(renderTimeout);
+  renderTimeout = window.setTimeout(() => {
+    renderFiles();
+    renderTimeout = null;
+  }, 50);
+}
+
 /**
  * Listens for VFS changes and re-renders if the change affects the current path.
  */
 window.addEventListener('cde-fs-change', (e: any) => {
   if (e.detail?.path === currentPath) {
-    renderFiles();
+    debouncedRender();
   }
 });
 
@@ -332,7 +342,9 @@ function handleContextMenu(e: MouseEvent): void {
   if (activeContextMenu) activeContextMenu.remove();
 
   const target = e.target as HTMLElement;
-  const fileEl = target.closest('.fm-file') as HTMLElement | null;
+  const fileEl = (target && typeof target.closest === 'function') 
+    ? target.closest('.fm-file') as HTMLElement | null
+    : null;
 
   const menu = document.createElement('div');
   menu.className = 'fm-contextmenu';

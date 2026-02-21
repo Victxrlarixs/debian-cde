@@ -59,34 +59,41 @@ const WindowManager = (() => {
     '4': [],
   };
 
+  let lastFocusedWindowId: string | null = null;
+
   /**
    * Brings a window to the front (max z-index) and marks it as active.
    * @param id - The ID of the window element.
    */
   function focusWindow(id: string): void {
+    if (id === lastFocusedWindowId) return; // Already focused
+
     const win = document.getElementById(id);
-    if (!win) {
-      console.warn(`[WindowManager] focusWindow: window with id "${id}" not found.`);
-      return;
-    }
+    if (!win) return;
 
     if (!dragState.isDragging) {
-      const elementsToRepaint = document.querySelectorAll('.window, .cde-retro-modal, #cde-panel');
-      elementsToRepaint.forEach((el) => {
-        const element = el as HTMLElement;
-        if (element.classList.contains('window') || element.classList.contains('cde-retro-modal')) {
-          element.classList.remove('active');
-        }
-      });
-
-      if (win.classList.contains('window') || win.classList.contains('cde-retro-modal')) {
-        win.classList.add('active');
+      // Remove active class only from the last focused window
+      if (lastFocusedWindowId) {
+        const prevWin = document.getElementById(lastFocusedWindowId);
+        if (prevWin) prevWin.classList.remove('active');
       }
+
+      // Special case: Ensure other windows are cleaned up if state got desynced
+      // (Rare, but helpful for stability without a full loop every time)
+      if (Math.random() < 0.05) { // Occasional garbage collection of classes
+         document.querySelectorAll('.active').forEach(el => {
+           if (el.id !== id) el.classList.remove('active');
+         });
+      }
+
+      win.classList.add('active');
+      lastFocusedWindowId = id;
 
       zIndex++;
       win.style.zIndex = String(zIndex);
-      AudioManager.click();
-      logger.log(`[WindowManager] focusWindow: window "${id}" focus updated.`);
+      
+      if (window.AudioManager) window.AudioManager.click();
+      logger.log(`[WindowManager] focused: ${id}`);
     }
   }
 
@@ -172,9 +179,12 @@ const WindowManager = (() => {
     // Capture the pointer to keep receiving events even if the pointer leaves the element
     el.setPointerCapture(e.pointerId);
 
-    el.addEventListener('pointermove', move);
-    el.addEventListener('pointerup', stopDrag);
-    el.addEventListener('pointercancel', stopDrag); // Handle touch cancellations
+    // Performance: Add will-change hint
+    el.style.willChange = 'transform, left, top';
+
+    el.addEventListener('pointermove', move, { passive: false });
+    el.addEventListener('pointerup', stopDrag, { passive: false });
+    el.addEventListener('pointercancel', stopDrag, { passive: false });
 
     logger.log(`[WindowManager] pointer drag started for "${id}".`);
   }
@@ -236,6 +246,9 @@ const WindowManager = (() => {
     el.removeEventListener('pointerup', stopDrag);
     el.removeEventListener('pointercancel', stopDrag);
 
+    // Performance: Clear will-change hint
+    el.style.willChange = 'auto';
+
     dragState.element.classList.remove('dragging-wireframe');
     dragState.isDragging = false;
 
@@ -264,10 +277,22 @@ const WindowManager = (() => {
     }
   }
 
-  function initWindows(): void {
+  function initGlobalInteraction(): void {
+    // Single delegated listener for both FOCUS and SOUND feedback
     document.addEventListener('pointerdown', (e) => {
       if (dragState.isDragging) return;
-      const win = (e.target as Element).closest('.window, .cde-retro-modal');
+      const target = e.target as HTMLElement;
+      if (!target || typeof target.closest !== 'function') return;
+
+      // 1. SOUND FEEDBACK (Unified)
+      if (
+        target.closest('.cde-icon, .cde-icon-btn, .menu-item, .cde-btn, .pager-workspace, .titlebar-btn')
+      ) {
+        if (window.AudioManager) window.AudioManager.click();
+      }
+
+      // 2. FOCUS MANAGEMENT
+      const win = target.closest('.window, .cde-retro-modal');
       if (win) {
         focusWindow(win.id);
       }
@@ -280,7 +305,10 @@ const WindowManager = (() => {
         const mode = document.documentElement.getAttribute('data-focus-mode');
         if (mode !== 'point') return;
 
-        const win = (e.target as Element).closest('.window, .cde-retro-modal');
+        const target = e.target as HTMLElement;
+        if (!target || typeof target.closest !== 'function') return;
+
+        const win = target.closest('.window, .cde-retro-modal');
         if (win) {
           focusWindow(win.id);
         }
@@ -375,7 +403,9 @@ const WindowManager = (() => {
       if (session && session.left && session.top) {
         win.style.left = session.left;
         win.style.top = session.top;
-        if (session.maximized) win.classList.add('maximized');
+        if (session.maximized && !win.hasAttribute('data-no-maximize')) {
+          win.classList.add('maximized');
+        }
         logger.log(`[WindowManager] Restored session for: ${id}`);
       } else {
         // Only normalize if it's already visible, otherwise wait for normalization on drag
@@ -496,6 +526,7 @@ const WindowManager = (() => {
 
   function init(): void {
     initDynamicScanning();
+    initGlobalInteraction();
     initDropdowns();
     initPager();
     logger.log('[WindowManager] Initialized');
@@ -525,7 +556,7 @@ function minimizeWindow(id: string): void {
 
 function maximizeWindow(id: string): void {
   const win = document.getElementById(id);
-  if (!win) return;
+  if (!win || win.hasAttribute('data-no-maximize')) return;
 
   if (win.classList.contains('maximized')) {
     win.classList.remove('maximized');
