@@ -7,6 +7,7 @@ import { FontModule } from './style/font';
 import { MouseModule } from './style/mouse';
 import { KeyboardModule } from './style/keyboard';
 import { BeepModule } from './style/beep';
+import { settingsManager } from '../core/settingsmanager';
 
 /**
  * CDE Style Manager for system customization.
@@ -37,8 +38,10 @@ export class StyleManager {
    * Initializes the Style Manager and all its modules.
    */
   public init(): void {
-    this.theme.loadSavedColors(this.getSavedSettings().colors || {});
-    this.font.loadSavedFonts(this.getSavedSettings().fonts || {});
+    const themeSettings = settingsManager.getSection('theme');
+    this.theme.loadSavedColors(themeSettings.colors || {});
+    this.font.loadSavedFonts(themeSettings.fonts || {});
+    
     this.mouse.load();
     this.keyboard.load();
     this.beep.load();
@@ -49,15 +52,6 @@ export class StyleManager {
 
     this.theme.updateUI();
     this.font.updateFontControls();
-  }
-
-  private getSavedSettings(): any {
-    try {
-      const saved = localStorage.getItem('cde-styles');
-      return saved ? JSON.parse(saved) : {};
-    } catch {
-      return {};
-    }
   }
 
   private bindEvents(): void {
@@ -153,8 +147,6 @@ export class StyleManager {
   }
 
   private setupFontControls(): void {
-    // Basic delegation to font module is already handled in font.init() if it were there,
-    // but here we maintain the existing logic simplified.
     document.querySelectorAll('#styleManagerFont select, #styleManagerFont input').forEach((ctrl) => {
       ctrl.addEventListener('input', () => this.font.updateFontPreview());
     });
@@ -202,15 +194,15 @@ export class StyleManager {
   public resetFont(): void { this.font.resetFont(); this.font.updateFontControls(); this.saveFont(); }
 
   public saveColor(): void {
-    const s = this.getSavedSettings();
-    s.colors = this.theme.styles;
-    localStorage.setItem('cde-styles', JSON.stringify(s));
+    const theme = settingsManager.getSection('theme');
+    theme.colors = this.theme.styles;
+    settingsManager.setSection('theme', theme);
   }
 
   public saveFont(): void {
-    const s = this.getSavedSettings();
-    s.fonts = this.font.fontStyles;
-    localStorage.setItem('cde-styles', JSON.stringify(s));
+    const theme = settingsManager.getSection('theme');
+    theme.fonts = this.font.fontStyles;
+    settingsManager.setSection('theme', theme);
   }
 
   private updateStatus(msg: string, id: string): void {

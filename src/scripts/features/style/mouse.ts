@@ -1,6 +1,7 @@
 // src/scripts/features/style/mouse.ts
 
 import { logger } from '../../utilities/logger';
+import { settingsManager } from '../../core/settingsmanager';
 
 export interface MouseSettings {
   handedness: string;
@@ -20,20 +21,16 @@ export class MouseModule {
   };
 
   public load(): void {
-    try {
-      const saved = localStorage.getItem('cde-mouse-settings');
-      if (saved) {
-        Object.assign(this.settings, JSON.parse(saved));
-        logger.log('[MouseModule] Loaded from localStorage:', this.settings);
-      }
-    } catch (e) {
-      console.warn('[MouseModule] Failed to load from localStorage:', e);
+    const saved = settingsManager.getSection('mouse');
+    if (Object.keys(saved).length > 0) {
+      Object.assign(this.settings, saved);
+      logger.log('[MouseModule] Loaded from SettingsManager:', this.settings);
     }
   }
 
   public save(): void {
-    localStorage.setItem('cde-mouse-settings', JSON.stringify(this.settings));
-    logger.log('[MouseModule] Saved to localStorage:', this.settings);
+    settingsManager.setSection('mouse', this.settings);
+    logger.log('[MouseModule] Saved to SettingsManager:', this.settings);
   }
 
   public apply(): void {
