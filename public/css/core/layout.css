@@ -160,7 +160,7 @@
 
 .pager-workspace.active {
   background: var(--titlebar-color);
-  color: var(--text-color);
+  color: var(--titlebar-text-color);
   font-weight: bold;
   border-top-color: var(--border-dark);
   border-left-color: var(--border-dark);

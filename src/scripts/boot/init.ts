@@ -203,24 +203,27 @@ class DebianRealBoot {
   private completeBoot(): void {
     logger.log('[DebianRealBoot] Completing boot process');
 
-    if (this.bootScreen) {
-      this.bootScreen.style.transition = 'opacity 0.5s ease-out';
-      this.bootScreen.style.opacity = '0';
-
-      setTimeout(() => {
-        this.bootScreen!.style.display = 'none';
-        const desktop = document.getElementById('desktop-ui');
-        if (desktop) {
-          desktop.style.display = 'block';
-          logger.log('[DebianRealBoot] Desktop UI revealed');
-        } else {
-          console.warn('[DebianRealBoot] Desktop UI element not found');
-        }
-        initDesktop();
-      }, 500);
-    } else {
-      initDesktop();
+    // 1. Reveal desktop behind the boot screen (it has lower z-index)
+    const desktop = document.getElementById('desktop-ui');
+    if (desktop) {
+      desktop.style.display = 'block';
     }
+
+    // 2. Initialize all desktop modules (including backdrop rendering)
+    initDesktop();
+
+    // 3. Wait a small cushion to let the initial backdrop render start
+    setTimeout(() => {
+      if (this.bootScreen) {
+        this.bootScreen.style.transition = 'opacity 0.8s ease-out';
+        this.bootScreen.style.opacity = '0';
+
+        setTimeout(() => {
+          this.bootScreen!.style.display = 'none';
+          logger.log('[DebianRealBoot] Boot screen removed');
+        }, 800);
+      }
+    }, 400); // 400ms is enough for most XPM renders to start seeing content
   }
 }
 

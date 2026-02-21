@@ -92,7 +92,7 @@
 
 .fm-file.selected {
   background: var(--titlebar-color);
-  color: white;
+  color: var(--titlebar-text-color);
   border-color: var(--border-light);
 }
 

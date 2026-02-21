@@ -205,7 +205,7 @@
 
 .pager-workspace.active {
   background: var(--titlebar-color);
-  color: var(--text-color);
+  color: var(--titlebar-text-color);
   font-weight: bold;
   border-top-color: var(--border-dark);
   border-left-color: var(--border-dark);
@@ -398,7 +398,7 @@
 
 .dropdown-menu .menu-item:hover {
   background: var(--titlebar-color);
-  color: var(--text-color);
+  color: var(--titlebar-text-color);
 }
 
 .dropdown-menu .menu-item img {
@@ -597,7 +597,7 @@
 
 .menu-item:hover {
   background: var(--titlebar-color);
-  color: var(--text-color);
+  color: var(--titlebar-text-color);
 }
 
 .menu-separator {
@@ -791,7 +791,7 @@
 
 .fm-file.selected {
   background: var(--titlebar-color);
-  color: white;
+  color: var(--titlebar-text-color);
   border-color: var(--border-light);
 }
 
@@ -835,7 +835,7 @@
 
 .fm-dropdown-item:hover {
   background: var(--titlebar-color);
-  color: var(--text-color);
+  color: var(--titlebar-text-color);
 }
 
 /* Menú contextual (clic derecho) */
@@ -866,7 +866,7 @@
 
 .fm-context-item:hover {
   background: var(--titlebar-color);
-  color: var(--text-color);
+  color: var(--titlebar-text-color);
 }
 
 .fm-context-item.disabled {
@@ -979,7 +979,7 @@
   left: 50%;
   transform: translateX(-50%);
   background: var(--titlebar-color, #4a6c7a);
-  color: var(--text-color);
+  color: var(--titlebar-text-color);
   padding: 8px 20px;
   border: 2px solid;
   border-top-color: var(--border-light);
@@ -1361,7 +1361,7 @@
 }
 .cde-menubar .cde-menu-item:hover {
   background: var(--titlebar-color);
-  color: var(--text-color);
+  color: var(--titlebar-text-color);
 }
 
 .style-manager-main {
@@ -1384,7 +1384,7 @@
 
 .cde-menu-item:hover {
   background: var(--titlebar-color);
-  color: var(--text-color);
+  color: var(--titlebar-text-color);
 }
 
 .style-manager-body {
@@ -1561,7 +1561,7 @@
 
 #styleManagerColor .color-palette-item.active {
   background: var(--titlebar-color);
-  color: var(--text-color);
+  color: var(--titlebar-text-color);
 }
 
 /* Cuadros de color en fila */
@@ -1936,7 +1936,7 @@
 
 #utilitiesDropdown .menu-item:hover {
   background: var(--titlebar-color);
-  color: var(--text-color);
+  color: var(--titlebar-text-color);
 }
 
 #utilitiesDropdown .menu-item img {
@@ -2022,7 +2022,7 @@
 
 .cde-desktop-icon.selected span {
   background: var(--titlebar-color);
-  color: white;
+  color: var(--titlebar-text-color);
   border-color: var(--border-light);
   box-shadow: 1px 1px 0 black;
 }
@@ -2276,7 +2276,7 @@
 
 .calendar-days .cal-day.today {
   background: var(--titlebar-color);
-  color: var(--text-color);
+  color: var(--titlebar-text-color);
   border: 1px solid var(--border-dark);
   font-weight: bold;
 }

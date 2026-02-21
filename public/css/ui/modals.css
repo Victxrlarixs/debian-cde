@@ -60,7 +60,7 @@
   left: 50%;
   transform: translateX(-50%);
   background: var(--titlebar-color, #4a6c7a);
-  color: var(--text-color);
+  color: var(--titlebar-text-color);
   padding: 8px 20px;
   border: 2px solid;
   border-top-color: var(--border-light);

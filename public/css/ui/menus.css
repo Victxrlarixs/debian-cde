@@ -10,7 +10,7 @@
 
 .menu-item:hover {
   background: var(--titlebar-color);
-  color: var(--text-color);
+  color: var(--titlebar-text-color);
 }
 
 .menu-separator {
