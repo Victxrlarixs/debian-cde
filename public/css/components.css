@@ -2080,3 +2080,52 @@
   max-width: 100%;
   box-sizing: border-box;
 }
+
+/* ------------------------------------------------------------------
+   STYLE MANAGER: BACKDROP PRESETS
+   ------------------------------------------------------------------ */
+.backdrop-preset {
+  height: 60px;
+  border: 2px solid var(--border-inset-dark);
+  cursor: pointer;
+  background-position: center;
+  transition: transform 0.1s ease;
+}
+
+.backdrop-preset:hover {
+  transform: scale(1.05);
+  border-color: var(--scrollbar-color);
+}
+
+.backdrop-preset.active {
+  border: 2px solid var(--scrollbar-color);
+  box-shadow: 0 0 5px var(--scrollbar-color);
+}
+
+/* Backdrop Grid and Modal Specifics */
+#styleManagerBackdrop .modal-body {
+  padding: 16px;
+}
+
+#styleManagerBackdrop .modal-body p {
+  margin-bottom: 12px;
+  font-size: 11px;
+}
+
+.backdrop-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 4px;
+  background: var(--button-active);
+  border: 2px solid;
+  border-top-color: var(--border-inset-dark);
+  border-left-color: var(--border-inset-dark);
+  border-right-color: var(--border-inset-light);
+  border-bottom-color: var(--border-inset-light);
+}
+
+/* Specific Image Presets */
+.backdrop-preset-marble { background-image: url('/backdrops/Marble.png'); background-size: cover; }
+.backdrop-preset-toronto { background-image: url('/backdrops/Toronto.png'); background-size: cover; }
+.backdrop-preset-circuit { background-image: url('/backdrops/CircuitBoards.png'); background-size: cover; }
