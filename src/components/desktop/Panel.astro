@@ -1,5 +1,6 @@
 ---
 // src/components/desktop/Panel.astro
+import { CONFIG } from '../../scripts/core/config';
 ---
 
 <div id="cde-panel">
@@ -28,7 +29,7 @@
       </div>
       <div class="cde-icon" title="Github Repo">
         <div
-          onclick="confirmExternalLink('https://github.com/Victxrlarixs/debian-cde')"
+          onclick={`confirmExternalLink('${CONFIG.META.GITHUB_REPO}')`}
           style="cursor: pointer;"
         >
           <img src="/icons/konqueror.png" alt="Browser" />

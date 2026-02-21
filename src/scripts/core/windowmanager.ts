@@ -32,7 +32,7 @@ const windowStates: Record<string, WindowState> = {};
 
 const WindowManager = (() => {
   // Start z-index higher than TopBar (9998) to ensure focused windows are on top
-  let zIndex = 10000;
+  let zIndex = CONFIG.WINDOW.BASE_Z_INDEX;
   const dragState: DragState = {
     element: null,
     offsetX: 0,
@@ -88,7 +88,7 @@ const WindowManager = (() => {
     }
 
     const rect = win.getBoundingClientRect();
-    const TOP_BAR_HEIGHT = 30; // 28px + safety margin
+    const TOP_BAR_HEIGHT = CONFIG.WINDOW.TOP_BAR_HEIGHT;
 
     win.style.position = 'absolute';
     win.style.left = rect.left + 'px';
@@ -236,12 +236,12 @@ const WindowManager = (() => {
         const rect = dropdownBtn.getBoundingClientRect();
         
         dropdownMenu.style.position = 'fixed';
-        dropdownMenu.style.zIndex = '20000'; // Above everything
+        dropdownMenu.style.zIndex = String(CONFIG.DROPDOWN.Z_INDEX);
         dropdownMenu.style.display = 'block';
 
         // Calculate position based on the button
         const menuRect = dropdownMenu.getBoundingClientRect();
-        dropdownMenu.style.bottom = window.innerHeight - rect.top + 6 + 'px';
+        dropdownMenu.style.bottom = window.innerHeight - rect.top + CONFIG.DROPDOWN.OFFSET + 'px';
         dropdownMenu.style.left = rect.left + (rect.width / 2) - (menuRect.width / 2) + 'px';
         
         logger.log('[WindowManager] Dropdown opened at bottom:', dropdownMenu.style.bottom);
@@ -289,7 +289,7 @@ const WindowManager = (() => {
       } else {
         // Only normalize if it's already visible, otherwise wait for normalization on drag
         if (window.getComputedStyle(win).display !== 'none') {
-          setTimeout(() => { normalizeWindowPosition(win); }, 100);
+          setTimeout(() => { normalizeWindowPosition(win); }, CONFIG.TIMINGS.NORMALIZATION_DELAY);
         }
       }
       
@@ -337,7 +337,7 @@ const WindowManager = (() => {
     // Initial scan and start observer
     setTimeout(() => {
       initDynamicScanning();
-    }, 200);
+    }, CONFIG.TIMINGS.SCANNING_DELAY);
 
     logger.log('[WindowManager] Dynamic system initialized.');
   }

@@ -1,9 +1,8 @@
-// src/scripts/features/text-editor.ts
-
 import { logger } from '../utilities/logger';
+import { marked } from 'marked';
 
 // ============================================================================
-// Text Editor - Read-only file viewer using terminal-body styling
+// Text Editor - Markdown and Plain Text viewer
 // ============================================================================
 
 let winElement: HTMLElement | null = null;
@@ -31,7 +30,7 @@ function initElements(): boolean {
  * @param {string} title - Window title (usually filename)
  * @param {string} content - Text content to display
  */
-export function openTextEditor(title: string, content: string): void {
+export async function openTextEditor(title: string, content: string): Promise<void> {
   if (!initElements()) {
     console.error('[TextEditor] Failed to initialize elements');
     return;
@@ -39,7 +38,25 @@ export function openTextEditor(title: string, content: string): void {
 
   const displayTitle = title?.trim() || 'Untitled';
   titleElement!.textContent = displayTitle;
-  contentElement!.innerText = content || '';
+  
+  const isMarkdown = displayTitle.toLowerCase().endsWith('.md');
+
+  if (isMarkdown && content) {
+    // Render Markdown
+    try {
+      const html = await marked.parse(content);
+      contentElement!.innerHTML = html;
+      contentElement!.classList.add('markdown-body');
+    } catch (err) {
+      logger.error('[TextEditor] Error parsing markdown:', err);
+      contentElement!.innerText = content;
+      contentElement!.classList.remove('markdown-body');
+    }
+  } else {
+    // Plain Text
+    contentElement!.innerText = content || '';
+    contentElement!.classList.remove('markdown-body');
+  }
 
   winElement!.style.display = 'flex';
   winElement!.style.zIndex = String(++zIndex);
@@ -95,15 +112,15 @@ function formatTutorial(data: any[]): string {
 /**
  * Loads and displays the tutorial file.
  */
-export function openTutorial(): void {
+export async function openTutorial(): Promise<void> {
   import('../../data/tutorial.json')
-    .then((module) => {
+    .then(async (module) => {
       const content = formatTutorial(module.default);
-      openTextEditor('Linux Tutorial - Commands Reference', content);
+      await openTextEditor('Linux Tutorial - Commands Reference', content);
     })
-    .catch((error) => {
+    .catch(async (error) => {
       console.error('[TextEditor] Failed to load tutorial:', error);
-      openTextEditor('Error', 'Could not load tutorial file.');
+      await openTextEditor('Error', 'Could not load tutorial file.');
     });
 }
 

@@ -8,6 +8,7 @@ import FileManager from '../components/features/FileManager.astro';
 import StyleManager from '../components/features/style/StyleManager.astro';
 import ProcessMonitor from '../components/features/ProcessMonitor.astro';
 import TextEditor from '../components/features/TextEditor.astro';
+import DesktopIcons from '../components/desktop/DesktopIcons.astro';
 ---
 
 <Layout title="Debian">
@@ -17,6 +18,9 @@ import TextEditor from '../components/features/TextEditor.astro';
   <div id="desktop-ui">
     <!-- Topbar -->
     <TopBar />
+
+    <!-- Desktop Icons -->
+    <DesktopIcons />
 
     <!-- Terminal -->
     <Terminal />

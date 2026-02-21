@@ -2,8 +2,9 @@
   "/home/victxrlarixs/": {
     "type": "folder",
     "children": {
-      "Desktop": { "type": "folder", "children": {} },
-      "welcome.md": { "type": "file", "content": "Welcome to Debian WebCDE." },
+      "Desktop": { "type": "folder", "children": {
+        "readme.md": { "type": "file", "content": "[Dinamic content: README.md]" }
+      } },
       "tutorials": {
         "type": "folder",
         "children": {

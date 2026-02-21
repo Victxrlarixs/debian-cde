@@ -4,6 +4,7 @@ import { CONFIG } from '../core/config';
 import filesystemData from '../../data/filesystem.json';
 import { CDEModal } from '../ui/modals';
 import { logger } from '../utilities/logger';
+import readmeContent from '../../../README.md?raw';
 
 declare global {
   interface Window {
@@ -63,11 +64,23 @@ declare global {
      * Saves content to an existing file (used by text editor).
      */
     saveFile: (path: string, content: string) => void;
+
+    /**
+     * Virtual Filesystem API
+     */
+    VirtualFS: {
+      getNode: (path: string) => any;
+      getChildren: (path: string) => any;
+      touch: (name: string, targetPath?: string) => Promise<void>;
+      mkdir: (name: string, targetPath?: string) => Promise<void>;
+      rm: (name: string, targetPath?: string) => Promise<void>;
+      rename: (oldName: string, newName: string, targetPath?: string) => Promise<void>;
+    };
+    CDEModal: typeof CDEModal;
   }
 }
 
-// ------------------------------------------------------------------
-// VIRTUAL FILESYSTEM TYPES
+(window as any).CDEModal = CDEModal;
 // ------------------------------------------------------------------
 
 /** Represents a file in the virtual filesystem */
@@ -122,10 +135,32 @@ const rootPath = CONFIG.FS.HOME;
 const rootNode = (filesystemData as Record<string, VirtualFolder>)[rootPath];
 if (rootNode) {
   flattenFilesystem(rootPath, rootNode);
+  
+  // Sync readme.md with README.md content dynamically
+  const readmePath = CONFIG.FS.DESKTOP + 'readme.md';
+  const readmeFile = fsMap[readmePath] as VirtualFile;
+  if (readmeFile && readmeFile.type === 'file') {
+    readmeFile.content = readmeContent;
+    logger.log(`[FileManager] Synced ${readmePath} with real README.md content`);
+  }
+
   logger.log('[FileManager] Filesystem flattened, entries:', Object.keys(fsMap).length);
 } else {
   console.error('[FileManager] Root path not found in filesystem data');
 }
+
+// Global VirtualFS exposure
+window.VirtualFS = {
+  getNode: (path: string) => fsMap[path] || null,
+  getChildren: (path: string) => {
+    const node = fsMap[path];
+    return node && node.type === 'folder' ? (node as VirtualFolder).children : null;
+  },
+  touch,
+  mkdir,
+  rm,
+  rename
+};
 
 // ------------------------------------------------------------------
 // INTERNAL STATE
@@ -157,6 +192,15 @@ let activeMenu: HTMLElement | null = null;
 
 /** Reference to the currently active context menu */
 let activeContextMenu: HTMLElement | null = null;
+
+/**
+ * Dispatches a custom event to notify other modules of filesystem changes.
+ */
+function dispatchFsChange(): void {
+  window.dispatchEvent(new CustomEvent('cde-fs-change', { 
+    detail: { path: currentPath } 
+  }));
+}
 
 // ------------------------------------------------------------------
 // PRIVATE FUNCTIONS
@@ -329,17 +373,23 @@ function goHome(): void {
  * Creates a new empty file with the specified name.
  *
  * @param name - The name of the file to create
+ * @param targetPath - Optional target path (defaults to currentPath)
  * @returns Promise that resolves when the file is created
  */
-async function touch(name: string): Promise<void> {
-  const folder = getCurrentFolder();
-  if (folder && name) {
-    folder[name] = { type: 'file', content: '' } as VirtualFile;
+async function touch(name: string, targetPath: string = currentPath): Promise<void> {
+  const path = targetPath.endsWith('/') ? targetPath : targetPath + '/';
+  const node = window.VirtualFS.getNode(path);
+  if (node && node.type === 'folder' && name) {
+    const folder = (node as any).children || node; // Handle both structures if needed, but VirtualFolder uses .children
+    const children = (node as VirtualFolder).children;
+    children[name] = { type: 'file', content: '' } as VirtualFile;
+    
     // Also add to the flattened map
-    const filePath = currentPath + name;
-    fsMap[filePath] = folder[name] as VirtualFile;
-    logger.log(`[FileManager] touch: created file "${name}"`);
-    renderFiles();
+    const filePath = path + name;
+    fsMap[filePath] = children[name] as VirtualFile;
+    logger.log(`[FileManager] touch: created file "${name}" at ${path}`);
+    if (path === currentPath) renderFiles();
+    dispatchFsChange();
   }
 }
 
@@ -347,17 +397,22 @@ async function touch(name: string): Promise<void> {
  * Creates a new folder with the specified name.
  *
  * @param name - The name of the folder to create
+ * @param targetPath - Optional target path (defaults to currentPath)
  * @returns Promise that resolves when the folder is created
  */
-async function mkdir(name: string): Promise<void> {
-  const folder = getCurrentFolder();
-  if (folder && name) {
+async function mkdir(name: string, targetPath: string = currentPath): Promise<void> {
+  const path = targetPath.endsWith('/') ? targetPath : targetPath + '/';
+  const node = window.VirtualFS.getNode(path);
+  if (node && node.type === 'folder' && name) {
+    const children = (node as VirtualFolder).children;
     const newFolder: VirtualFolder = { type: 'folder', children: {} };
-    folder[name] = newFolder;
-    const folderPath = currentPath + name + '/';
+    children[name] = newFolder;
+    
+    const folderPath = path + name + '/';
     fsMap[folderPath] = newFolder;
-    logger.log(`[FileManager] mkdir: created folder "${name}"`);
-    renderFiles();
+    logger.log(`[FileManager] mkdir: created folder "${name}" at ${path}`);
+    if (path === currentPath) renderFiles();
+    dispatchFsChange();
   }
 }
 
@@ -365,24 +420,30 @@ async function mkdir(name: string): Promise<void> {
  * Deletes the specified file or folder.
  *
  * @param name - The name of the item to delete
+ * @param targetPath - Optional target path (defaults to currentPath)
  * @returns Promise that resolves when the deletion is complete
- *
- * @remarks
- * Shows a confirmation modal before deletion.
  */
-async function rm(name: string): Promise<void> {
-  const folder = getCurrentFolder();
-  if (!folder) return;
+async function rm(name: string, targetPath: string = currentPath): Promise<void> {
+  const path = targetPath.endsWith('/') ? targetPath : targetPath + '/';
+  const node = window.VirtualFS.getNode(path);
+  if (!node || node.type !== 'folder') return;
+
+  const children = (node as VirtualFolder).children;
+  if (!children[name]) return;
 
   const confirmed = await CDEModal.confirm(`Delete ${name}?`);
   if (confirmed) {
-    // Remove from flattened map if it's a file or folder
-    const fullPath = currentPath + name + (folder[name].type === 'folder' ? '/' : '');
+    const item = children[name];
+    const fullPath = path + name + (item.type === 'folder' ? '/' : '');
     delete fsMap[fullPath];
-    delete folder[name];
-    fmSelected = null;
-    logger.log(`[FileManager] rm: deleted "${name}"`);
-    renderFiles();
+    delete children[name];
+    
+    if (path === currentPath) {
+      fmSelected = null;
+      renderFiles();
+    }
+    logger.log(`[FileManager] rm: deleted "${name}" from ${path}`);
+    dispatchFsChange();
   }
 }
 
@@ -391,23 +452,31 @@ async function rm(name: string): Promise<void> {
  *
  * @param oldName - The current name of the item
  * @param newName - The new name for the item
+ * @param targetPath - Optional target path (defaults to currentPath)
  * @returns Promise that resolves when the rename is complete
  */
-async function rename(oldName: string, newName: string): Promise<void> {
-  const folder = getCurrentFolder();
-  if (folder && folder[oldName] && newName && newName !== oldName) {
-    const item = folder[oldName];
-    const oldFullPath = currentPath + oldName + (item.type === 'folder' ? '/' : '');
-    const newFullPath = currentPath + newName + (item.type === 'folder' ? '/' : '');
+async function rename(oldName: string, newName: string, targetPath: string = currentPath): Promise<void> {
+  const path = targetPath.endsWith('/') ? targetPath : targetPath + '/';
+  const node = window.VirtualFS.getNode(path);
+  if (!node || node.type !== 'folder') return;
 
-    folder[newName] = item;
-    delete folder[oldName];
+  const children = (node as VirtualFolder).children;
+  if (children[oldName] && newName && newName !== oldName) {
+    const item = children[oldName];
+    const oldFullPath = path + oldName + (item.type === 'folder' ? '/' : '');
+    const newFullPath = path + newName + (item.type === 'folder' ? '/' : '');
+
+    children[newName] = item;
+    delete children[oldName];
     fsMap[newFullPath] = item;
     delete fsMap[oldFullPath];
 
-    fmSelected = null;
-    logger.log(`[FileManager] rename: renamed "${oldName}" to "${newName}"`);
-    renderFiles();
+    if (path === currentPath) {
+      fmSelected = null;
+      renderFiles();
+    }
+    logger.log(`[FileManager] rename: renamed "${oldName}" to "${newName}" at ${path}`);
+    dispatchFsChange();
   }
 }
 
@@ -417,8 +486,8 @@ async function rename(oldName: string, newName: string): Promise<void> {
  * @param name - The name of the file
  * @param content - The content of the file to display
  */
-function openTextWindow(name: string, content: string): void {
-  window.openTextEditor(name, content);
+async function openTextWindow(name: string, content: string): Promise<void> {
+  await window.openTextEditor(name, content);
 }
 
 /**
@@ -543,7 +612,7 @@ function setupMenuBar(): void {
 
       const menu = document.createElement('div');
       menu.className = 'fm-dropdown';
-      menu.style.zIndex = String(++zIndex);
+      menu.style.zIndex = String(CONFIG.DROPDOWN.Z_INDEX);
 
       items.forEach((item) => {
         const option = document.createElement('div');
@@ -612,7 +681,7 @@ async function handleContextMenu(e: MouseEvent): Promise<void> {
 
   const menu = document.createElement('div');
   menu.className = 'fm-contextmenu';
-  menu.style.zIndex = String(++zIndex);
+  menu.style.zIndex = String(CONFIG.DROPDOWN.Z_INDEX);
 
   const items: MenuItem[] = [
     {

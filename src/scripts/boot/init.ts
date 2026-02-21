@@ -9,6 +9,7 @@ import { captureFullPageScreenshot } from '../utilities/screenshot';
 import '../ui/external-links';
 import { ProcessMonitor } from '../features/processmonitor';
 import { logger } from '../utilities/logger';
+import { DesktopManager } from '../features/desktop';
 /**
  * Global interface declarations for CDE desktop environment.
  */
@@ -205,6 +206,10 @@ function initDesktop(): void {
     // initDraggableTitlebars() runs after a 200ms delay to ensure the DOM is fully settled.
     WindowManager.init();
     logger.log('[initDesktop] Window manager initialized');
+
+    // Desktop Icons initialization
+    DesktopManager.init();
+    logger.log('[initDesktop] Desktop icons initialized');
 
     // StyleManager.init() must run AFTER WindowManager so its windows exist when
     // initDraggableTitlebars fires. StyleManager no longer registers its own drag handlers.

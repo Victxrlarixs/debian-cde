@@ -18,6 +18,7 @@ export interface SystemSettings {
       maximized: boolean;
     }>;
   };
+  desktop: Record<string, any>;
 }
 
 const STORAGE_KEY = 'cde-system-settings';
@@ -44,7 +45,8 @@ class SettingsManager {
       mouse: {},
       keyboard: {},
       beep: {},
-      session: { windows: {} }
+      session: { windows: {} },
+      desktop: {}
     };
   }
 
