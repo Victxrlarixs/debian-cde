@@ -2552,3 +2552,59 @@
 .option-row input {
   margin: 0;
 }
+
+.color-swatches-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: 12px;
+  padding: 10px;
+  background: var(--dock-icon-bg);
+  border: 2px solid;
+  border-top-color: var(--border-inset-dark);
+  border-left-color: var(--border-inset-dark);
+  border-right-color: var(--border-inset-light);
+  border-bottom-color: var(--border-inset-light);
+}
+
+.color-swatch-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  text-align: center;
+}
+
+.color-swatch-item label {
+  color: var(--text-color);
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.color-swatches-section {
+  margin-top: 15px;
+}
+
+.color-swatches-grid .color-swatch-btn {
+  width: 32px;
+  height: 32px;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  cursor: pointer;
+}
+
+/* ------------------------------------------------------------------
+   6. CLASSIC ICON SIMULATION (4-BIT STYLE)
+   ------------------------------------------------------------------ */
+.cde-icon-style-classic img,
+.cde-icon-style-classic .app-item img,
+.cde-icon-style-classic .cde-desktop-icon img,
+.cde-icon-style-classic .window img {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  filter: contrast(1.1) saturate(1.2) brightness(1.05);
+}
