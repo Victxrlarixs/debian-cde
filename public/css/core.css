@@ -62,8 +62,6 @@ body {
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-normal);
   line-height: var(--line-height-base);
-
-  background-image: url('/backdrops/Marble.png');
   background-size: auto;
   background-repeat: repeat;
   background-position: center;
@@ -258,10 +256,55 @@ body {
   background: var(--dock-icon-hover);
 }
 
-/* ----- Cursor personalizado (SVG) ----- */
+/* ----- Cursores contextuales estilo X11/CDE ----- */
+
+/* Cursor base: flecha CDE para todo */
 * {
-  cursor: url('/icons/cursor.svg'), auto;
+  cursor: url('/icons/cursor.svg') 0 0, default;
 }
+
+/* Cursor de movimiento: titlebar y elementos arrastrables */
+.titlebar,
+[data-draggable="true"],
+.cde-menu-btn {
+  cursor: url('/icons/cursor-move.svg') 12 12, move;
+}
+
+/* Cursor de redimensionado: esquinas de ventana */
+.window-resize-nw,
+.window-resize-se,
+[data-resize="nw"],
+[data-resize="se"] {
+  cursor: url('/icons/cursor-resize-nw.svg') 12 12, nw-resize;
+}
+
+/* Cursor de espera: boot screen y carga de apps */
+#debian-boot-screen,
+.cde-loading,
+[data-state="loading"] {
+  cursor: url('/icons/cursor-wait.svg') 12 12, wait;
+}
+
+/* Cursor de texto: inputs y áreas de texto */
+input[type="text"],
+input[type="color"],
+textarea,
+.fm-path,
+#cde-prompt-input {
+  cursor: text;
+}
+
+/* Botones interactivos: puntero por defecto (CDE no usaba "hand") */
+button,
+.cde-btn,
+.cde-icon,
+.menu-item,
+.cde-preset,
+.fm-item,
+.fm-file {
+  cursor: url('/icons/cursor.svg') 0 0, default;
+}
+
 
 #cde-prompt-input {
   width: 100%;

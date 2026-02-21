@@ -1,0 +1,22 @@
+<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <!-- Classic X11 watch/hourglass cursor -->
+  <!-- Outer shadow -->
+  <rect x="7" y="2" width="10" height="3" rx="0" fill="#404040"/>
+  <rect x="7" y="19" width="10" height="3" rx="0" fill="#404040"/>
+  <!-- Top frame -->
+  <rect x="6" y="1" width="12" height="3" rx="0" fill="#808080"/>
+  <!-- Bottom frame -->
+  <rect x="6" y="20" width="12" height="3" rx="0" fill="#808080"/>
+  <!-- Hourglass body shadow -->
+  <polygon points="7,4 17,4 17,10 12,13 17,16 17,20 7,20 7,14 12,11 7,8" fill="#404040" transform="translate(1,0)"/>
+  <!-- Hourglass body highlight -->
+  <polygon points="7,4 17,4 17,10 12,13 17,16 17,20 7,20 7,14 12,11 7,8" fill="#E0E0E0" transform="translate(-0.5,0)"/>
+  <!-- Hourglass body -->
+  <polygon points="7,4 17,4 17,10 12,13 17,16 17,20 7,20 7,14 12,11 7,8" fill="#c8c8c8"/>
+  <!-- Sand (top half - partially empty) -->
+  <polygon points="9,5 15,5 15,9 12,11 9,9" fill="#a0a0a0"/>
+  <!-- Sand (bottom - filled) -->
+  <polygon points="9,16 15,16 15,19 9,19" fill="#404040"/>
+  <!-- Running sand grain -->
+  <line x1="12" y1="11" x2="12" y2="15" stroke="#404040" stroke-width="1.5"/>
+</svg>

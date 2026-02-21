@@ -2163,20 +2163,6 @@
   border-bottom-color: var(--border-inset-light);
 }
 
-/* Specific Image Presets */
-.backdrop-preset-marble {
-  background-image: url('/backdrops/Marble.png');
-  background-size: cover;
-}
-.backdrop-preset-toronto {
-  background-image: url('/backdrops/Toronto.png');
-  background-size: cover;
-}
-.backdrop-preset-circuit {
-  background-image: url('/backdrops/CircuitBoards.png');
-  background-size: cover;
-}
-
 /* Modal layout and form utilities */
 .cde-modal-field {
   margin-bottom: 20px;
@@ -2607,4 +2593,79 @@
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
   filter: contrast(1.1) saturate(1.2) brightness(1.05);
+}
+
+/* ------------------------------------------------------------------
+   7. BACKDROP MANAGER — Grid de fondos
+   ------------------------------------------------------------------ */
+
+.backdrop-modal-body {
+  max-height: 360px;
+  overflow-y: auto;
+  padding: 6px 8px;
+}
+
+.backdrop-section-label {
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-color);
+  margin: 8px 0 4px 0;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--separator-color);
+}
+
+.backdrop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.backdrop-preset {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 4px;
+  background: var(--button-bg);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-bottom-color: var(--border-dark);
+  border-right-color: var(--border-dark);
+  cursor: url('/icons/cursor.svg') 0 0, default;
+}
+
+.backdrop-preset:hover {
+  background: var(--dock-icon-hover);
+}
+
+.backdrop-preset.active {
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-bottom-color: var(--border-light);
+  border-right-color: var(--border-light);
+  background: var(--button-active);
+}
+
+.backdrop-preview-canvas,
+.backdrop-preview-img {
+  width: 48px;
+  height: 36px;
+  display: block;
+  image-rendering: pixelated;
+  border: 1px solid var(--border-dark);
+  background-size: auto;
+  background-repeat: repeat;
+}
+
+.backdrop-label {
+  font-size: 9px;
+  color: var(--text-color);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 56px;
+  display: block;
 }
