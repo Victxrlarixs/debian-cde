@@ -3,7 +3,7 @@ import WindowControls from '../../common/WindowControls.astro';
 ---
 
 <div class="cde-retro-modal" id="styleManagerScreen">
-  <div class="titlebar" id="styleManagerScreenTitlebar">
+  <div class="titlebar" id="styleManagerScreenTitlebar" onmousedown="window.drag(event, 'styleManagerScreen')">
     <span class="titlebar-text">Style Manager - Screen</span>
     <WindowControls windowId="styleManagerScreen" closeFunction="styleManager.closeScreen" />
   </div>

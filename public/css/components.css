@@ -842,24 +842,15 @@
    ------------------------------------------------------------------ */
 .cde-retro-modal,
 #cde-modal-global {
-  position: fixed !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  margin: 0 !important;
+  position: absolute;
+  margin: 0;
   display: none;
   flex-direction: column;
   z-index: 10000;
   background: var(--window-color);
 }
 
-/* Asegurar que el #styleManager no herede este posicionamiento forzado */
-#styleManager.cde-retro-modal {
-  position: fixed !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-}
+
 
 /* ------------------------------------------------------------------
    CDE MODAL – Estilos globales para ventanas modales
@@ -869,10 +860,10 @@
 /* Modal base – hereda de .cde-retro-modal pero aseguramos posición fija */
 #cde-modal-global,
 .cde-retro-modal.cde-modal-global {
-  position: fixed !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 400px;
   max-width: 90vw;
   background: var(--modal-bg);
@@ -1337,7 +1328,6 @@
   width: fit-content;
   min-width: 70vw;
   max-width: 100vw;
-  margin: 0 auto;
 }
 
 .cde-menubar {

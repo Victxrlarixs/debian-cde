@@ -11,7 +11,7 @@ import StyleManagerStartup from './StyleManagerStartup.astro';
 ---
 
 <div class="cde-retro-modal style-manager-main" id="styleManagerMain">
-  <div class="titlebar" id="styleManagerMainTitlebar">
+  <div class="titlebar" id="styleManagerMainTitlebar" onmousedown="window.drag(event, 'styleManagerMain')">
     <span class="titlebar-text">Style Manager</span>
     <WindowControls
       windowId="styleManagerMain"

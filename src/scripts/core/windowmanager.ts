@@ -64,10 +64,7 @@ const WindowManager = (() => {
       const elementsToRepaint = document.querySelectorAll('.window, .cde-retro-modal, #cde-panel');
       elementsToRepaint.forEach((el) => {
         const element = el as HTMLElement;
-        if (
-          element.id !== 'styleManagerMain' &&
-          (element.classList.contains('window') || element.classList.contains('cde-retro-modal'))
-        ) {
+        if (element.classList.contains('window') || element.classList.contains('cde-retro-modal')) {
           element.classList.remove('active');
         }
       });

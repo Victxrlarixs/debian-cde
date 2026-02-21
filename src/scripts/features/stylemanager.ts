@@ -190,12 +190,33 @@ export class StyleManager {
   public openStartup(): void { this.showWindow('styleManagerStartup'); this.startup.syncUI(); }
   public closeStartup(): void { this.hideWindow('styleManagerStartup'); }
 
+  private centerWindow(win: HTMLElement): void {
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const rect = win.getBoundingClientRect();
+    
+    const left = (viewportWidth - rect.width) / 2;
+    const top = (viewportHeight - rect.height) / 2;
+    
+    win.style.position = 'absolute';
+    win.style.left = `${Math.max(0, left)}px`;
+    win.style.top = `${Math.max(CONFIG.WINDOW.TOP_BAR_HEIGHT, top)}px`;
+    win.style.transform = 'none';
+    
+    logger.log(`[StyleManager] Centered window "${win.id}" at ${win.style.left}, ${win.style.top}`);
+  }
+
   private showWindow(id: string): void {
     const win = document.getElementById(id);
     if (win) {
       win.style.display = 'flex';
       win.style.zIndex = '10000';
-      if (window.focusWindow) window.focusWindow(id);
+      
+      // Center on next frame to ensure dimensions are calculated after display: flex
+      requestAnimationFrame(() => {
+        this.centerWindow(win);
+        if (window.focusWindow) window.focusWindow(id);
+      });
     }
   }
 
