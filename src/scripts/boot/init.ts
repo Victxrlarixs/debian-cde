@@ -11,6 +11,7 @@ import { ProcessMonitor } from '../features/processmonitor';
 import { logger } from '../utilities/logger';
 import { DesktopManager } from '../features/desktop';
 import { CalendarManager } from '../features/calendar';
+import { VFS } from '../core/vfs';
 /**
  * Global interface declarations for CDE desktop environment.
  */
@@ -210,6 +211,10 @@ function initDesktop(): void {
   }
 
   try {
+    // 1. Initialize VFS first as it's the core data layer
+    VFS.init();
+    logger.log('[initDesktop] Virtual Filesystem initialized');
+
     initClock();
     logger.log('[initDesktop] Clock initialized');
 
