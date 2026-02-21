@@ -55,39 +55,47 @@ export const DesktopManager = (() => {
     const container = document.getElementById('desktop-icons-container');
     if (!container) return;
 
-    // Clear current icons
-    container.innerHTML = '';
-
-    // Get positions from settings
-    const savedPositions = (settingsManager.getSection('desktop') as IconPositions) || {};
-
     // Get files from the virtual Desktop folder
     const desktopPath = CONFIG.FS.DESKTOP;
-    const desktopChildren = VFS.getChildren(desktopPath);
+    const desktopChildren = VFS.getChildren(desktopPath) || {};
+    const savedPositions = (settingsManager.getSection('desktop') as IconPositions) || {};
 
-    if (!desktopChildren) {
-      logger.warn('[DesktopManager] Desktop folder empty or VirtualFS not ready.');
-      return;
-    }
+    // 1. Collect current DOM icons to identify what to remove
+    const currentIconElements = Array.from(container.querySelectorAll('.cde-desktop-icon')) as HTMLElement[];
+    const existingNames = new Set(currentIconElements.map(el => el.dataset.name));
 
-    Object.entries(desktopChildren).forEach(([name, node], index) => {
-      const type = node.type;
-      const pos = savedPositions[name] || {
-        left: 20,
-        top: 15 + index * CONFIG.DESKTOP_ICONS.GRID_SIZE,
-      };
-
-      createIcon(name, type, pos.left, pos.top);
+    // 2. Add or update icons from VFS
+    const newNames = Object.keys(desktopChildren);
+    newNames.forEach((name, index) => {
+      const node = desktopChildren[name];
+      if (!existingNames.has(name)) {
+        // Create only if it doesn't exist
+        const pos = savedPositions[name] || {
+          left: 20,
+          top: 15 + index * CONFIG.DESKTOP_ICONS.GRID_SIZE,
+        };
+        createIcon(name, node.type, pos.left, pos.top);
+      }
     });
 
-    // Add System Icons
-    SYSTEM_ICONS.forEach((sys) => {
-      const pos = savedPositions[sys.id] || {
-        left: Math.round(container.clientWidth / 2 - 37),
-        top: Math.round(container.clientHeight / 2 - 40),
-      };
+    // 3. Remove icons that no longer exist in VFS or System
+    currentIconElements.forEach(el => {
+      const name = el.dataset.name;
+      const isSystem = el.dataset.system === 'true';
+      if (!isSystem && name && !desktopChildren[name]) {
+        el.remove();
+      }
+    });
 
-      createIcon(sys.name, 'file', pos.left, pos.top, true, sys.id, sys.icon);
+    // 4. Handle System Icons (Ensure they exist only once)
+    SYSTEM_ICONS.forEach((sys) => {
+      if (!container.querySelector(`[data-id="${sys.id}"]`)) {
+        const pos = savedPositions[sys.id] || {
+          left: 100,
+          top: 100,
+        };
+        createIcon(sys.name, 'file', pos.left, pos.top, true, sys.id, sys.icon);
+      }
     });
   }
 
@@ -126,15 +134,7 @@ export const DesktopManager = (() => {
     icon.appendChild(img);
     icon.appendChild(span);
 
-    // Events
-    icon.addEventListener('pointerdown', (e) => onIconPointerDown(e, icon));
-    icon.addEventListener('dblclick', () => onIconDoubleClick(name, type));
-    icon.addEventListener('contextmenu', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      showContextMenu(e as MouseEvent, icon);
-    });
-
+    // Event delegation is now handled in setupGlobalEvents for efficiency
     container.appendChild(icon);
     icons.push(icon);
   }
@@ -246,47 +246,62 @@ export const DesktopManager = (() => {
 
   function setupGlobalEvents(): void {
     const container = document.getElementById('desktop-icons-container');
+    if (!container) return;
 
-    document.addEventListener('pointerdown', (e) => {
+    // --- DELEGATED ICON EVENTS ---
+
+    container.addEventListener('pointerdown', (e) => {
       const target = e.target as HTMLElement;
-      if (!target.closest('.cde-desktop-icon') && !target.closest('.fm-contextmenu')) {
-        deselectAll();
-        closeContextMenu();
-      }
-    });
-
-    // Global UI Sound Feedback
-    document.addEventListener('click', (e) => {
-      const target = e.target as HTMLElement;
-      if (
-        target.closest('.cde-icon') ||
-        target.closest('.cde-icon-btn') ||
-        target.closest('.menu-item') ||
-        target.closest('.cde-btn') ||
-        target.closest('.pager-workspace') ||
-        target.closest('.titlebar-btn')
-      ) {
-        if (window.AudioManager) window.AudioManager.click();
-      }
-    });
-
-    // Right-click on desktop background
-    if (container) {
-      container.addEventListener('contextmenu', (e) => {
+      if (!target || typeof target.closest !== 'function') return;
+      
+      const icon = target.closest('.cde-desktop-icon') as HTMLElement | null;
+      if (icon) {
+        onIconPointerDown(e, icon);
+      } else {
+        // Click on background
         const target = e.target as HTMLElement;
-        // If we click on the container itself or a non-icon child, show general menu
-        if (target === container || !target.closest('.cde-desktop-icon')) {
-          e.preventDefault();
-          showContextMenu(e, null);
+        if (!target.closest('.fm-contextmenu')) {
+          deselectAll();
+          closeContextMenu();
         }
-      });
-    }
+      }
+    });
+
+    container.addEventListener('dblclick', (e) => {
+      const target = e.target as HTMLElement;
+      if (!target || typeof target.closest !== 'function') return;
+
+      const icon = target.closest('.cde-desktop-icon') as HTMLElement | null;
+      if (icon) {
+        const name = icon.dataset.name || '';
+        const type = (icon.dataset.type as 'file' | 'folder') || 'file';
+        onIconDoubleClick(name, type);
+      }
+    });
+
+    container.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      const target = e.target as HTMLElement;
+      const icon = (target && typeof target.closest === 'function') 
+        ? target.closest('.cde-desktop-icon') as HTMLElement | null
+        : null;
+      
+      // If we click on an icon, show its menu; otherwise show desktop menu
+      showContextMenu(e, icon);
+    });
+
+    // --- GLOBAL EVENTS ---
 
     // Listen for filesystem changes to refresh icons
+    let syncTimeout: number | null = null;
     window.addEventListener('cde-fs-change', (e: any) => {
       if (e.detail?.path === CONFIG.FS.DESKTOP) {
-        logger.log('[DesktopManager] Filesystem change detected, syncing icons...');
-        syncIcons();
+        if (syncTimeout) window.clearTimeout(syncTimeout);
+        syncTimeout = window.setTimeout(() => {
+          logger.log('[DesktopManager] Filesystem change detected, syncing icons...');
+          syncIcons();
+          syncTimeout = null;
+        }, 50);
       }
     });
   }

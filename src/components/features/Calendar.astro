@@ -6,7 +6,11 @@ import WindowControls from '../common/WindowControls.astro';
 <div class="window" id="calendar-window">
   <div class="titlebar" onmousedown="drag(event, 'calendar-window')">
     <span class="titlebar-text">Calendar</span>
-    <WindowControls windowId="calendar-window" closeFunction="calendarManager.close" />
+    <WindowControls 
+      windowId="calendar-window" 
+      closeFunction="calendarManager.close" 
+      disableMaximize={true}
+    />
   </div>
   <div class="calendar-container">
     <div class="calendar-header">

@@ -12,6 +12,12 @@ import { logger } from '../utilities/logger';
 import { DesktopManager } from '../features/desktop';
 import { CalendarManager } from '../features/calendar';
 import { VFS } from '../core/vfs';
+import { Preloader } from '../utilities/preloader';
+/**
+ * Global interface declarations for CDE desktop environment.
+ */
+import bootMessagesData from '../../data/boot-messages.json';
+
 /**
  * Global interface declarations for CDE desktop environment.
  */
@@ -29,13 +35,11 @@ let desktopInitialized = false;
 
 /**
  * Simulates a Debian system boot with CDE.
- * Displays the Debian logo first, then kernel-style messages
- * in #boot-log-container, and finally reveals the desktop (#desktop-ui).
  */
 class DebianRealBoot {
   private currentStep: number = 0;
   private logo: string;
-  private bootSequence: Array<{ delay: number; text: string; type: string }>;
+  private bootSequence: Array<{ delay: number; text: string; type: string }> = [];
   private bootLog: string[] = [];
   private container: HTMLElement | null;
   private bootScreen: HTMLElement | null;
@@ -43,21 +47,63 @@ class DebianRealBoot {
 
   constructor() {
     this.logo = CONFIG.BOOT.LOGO;
-    this.bootSequence = CONFIG.BOOT.SEQUENCE;
     this.container = document.getElementById('boot-log-container');
     this.bootScreen = document.getElementById('debian-boot-screen');
     this.progressBar = document.getElementById('boot-progress-bar');
+    
+    this.generateDynamicSequence();
+
     if (!this.container) {
       console.error('[DebianRealBoot] Boot container #boot-log-container not found');
-    }
-    if (!this.bootScreen) {
-      console.warn('[DebianRealBoot] Boot screen element #debian-boot-screen not found');
     }
   }
 
   /**
+   * Generates a randomized boot sequence based on phases.
+   */
+  private generateDynamicSequence(): void {
+    const phases = bootMessagesData.phases;
+    let totalTime = 0;
+
+    phases.forEach((phase) => {
+      // Pick random number of messages between min and max
+      const count = Math.floor(Math.random() * (phase.max - phase.min + 1)) + phase.min;
+      const selected = this.getRandomSubset(phase.messages, count);
+
+      selected.forEach((msg) => {
+        // Increment global boot time (seconds)
+        const increment = Math.random() * 0.3 + 0.05;
+        totalTime += increment;
+
+        // Format [  timestamp ] Text
+        const timestamp = totalTime.toFixed(6).padStart(12, ' ');
+        const text = phase.name === 'kernel' || phase.name === 'cpu' || phase.name === 'fs' || phase.name === 'memory'
+          ? `[ ${timestamp} ] ${msg.text}`
+          : msg.text;
+
+        this.bootSequence.push({
+          text,
+          type: msg.type,
+          delay: Math.floor(Math.random() * 200) + 50 // Varied delay between lines
+        });
+      });
+    });
+
+    // Add final success message
+    this.bootSequence.push({
+      text: '[    OK    ] CDE Desktop ready ....',
+      type: 'desktop',
+      delay: 500
+    });
+  }
+
+  private getRandomSubset(array: any[], count: number): any[] {
+    const shuffled = [...array].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+  }
+
+  /**
    * Inserts the Debian ASCII logo at the beginning of the container.
-   * @private
    */
   private insertLogo(): void {
     if (!this.container) return;
@@ -95,10 +141,6 @@ class DebianRealBoot {
     this.startBootSequence();
   }
 
-  /**
-   * Recursively plays each line of the boot sequence.
-   * @private
-   */
   private updateProgress(): void {
     const total = this.bootSequence.length;
     const pct = Math.round((this.currentStep / total) * 100);
@@ -109,7 +151,6 @@ class DebianRealBoot {
     this.updateProgress();
     const showNextStep = () => {
       if (this.currentStep >= this.bootSequence.length) {
-        logger.log('[DebianRealBoot] Boot sequence completed, waiting for final delay');
         if (this.progressBar) this.progressBar.style.width = '100%';
         setTimeout(() => this.completeBoot(), CONFIG.BOOT.FINAL_DELAY);
         return;
@@ -127,11 +168,6 @@ class DebianRealBoot {
 
       this.container!.appendChild(line);
       this.container!.scrollTop = this.container!.scrollHeight;
-      this.bootLog.push(step.text);
-
-      logger.log(
-        `[DebianRealBoot] Step ${this.currentStep + 1}/${this.bootSequence.length}: ${step.type} - ${step.text.substring(0, 50)}${step.text.length > 50 ? '...' : ''}`
-      );
 
       this.currentStep++;
       this.updateProgress();
@@ -209,6 +245,9 @@ function initDesktop(): void {
   }
 
   try {
+    // 0. Preload assets as early as possible
+    Preloader.init();
+
     // 1. Initialize VFS first as it's the core data layer
     VFS.init();
     logger.log('[initDesktop] Virtual Filesystem initialized');

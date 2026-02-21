@@ -11,6 +11,8 @@ import TextEditor from '../components/features/TextEditor.astro';
 import DesktopIcons from '../components/desktop/DesktopIcons.astro';
 import Calendar from '../components/features/Calendar.astro';
 import TerminalLab from '../components/features/TerminalLab.astro';
+import AppManager from '../components/features/AppManager.astro';
+import TimeManager from '../components/features/TimeManager.astro';
 ---
 
 <Layout title="Debian">
@@ -47,6 +49,12 @@ import TerminalLab from '../components/features/TerminalLab.astro';
 
     <!-- Calendar -->
     <Calendar />
+
+    <!-- Application Manager -->
+    <AppManager />
+
+    <!-- Time Manager -->
+    <TimeManager />
   </div>
   <!-- cierre desktop-ui -->
 </Layout>

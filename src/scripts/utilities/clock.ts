@@ -8,42 +8,46 @@ import { logger } from './logger';
 let clockInterval: number | null = null;
 let lastTimeString: string = '';
 
+// Global format settings
+let use24h = true;
+let showSeconds = false;
+
 /**
  * Updates the clock element with the current time.
- * Only updates if the time has actually changed.
- *
- * @remarks
- * Retrieves the current system time and formats it as HH:MM (24-hour format).
- * The time is displayed in the element with ID 'clock'.
- * If the clock element is not found, the function exits silently.
- *
- * @example
- * ```typescript
- * updateClock(); // Updates the clock display if time changed
- * ```
  */
 function updateClock(): void {
   const clockEl = document.getElementById('clock');
-  if (!clockEl) {
-    // Solo loggear una vez para no spam
-    if (!(window as any)._clockWarningLogged) {
-      console.warn('[Clock] updateClock: clock element not found');
-      (window as any)._clockWarningLogged = true;
-    }
-    return;
-  }
+  if (!clockEl) return;
 
   const now = new Date();
-  const hours = now.getHours().toString().padStart(2, '0');
-  const minutes = now.getMinutes().toString().padStart(2, '0');
-  const timeString = `${hours}:${minutes}`;
+  
+  const timeString = now.toLocaleTimeString('en-US', {
+    hour12: !use24h,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: showSeconds ? '2-digit' : undefined
+  });
 
   // Solo actualizar DOM si el tiempo cambió
   if (timeString !== lastTimeString) {
     clockEl.textContent = timeString;
     lastTimeString = timeString;
-    logger.log(`[Clock] updateClock: time updated to ${timeString}`);
   }
+}
+
+/**
+ * Updates the clock display format.
+ */
+function updateClockFormat(config: { is24h?: boolean; showSeconds?: boolean }): void {
+  if (config.is24h !== undefined) use24h = config.is24h;
+  if (config.showSeconds !== undefined) showSeconds = config.showSeconds;
+  lastTimeString = ''; // Reset flag to force update
+  updateClock();
+}
+
+// Global exposure
+if (typeof window !== 'undefined') {
+  (window as any).updateClockFormat = updateClockFormat;
 }
 
 /**
