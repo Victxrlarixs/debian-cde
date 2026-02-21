@@ -7,6 +7,7 @@ import { logger } from '../utilities/logger';
 import readmeContent from '../../../README.md?raw';
 import tutorialData from '../../data/tutorial.json';
 import bashBibleContent from '../../data/pure-bash-bible.md?raw';
+import shBibleContent from '../../data/pure-sh-bible.md?raw';
 import themesData from '../../data/themes.json';
 import fontsData from '../../data/fonts.json';
 
@@ -169,11 +170,20 @@ if (rootNode) {
   }
 
   // Sync bash-bible.md with real content
-  const bashPath = CONFIG.FS.HOME + 'man-pages/bash-bible.md';
+  const bashPath = CONFIG.FS.HOME + 'man-pages/pure-bash-bible.md';
   const bashFile = fsMap[bashPath] as VirtualFile;
   if (bashFile && bashFile.type === 'file') {
     bashFile.content = bashBibleContent;
     logger.log(`[FileManager] Synced ${bashPath} with pure-bash-bible.md content`);
+  }
+
+  
+  // Sync sh-bible.md with real content
+  const shPath = CONFIG.FS.HOME + 'man-pages/pure-sh-bible.md';
+  const shFile = fsMap[shPath] as VirtualFile;
+  if (shFile && shFile.type === 'file') {
+    shFile.content = shBibleContent;
+    logger.log(`[FileManager] Synced ${shPath} with pure-sh-bible.md content`);
   }
 
   // Sync themes.json and fonts.json in settings

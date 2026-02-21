@@ -14,11 +14,11 @@
       "man-pages": {
         "type": "folder",
         "children": {
-          "linux-bible.md": {
+          "pure-sh-bible.md": {
             "type": "file",
-            "content": "[Dinamic content: tutorial.json]"
+            "content": "[Dinamic content: pure-sh-bible.md]"
           },
-          "bash-bible.md": {
+          "pure-bash-bible.md": {
             "type": "file",
             "content": "[Dinamic content: pure-bash-bible.md]"
           }
