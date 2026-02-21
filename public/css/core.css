@@ -265,15 +265,13 @@ body {
   box-sizing: border-box;
 }
 
-/* Logo de Debian en el bootloader */
 .boot-logo {
-  color: #00aa00;
+  color: #ff8888;
   font-family: monospace;
   white-space: pre;
   line-height: 1.2;
   margin-bottom: 20px;
   opacity: 1 !important;
-  /* visible desde el inicio */
 }
 
 #taskmanager .terminal-body {

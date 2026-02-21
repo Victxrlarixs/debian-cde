@@ -40,7 +40,6 @@ export class StyleManager {
     this.setupFontControls();
     this.updateUI();
     this.updateFontControls();
-    this.makeAllWindowsDraggable();
   }
 
   /**
@@ -753,63 +752,6 @@ export class StyleManager {
     setTimeout(() => msgBox.parentNode?.removeChild(msgBox), 2000);
   }
 
-  /** Makes all Style Manager windows draggable by attaching event listeners to their titlebars. */
-  private makeAllWindowsDraggable(): void {
-    const windows = [
-      'styleManagerMain',
-      'styleManagerColor',
-      'styleManagerFont',
-      'styleManagerBackdrop',
-      'styleManagerMouse',
-      'styleManagerKeyboard',
-      'styleManagerWindow',
-      'styleManagerScreen',
-      'styleManagerBeep',
-      'styleManagerStartup',
-    ];
-
-    windows.forEach((id) => {
-      const win = document.getElementById(id);
-      const titlebar = document.getElementById(`${id}Titlebar`);
-      if (win && titlebar) {
-        this.makeDraggable(win, titlebar);
-      }
-    });
-  }
-
-  /**
-   * Makes a specific window draggable by handling mousedown on its titlebar.
-   * @param win - The window element.
-   * @param titlebar - The titlebar element.
-   */
-  private makeDraggable(win: HTMLElement, titlebar: HTMLElement): void {
-    let isDragging = false;
-    let dragOffset = { x: 0, y: 0 };
-
-    titlebar.addEventListener('mousedown', (e) => {
-      if ((e.target as HTMLElement).classList.contains('close-btn')) return;
-      isDragging = true;
-      const rect = win.getBoundingClientRect();
-      dragOffset.x = e.clientX - rect.left;
-      dragOffset.y = e.clientY - rect.top;
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp);
-      e.preventDefault();
-    });
-
-    const onMouseMove = (e: MouseEvent) => {
-      if (!isDragging || !win) return;
-      win.style.left = e.clientX - dragOffset.x + 'px';
-      win.style.top = e.clientY - dragOffset.y + 'px';
-      win.style.transform = 'none';
-    };
-
-    const onMouseUp = () => {
-      isDragging = false;
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-    };
-  }
 }
 
 // ============================================================================
@@ -950,11 +892,8 @@ declare global {
   }
 }
 
-// Initialization when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-  window.styleManager = new StyleManager();
-  setTimeout(() => window.styleManager?.init(), 100);
-});
+// StyleManager instance — initialized by init.ts after the boot sequence
+window.styleManager = new StyleManager();
 
 window.updateMouseSetting = updateMouseSetting;
 window.syncMouseControls = syncMouseControls;

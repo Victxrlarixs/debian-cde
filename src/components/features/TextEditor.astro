@@ -1,0 +1,12 @@
+---
+// src/components/apps/TextEditor.astro
+import WindowControls from '../common/WindowControls.astro';
+---
+
+<div class="window" id="text-editor">
+  <div class="titlebar" id="text-editor-titlebar" onmousedown="window.drag(event, 'text-editor')">
+    <span class="titlebar-text" id="text-editor-title">Text Editor</span>
+    <WindowControls windowId="text-editor" closeFunction="window.closeTextEditor" />
+  </div>
+  <div class="terminal-body" id="text-editor-content"></div>
+</div>

@@ -3,7 +3,7 @@
     "type": "folder",
     "children": {
       "Desktop": { "type": "folder", "children": {} },
-      "welcome.txt": { "type": "file", "content": "Welcome to Debian WebCDE." },
+      "welcome.md": { "type": "file", "content": "Welcome to Debian WebCDE." },
       "tutorials": {
         "type": "folder",
         "children": {
