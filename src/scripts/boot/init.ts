@@ -4,7 +4,7 @@ import { CONFIG } from '../core/config';
 import { initClock } from '../utilities/clock';
 import { WindowManager } from '../core/windowmanager';
 import type { StyleManager } from '../features/stylemanager';
-import { retroBeep } from '../utilities/beep';
+
 import { captureFullPageScreenshot } from '../utilities/screenshot';
 import '../ui/external-links';
 import { ProcessMonitor } from '../features/processmonitor';
@@ -197,9 +197,7 @@ function initDesktop(): void {
     return;
   }
   logger.log('[initDesktop] Initializing desktop modules...');
-  if (typeof window.retroBeep === 'function') {
-    logger.log('[Init] Beep utility available');
-  }
+
   if (typeof window.captureFullPageScreenshot === 'function') {
     logger.log('[Init] Screenshot utility available');
   }

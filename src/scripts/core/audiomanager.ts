@@ -3,18 +3,22 @@ import { CONFIG } from './config';
 import { logger } from '../utilities/logger';
 
 export interface IAudioManager {
-  beep(): void;
+  beep(frequency?: number, duration?: number): void;
   click(): void;
   error(): void;
   success(): void;
   windowOpen(): void;
   windowClose(): void;
   setVolume(volume: number): void;
+  playMelody(notes: Array<{ freq: number; duration: number; type?: OscillatorType; delay?: number }>): Promise<void>;
+  playStartupChime(): void;
+  playThemeMelody(): void;
 }
 
 declare global {
   interface Window {
     AudioManager: IAudioManager;
+    retroBeep: () => void;
   }
 }
 
@@ -26,10 +30,6 @@ export const AudioManager = (() => {
   let audioCtx: AudioContext | null = null;
   let masterGain: GainNode | null = null;
 
-  /**
-   * Initializes the audio context and master gain node.
-   * Due to autoplay policies, this is typically called after a user gesture.
-   */
   function init(): void {
     if (audioCtx) return;
 
@@ -44,7 +44,6 @@ export const AudioManager = (() => {
       masterGain = audioCtx.createGain();
       masterGain.connect(audioCtx.destination);
       
-      // Initial volume from CONFIG
       masterGain.gain.value = CONFIG.AUDIO.BEEP_GAIN;
       
       logger.log('[AudioManager] Audio system initialized');
@@ -53,22 +52,43 @@ export const AudioManager = (() => {
     }
   }
 
-  /**
-   * Ensures the audio context is running.
-   */
   async function ensureContext(): Promise<boolean> {
     if (!audioCtx) init();
     if (!audioCtx) return false;
 
     if (audioCtx.state === 'suspended') {
-      await audioCtx.resume();
+      try {
+        await audioCtx.resume();
+      } catch (e) {
+        // Silent fail - browser policy blocked it
+        return false;
+      }
     }
     return true;
   }
 
-  /**
-   * Plays a simple tone.
-   */
+  // Global "Unlock" on first user gesture
+  if (typeof window !== 'undefined') {
+    const unlock = () => {
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume().then(() => {
+          logger.log('[AudioManager] AudioContext unlocked via user gesture');
+          removeListeners();
+        }).catch(() => {});
+      } else if (audioCtx && audioCtx.state === 'running') {
+        removeListeners();
+      }
+    };
+
+    const removeListeners = () => {
+      window.removeEventListener('pointerdown', unlock);
+      window.removeEventListener('keydown', unlock);
+    };
+
+    window.addEventListener('pointerdown', unlock);
+    window.addEventListener('keydown', unlock);
+  }
+
   async function playTone(freq: number, duration: number, type: OscillatorType = 'sine', volume: number = 1.0): Promise<void> {
     if (!(await ensureContext()) || !audioCtx || !masterGain) return;
 
@@ -78,7 +98,6 @@ export const AudioManager = (() => {
     osc.type = type;
     osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
 
-    // Apply specific volume relative to master gain
     gain.gain.setValueAtTime(volume, audioCtx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
 
@@ -89,69 +108,86 @@ export const AudioManager = (() => {
     osc.stop(audioCtx.currentTime + duration);
   }
 
-  return {
-    /**
-     * Classic system beep.
-     */
-    beep(): void {
-      playTone(CONFIG.AUDIO.BEEP_FREQUENCY, CONFIG.AUDIO.BEEP_DURATION, 'square', 0.5);
+  const manager: IAudioManager = {
+    beep(frequency?: number, duration?: number): void {
+      const freq = frequency || CONFIG.AUDIO.BEEP_FREQUENCY;
+      const dur = duration || CONFIG.AUDIO.BEEP_DURATION;
+      playTone(freq, dur, 'square', 0.5);
     },
 
-    /**
-     * Short sharp click for UI interactions.
-     */
     click(): void {
       playTone(1200, 0.05, 'sine', 0.3);
     },
 
-    /**
-     * Error/Warning sound (double beep low pitch).
-     */
     error(): void {
-      playTone(200, 0.1, 'square', 0.4);
-      setTimeout(() => playTone(150, 0.2, 'square', 0.4), 120);
+      this.playMelody([
+        { freq: 200, duration: 0.1, type: 'square', delay: 0 },
+        { freq: 150, duration: 0.2, type: 'square', delay: 120 }
+      ]);
     },
 
-    /**
-     * Success sound (rising pitch).
-     */
     success(): void {
-      playTone(600, 0.1, 'sine', 0.4);
-      setTimeout(() => playTone(800, 0.15, 'sine', 0.4), 100);
+      this.playMelody([
+        { freq: 600, duration: 0.1, type: 'sine', delay: 0 },
+        { freq: 800, duration: 0.15, type: 'sine', delay: 100 }
+      ]);
     },
 
-    /**
-     * Window "pop" sound.
-     */
     windowOpen(): void {
-      playTone(440, 0.1, 'sine', 0.2);
-      setTimeout(() => playTone(880, 0.05, 'sine', 0.2), 50);
+      this.playMelody([
+        { freq: 440, duration: 0.1, type: 'sine', delay: 0 },
+        { freq: 880, duration: 0.05, type: 'sine', delay: 50 }
+      ]);
     },
 
-    /**
-     * Window "close" sound.
-     */
     windowClose(): void {
-      playTone(880, 0.05, 'sine', 0.2);
-      setTimeout(() => playTone(440, 0.1, 'sine', 0.2), 50);
+      this.playMelody([
+        { freq: 880, duration: 0.05, type: 'sine', delay: 0 },
+        { freq: 440, duration: 0.1, type: 'sine', delay: 50 }
+      ]);
     },
 
-    /**
-     * Update global volume.
-     * @param volume 0.0 to 1.0
-     */
     setVolume(volume: number): void {
       if (masterGain) {
         masterGain.gain.setValueAtTime(volume, audioCtx?.currentTime || 0);
         logger.log(`[AudioManager] Volume set to: ${volume}`);
       }
+    },
+
+    async playMelody(notes): Promise<void> {
+      for (const note of notes) {
+        if (note.delay) {
+          await new Promise(resolve => setTimeout(resolve, note.delay));
+        }
+        playTone(note.freq, note.duration, note.type || 'sine', 0.4);
+      }
+    },
+
+    playStartupChime(): void {
+      this.playMelody([
+        { freq: 392.00, duration: 0.15, type: 'sine' }, // G4
+        { freq: 523.25, duration: 0.15, type: 'sine', delay: 50 }, // C5
+        { freq: 659.25, duration: 0.3, type: 'sine', delay: 50 }, // E5
+      ]);
+    },
+
+    playThemeMelody(): void {
+      // A slightly more complex "8-bit" theme sequence
+      this.playMelody([
+        { freq: 261.63, duration: 0.1, type: 'square' },    // C4
+        { freq: 329.63, duration: 0.1, type: 'square', delay: 100 }, // E4
+        { freq: 392.00, duration: 0.1, type: 'square', delay: 100 }, // G4
+        { freq: 523.25, duration: 0.2, type: 'square', delay: 100 }, // C5
+        { freq: 392.00, duration: 0.1, type: 'square', delay: 200 }, // G4
+        { freq: 523.25, duration: 0.4, type: 'square', delay: 100 }, // C5
+      ]);
     }
   };
+
+  return manager;
 })();
 
 // Global Exposure
 if (typeof window !== 'undefined') {
-  (window as any).AudioManager = AudioManager;
-  // Backward compatibility
-  (window as any).retroBeep = () => AudioManager.beep();
+  window.AudioManager = AudioManager;
 }

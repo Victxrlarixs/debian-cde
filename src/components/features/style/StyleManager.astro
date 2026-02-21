@@ -8,6 +8,7 @@ import StyleManagerKeyboard from './StyleManagerKeyboard.astro';
 import StyleManagerWindow from './StyleManagerWindows.astro';
 import StyleManagerScreen from './StyleManagerScreen.astro';
 import StyleManagerStartup from './StyleManagerStartup.astro';
+import StyleManagerBeep from './StyleManagerBeep.astro';
 ---
 
 <div class="cde-retro-modal style-manager-main" id="styleManagerMain">
@@ -52,7 +53,7 @@ import StyleManagerStartup from './StyleManagerStartup.astro';
         <span>Mouse</span>
       </div>
 
-      <div class="cde-category-icon-btn" onclick="retroBeep()">
+      <div class="cde-category-icon-btn" onclick="styleManager.openBeep()">
         <img src="/icons/multimedia-volume-control.png" alt="Beep" width="32" height="32" />
         <span>Beep</span>
       </div>
@@ -88,3 +89,4 @@ import StyleManagerStartup from './StyleManagerStartup.astro';
 <StyleManagerWindow />
 <StyleManagerScreen />
 <StyleManagerStartup />
+<StyleManagerBeep />
