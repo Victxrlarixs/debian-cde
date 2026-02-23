@@ -58,6 +58,7 @@ body {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
+  background-color: #000; /* Match boot screen to prevent flash */
   font-family: var(--font-family-base);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-normal);
@@ -260,34 +261,42 @@ body {
 
 /* Cursor base: flecha CDE para todo */
 * {
-  cursor: url('/icons/cursor.svg') 0 0, default;
+  cursor:
+    url('/icons/cursor.svg') 0 0,
+    default;
 }
 
 /* Cursor de movimiento: titlebar y elementos arrastrables */
 .titlebar,
-[data-draggable="true"],
+[data-draggable='true'],
 .cde-menu-btn {
-  cursor: url('/icons/cursor-move.svg') 12 12, move;
+  cursor:
+    url('/icons/cursor-move.svg') 12 12,
+    move;
 }
 
 /* Cursor de redimensionado: esquinas de ventana */
 .window-resize-nw,
 .window-resize-se,
-[data-resize="nw"],
-[data-resize="se"] {
-  cursor: url('/icons/cursor-resize-nw.svg') 12 12, nw-resize;
+[data-resize='nw'],
+[data-resize='se'] {
+  cursor:
+    url('/icons/cursor-resize-nw.svg') 12 12,
+    nw-resize;
 }
 
 /* Cursor de espera: boot screen y carga de apps */
 #debian-boot-screen,
 .cde-loading,
-[data-state="loading"] {
-  cursor: url('/icons/cursor-wait.svg') 12 12, wait;
+[data-state='loading'] {
+  cursor:
+    url('/icons/cursor-wait.svg') 12 12,
+    wait;
 }
 
 /* Cursor de texto: inputs y áreas de texto */
-input[type="text"],
-input[type="color"],
+input[type='text'],
+input[type='color'],
 textarea,
 .fm-path,
 #cde-prompt-input {
@@ -302,9 +311,10 @@ button,
 .cde-preset,
 .fm-item,
 .fm-file {
-  cursor: url('/icons/cursor.svg') 0 0, default;
+  cursor:
+    url('/icons/cursor.svg') 0 0,
+    default;
 }
-
 
 #cde-prompt-input {
   width: 100%;

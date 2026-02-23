@@ -179,7 +179,39 @@ export class StyleManager {
     document
       .querySelectorAll('#styleManagerFont select, #styleManagerFont input')
       .forEach((ctrl) => {
-        ctrl.addEventListener('input', () => this.font.updateFontPreview());
+        ctrl.addEventListener('input', (e) => {
+          const target = e.target as HTMLInputElement;
+          const cssVar = target.dataset.var;
+          const unit = target.dataset.unit || '';
+          const val = target.value + unit;
+
+          if (cssVar) {
+            // Apply style globally and update local map
+            this.font.applyFontStyle(cssVar, val);
+
+            // Update specific span text if it's a slider
+            if (target.type === 'range') {
+              const valueSpan = target.nextElementSibling as HTMLElement;
+              if (valueSpan && valueSpan.classList.contains('cde-slidervalue')) {
+                valueSpan.textContent = val;
+              }
+            }
+
+            // Sync with Font Weight Bold if normal weight is changed
+            if (cssVar === '--font-weight-normal' && parseInt(target.value) >= 600) {
+              this.font.applyFontStyle(
+                '--font-weight-bold',
+                String(Math.min(parseInt(target.value) + 100, 900))
+              );
+            } else if (cssVar === '--font-weight-normal') {
+              this.font.applyFontStyle('--font-weight-bold', '700');
+            }
+
+            // Refresh preview and save
+            this.font.updateFontPreview();
+            this.saveFont();
+          }
+        });
       });
   }
 
@@ -199,6 +231,7 @@ export class StyleManager {
   }
   public openFont(): void {
     this.showWindow('styleManagerFont');
+    this.font.updateFontControls();
   }
   public closeFont(): void {
     this.hideWindow('styleManagerFont');

@@ -133,6 +133,7 @@
   width: 88px;
   padding: 2px;
   background: var(--dock-icon-bg);
+  color: black;
   border: 2px solid;
   border-top-color: var(--border-inset-dark);
   border-left-color: var(--border-inset-dark);
@@ -160,7 +161,7 @@
 
 .pager-workspace.active {
   background: var(--titlebar-color);
-  color: var(--text-color);
+  color: var(--titlebar-text-color);
   font-weight: bold;
   border-top-color: var(--border-dark);
   border-left-color: var(--border-dark);

@@ -14,7 +14,7 @@ The snippets below are all linted using `shellcheck`.
 
 See something incorrectly described, buggy or outright wrong? Open an issue or send a pull request. If the bible is missing something, open an issue and a solution will be found.
 
-- Leanpub book: (*coming soon*)
+- Leanpub book: (_coming soon_)
 - Buy me a coffee: <a href="https://www.patreon.com/dyla"><img src="https://img.shields.io/badge/donate-patreon-yellow.svg"> </a>
 
 <br>
@@ -23,69 +23,68 @@ See something incorrectly described, buggy or outright wrong? Open an issue or s
 
 <!-- vim-markdown-toc GFM -->
 
-* [STRINGS](#strings)
-    * [Strip pattern from start of string](#strip-pattern-from-start-of-string)
-    * [Strip pattern from end of string](#strip-pattern-from-end-of-string)
-    * [Trim leading and trailing white-space from string](#trim-leading-and-trailing-white-space-from-string)
-    * [Trim all white-space from string and truncate spaces](#trim-all-white-space-from-string-and-truncate-spaces)
-    * [Check if string contains a sub-string](#check-if-string-contains-a-sub-string)
-    * [Check if string starts with sub-string](#check-if-string-starts-with-sub-string)
-    * [Check if string ends with sub-string](#check-if-string-ends-with-sub-string)
-    * [Split a string on a delimiter](#split-a-string-on-a-delimiter)
-    * [Trim quotes from a string](#trim-quotes-from-a-string)
-* [FILES](#files)
-    * [Parsing a `key=val` file.](#parsing-a-keyval-file)
-    * [Get the first N lines of a file](#get-the-first-n-lines-of-a-file)
-    * [Get the number of lines in a file](#get-the-number-of-lines-in-a-file)
-    * [Count files or directories in directory](#count-files-or-directories-in-directory)
-    * [Create an empty file](#create-an-empty-file)
-* [FILE PATHS](#file-paths)
-    * [Get the directory name of a file path](#get-the-directory-name-of-a-file-path)
-    * [Get the base-name of a file path](#get-the-base-name-of-a-file-path)
-* [LOOPS](#loops)
-    * [Loop over a (*small*) range of numbers](#loop-over-a-small-range-of-numbers)
-    * [Loop over a variable range of numbers](#loop-over-a-variable-range-of-numbers)
-    * [Loop over the contents of a file](#loop-over-the-contents-of-a-file)
-    * [Loop over files and directories](#loop-over-files-and-directories)
-* [VARIABLES](#variables)
-    * [Name a variable based on another variable](#name-a-variable-based-on-another-variable)
-* [ESCAPE SEQUENCES](#escape-sequences)
-    * [Text Colors](#text-colors)
-    * [Text Attributes](#text-attributes)
-    * [Cursor Movement](#cursor-movement)
-    * [Erasing Text](#erasing-text)
-* [PARAMETER EXPANSION](#parameter-expansion)
-    * [Prefix and Suffix Deletion](#prefix-and-suffix-deletion)
-    * [Length](#length)
-    * [Default Value](#default-value)
-* [CONDITIONAL EXPRESSIONS](#conditional-expressions)
-    * [File Conditionals](#file-conditionals)
-    * [Variable Conditionals](#variable-conditionals)
-    * [Variable Comparisons](#variable-comparisons)
-* [ARITHMETIC OPERATORS](#arithmetic-operators)
-    * [Assignment](#assignment)
-    * [Arithmetic](#arithmetic)
-    * [Bitwise](#bitwise)
-    * [Logical](#logical)
-    * [Miscellaneous](#miscellaneous)
-* [ARITHMETIC](#arithmetic-1)
-    * [Ternary Tests](#ternary-tests)
-    * [Check if a number is a float](#check-if-a-number-is-a-float)
-    * [Check if a number is an integer](#check-if-a-number-is-an-integer)
-* [TRAPS](#traps)
-    * [Do something on script exit](#do-something-on-script-exit)
-    * [Ignore terminal interrupt (CTRL+C, SIGINT)](#ignore-terminal-interrupt-ctrlc-sigint)
-* [OBSOLETE SYNTAX](#obsolete-syntax)
-    * [Command Substitution](#command-substitution)
-* [INTERNAL AND ENVIRONMENT VARIABLES](#internal-and-environment-variables)
-    * [Open the user's preferred text editor](#open-the-users-preferred-text-editor)
-    * [Get the current working directory](#get-the-current-working-directory)
-    * [Get the PID of the current shell](#get-the-pid-of-the-current-shell)
-    * [Get the current shell options](#get-the-current-shell-options)
-* [AFTERWORD](#afterword)
+- [STRINGS](#strings)
+  - [Strip pattern from start of string](#strip-pattern-from-start-of-string)
+  - [Strip pattern from end of string](#strip-pattern-from-end-of-string)
+  - [Trim leading and trailing white-space from string](#trim-leading-and-trailing-white-space-from-string)
+  - [Trim all white-space from string and truncate spaces](#trim-all-white-space-from-string-and-truncate-spaces)
+  - [Check if string contains a sub-string](#check-if-string-contains-a-sub-string)
+  - [Check if string starts with sub-string](#check-if-string-starts-with-sub-string)
+  - [Check if string ends with sub-string](#check-if-string-ends-with-sub-string)
+  - [Split a string on a delimiter](#split-a-string-on-a-delimiter)
+  - [Trim quotes from a string](#trim-quotes-from-a-string)
+- [FILES](#files)
+  - [Parsing a `key=val` file.](#parsing-a-keyval-file)
+  - [Get the first N lines of a file](#get-the-first-n-lines-of-a-file)
+  - [Get the number of lines in a file](#get-the-number-of-lines-in-a-file)
+  - [Count files or directories in directory](#count-files-or-directories-in-directory)
+  - [Create an empty file](#create-an-empty-file)
+- [FILE PATHS](#file-paths)
+  - [Get the directory name of a file path](#get-the-directory-name-of-a-file-path)
+  - [Get the base-name of a file path](#get-the-base-name-of-a-file-path)
+- [LOOPS](#loops)
+  - [Loop over a (_small_) range of numbers](#loop-over-a-small-range-of-numbers)
+  - [Loop over a variable range of numbers](#loop-over-a-variable-range-of-numbers)
+  - [Loop over the contents of a file](#loop-over-the-contents-of-a-file)
+  - [Loop over files and directories](#loop-over-files-and-directories)
+- [VARIABLES](#variables)
+  - [Name a variable based on another variable](#name-a-variable-based-on-another-variable)
+- [ESCAPE SEQUENCES](#escape-sequences)
+  - [Text Colors](#text-colors)
+  - [Text Attributes](#text-attributes)
+  - [Cursor Movement](#cursor-movement)
+  - [Erasing Text](#erasing-text)
+- [PARAMETER EXPANSION](#parameter-expansion)
+  - [Prefix and Suffix Deletion](#prefix-and-suffix-deletion)
+  - [Length](#length)
+  - [Default Value](#default-value)
+- [CONDITIONAL EXPRESSIONS](#conditional-expressions)
+  - [File Conditionals](#file-conditionals)
+  - [Variable Conditionals](#variable-conditionals)
+  - [Variable Comparisons](#variable-comparisons)
+- [ARITHMETIC OPERATORS](#arithmetic-operators)
+  - [Assignment](#assignment)
+  - [Arithmetic](#arithmetic)
+  - [Bitwise](#bitwise)
+  - [Logical](#logical)
+  - [Miscellaneous](#miscellaneous)
+- [ARITHMETIC](#arithmetic-1)
+  - [Ternary Tests](#ternary-tests)
+  - [Check if a number is a float](#check-if-a-number-is-a-float)
+  - [Check if a number is an integer](#check-if-a-number-is-an-integer)
+- [TRAPS](#traps)
+  - [Do something on script exit](#do-something-on-script-exit)
+  - [Ignore terminal interrupt (CTRL+C, SIGINT)](#ignore-terminal-interrupt-ctrlc-sigint)
+- [OBSOLETE SYNTAX](#obsolete-syntax)
+  - [Command Substitution](#command-substitution)
+- [INTERNAL AND ENVIRONMENT VARIABLES](#internal-and-environment-variables)
+  - [Open the user's preferred text editor](#open-the-users-preferred-text-editor)
+  - [Get the current working directory](#get-the-current-working-directory)
+  - [Get the PID of the current shell](#get-the-pid-of-the-current-shell)
+  - [Get the current shell options](#get-the-current-shell-options)
+- [AFTERWORD](#afterword)
 
 <!-- vim-markdown-toc -->
-
 
 # STRINGS
 
@@ -615,7 +614,7 @@ Downloads
 
 # LOOPS
 
-## Loop over a (*small*) range of numbers
+## Loop over a (_small_) range of numbers
 
 Alternative to `seq` and only suitable for small and static number ranges. The number list can also be replaced with a list of words, variables etc.
 
@@ -688,91 +687,87 @@ value
 
 # ESCAPE SEQUENCES
 
-Contrary to popular belief, there is no issue in utilizing raw escape sequences. Using `tput` abstracts the same ANSI sequences as if printed manually. Worse still, `tput` is not actually portable. There are a number of `tput` variants each with different commands and syntaxes (*try `tput setaf 3` on a FreeBSD system*). Raw sequences are fine.
+Contrary to popular belief, there is no issue in utilizing raw escape sequences. Using `tput` abstracts the same ANSI sequences as if printed manually. Worse still, `tput` is not actually portable. There are a number of `tput` variants each with different commands and syntaxes (_try `tput setaf 3` on a FreeBSD system_). Raw sequences are fine.
 
 ## Text Colors
 
 **NOTE:** Sequences requiring RGB values only work in True-Color Terminal Emulators.
 
-| Sequence | What does it do? | Value |
-| -------- | ---------------- | ----- |
-| `\033[38;5;<NUM>m` | Set text foreground color. | `0-255`
-| `\033[48;5;<NUM>m` | Set text background color. | `0-255`
-| `\033[38;2;<R>;<G>;<B>m` | Set text foreground color to RGB color. | `R`, `G`, `B`
-| `\033[48;2;<R>;<G>;<B>m` | Set text background color to RGB color. | `R`, `G`, `B`
+| Sequence                 | What does it do?                        | Value         |
+| ------------------------ | --------------------------------------- | ------------- |
+| `\033[38;5;<NUM>m`       | Set text foreground color.              | `0-255`       |
+| `\033[48;5;<NUM>m`       | Set text background color.              | `0-255`       |
+| `\033[38;2;<R>;<G>;<B>m` | Set text foreground color to RGB color. | `R`, `G`, `B` |
+| `\033[48;2;<R>;<G>;<B>m` | Set text background color to RGB color. | `R`, `G`, `B` |
 
 ## Text Attributes
 
-| Sequence | What does it do? |
-| -------- | ---------------- |
-| `\033[m`  | Reset text formatting and colors.
-| `\033[1m` | Bold text. |
-| `\033[2m` | Faint text. |
-| `\033[3m` | Italic text. |
-| `\033[4m` | Underline text. |
-| `\033[5m` | Slow blink. |
+| Sequence  | What does it do?                       |
+| --------- | -------------------------------------- |
+| `\033[m`  | Reset text formatting and colors.      |
+| `\033[1m` | Bold text.                             |
+| `\033[2m` | Faint text.                            |
+| `\033[3m` | Italic text.                           |
+| `\033[4m` | Underline text.                        |
+| `\033[5m` | Slow blink.                            |
 | `\033[7m` | Swap foreground and background colors. |
-| `\033[8m` | Hidden text. |
-| `\033[9m` | Strike-through text. |
-
+| `\033[8m` | Hidden text.                           |
+| `\033[9m` | Strike-through text.                   |
 
 ## Cursor Movement
 
-| Sequence | What does it do? | Value |
-| -------- | ---------------- | ----- |
-| `\033[<LINE>;<COLUMN>H` | Move cursor to absolute position. | `line`, `column`
-| `\033[H` | Move cursor to home position (`0,0`). |
-| `\033[<NUM>A` | Move cursor up N lines. | `num`
-| `\033[<NUM>B` | Move cursor down N lines. | `num`
-| `\033[<NUM>C` | Move cursor right N columns. | `num`
-| `\033[<NUM>D` | Move cursor left N columns. | `num`
-| `\033[s` | Save cursor position. |
-| `\033[u` | Restore cursor position. |
-
+| Sequence                | What does it do?                      | Value            |
+| ----------------------- | ------------------------------------- | ---------------- |
+| `\033[<LINE>;<COLUMN>H` | Move cursor to absolute position.     | `line`, `column` |
+| `\033[H`                | Move cursor to home position (`0,0`). |
+| `\033[<NUM>A`           | Move cursor up N lines.               | `num`            |
+| `\033[<NUM>B`           | Move cursor down N lines.             | `num`            |
+| `\033[<NUM>C`           | Move cursor right N columns.          | `num`            |
+| `\033[<NUM>D`           | Move cursor left N columns.           | `num`            |
+| `\033[s`                | Save cursor position.                 |
+| `\033[u`                | Restore cursor position.              |
 
 ## Erasing Text
 
-| Sequence | What does it do? |
-| -------- | ---------------- |
-| `\033[K` | Erase from cursor position to end of line.
-| `\033[1K` | Erase from cursor position to start of line.
-| `\033[2K` | Erase the entire current line.
-| `\033[J` | Erase from the current line to the bottom of the screen.
-| `\033[1J` | Erase from the current line to the top of the screen.
-| `\033[2J` | Clear the screen.
-| `\033[2J\033[H` | Clear the screen and move cursor to `0,0`.
-
+| Sequence        | What does it do?                                         |
+| --------------- | -------------------------------------------------------- |
+| `\033[K`        | Erase from cursor position to end of line.               |
+| `\033[1K`       | Erase from cursor position to start of line.             |
+| `\033[2K`       | Erase the entire current line.                           |
+| `\033[J`        | Erase from the current line to the bottom of the screen. |
+| `\033[1J`       | Erase from the current line to the top of the screen.    |
+| `\033[2J`       | Clear the screen.                                        |
+| `\033[2J\033[H` | Clear the screen and move cursor to `0,0`.               |
 
 # PARAMETER EXPANSION
 
 ## Prefix and Suffix Deletion
 
-| Parameter | What does it do? |
-| --------- | ---------------- |
-| `${VAR#PATTERN}` | Remove shortest match of pattern from start of string. |
-| `${VAR##PATTERN}` | Remove longest match of pattern from start of string. |
-| `${VAR%PATTERN}` | Remove shortest match of pattern from end of string. |
-| `${VAR%%PATTERN}` | Remove longest match of pattern from end of string. |
+| Parameter         | What does it do?                                       |
+| ----------------- | ------------------------------------------------------ |
+| `${VAR#PATTERN}`  | Remove shortest match of pattern from start of string. |
+| `${VAR##PATTERN}` | Remove longest match of pattern from start of string.  |
+| `${VAR%PATTERN}`  | Remove shortest match of pattern from end of string.   |
+| `${VAR%%PATTERN}` | Remove longest match of pattern from end of string.    |
 
 ## Length
 
-| Parameter | What does it do? |
-| --------- | ---------------- |
-| `${#VAR}` | Length of var in characters.
+| Parameter | What does it do?             |
+| --------- | ---------------------------- |
+| `${#VAR}` | Length of var in characters. |
 
 ## Default Value
 
-| Parameter | What does it do? |
-| --------- | ---------------- |
-| `${VAR:-STRING}` | If `VAR` is empty or unset, use `STRING` as its value.
-| `${VAR-STRING}` | If `VAR` is unset, use `STRING` as its value.
-| `${VAR:=STRING}` | If `VAR` is empty or unset, set the value of `VAR` to `STRING`.
-| `${VAR=STRING}` | If `VAR` is unset, set the value of `VAR` to `STRING`.
-| `${VAR:+STRING}` | If `VAR` is not empty, use `STRING` as its value.
-| `${VAR+STRING}` | If `VAR` is set, use `STRING` as its value.
-| `${VAR:?STRING}` | Display an error if empty or unset.
-| `${VAR?STRING}` | Display an error if unset.
-
+| Parameter        | What does it do?                                                |
+| ---------------- | --------------------------------------------------------------- |
+| `${VAR:-STRING}` | If `VAR` is empty or unset, use `STRING` as its value.          |
+| `${VAR-STRING}`  | If `VAR` is unset, use `STRING` as its value.                   |
+| `${VAR:=STRING}` | If `VAR` is empty or unset, set the value of `VAR` to `STRING`. |
+| `${VAR=STRING}`  | If `VAR` is unset, set the value of `VAR` to `STRING`.          |
+| `${VAR:+STRING}` | If `VAR` is not empty, use `STRING` as its value.               |
+| `${VAR+STRING}`  | If `VAR` is set, use `STRING` as its value.                     |
+| `${VAR:?STRING}` | Display an error if empty or unset.                             |
+| `${VAR?STRING}`  | Display an error if unset.                                      |
 
 # CONDITIONAL EXPRESSIONS
 
@@ -780,99 +775,97 @@ For use in `[ ]` `if [ ]; then` and `test`.
 
 ## File Conditionals
 
-| Expression | Value  | What does it do? |
-| ---------- | ------ | ---------------- |
-| `-b`       | `file` | If file exists and is a block special file.
-| `-c`       | `file` | If file exists and is a character special file.
-| `-d`       | `file` | If file exists and is a directory.
-| `-e`       | `file` | If file exists.
-| `-f`       | `file` | If file exists and is a regular file.
-| `-g`       | `file` | If file exists and its set-group-id bit is set.
-| `-h`       | `file` | If file exists and is a symbolic link.
-| `-p`       | `file` | If file exists and is a named pipe (*FIFO*).
-| `-r`       | `file` | If file exists and is readable.
-| `-s`       | `file` | If file exists and its size is greater than zero.
-| `-t`       | `fd`   | If file descriptor is open and refers to a terminal.
-| `-u`       | `file` | If file exists and its set-user-id bit is set.
-| `-w`       | `file` | If file exists and is writable.
-| `-x`       | `file` | If file exists and is executable.
-| `-L`       | `file` | If file exists and is a symbolic link.
-| `-S`       | `file` | If file exists and is a socket.
+| Expression | Value  | What does it do?                                     |
+| ---------- | ------ | ---------------------------------------------------- |
+| `-b`       | `file` | If file exists and is a block special file.          |
+| `-c`       | `file` | If file exists and is a character special file.      |
+| `-d`       | `file` | If file exists and is a directory.                   |
+| `-e`       | `file` | If file exists.                                      |
+| `-f`       | `file` | If file exists and is a regular file.                |
+| `-g`       | `file` | If file exists and its set-group-id bit is set.      |
+| `-h`       | `file` | If file exists and is a symbolic link.               |
+| `-p`       | `file` | If file exists and is a named pipe (_FIFO_).         |
+| `-r`       | `file` | If file exists and is readable.                      |
+| `-s`       | `file` | If file exists and its size is greater than zero.    |
+| `-t`       | `fd`   | If file descriptor is open and refers to a terminal. |
+| `-u`       | `file` | If file exists and its set-user-id bit is set.       |
+| `-w`       | `file` | If file exists and is writable.                      |
+| `-x`       | `file` | If file exists and is executable.                    |
+| `-L`       | `file` | If file exists and is a symbolic link.               |
+| `-S`       | `file` | If file exists and is a socket.                      |
 
 ## Variable Conditionals
 
-| Expression | Value | What does it do? |
-| ---------- | ----- | ---------------- |
-| `-z`       | `var` | If the length of string is zero.
-| `-n`       | `var` | If the length of string is non-zero.
+| Expression | Value | What does it do?                     |
+| ---------- | ----- | ------------------------------------ |
+| `-z`       | `var` | If the length of string is zero.     |
+| `-n`       | `var` | If the length of string is non-zero. |
 
 ## Variable Comparisons
 
-| Expression | What does it do? |
-| ---------- | ---------------- |
-| `var = var2` | Equal to.
-| `var != var2` | Not equal to.
-| `var -eq var2` | Equal to (*algebraically*).
-| `var -ne var2` | Not equal to (*algebraically*).
-| `var -gt var2` | Greater than (*algebraically*).
-| `var -ge var2` | Greater than or equal to (*algebraically*).
-| `var -lt var2` | Less than (*algebraically*).
-| `var -le var2` | Less than or equal to (*algebraically*).
-
+| Expression     | What does it do?                            |
+| -------------- | ------------------------------------------- |
+| `var = var2`   | Equal to.                                   |
+| `var != var2`  | Not equal to.                               |
+| `var -eq var2` | Equal to (_algebraically_).                 |
+| `var -ne var2` | Not equal to (_algebraically_).             |
+| `var -gt var2` | Greater than (_algebraically_).             |
+| `var -ge var2` | Greater than or equal to (_algebraically_). |
+| `var -lt var2` | Less than (_algebraically_).                |
+| `var -le var2` | Less than or equal to (_algebraically_).    |
 
 # ARITHMETIC OPERATORS
 
 ## Assignment
 
-| Operators | What does it do? |
-| --------- | ---------------- |
-| `=`       | Initialize or change the value of a variable.
+| Operators | What does it do?                              |
+| --------- | --------------------------------------------- |
+| `=`       | Initialize or change the value of a variable. |
 
 ## Arithmetic
 
-| Operators | What does it do? |
-| --------- | ---------------- |
-| `+` | Addition
-| `-` | Subtraction
-| `*` | Multiplication
-| `/` | Division
-| `%` | Modulo
-| `+=` | Plus-Equal (*Increment a variable.*)
-| `-=` | Minus-Equal (*Decrement a variable.*)
-| `*=` | Times-Equal (*Multiply a variable.*)
-| `/=` | Slash-Equal (*Divide a variable.*)
-| `%=` | Mod-Equal (*Remainder of dividing a variable.*)
+| Operators | What does it do?                                |
+| --------- | ----------------------------------------------- |
+| `+`       | Addition                                        |
+| `-`       | Subtraction                                     |
+| `*`       | Multiplication                                  |
+| `/`       | Division                                        |
+| `%`       | Modulo                                          |
+| `+=`      | Plus-Equal (_Increment a variable._)            |
+| `-=`      | Minus-Equal (_Decrement a variable._)           |
+| `*=`      | Times-Equal (_Multiply a variable._)            |
+| `/=`      | Slash-Equal (_Divide a variable._)              |
+| `%=`      | Mod-Equal (_Remainder of dividing a variable._) |
 
 ## Bitwise
 
-| Operators | What does it do? |
-| --------- | ---------------- |
-| `<<` | Bitwise Left Shift
-| `<<=` | Left-Shift-Equal
-| `>>` | Bitwise Right Shift
-| `>>=` | Right-Shift-Equal
-| `&` | Bitwise AND
-| `&=` | Bitwise AND-Equal
-| `\|` | Bitwise OR
-| `\|=` | Bitwise OR-Equal
-| `~` | Bitwise NOT
-| `^` | Bitwise XOR
-| `^=` | Bitwise XOR-Equal
+| Operators | What does it do?    |
+| --------- | ------------------- |
+| `<<`      | Bitwise Left Shift  |
+| `<<=`     | Left-Shift-Equal    |
+| `>>`      | Bitwise Right Shift |
+| `>>=`     | Right-Shift-Equal   |
+| `&`       | Bitwise AND         |
+| `&=`      | Bitwise AND-Equal   |
+| `\|`      | Bitwise OR          |
+| `\|=`     | Bitwise OR-Equal    |
+| `~`       | Bitwise NOT         |
+| `^`       | Bitwise XOR         |
+| `^=`      | Bitwise XOR-Equal   |
 
 ## Logical
 
 | Operators | What does it do? |
 | --------- | ---------------- |
-| `!` | NOT
-| `&&` | AND
-| `\|\|` | OR
+| `!`       | NOT              |
+| `&&`      | AND              |
+| `\|\|`    | OR               |
 
 ## Miscellaneous
 
-| Operators | What does it do? | Example |
-| --------- | ---------------- | ------- |
-| `,` | Comma Separator | `((a=1,b=2,c=3))`
-
+| Operators | What does it do? | Example           |
+| --------- | ---------------- | ----------------- |
+| `,`       | Comma Separator  | `((a=1,b=2,c=3))` |
 
 # ARITHMETIC
 
@@ -934,7 +927,7 @@ $
 
 # TRAPS
 
-Traps allow a script to execute code on various signals. In [pxltrm](https://github.com/dylanaraps/pxltrm) (*a pixel art editor written in bash*)  traps are used to redraw the user interface on window resize. Another use case is cleaning up temporary files on script exit.
+Traps allow a script to execute code on various signals. In [pxltrm](https://github.com/dylanaraps/pxltrm) (_a pixel art editor written in bash_) traps are used to redraw the user interface on window resize. Another use case is cleaning up temporary files on script exit.
 
 Traps should be added near the start of scripts so any early errors are also caught.
 
@@ -1008,6 +1001,5 @@ This is an alternative to the `pwd` built-in.
 Thanks for reading! If this bible helped you in any way and you'd like to give back, consider donating. Donations give me the time to make this the best resource possible. Can't donate? That's OK, star the repo and share it with your friends!
 
 <a href="https://www.patreon.com/dyla"><img src="https://img.shields.io/badge/donate-patreon-yellow.svg"></a>
-
 
 Rock on. 🤘

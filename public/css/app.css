@@ -287,7 +287,7 @@
 
 .cde-category.active {
   background: var(--titlebar-color);
-  color: var(--text-color);
+  color: var(--titlebar-text-color);
   border: 1px solid var(--border-dark);
 }
 

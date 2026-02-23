@@ -61,8 +61,10 @@ export const DesktopManager = (() => {
     const savedPositions = (settingsManager.getSection('desktop') as IconPositions) || {};
 
     // 1. Collect current DOM icons to identify what to remove
-    const currentIconElements = Array.from(container.querySelectorAll('.cde-desktop-icon')) as HTMLElement[];
-    const existingNames = new Set(currentIconElements.map(el => el.dataset.name));
+    const currentIconElements = Array.from(
+      container.querySelectorAll('.cde-desktop-icon')
+    ) as HTMLElement[];
+    const existingNames = new Set(currentIconElements.map((el) => el.dataset.name));
 
     // 2. Add or update icons from VFS
     const newNames = Object.keys(desktopChildren);
@@ -79,7 +81,7 @@ export const DesktopManager = (() => {
     });
 
     // 3. Remove icons that no longer exist in VFS or System
-    currentIconElements.forEach(el => {
+    currentIconElements.forEach((el) => {
       const name = el.dataset.name;
       const isSystem = el.dataset.system === 'true';
       if (!isSystem && name && !desktopChildren[name]) {
@@ -253,7 +255,7 @@ export const DesktopManager = (() => {
     container.addEventListener('pointerdown', (e) => {
       const target = e.target as HTMLElement;
       if (!target || typeof target.closest !== 'function') return;
-      
+
       const icon = target.closest('.cde-desktop-icon') as HTMLElement | null;
       if (icon) {
         onIconPointerDown(e, icon);
@@ -282,10 +284,11 @@ export const DesktopManager = (() => {
     container.addEventListener('contextmenu', (e) => {
       e.preventDefault();
       const target = e.target as HTMLElement;
-      const icon = (target && typeof target.closest === 'function') 
-        ? target.closest('.cde-desktop-icon') as HTMLElement | null
-        : null;
-      
+      const icon =
+        target && typeof target.closest === 'function'
+          ? (target.closest('.cde-desktop-icon') as HTMLElement | null)
+          : null;
+
       // If we click on an icon, show its menu; otherwise show desktop menu
       showContextMenu(e, icon);
     });

@@ -10,7 +10,9 @@ export interface IAudioManager {
   windowOpen(): void;
   windowClose(): void;
   setVolume(volume: number): void;
-  playMelody(notes: Array<{ freq: number; duration: number; type?: OscillatorType; delay?: number }>): Promise<void>;
+  playMelody(
+    notes: Array<{ freq: number; duration: number; type?: OscillatorType; delay?: number }>
+  ): Promise<void>;
   playStartupChime(): void;
   playThemeMelody(): void;
 }
@@ -81,7 +83,8 @@ export const AudioManager = (() => {
         init();
       }
       if (audioCtx && audioCtx.state === 'suspended') {
-        audioCtx.resume()
+        audioCtx
+          .resume()
           .then(() => {
             logger.log('[AudioManager] AudioContext unlocked via user gesture');
             removeListeners();
@@ -96,7 +99,12 @@ export const AudioManager = (() => {
     window.addEventListener('keydown', unlock);
   }
 
-  function playTone(freq: number, duration: number, type: OscillatorType = 'sine', volume: number = 1.0): void {
+  function playTone(
+    freq: number,
+    duration: number,
+    type: OscillatorType = 'sine',
+    volume: number = 1.0
+  ): void {
     if (!audioCtx || audioCtx.state !== 'running') {
       ensureContext();
       return;
@@ -134,28 +142,28 @@ export const AudioManager = (() => {
     error(): void {
       this.playMelody([
         { freq: 200, duration: 0.1, type: 'square', delay: 0 },
-        { freq: 150, duration: 0.2, type: 'square', delay: 120 }
+        { freq: 150, duration: 0.2, type: 'square', delay: 120 },
       ]);
     },
 
     success(): void {
       this.playMelody([
         { freq: 600, duration: 0.1, type: 'sine', delay: 0 },
-        { freq: 800, duration: 0.15, type: 'sine', delay: 100 }
+        { freq: 800, duration: 0.15, type: 'sine', delay: 100 },
       ]);
     },
 
     windowOpen(): void {
       this.playMelody([
         { freq: 440, duration: 0.1, type: 'sine', delay: 0 },
-        { freq: 880, duration: 0.05, type: 'sine', delay: 50 }
+        { freq: 880, duration: 0.05, type: 'sine', delay: 50 },
       ]);
     },
 
     windowClose(): void {
       this.playMelody([
         { freq: 880, duration: 0.05, type: 'sine', delay: 0 },
-        { freq: 440, duration: 0.1, type: 'sine', delay: 50 }
+        { freq: 440, duration: 0.1, type: 'sine', delay: 50 },
       ]);
     },
 
@@ -169,7 +177,7 @@ export const AudioManager = (() => {
     async playMelody(notes): Promise<void> {
       for (const note of notes) {
         if (note.delay) {
-          await new Promise(resolve => setTimeout(resolve, note.delay));
+          await new Promise((resolve) => setTimeout(resolve, note.delay));
         }
         playTone(note.freq, note.duration, note.type || 'sine', 0.4);
       }
@@ -177,22 +185,22 @@ export const AudioManager = (() => {
 
     playStartupChime(): void {
       this.playMelody([
-        { freq: 392.00, duration: 0.15, type: 'sine' },          // G4
+        { freq: 392.0, duration: 0.15, type: 'sine' }, // G4
         { freq: 523.25, duration: 0.15, type: 'sine', delay: 50 }, // C5
-        { freq: 659.25, duration: 0.3,  type: 'sine', delay: 50 }, // E5
+        { freq: 659.25, duration: 0.3, type: 'sine', delay: 50 }, // E5
       ]);
     },
 
     playThemeMelody(): void {
       this.playMelody([
-        { freq: 261.63, duration: 0.1, type: 'square' },              // C4
-        { freq: 329.63, duration: 0.1, type: 'square', delay: 100 },  // E4
-        { freq: 392.00, duration: 0.1, type: 'square', delay: 100 },  // G4
-        { freq: 523.25, duration: 0.2, type: 'square', delay: 100 },  // C5
-        { freq: 392.00, duration: 0.1, type: 'square', delay: 200 },  // G4
-        { freq: 523.25, duration: 0.4, type: 'square', delay: 100 },  // C5
+        { freq: 261.63, duration: 0.1, type: 'square' }, // C4
+        { freq: 329.63, duration: 0.1, type: 'square', delay: 100 }, // E4
+        { freq: 392.0, duration: 0.1, type: 'square', delay: 100 }, // G4
+        { freq: 523.25, duration: 0.2, type: 'square', delay: 100 }, // C5
+        { freq: 392.0, duration: 0.1, type: 'square', delay: 200 }, // G4
+        { freq: 523.25, duration: 0.4, type: 'square', delay: 100 }, // C5
       ]);
-    }
+    },
   };
 
   return manager;

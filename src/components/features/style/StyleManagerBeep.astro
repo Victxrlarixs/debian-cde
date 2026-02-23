@@ -21,67 +21,69 @@ import WindowControls from '../../common/WindowControls.astro';
       <div class="beep-icon-section">
         <img src="/icons/multimedia-volume-control.png" alt="Audio" width="48" height="48" />
         <div class="beep-test-buttons">
-            <button class="cde-btn" onclick="styleManager.beep.testBeep()">Test Beep</button>
-            <button class="cde-btn" onclick="AudioManager.playThemeMelody()">Play Theme</button>
+          <button class="cde-btn" onclick="styleManager.beep.testBeep()">Test Beep</button>
+          <button class="cde-btn" onclick="AudioManager.playThemeMelody()">Play Theme</button>
         </div>
       </div>
 
       <div class="beep-controls">
         <div class="beep-group-title">Audio Settings</div>
-        
+
         <div class="beep-control-row">
-            <label for="beep-volume">System Volume:</label>
-            <div class="slider-container">
-                <input 
-                    type="range" 
-                    id="beep-volume" 
-                    min="0" 
-                    max="100" 
-                    value="50"
-                    oninput="styleManager.beep.update('volume', parseInt(this.value)); this.nextElementSibling.textContent = this.value + '%'"
-                />
-                <span class="value-display">50%</span>
-            </div>
+          <label for="beep-volume">System Volume:</label>
+          <div class="slider-container">
+            <input
+              type="range"
+              id="beep-volume"
+              min="0"
+              max="100"
+              value="50"
+              oninput="styleManager.beep.update('volume', parseInt(this.value)); this.nextElementSibling.textContent = this.value + '%'"
+            />
+            <span class="value-display">50%</span>
+          </div>
         </div>
 
         <div class="beep-control-row">
-            <label for="beep-pitch">Beep Pitch (Hz):</label>
-            <div class="slider-container">
-                <input 
-                    type="range" 
-                    id="beep-pitch" 
-                    min="200" 
-                    max="2000" 
-                    step="10"
-                    value="880"
-                    oninput="styleManager.beep.update('pitch', parseInt(this.value)); this.nextElementSibling.textContent = this.value + 'Hz'"
-                />
-                <span class="value-display">880Hz</span>
-            </div>
+          <label for="beep-pitch">Beep Pitch (Hz):</label>
+          <div class="slider-container">
+            <input
+              type="range"
+              id="beep-pitch"
+              min="200"
+              max="2000"
+              step="10"
+              value="880"
+              oninput="styleManager.beep.update('pitch', parseInt(this.value)); this.nextElementSibling.textContent = this.value + 'Hz'"
+            />
+            <span class="value-display">880Hz</span>
+          </div>
         </div>
 
         <div class="beep-control-row">
-            <label for="beep-duration">Beep Duration (ms):</label>
-            <div class="slider-container">
-                <input 
-                    type="range" 
-                    id="beep-duration" 
-                    min="10" 
-                    max="500" 
-                    step="10"
-                    value="100"
-                    oninput="styleManager.beep.update('duration', parseInt(this.value)); this.nextElementSibling.textContent = this.value + 'ms'"
-                />
-                <span class="value-display">100ms</span>
-            </div>
+          <label for="beep-duration">Beep Duration (ms):</label>
+          <div class="slider-container">
+            <input
+              type="range"
+              id="beep-duration"
+              min="10"
+              max="500"
+              step="10"
+              value="100"
+              oninput="styleManager.beep.update('duration', parseInt(this.value)); this.nextElementSibling.textContent = this.value + 'ms'"
+            />
+            <span class="value-display">100ms</span>
+          </div>
         </div>
 
         <div class="beep-group-title u-margin-top-sm">Melody Presets</div>
         <div class="melody-grid">
-            <button class="cde-btn melody-btn" onclick="AudioManager.playStartupChime()">Startup</button>
-            <button class="cde-btn melody-btn" onclick="AudioManager.success()">Success</button>
-            <button class="cde-btn melody-btn" onclick="AudioManager.error()">Error</button>
-            <button class="cde-btn melody-btn" onclick="AudioManager.windowOpen()">Window</button>
+          <button class="cde-btn melody-btn" onclick="AudioManager.playStartupChime()"
+            >Startup</button
+          >
+          <button class="cde-btn melody-btn" onclick="AudioManager.success()">Success</button>
+          <button class="cde-btn melody-btn" onclick="AudioManager.error()">Error</button>
+          <button class="cde-btn melody-btn" onclick="AudioManager.windowOpen()">Window</button>
         </div>
       </div>
     </div>
@@ -181,6 +183,6 @@ import WindowControls from '../../common/WindowControls.astro';
   }
 
   .u-margin-top-sm {
-      margin-top: 10px;
+    margin-top: 10px;
   }
 </style>
