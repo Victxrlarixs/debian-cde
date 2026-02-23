@@ -133,6 +133,7 @@
   width: 88px;
   padding: 2px;
   background: var(--dock-icon-bg);
+  color: black;
   border: 2px solid;
   border-top-color: var(--border-inset-dark);
   border-left-color: var(--border-inset-dark);

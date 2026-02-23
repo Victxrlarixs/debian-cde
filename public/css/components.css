@@ -197,6 +197,7 @@
   line-height: 22px;
   cursor: pointer;
   border: 2px solid;
+  color: var(--text-color);
   border-top-color: var(--border-light);
   border-left-color: var(--border-light);
   border-right-color: var(--border-dark);
@@ -2511,7 +2512,7 @@
 .time-settings-section {
   border: 1px solid var(--border-dark, #808080);
   padding: 8px;
-  background: rgba(0,0,0,0.05);
+  background: rgba(0, 0, 0, 0.05);
   box-shadow: inset 1px 1px 0 #fff;
 }
 
@@ -2633,7 +2634,9 @@
   border-left-color: var(--border-light);
   border-bottom-color: var(--border-dark);
   border-right-color: var(--border-dark);
-  cursor: url('/icons/cursor.svg') 0 0, default;
+  cursor:
+    url('/icons/cursor.svg') 0 0,
+    default;
 }
 
 .backdrop-preset:hover {

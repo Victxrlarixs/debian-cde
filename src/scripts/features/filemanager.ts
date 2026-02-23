@@ -74,7 +74,7 @@ function renderFiles(): void {
 
   pathInput.value = currentPath;
   const folder = VFS.getChildren(currentPath);
-  
+
   if (!folder) {
     logger.warn(`[FileManager] renderFiles: path not found: ${currentPath}`);
     return;
@@ -342,9 +342,10 @@ function handleContextMenu(e: MouseEvent): void {
   if (activeContextMenu) activeContextMenu.remove();
 
   const target = e.target as HTMLElement;
-  const fileEl = (target && typeof target.closest === 'function') 
-    ? target.closest('.fm-file') as HTMLElement | null
-    : null;
+  const fileEl =
+    target && typeof target.closest === 'function'
+      ? (target.closest('.fm-file') as HTMLElement | null)
+      : null;
 
   const menu = document.createElement('div');
   menu.className = 'fm-contextmenu';
@@ -364,7 +365,9 @@ function handleContextMenu(e: MouseEvent): void {
       {
         label: 'Open',
         action: () => {
-          const item = VFS.getNode(currentPath + name + (VFS.getNode(currentPath + name + '/') ? '/' : ''));
+          const item = VFS.getNode(
+            currentPath + name + (VFS.getNode(currentPath + name + '/') ? '/' : '')
+          );
           if (item) {
             if (item.type === 'folder') openPath(currentPath + name + '/');
             else openTextWindow(name, (item as VFSFile).content);
@@ -495,7 +498,7 @@ export const FileManager = {
   close: window.closeFileManager,
   toggle: window.toggleFileManager,
   isOpen: window.isFileManagerOpen,
-  openPath: openPath
+  openPath: openPath,
 };
 
 logger.log('[FileManager] Module loaded');

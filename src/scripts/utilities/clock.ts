@@ -20,12 +20,12 @@ function updateClock(): void {
   if (!clockEl) return;
 
   const now = new Date();
-  
+
   const timeString = now.toLocaleTimeString('en-US', {
     hour12: !use24h,
     hour: '2-digit',
     minute: '2-digit',
-    second: showSeconds ? '2-digit' : undefined
+    second: showSeconds ? '2-digit' : undefined,
   });
 
   // Solo actualizar DOM si el tiempo cambió

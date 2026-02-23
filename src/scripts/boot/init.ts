@@ -50,7 +50,7 @@ class DebianRealBoot {
     this.container = document.getElementById('boot-log-container');
     this.bootScreen = document.getElementById('debian-boot-screen');
     this.progressBar = document.getElementById('boot-progress-bar');
-    
+
     this.generateDynamicSequence();
 
     if (!this.container) {
@@ -77,14 +77,18 @@ class DebianRealBoot {
 
         // Format [  timestamp ] Text
         const timestamp = totalTime.toFixed(6).padStart(12, ' ');
-        const text = phase.name === 'kernel' || phase.name === 'cpu' || phase.name === 'fs' || phase.name === 'memory'
-          ? `[ ${timestamp} ] ${msg.text}`
-          : msg.text;
+        const text =
+          phase.name === 'kernel' ||
+          phase.name === 'cpu' ||
+          phase.name === 'fs' ||
+          phase.name === 'memory'
+            ? `[ ${timestamp} ] ${msg.text}`
+            : msg.text;
 
         this.bootSequence.push({
           text,
           type: msg.type,
-          delay: Math.floor(Math.random() * 200) + 50 // Varied delay between lines
+          delay: Math.floor(Math.random() * 200) + 50, // Varied delay between lines
         });
       });
     });
@@ -93,7 +97,7 @@ class DebianRealBoot {
     this.bootSequence.push({
       text: '[    OK    ] CDE Desktop ready ....',
       type: 'desktop',
-      delay: 500
+      delay: 500,
     });
   }
 

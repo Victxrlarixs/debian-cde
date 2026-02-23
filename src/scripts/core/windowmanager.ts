@@ -80,10 +80,11 @@ const WindowManager = (() => {
 
       // Special case: Ensure other windows are cleaned up if state got desynced
       // (Rare, but helpful for stability without a full loop every time)
-      if (Math.random() < 0.05) { // Occasional garbage collection of classes
-         document.querySelectorAll('.active').forEach(el => {
-           if (el.id !== id) el.classList.remove('active');
-         });
+      if (Math.random() < 0.05) {
+        // Occasional garbage collection of classes
+        document.querySelectorAll('.active').forEach((el) => {
+          if (el.id !== id) el.classList.remove('active');
+        });
       }
 
       win.classList.add('active');
@@ -91,7 +92,7 @@ const WindowManager = (() => {
 
       zIndex++;
       win.style.zIndex = String(zIndex);
-      
+
       if (window.AudioManager) window.AudioManager.click();
       logger.log(`[WindowManager] focused: ${id}`);
     }
@@ -180,7 +181,10 @@ const WindowManager = (() => {
     el.setPointerCapture(e.pointerId);
 
     // X11-style move cursor while dragging
-    document.documentElement.style.setProperty('--cde-cursor-override', "url('/icons/cursor-move.svg') 12 12, move");
+    document.documentElement.style.setProperty(
+      '--cde-cursor-override',
+      "url('/icons/cursor-move.svg') 12 12, move"
+    );
     document.body.style.cursor = `url('/icons/cursor-move.svg') 12 12, move`;
 
     // Performance: Add will-change hint
@@ -293,7 +297,9 @@ const WindowManager = (() => {
 
       // 1. SOUND FEEDBACK (Unified)
       if (
-        target.closest('.cde-icon, .cde-icon-btn, .menu-item, .cde-btn, .pager-workspace, .titlebar-btn')
+        target.closest(
+          '.cde-icon, .cde-icon-btn, .menu-item, .cde-btn, .pager-workspace, .titlebar-btn'
+        )
       ) {
         if (window.AudioManager) window.AudioManager.click();
       }

@@ -8,7 +8,10 @@
         { "text": "Linux version 2.0.36 (root@debian) (gcc version 2.7.2.3)", "type": "kernel" },
         { "text": "Console: colour VGA+ 80x25", "type": "kernel" },
         { "text": "Calibrating delay loop.. 66.56 BogoMIPS", "type": "kernel" },
-        { "text": "Memory: 65536k/65536k available (772k kernel code, 384k reserved, 512k data)", "type": "kernel" },
+        {
+          "text": "Memory: 65536k/65536k available (772k kernel code, 384k reserved, 512k data)",
+          "type": "kernel"
+        },
         { "text": "Checking 'hlt' instruction... OK.", "type": "kernel" },
         { "text": "Intel Pentium with F0 0F bug - fixing.", "type": "cpu" },
         { "text": "PCI: Probing PCI hardware", "type": "kernel" },
@@ -44,7 +47,10 @@
       "min": 3,
       "max": 5,
       "messages": [
-        { "text": "Starting Common Desktop Environment session manager: dtlogin", "type": "desktop" },
+        {
+          "text": "Starting Common Desktop Environment session manager: dtlogin",
+          "type": "desktop"
+        },
         { "text": "dtwm: Window manager initialized (Motif 1.2)", "type": "desktop" },
         { "text": "Loading CDE Panel assets: FrontPanel, WorkspaceManager", "type": "desktop" },
         { "text": "Loading user profile: victxrlarixs", "type": "desktop" },

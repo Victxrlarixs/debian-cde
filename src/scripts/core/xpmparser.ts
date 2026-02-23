@@ -12,17 +12,17 @@ import { logger } from '../utilities/logger';
  * We map that to the active theme variable.
  */
 const CDE_SEMANTIC_MAP: Record<string, string> = {
-  background:        '--window-color',
-  selectColor:       '--titlebar-color',
-  foreground:        '--text-color',
-  topShadowColor:    '--border-light',
+  background: '--window-color',
+  selectColor: '--titlebar-color',
+  foreground: '--text-color',
+  topShadowColor: '--border-light',
   bottomShadowColor: '--border-dark',
-  selectBackground:  '--dock-color',
-  activeForeground:  '--titlebar-text-color',
-  activeBackground:  '--titlebar-color',
-  troughColor:       '--button-active',
-  highlightColor:    '--border-light',
-  backgroundColor:   '--window-color',
+  selectBackground: '--dock-color',
+  activeForeground: '--titlebar-text-color',
+  activeBackground: '--titlebar-color',
+  troughColor: '--button-active',
+  highlightColor: '--border-light',
+  backgroundColor: '--window-color',
 };
 
 /** Convert 16-bit-per-channel XPM hex (#RRRRGGGGBBBB) to CSS #RRGGBB */
@@ -72,8 +72,7 @@ export async function parseXpmToDataUrl(xpmText: string): Promise<string | null>
     const text = xpmText.replace(/\/\*.*?\*\//gs, '');
 
     // Extract all quoted strings
-    const strings = Array.from(text.matchAll(/"(.*?)"/gs))
-      .map(m => m[1].replace(/\\n/g, ''));
+    const strings = Array.from(text.matchAll(/"(.*?)"/gs)).map((m) => m[1].replace(/\\n/g, ''));
 
     if (strings.length < 2) {
       logger.warn('[XPMParser] Not enough data in file');
@@ -133,7 +132,6 @@ export async function parseXpmToDataUrl(xpmText: string): Promise<string | null>
     const dataUrl = canvas.toDataURL('image/png');
     logger.log(`[XPMParser] Rendered ${width}x${height} XPM pattern`);
     return dataUrl;
-
   } catch (err) {
     logger.error('[XPMParser] Parse error:', err);
     return null;

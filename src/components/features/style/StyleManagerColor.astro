@@ -34,52 +34,124 @@ import WindowControls from '../../common/WindowControls.astro';
       <div class="color-swatches-grid">
         <!-- BASE UI COLORS -->
         <div class="color-swatch-item">
-          <button class="color-swatch-btn" style="background-color: var(--window-color);" onclick="document.getElementById('color-window').click()"></button>
+          <button
+            class="color-swatch-btn"
+            style="background-color: var(--window-color);"
+            onclick="document.getElementById('color-window').click()"></button>
           <label>Window</label>
-          <input type="color" id="color-window" data-var="--window-color" style="display: none;" oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value" />
+          <input
+            type="color"
+            id="color-window"
+            data-var="--window-color"
+            style="display: none;"
+            oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value"
+          />
         </div>
 
         <div class="color-swatch-item">
-          <button class="color-swatch-btn" style="background-color: var(--titlebar-color);" onclick="document.getElementById('color-titlebar').click()"></button>
+          <button
+            class="color-swatch-btn"
+            style="background-color: var(--titlebar-color);"
+            onclick="document.getElementById('color-titlebar').click()"></button>
           <label>Titlebar</label>
-          <input type="color" id="color-titlebar" data-var="--titlebar-color" style="display: none;" oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value" />
+          <input
+            type="color"
+            id="color-titlebar"
+            data-var="--titlebar-color"
+            style="display: none;"
+            oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value"
+          />
         </div>
 
         <div class="color-swatch-item">
-          <button class="color-swatch-btn" style="background-color: var(--titlebar-text-color);" onclick="document.getElementById('color-titlebar-text').click()"></button>
+          <button
+            class="color-swatch-btn"
+            style="background-color: var(--titlebar-text-color);"
+            onclick="document.getElementById('color-titlebar-text').click()"></button>
           <label>Text (Title)</label>
-          <input type="color" id="color-titlebar-text" data-var="--titlebar-text-color" style="display: none;" oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value" />
+          <input
+            type="color"
+            id="color-titlebar-text"
+            data-var="--titlebar-text-color"
+            style="display: none;"
+            oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value"
+          />
         </div>
 
         <div class="color-swatch-item">
-          <button class="color-swatch-btn" style="background-color: var(--topbar-color);" onclick="document.getElementById('color-topbar').click()"></button>
+          <button
+            class="color-swatch-btn"
+            style="background-color: var(--topbar-color);"
+            onclick="document.getElementById('color-topbar').click()"></button>
           <label>Topbar</label>
-          <input type="color" id="color-topbar" data-var="--topbar-color" style="display: none;" oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value" />
+          <input
+            type="color"
+            id="color-topbar"
+            data-var="--topbar-color"
+            style="display: none;"
+            oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value"
+          />
         </div>
 
         <div class="color-swatch-item">
-          <button class="color-swatch-btn" style="background-color: var(--button-bg);" onclick="document.getElementById('color-button-bg').click()"></button>
+          <button
+            class="color-swatch-btn"
+            style="background-color: var(--button-bg);"
+            onclick="document.getElementById('color-button-bg').click()"></button>
           <label>Buttons</label>
-          <input type="color" id="color-button-bg" data-var="--button-bg" style="display: none;" oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value" />
+          <input
+            type="color"
+            id="color-button-bg"
+            data-var="--button-bg"
+            style="display: none;"
+            oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value"
+          />
         </div>
 
         <div class="color-swatch-item">
-          <button class="color-swatch-btn" style="background-color: var(--text-color);" onclick="document.getElementById('color-text-main').click()"></button>
+          <button
+            class="color-swatch-btn"
+            style="background-color: var(--text-color);"
+            onclick="document.getElementById('color-text-main').click()"></button>
           <label>Text (Base)</label>
-          <input type="color" id="color-text-main" data-var="--text-color" style="display: none;" oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value" />
+          <input
+            type="color"
+            id="color-text-main"
+            data-var="--text-color"
+            style="display: none;"
+            oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value"
+          />
         </div>
 
         <!-- TERMINAL COLORS -->
         <div class="color-swatch-item">
-          <button class="color-swatch-btn" style="background-color: var(--terminal-bg-color);" onclick="document.getElementById('color-terminal-bg').click()"></button>
+          <button
+            class="color-swatch-btn"
+            style="background-color: var(--terminal-bg-color);"
+            onclick="document.getElementById('color-terminal-bg').click()"></button>
           <label>Terminal BG</label>
-          <input type="color" id="color-terminal-bg" data-var="--terminal-bg-color" style="display: none;" oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value" />
+          <input
+            type="color"
+            id="color-terminal-bg"
+            data-var="--terminal-bg-color"
+            style="display: none;"
+            oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value"
+          />
         </div>
 
         <div class="color-swatch-item">
-          <button class="color-swatch-btn" style="background-color: var(--terminal-text-color);" onclick="document.getElementById('color-terminal-text').click()"></button>
+          <button
+            class="color-swatch-btn"
+            style="background-color: var(--terminal-text-color);"
+            onclick="document.getElementById('color-terminal-text').click()"></button>
           <label>Terminal Text</label>
-          <input type="color" id="color-terminal-text" data-var="--terminal-text-color" style="display: none;" oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value" />
+          <input
+            type="color"
+            id="color-terminal-text"
+            data-var="--terminal-text-color"
+            style="display: none;"
+            oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value"
+          />
         </div>
       </div>
     </div>
@@ -89,33 +161,78 @@ import WindowControls from '../../common/WindowControls.astro';
       <h4 class="color-palettes-title">Advanced / Borders</h4>
       <div class="color-swatches-grid">
         <div class="color-swatch-item">
-          <button class="color-swatch-btn" style="background-color: var(--dock-color);" onclick="document.getElementById('color-dock').click()"></button>
+          <button
+            class="color-swatch-btn"
+            style="background-color: var(--dock-color);"
+            onclick="document.getElementById('color-dock').click()"></button>
           <label>Dock</label>
-          <input type="color" id="color-dock" data-var="--dock-color" style="display: none;" oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value" />
+          <input
+            type="color"
+            id="color-dock"
+            data-var="--dock-color"
+            style="display: none;"
+            oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value"
+          />
         </div>
 
         <div class="color-swatch-item">
-          <button class="color-swatch-btn" style="background-color: var(--menu-color);" onclick="document.getElementById('color-menu').click()"></button>
+          <button
+            class="color-swatch-btn"
+            style="background-color: var(--menu-color);"
+            onclick="document.getElementById('color-menu').click()"></button>
           <label>Menus</label>
-          <input type="color" id="color-menu" data-var="--menu-color" style="display: none;" oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value" />
+          <input
+            type="color"
+            id="color-menu"
+            data-var="--menu-color"
+            style="display: none;"
+            oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value"
+          />
         </div>
 
         <div class="color-swatch-item">
-          <button class="color-swatch-btn" style="background-color: var(--border-light);" onclick="document.getElementById('color-border-light').click()"></button>
+          <button
+            class="color-swatch-btn"
+            style="background-color: var(--border-light);"
+            onclick="document.getElementById('color-border-light').click()"></button>
           <label>Bisel (L)</label>
-          <input type="color" id="color-border-light" data-var="--border-light" style="display: none;" oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value" />
+          <input
+            type="color"
+            id="color-border-light"
+            data-var="--border-light"
+            style="display: none;"
+            oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value"
+          />
         </div>
 
         <div class="color-swatch-item">
-          <button class="color-swatch-btn" style="background-color: var(--border-dark);" onclick="document.getElementById('color-border-dark').click()"></button>
+          <button
+            class="color-swatch-btn"
+            style="background-color: var(--border-dark);"
+            onclick="document.getElementById('color-border-dark').click()"></button>
           <label>Bisel (D)</label>
-          <input type="color" id="color-border-dark" data-var="--border-dark" style="display: none;" oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value" />
+          <input
+            type="color"
+            id="color-border-dark"
+            data-var="--border-dark"
+            style="display: none;"
+            oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value"
+          />
         </div>
 
         <div class="color-swatch-item">
-          <button class="color-swatch-btn" style="background-color: var(--scrollbar-color);" onclick="document.getElementById('color-scrollbar').click()"></button>
+          <button
+            class="color-swatch-btn"
+            style="background-color: var(--scrollbar-color);"
+            onclick="document.getElementById('color-scrollbar').click()"></button>
           <label>Scrollbar</label>
-          <input type="color" id="color-scrollbar" data-var="--scrollbar-color" style="display: none;" oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value" />
+          <input
+            type="color"
+            id="color-scrollbar"
+            data-var="--scrollbar-color"
+            style="display: none;"
+            oninput="this.previousElementSibling.previousElementSibling.style.backgroundColor = this.value"
+          />
         </div>
       </div>
     </div>

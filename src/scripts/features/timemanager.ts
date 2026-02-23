@@ -18,21 +18,21 @@ export class TimeManager {
     if (win) {
       win.style.display = 'flex';
       win.style.zIndex = '10000';
-      
+
       if (window.centerWindow) {
         window.centerWindow(win);
       }
-      
+
       if (window.focusWindow) {
         window.focusWindow(this.id);
       }
 
       this.startTimeUpdate();
-      
+
       if (window.AudioManager) {
         window.AudioManager.windowOpen();
       }
-      
+
       logger.log('[TimeManager] Window opened');
     }
   }
@@ -42,11 +42,11 @@ export class TimeManager {
     if (win) {
       win.style.display = 'none';
       this.stopTimeUpdate();
-      
+
       if (window.AudioManager) {
         window.AudioManager.windowClose();
       }
-      
+
       logger.log('[TimeManager] Window closed');
     }
   }
@@ -69,8 +69,9 @@ export class TimeManager {
 
   public updateFormat(): void {
     const is24h = (document.getElementById('tm-24h') as HTMLInputElement)?.checked ?? true;
-    const showSeconds = (document.getElementById('tm-seconds') as HTMLInputElement)?.checked ?? true;
-    
+    const showSeconds =
+      (document.getElementById('tm-seconds') as HTMLInputElement)?.checked ?? true;
+
     if ((window as any).updateClockFormat) {
       (window as any).updateClockFormat({ is24h, showSeconds });
     }

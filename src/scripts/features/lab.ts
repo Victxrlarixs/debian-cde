@@ -388,7 +388,7 @@ class TerminalLabManager {
         const showHidden = args.includes('-la') || args.includes('-a');
         const node = VFS.getNode(this.cwd);
         if (!node || node.type !== 'folder') return 'ls: cannot access directory';
-        
+
         const children = Object.keys(node.children);
         const base = showHidden ? ['.', '..', ...children] : children;
         return base.join('  ');
@@ -400,7 +400,7 @@ class TerminalLabManager {
         const node = VFS.getNode(resolved);
         if (!node) return `bash: cd: ${target}: No such file or directory`;
         if (node.type !== 'folder') return `bash: cd: ${target}: Not a directory`;
-        
+
         this.cwd = resolved;
         if (this.prompt) this.prompt.textContent = `${this.user}@debian:${this.cwdShort()}$`;
         return '';
@@ -421,7 +421,7 @@ class TerminalLabManager {
         const parts = resolved.split('/').filter(Boolean);
         const name = parts.pop()!;
         const parentPath = '/' + parts.join('/') + (parts.length > 0 ? '/' : '');
-        
+
         await VFS.mkdir(parentPath, name);
         return '';
       },
@@ -433,7 +433,7 @@ class TerminalLabManager {
           const parts = resolved.split('/').filter(Boolean);
           const name = parts.pop()!;
           const parentPath = '/' + parts.join('/') + (parts.length > 0 ? '/' : '');
-          
+
           await VFS.touch(parentPath, name);
         }
         return '';
@@ -445,7 +445,7 @@ class TerminalLabManager {
         const parts = resolved.split('/').filter(Boolean);
         const name = parts.pop()!;
         const parentPath = '/' + parts.join('/') + (parts.length > 0 ? '/' : '');
-        
+
         const ok = await VFS.rm(parentPath, name);
         return ok ? '' : `rm: cannot remove '${args[0]}': No such file or directory`;
       },

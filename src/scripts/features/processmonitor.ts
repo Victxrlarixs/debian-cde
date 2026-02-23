@@ -23,7 +23,7 @@ function scanProcesses(): ProcessInfo[] {
   activeWindows.forEach((win) => {
     const el = win as HTMLElement;
     if (el.id === 'process-monitor') return;
-    
+
     const isVisible = el.style.display !== 'none';
     const titleEl = el.querySelector('.titlebar-text');
     let name = el.id || 'Window';
@@ -45,9 +45,33 @@ function scanProcesses(): ProcessInfo[] {
   });
 
   processes.push(
-    { pid: 1, name: 'init', cpu: '0.3', mem: '1.2', elementId: null, visible: true, isModal: false },
-    { pid: 2, name: 'kthreadd', cpu: '0.0', mem: '0.0', elementId: null, visible: true, isModal: false },
-    { pid: 3, name: 'ksoftirqd/0', cpu: '0.1', mem: '0.0', elementId: null, visible: true, isModal: false }
+    {
+      pid: 1,
+      name: 'init',
+      cpu: '0.3',
+      mem: '1.2',
+      elementId: null,
+      visible: true,
+      isModal: false,
+    },
+    {
+      pid: 2,
+      name: 'kthreadd',
+      cpu: '0.0',
+      mem: '0.0',
+      elementId: null,
+      visible: true,
+      isModal: false,
+    },
+    {
+      pid: 3,
+      name: 'ksoftirqd/0',
+      cpu: '0.1',
+      mem: '0.0',
+      elementId: null,
+      visible: true,
+      isModal: false,
+    }
   );
 
   return processes;
@@ -127,9 +151,15 @@ const ProcessMonitor = (() => {
 
   function updateRowText(row: HTMLElement, p: ProcessInfo, isSelected: boolean): void {
     const user = p.elementId ? 'user' : 'system';
-    const virt = Math.floor(Math.random() * 200 + 100).toString().padStart(5);
-    const res = Math.floor(Math.random() * 50 + 20).toString().padStart(4);
-    const shr = Math.floor(Math.random() * 30 + 10).toString().padStart(4);
+    const virt = Math.floor(Math.random() * 200 + 100)
+      .toString()
+      .padStart(5);
+    const res = Math.floor(Math.random() * 50 + 20)
+      .toString()
+      .padStart(4);
+    const shr = Math.floor(Math.random() * 30 + 10)
+      .toString()
+      .padStart(4);
     const status = p.visible ? 'R' : 'S';
     const selector = isSelected ? '▶' : ' ';
     row.textContent = `${selector} ${p.pid.toString().padStart(5)} ${user.padEnd(8)} 20   0 ${virt} ${res} ${shr} ${status}  ${p.cpu.padStart(4)} ${p.mem.padStart(5)} 0:00.0 ${p.name}`;
@@ -170,10 +200,10 @@ const ProcessMonitor = (() => {
     addLine('');
 
     for (let i = 0; i < 4; i++) {
-        const line = document.createElement('div');
-        line.appendChild(document.createTextNode(`  CPU${i} `));
-        line.appendChild(createBar(0, 'cpu'));
-        contentDiv.appendChild(line);
+      const line = document.createElement('div');
+      line.appendChild(document.createTextNode(`  CPU${i} `));
+      line.appendChild(createBar(0, 'cpu'));
+      contentDiv.appendChild(line);
     }
 
     addLine('');
@@ -209,18 +239,21 @@ const ProcessMonitor = (() => {
     const swapTotal = 2048;
     const swapUsed = Math.random() * 500;
 
-    if (timeLoadLine) timeLoadLine.textContent = `${now.toLocaleTimeString()} up 1 day, load: ${load}, ${load}, ${load}`;
-    if (tasksLine) tasksLine.textContent = `Tasks: ${processes.length} total, 1 running, ${processes.length - 1} sleeping`;
+    if (timeLoadLine)
+      timeLoadLine.textContent = `${now.toLocaleTimeString()} up 1 day, load: ${load}, ${load}, ${load}`;
+    if (tasksLine)
+      tasksLine.textContent = `Tasks: ${processes.length} total, 1 running, ${processes.length - 1} sleeping`;
 
     const cpuFills = contentDiv.querySelectorAll('.cpu-bar-fill');
     cpuFills.forEach((fill) => {
-        (fill as HTMLElement).style.width = `${Math.random() * 100}%`;
+      (fill as HTMLElement).style.width = `${Math.random() * 100}%`;
     });
 
     if (memBarFill) memBarFill.style.width = `${(memUsed / memTotal) * 100}%`;
     if (memTextSpan) memTextSpan.textContent = ` ${memUsed.toFixed(1)}/${memTotal.toFixed(1)} MB`;
     if (swapBarFill) swapBarFill.style.width = `${(swapUsed / swapTotal) * 100}%`;
-    if (swapTextSpan) swapTextSpan.textContent = ` ${swapUsed.toFixed(1)}/${swapTotal.toFixed(1)} MB`;
+    if (swapTextSpan)
+      swapTextSpan.textContent = ` ${swapUsed.toFixed(1)}/${swapTotal.toFixed(1)} MB`;
   }
 
   function updateProcessRows(): void {
@@ -245,7 +278,7 @@ const ProcessMonitor = (() => {
     if (!isOpen) return;
     const newProcesses = scanProcesses();
     const newJSON = JSON.stringify(newProcesses);
-    
+
     requestAnimationFrame(() => {
       if (!isOpen) return;
       if (newJSON === lastProcessesJSON) {

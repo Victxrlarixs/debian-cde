@@ -10,7 +10,7 @@ export class AppManager {
 
   private init(): void {
     logger.log('[AppManager] Initializing...');
-    
+
     // Bind the menu button if it exists
     const menuBtn = document.querySelector('.cde-menu-btn');
     if (menuBtn) {
@@ -27,7 +27,7 @@ export class AppManager {
     if (win) {
       win.style.display = 'flex';
       win.style.zIndex = '10000';
-      
+
       // Use requestAnimationFrame to ensure dimensions are ready for centering,
       // especially on mobile where layout changes might cause overflows.
       requestAnimationFrame(() => {
@@ -38,11 +38,11 @@ export class AppManager {
           window.focusWindow(this.id);
         }
       });
-      
+
       if (window.AudioManager) {
         window.AudioManager.windowOpen();
       }
-      
+
       logger.log('[AppManager] Window opened');
     }
   }
@@ -51,11 +51,11 @@ export class AppManager {
     const win = document.getElementById(this.id);
     if (win) {
       win.style.display = 'none';
-      
+
       if (window.AudioManager) {
         window.AudioManager.windowClose();
       }
-      
+
       logger.log('[AppManager] Window closed');
     }
   }

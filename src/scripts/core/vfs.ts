@@ -1,15 +1,10 @@
-// src/scripts/core/vfs.ts
 import { CONFIG } from './config';
-import filesystemData from '../../data/filesystem.json';
 import { logger } from '../utilities/logger';
-
 // Sync content imports
-import readmeContent from '../../../README.md?raw';
 import tutorialData from '../../data/tutorial.json';
-import bashBibleContent from '../../data/pure-bash-bible.md?raw';
-import shBibleContent from '../../data/pure-sh-bible.md?raw';
 import themesData from '../../data/themes.json';
 import fontsData from '../../data/fonts.json';
+import filesystemData from '../../data/filesystem.json';
 
 // --- Types ---
 
@@ -80,12 +75,19 @@ function dispatchChange(path: string): void {
 
 // --- Sync Logic ---
 
-function syncDynamicContent(): void {
+async function syncDynamicContent(): Promise<void> {
+  // Load heavy assets dynamically to keep initial bundle small
+  const [readme, bashBible, shBible] = await Promise.all([
+    import('../../../README.md?raw'),
+    import('../../data/pure-bash-bible.md?raw'),
+    import('../../data/pure-sh-bible.md?raw'),
+  ]);
+
   // README.md
   const readmePath = CONFIG.FS.DESKTOP + 'readme.md';
   const readmeFile = fsMap[readmePath] as VFSFile;
   if (readmeFile?.type === 'file') {
-    readmeFile.content = readmeContent;
+    readmeFile.content = readme.default;
   }
 
   // Tutorial / Linux Bible
@@ -107,21 +109,20 @@ function syncDynamicContent(): void {
 
   // Bibles
   const bashPath = CONFIG.FS.HOME + 'man-pages/pure-bash-bible.md';
-  const bashFile = fsMap[bashPath] as VFSFile;
-  if (bashFile?.type === 'file') bashFile.content = bashBibleContent;
+  if (fsMap[bashPath]) (fsMap[bashPath] as VFSFile).content = bashBible.default;
 
   const shPath = CONFIG.FS.HOME + 'man-pages/pure-sh-bible.md';
-  const shFile = fsMap[shPath] as VFSFile;
-  if (shFile?.type === 'file') shFile.content = shBibleContent;
+  if (fsMap[shPath]) (fsMap[shPath] as VFSFile).content = shBible.default;
 
   // Settings
   const themesPath = CONFIG.FS.HOME + 'settings/themes.json';
-  if (fsMap[themesPath]) (fsMap[themesPath] as VFSFile).content = JSON.stringify(themesData, null, 2);
+  if (fsMap[themesPath])
+    (fsMap[themesPath] as VFSFile).content = JSON.stringify(themesData, null, 2);
 
   const fontsPath = CONFIG.FS.HOME + 'settings/fonts.json';
   if (fsMap[fontsPath]) (fsMap[fontsPath] as VFSFile).content = JSON.stringify(fontsData, null, 2);
 
-  logger.log('[VFS] Dynamic content synced');
+  logger.log('[VFS] Dynamic content synced (Lazy)');
 }
 
 // --- Public API ---
@@ -133,7 +134,7 @@ export const VFS: IVFS = {
 
     if (rootNode) {
       flatten(rootPath, rootNode);
-      syncDynamicContent();
+      syncDynamicContent(); // Non-blocking sync
       logger.log('[VFS] Initialized, entries:', Object.keys(fsMap).length);
     } else {
       logger.error('[VFS] Root path not found in filesystem data');
@@ -143,10 +144,10 @@ export const VFS: IVFS = {
   resolvePath(cwd: string, path: string): string {
     if (path.startsWith('~')) path = CONFIG.FS.HOME + path.slice(1);
     if (!path.startsWith('/')) path = cwd + (cwd.endsWith('/') ? '' : '/') + path;
-    
+
     const parts = path.split('/').filter(Boolean);
     const resolved: string[] = [];
-    
+
     for (const part of parts) {
       if (part === '.') continue;
       if (part === '..') {
@@ -155,7 +156,7 @@ export const VFS: IVFS = {
       }
       resolved.push(part);
     }
-    
+
     return '/' + resolved.join('/') + (path.endsWith('/') && resolved.length > 0 ? '/' : '');
   },
 
@@ -214,17 +215,17 @@ export const VFS: IVFS = {
       const item = node.children[oldName];
       const oldPath = dirPath + oldName + (item.type === 'folder' ? '/' : '');
       const newPath = dirPath + newName + (item.type === 'folder' ? '/' : '');
-      
+
       node.children[newName] = item;
       delete node.children[oldName];
-      
+
       fsMap[newPath] = item;
       delete fsMap[oldPath];
-      
+
       logger.log(`[VFS] rename: ${oldPath} -> ${newPath}`);
       dispatchChange(dirPath);
     }
-  }
+  },
 };
 
 // Global Exposure

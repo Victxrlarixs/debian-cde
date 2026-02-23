@@ -2,7 +2,7 @@
 import { logger } from './logger';
 
 /**
- * Utility to preload critical CDE assets (icons, sounds) 
+ * Utility to preload critical CDE assets (icons, sounds)
  * to ensure they are available in memory and avoid redundant network requests.
  */
 export const Preloader = (() => {
@@ -21,14 +21,14 @@ export const Preloader = (() => {
     '/icons/org.xfce.taskmanager.png',
     '/icons/calendar.png',
     '/icons/gtkclocksetup.png',
-    '/icons/org.xfce.screenshooter.png'
+    '/icons/org.xfce.screenshooter.png',
   ];
 
   /**
    * Preloads an array of image URLs.
    */
   async function preloadImages(urls: string[]): Promise<void> {
-    const promises = urls.map(url => {
+    const promises = urls.map((url) => {
       return new Promise((resolve) => {
         const img = new Image();
         img.src = url;
@@ -45,11 +45,13 @@ export const Preloader = (() => {
   async function init(): Promise<void> {
     logger.log('[Preloader] Starting preloading of critical assets...');
     const start = performance.now();
-    
+
     await preloadImages(CRITICAL_ICONS);
-    
+
     const end = performance.now();
-    logger.log(`[Preloader] Preloaded ${CRITICAL_ICONS.length} icons in ${(end - start).toFixed(2)}ms`);
+    logger.log(
+      `[Preloader] Preloaded ${CRITICAL_ICONS.length} icons in ${(end - start).toFixed(2)}ms`
+    );
   }
 
   return { init };

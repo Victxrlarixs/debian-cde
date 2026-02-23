@@ -32,7 +32,7 @@ import WindowControls from '../../common/WindowControls.astro';
 
     <div class="cde-controlrow">
       <label class="cde-label">UI Font Family:</label>
-      <select class="cde-select" id="font-family-base">
+      <select class="cde-select" id="font-family-base" data-var="--font-family-base">
         <option value='"Fixedsys", "Lucida Console", monospace'>Fixedsys (Default)</option>
         <option value='"MS Sans Serif", sans-serif'>MS Sans Serif</option>
         <option value='"Times New Roman", serif'>Times New Roman</option>
@@ -43,7 +43,7 @@ import WindowControls from '../../common/WindowControls.astro';
 
     <div class="cde-controlrow">
       <label class="cde-label">Terminal Font:</label>
-      <select class="cde-select" id="font-family-terminal">
+      <select class="cde-select" id="font-family-terminal" data-var="--font-family-terminal">
         <option value='"Courier New", monospace'>Courier New (Default)</option>
         <option value='"Lucida Console", monospace'>Lucida Console</option>
         <option value="Consolas, monospace">Consolas</option>
@@ -57,6 +57,8 @@ import WindowControls from '../../common/WindowControls.astro';
         type="range"
         class="cde-slider"
         id="font-size-base"
+        data-var="--font-size-base"
+        data-unit="px"
         min="10"
         max="18"
         value="12"
@@ -71,6 +73,8 @@ import WindowControls from '../../common/WindowControls.astro';
         type="range"
         class="cde-slider"
         id="font-size-title"
+        data-var="--font-size-title"
+        data-unit="px"
         min="11"
         max="20"
         value="13"
@@ -85,6 +89,7 @@ import WindowControls from '../../common/WindowControls.astro';
         type="range"
         class="cde-slider"
         id="line-height-base"
+        data-var="--line-height-base"
         min="1.0"
         max="2.0"
         value="1.45"
@@ -95,7 +100,7 @@ import WindowControls from '../../common/WindowControls.astro';
 
     <div class="cde-controlrow">
       <label class="cde-label">Font Weight:</label>
-      <select class="cde-select" id="font-weight">
+      <select class="cde-select" id="font-weight" data-var="--font-weight-normal">
         <option value="300">Light (300)</option>
         <option value="400" selected>Normal (400)</option>
         <option value="600">Semibold (600)</option>

@@ -99,13 +99,13 @@ export class ScreenModule {
   public update(key: keyof ScreenSettings, value: any): void {
     (this.settings as any)[key] = value;
     this.save();
-    
+
     if (key === 'iconStyle') {
       this.applyIconStyle();
     } else {
       this.resetTimer();
     }
-    
+
     logger.log(`[ScreenModule] "${key}" updated to ${value}`);
   }
 
@@ -146,7 +146,9 @@ export class ScreenModule {
     const status = document.getElementById('screenStatus');
     if (status) {
       status.textContent =
-        this.settings.saverTimeout > 0 ? `Active (${this.settings.saverTimeout}m)` : 'Settings Loaded';
+        this.settings.saverTimeout > 0
+          ? `Active (${this.settings.saverTimeout}m)`
+          : 'Settings Loaded';
     }
 
     const styleSelect = panel.querySelector('select[data-key="iconStyle"]') as HTMLSelectElement;
