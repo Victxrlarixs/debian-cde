@@ -22,8 +22,9 @@ declare global {
   }
 }
 
-(window as any).CDEModal = CDEModal;
 window.VirtualFS = VFS;
+
+export { formatSize, showProperties };
 
 // ------------------------------------------------------------------
 // INTERNAL STATE
@@ -38,6 +39,7 @@ let zIndex: number = CONFIG.FILEMANAGER.BASE_Z_INDEX;
 let initialized: boolean = false;
 let activeMenu: HTMLElement | null = null;
 let activeContextMenu: HTMLElement | null = null;
+let searchQuery: string = '';
 
 // Mobile support: Tap & Long-press state
 let lastTapTime = 0;
@@ -79,90 +81,139 @@ function renderFiles(): void {
   if (!container || !pathInput || !status) return;
 
   pathInput.value = currentPath;
-  const folder = VFS.getChildren(currentPath);
+  const children = VFS.getChildren(currentPath);
 
-  if (!folder) {
+  if (!children) {
     logger.warn(`[FileManager] renderFiles: path not found: ${currentPath}`);
     return;
   }
 
+  // Filter and Sort (Folders first, then Alpha)
+  let items = Object.entries(children)
+    .filter(([name]) => showHidden || !name.startsWith('.'))
+    .filter(([name]) => !searchQuery || name.toLowerCase().includes(searchQuery))
+    .map(([name, node]) => ({ name, node }));
+
+  items.sort((a, b) => {
+    if (a.node.type === 'folder' && b.node.type === 'file') return -1;
+    if (a.node.type === 'file' && b.node.type === 'folder') return 1;
+    return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+  });
+
+  renderIconView(container, items);
+
+  status.textContent = `${items.length} ${items.length === 1 ? 'item' : 'items'}${searchQuery ? ' (filtered)' : ''}`;
+  renderBreadcrumbs();
+}
+
+function renderIconView(container: HTMLElement, items: { name: string; node: VFSNode }[]): void {
   const fragment = document.createDocumentFragment();
-  let count = 0;
-
-  Object.entries(folder).forEach(([name, item]) => {
-    if (!showHidden && name.startsWith('.')) return;
-    count++;
-
+  items.forEach(({ name, node }) => {
     const div = document.createElement('div');
     div.className = 'fm-file';
+    if (fmSelected === name) div.classList.add('selected');
     div.dataset.name = name;
 
-    div.addEventListener('pointerdown', (e) => {
-      e.stopPropagation();
-      
-      // Select icon
-      document.querySelectorAll('.fm-file').forEach((el) => el.classList.remove('selected'));
-      div.classList.add('selected');
-      fmSelected = name;
-
-      // --- MOBILE: Long-press support ---
-      if (longPressTimer) clearTimeout(longPressTimer);
-      tapStartX = e.clientX;
-      tapStartY = e.clientY;
-
-      longPressTimer = window.setTimeout(() => {
-        if (Math.abs(e.clientX - tapStartX) < 10 && Math.abs(e.clientY - tapStartY) < 10) {
-          logger.log('[FileManager] Long-press on file detected.');
-          handleContextMenu(e as unknown as MouseEvent);
-        }
-        longPressTimer = null;
-      }, 500);
-
-      // --- MOBILE: Double-tap support ---
-      const now = Date.now();
-      if (now - lastTapTime < 300) {
-        logger.log('[FileManager] Double-tap detected.');
-        if (longPressTimer) clearTimeout(longPressTimer);
-        
-        if (item.type === 'folder') {
-          openPath(currentPath + name + '/');
-        } else {
-          openTextWindow(name, (item as VFSFile).content);
-        }
-        lastTapTime = 0;
-        return;
-      }
-      lastTapTime = now;
-    });
-
-    div.addEventListener('pointermove', (e) => {
-      if (longPressTimer && (Math.abs(e.clientX - tapStartX) > 10 || Math.abs(e.clientY - tapStartY) > 10)) {
-        clearTimeout(longPressTimer);
-        longPressTimer = null;
-      }
-    });
-
-    div.addEventListener('pointerup', () => {
-      if (longPressTimer) {
-        clearTimeout(longPressTimer);
-        longPressTimer = null;
-      }
-    });
+    setupFileEvents(div, name, node);
 
     const img = document.createElement('img');
-    img.src = item.type === 'folder' ? '/icons/filemanager.png' : '/icons/text-x-generic.png';
+    img.src = node.type === 'folder' ? '/icons/filemanager.png' : '/icons/text-x-generic.png';
+    img.draggable = false;
 
     const span = document.createElement('span');
     span.textContent = name;
 
     div.appendChild(img);
     div.appendChild(span);
-
     fragment.appendChild(div);
   });
-
   container.replaceChildren(fragment);
-  status.textContent = `${count} ${count === 1 ? 'item' : 'items'}`;
+}
+
+function formatSize(bytes: number): string {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+function setupFileEvents(div: HTMLElement, name: string, item: VFSNode): void {
+  div.draggable = true;
+
+  div.addEventListener('dragstart', (e) => {
+    if (e.dataTransfer) {
+      e.dataTransfer.setData('text/plain', currentPath + name + (item.type === 'folder' ? '/' : ''));
+      e.dataTransfer.effectAllowed = 'move';
+    }
+    div.classList.add('dragging');
+  });
+
+  div.addEventListener('dragend', () => {
+    div.classList.remove('dragging');
+  });
+
+  if (item.type === 'folder') {
+    div.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      div.classList.add('drag-over');
+    });
+    div.addEventListener('dragleave', () => {
+      div.classList.remove('drag-over');
+    });
+    div.addEventListener('drop', async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      div.classList.remove('drag-over');
+      const sourcePath = e.dataTransfer?.getData('text/plain');
+      if (sourcePath && sourcePath !== currentPath + name + '/') {
+        const parts = sourcePath.split('/').filter(Boolean);
+        const fileName = parts[parts.length - 1];
+        await VFS.move(sourcePath, currentPath + name + '/' + fileName);
+      }
+    });
+  }
+
+  div.addEventListener('pointerdown', (e) => {
+    e.stopPropagation();
+    document.querySelectorAll('.fm-file, .fm-list-item').forEach((el) => el.classList.remove('selected'));
+    div.classList.add('selected');
+    fmSelected = name;
+
+    // Mobile Logic
+    if (longPressTimer) clearTimeout(longPressTimer);
+    tapStartX = e.clientX;
+    tapStartY = e.clientY;
+    longPressTimer = window.setTimeout(() => {
+      if (Math.abs(e.clientX - tapStartX) < 10 && Math.abs(e.clientY - tapStartY) < 10) {
+        handleContextMenu(e as unknown as MouseEvent);
+      }
+      longPressTimer = null;
+    }, 500);
+
+    const now = Date.now();
+    if (now - lastTapTime < 300) {
+      if (longPressTimer) clearTimeout(longPressTimer);
+      if (item.type === 'folder') openPath(currentPath + name + '/');
+      else openTextWindow(name, (item as VFSFile).content);
+      lastTapTime = 0;
+      return;
+    }
+    lastTapTime = now;
+  });
+
+  div.addEventListener('pointermove', (e) => {
+    if (longPressTimer && (Math.abs(e.clientX - tapStartX) > 10 || Math.abs(e.clientY - tapStartY) > 10)) {
+      clearTimeout(longPressTimer);
+      longPressTimer = null;
+    }
+  });
+
+  div.addEventListener('pointerup', () => {
+    if (longPressTimer) {
+      clearTimeout(longPressTimer);
+      longPressTimer = null;
+    }
+  });
 }
 
 /**
@@ -170,7 +221,7 @@ function renderFiles(): void {
  */
 function openPath(path: string): void {
   if (!VFS.getNode(path)) {
-    logger.warn(`[FileManager] openPath: path does not exist: ${path}`);
+    logger.warn(`[FileManager] openPath: path not found: ${path}`);
     return;
   }
 
@@ -180,8 +231,60 @@ function openPath(path: string): void {
   history.push(path);
   historyIndex++;
   currentPath = path;
+  searchQuery = ''; // Clear search on navigation
+  const searchInput = document.getElementById('fmSearch') as HTMLInputElement | null;
+  if (searchInput) searchInput.value = '';
 
   renderFiles();
+}
+
+function renderBreadcrumbs(): void {
+  const container = document.getElementById('fmBreadcrumbs');
+  if (!container) return;
+
+  const parts = currentPath.split('/').filter(Boolean);
+  const fragment = document.createDocumentFragment();
+
+  // Root segment
+  const root = document.createElement('span');
+  root.className = 'fm-breadcrumb-segment';
+  root.textContent = '/';
+  root.onclick = (e) => { e.stopPropagation(); openPath('/'); };
+  fragment.appendChild(root);
+
+  let full = '/';
+  parts.forEach((part, i) => {
+    const sep = document.createElement('span');
+    sep.className = 'fm-breadcrumb-separator';
+    sep.textContent = '>';
+    fragment.appendChild(sep);
+
+    full += part + '/';
+    const segment = document.createElement('span');
+    segment.className = 'fm-breadcrumb-segment';
+    segment.textContent = part;
+    const thisPath = full;
+    segment.onclick = (e) => { e.stopPropagation(); openPath(thisPath); };
+    fragment.appendChild(segment);
+  });
+
+  container.replaceChildren(fragment);
+}
+
+function togglePathInput(show: boolean): void {
+  const breadcrumbs = document.getElementById('fmBreadcrumbs');
+  const pathInput = document.getElementById('fmPath');
+  if (!breadcrumbs || !pathInput) return;
+
+  if (show) {
+    breadcrumbs.classList.add('fm-hidden');
+    pathInput.classList.remove('fm-hidden');
+    (pathInput as HTMLInputElement).value = currentPath;
+    pathInput.focus();
+  } else {
+    breadcrumbs.classList.remove('fm-hidden');
+    pathInput.classList.add('fm-hidden');
+  }
 }
 
 /**
@@ -241,11 +344,32 @@ async function mkdir(name: string): Promise<void> {
 
 async function rm(name: string): Promise<void> {
   if (!name) return;
-  const confirmed = await CDEModal.confirm(`Delete ${name}?`);
+  const isTrash = currentPath.includes('/.trash/');
+  const msg = isTrash ? `Permanently delete ${name}?` : `Move ${name} to Trash?`;
+  const confirmed = await CDEModal.confirm(msg);
   if (confirmed) {
-    await VFS.rm(currentPath, name);
+    if (isTrash) await VFS.rm(currentPath, name);
+    else await VFS.moveToTrash(currentPath + name + (VFS.getNode(currentPath + name + '/') ? '/' : ''));
     fmSelected = null;
   }
+}
+
+async function emptyTrash(): Promise<void> {
+  const confirmed = await CDEModal.confirm('Permanently delete all items in Trash?');
+  if (confirmed) {
+    const trashPath = CONFIG.FS.HOME + '.trash/';
+    const trash = VFS.getChildren(trashPath);
+    if (trash) {
+      for (const name of Object.keys(trash)) {
+        await VFS.rm(trashPath, name);
+      }
+    }
+  }
+}
+
+async function restore(name: string): Promise<void> {
+  await VFS.restoreFromTrash(name);
+  fmSelected = null;
 }
 
 async function rename(oldName: string, newName: string): Promise<void> {
@@ -257,6 +381,39 @@ async function openTextWindow(name: string, content: string): Promise<void> {
   if (window.openEmacs) {
     await window.openEmacs(name, content);
   }
+}
+
+async function showProperties(fullPath: string): Promise<void> {
+  const node = VFS.getNode(fullPath + (VFS.getNode(fullPath + '/') && !fullPath.endsWith('/') ? '/' : ''));
+  if (!node) return;
+
+  const parts = fullPath.split('/').filter(Boolean);
+  const name = parts[parts.length - 1] || '/';
+  const meta = (node as any).metadata;
+  const sizeStr = node.type === 'folder' ? '--' : formatSize(meta?.size || 0);
+  const dateStr = meta?.mtime ? new Date(meta.mtime).toLocaleString() : 'Unknown';
+
+  const html = `
+    <div class="fm-properties">
+      <div style="display: flex; gap: 15px; margin-bottom: 10px;">
+        <img src="${node.type === 'folder' ? '/icons/filemanager.png' : '/icons/text-x-generic.png'}" style="width: 48px; height: 48px;" />
+        <div>
+          <b style="font-size: 14px;">${name}</b><br/>
+          <span style="color: #666;">Type: ${node.type}</span>
+        </div>
+      </div>
+      <hr style="border: none; border-top: 1px solid #ccc; margin: 10px 0;"/>
+      <table style="width: 100%; font-size: 12px; border-collapse: collapse;">
+        <tr><td style="padding: 2px 0; color: #555;">Path:</td><td>${fullPath}</td></tr>
+        <tr><td style="padding: 2px 0; color: #555;">Size:</td><td>${sizeStr}</td></tr>
+        <tr><td style="padding: 2px 0; color: #555;">Modified:</td><td>${dateStr}</td></tr>
+        <tr><td style="padding: 2px 0; color: #555;">Owner:</td><td>${meta?.owner || 'victx'}</td></tr>
+        <tr><td style="padding: 2px 0; color: #555;">Permissions:</td><td><code>${meta?.permissions || (node.type === 'folder' ? 'rwxr-xr-x' : 'rw-r--r--')}</code></td></tr>
+      </table>
+    </div>
+  `;
+
+  CDEModal.open(`Properties: ${name}`, html, [{ label: 'Close', value: true, isDefault: true }]);
 }
 
 // ------------------------------------------------------------------
@@ -285,10 +442,8 @@ const fmMenus: Record<string, MenuItem[]> = {
       },
     },
     {
-      label: 'Delete Selected',
-      action: async () => {
-        if (fmSelected) await rm(fmSelected);
-      },
+      label: 'Empty Trash',
+      action: emptyTrash,
     },
   ],
   Edit: [
@@ -346,8 +501,17 @@ function setupMenuBar(): void {
       closeMenu();
 
       const name = span.textContent?.trim() || '';
-      const items = fmMenus[name];
-      if (!items) return;
+      let items = fmMenus[name];
+
+      // Conditional items: Empty Trash only in trash
+      if (name === 'File') {
+        // Robust check for trash path (ignoring trailing slashes)
+        const normalize = (p: string) => p.endsWith('/') ? p : p + '/';
+        const isTrash = normalize(currentPath) === normalize(CONFIG.FS.TRASH);
+        items = items.filter(item => item.label !== 'Empty Trash' || isTrash);
+      }
+
+      if (!items || items.length === 0) return;
 
       const menu = document.createElement('div');
       menu.className = 'fm-dropdown';
@@ -404,16 +568,22 @@ function handleContextMenu(e: MouseEvent): void {
     document.querySelectorAll('.fm-file').forEach((el) => el.classList.remove('selected'));
     fileEl.classList.add('selected');
 
+    const isTrashDir = currentPath.includes('/.trash/');
+    
     items = [
       {
-        label: 'Open',
+        label: isTrashDir ? 'Restore' : 'Open',
         action: () => {
-          const item = VFS.getNode(
-            currentPath + name + (VFS.getNode(currentPath + name + '/') ? '/' : '')
-          );
-          if (item) {
-            if (item.type === 'folder') openPath(currentPath + name + '/');
-            else openTextWindow(name, (item as VFSFile).content);
+          if (isTrashDir) {
+            restore(name);
+          } else {
+            const item = VFS.getNode(
+              currentPath + name + (VFS.getNode(currentPath + name + '/') ? '/' : '')
+            );
+            if (item) {
+              if (item.type === 'folder') openPath(currentPath + name + '/');
+              else openTextWindow(name, (item as VFSFile).content);
+            }
           }
         },
       },
@@ -423,6 +593,10 @@ function handleContextMenu(e: MouseEvent): void {
           const newName = await CDEModal.prompt('New name:', name);
           if (newName) await rename(name, newName);
         },
+      },
+      {
+        label: 'Properties',
+        action: () => showProperties(currentPath + name),
       },
       {
         label: 'Delete',
@@ -459,7 +633,23 @@ function initFileManager(): void {
 
   setupMenuBar();
   const fmFiles = document.getElementById('fmFiles');
-  if (fmFiles) fmFiles.addEventListener('contextmenu', handleContextMenu);
+  if (fmFiles) {
+    fmFiles.addEventListener('contextmenu', handleContextMenu);
+    
+    // Drop on background to move to current dir
+    fmFiles.addEventListener('dragover', (e) => e.preventDefault());
+    fmFiles.addEventListener('drop', async (e) => {
+      const sourcePath = e.dataTransfer?.getData('text/plain');
+      if (sourcePath) {
+        const parts = sourcePath.split('/').filter(Boolean);
+        const fileName = parts[parts.length - 1];
+        const newPath = currentPath + fileName + (sourcePath.endsWith('/') ? '/' : '');
+        if (sourcePath !== newPath) {
+          await VFS.move(sourcePath, newPath);
+        }
+      }
+    });
+  }
 
   document.addEventListener('click', () => {
     closeMenu();
@@ -471,8 +661,26 @@ function initFileManager(): void {
 
   const pathInput = document.getElementById('fmPath') as HTMLInputElement | null;
   if (pathInput) {
-    pathInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') openPath(pathInput.value);
+    pathInput.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        openPath(pathInput.value);
+        togglePathInput(false);
+      }
+      if (e.key === 'Escape') togglePathInput(false);
+    });
+    pathInput.addEventListener('blur', () => togglePathInput(false));
+  }
+
+  const pathContainer = document.getElementById('fmPathContainer');
+  if (pathContainer) {
+    pathContainer.addEventListener('click', () => togglePathInput(true));
+  }
+
+  const searchInput = document.getElementById('fmSearch') as HTMLInputElement | null;
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      searchQuery = searchInput.value.toLowerCase();
+      renderFiles();
     });
   }
 

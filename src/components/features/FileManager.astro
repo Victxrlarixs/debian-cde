@@ -31,22 +31,31 @@ import { CONFIG } from '../../scripts/core/config';
       <button class="fm-btn" onclick="goHome()">
         <img src="/icons/gohome.png" alt="Home" />
       </button>
-      <input class="fm-path" id="fmPath" />
+      
+      <div class="fm-path-container" id="fmPathContainer">
+        <div id="fmBreadcrumbs" class="fm-breadcrumbs"></div>
+        <input class="fm-path fm-hidden" id="fmPath" spellcheck="false" />
+      </div>
+
+      <div class="fm-search-container">
+        <img src="/icons/org.xfce.catfish.png" class="fm-search-icon" />
+        <input class="fm-search-input" id="fmSearch" placeholder="Filter..." spellcheck="false" />
+      </div>
     </div>
     <div class="fm-body">
       <div class="fm-sidebar">
         <div class="fm-section">Places</div>
-        <div class="fm-item" onclick="openPath('/home/victxrlarixs/')">
+        <div class="fm-item" onclick={`openPath('${CONFIG.FS.HOME}')`}>
           <img src="/icons/gohome.png" class="fm-icon" /> victxrlarixs
         </div>
-        <div class="fm-item" onclick="openPath('/home/victxrlarixs/Desktop/')">
+        <div class="fm-item" onclick={`openPath('${CONFIG.FS.DESKTOP}')`}>
           <img src="/icons/desktop.png" class="fm-icon" /> Desktop
         </div>
-        <div class="fm-item">
+        <div class="fm-item" onclick={`openPath('${CONFIG.FS.TRASH}')`}>
           <img src="/icons/user-trash-full.png" class="fm-icon" /> Trash
         </div>
         <div class="fm-section">Devices</div>
-        <div class="fm-item">
+        <div class="fm-item" onclick="openPath('/')">
           <img src="/icons/drive-harddisk.png" class="fm-icon" /> File System
         </div>
         <div class="fm-section">Network</div>
