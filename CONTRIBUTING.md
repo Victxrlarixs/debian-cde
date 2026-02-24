@@ -36,24 +36,34 @@ To understand how the pieces fit together, here is a high-level overview of the 
 ```mermaid
 graph TD
     Root["/"] --> Src["src/"]
-    Src --> Components["components/"]
-    Src --> Scripts["scripts/"]
-    Src --> Data["data/"]
-    
-    Components --> CFeatures["features/ (Astro Windows)"]
-    Components --> CDesktop["desktop/ (Panel, TopBar)"]
-    
-    Scripts --> SCore["core/ (VFS, WindowManager, Audio)"]
-    Scripts --> SFeatures["features/ (Logic for Apps)"]
-    Scripts --> SUtils["utilities/ (Logger, Colors)"]
-    
-    Data --> DJSON["Palettes, Icons, Fonts, VFS"]
-    
-    Public["public/"]
-    Public --> CSS["css/ (Modular Styles)"]
-    Public --> PIcons["icons/ (Desktop & UI Icons)"]
-    Public --> PBackdrops["backdrops/ (Desktop Backgrounds)"]
-    Public --> PPalettes["palettes/ (CDE Color Themes)"]
+    Root --> Public["public/"]
+
+    subgraph "src (Source Code)"
+        Src --> Components["components/"]
+        Src --> Scripts["scripts/"]
+        Src --> Data["data/"]
+        Src --> Layouts["layouts/"]
+        Src --> Pages["pages/"]
+
+        Components --> CFeatures["features/"]
+        CFeatures --> CApps["AppMgr, Terminal, TextEditor, FM, ProcMon, etc."]
+        Components --> CDesktop["desktop/ (Panel, TopBar, Dock)"]
+
+        Scripts --> SCore["core/ (Logic Center)"]
+        SCore --> SCoreFiles["VFS, WindowMgr, Settings, Audio"]
+        Scripts --> SFeatures["features/ (App Controllers)"]
+        Scripts --> SUI["ui/ (Modals, Links)"]
+        Scripts --> SUtils["utilities/ (Logger, Colors, Screenshots)"]
+
+        Data --> DFiles["Palettes, FS, Fonts, Tutorials (JSON/MD)"]
+    end
+
+    subgraph "public (Static Assets)"
+        Public --> CSS["css/ (CDE Design System)"]
+        Public --> PIcons["icons/ (System & App Icons)"]
+        Public --> PBackdrops["backdrops/ (Retro Backgrounds)"]
+        Public --> PPalettes["palettes/ (Theme Definitions)"]
+    end
 ```
 
 ### Component Interaction Flow
