@@ -4,6 +4,7 @@ import { CONFIG } from '../core/config';
 import { VFS, type VFSNode, type VFSFile, type VFSFolder } from '../core/vfs';
 import { CDEModal } from '../ui/modals';
 import { logger } from '../utilities/logger';
+import { WindowManager } from '../core/windowmanager';
 
 declare global {
   interface Window {
@@ -697,6 +698,7 @@ window.openFileManager = () => {
   if (win) {
     win.style.display = 'flex';
     win.style.zIndex = String(++zIndex);
+    WindowManager.centerWindow(win);
     if (window.AudioManager) window.AudioManager.windowOpen();
     initFileManager();
     openPath(currentPath);

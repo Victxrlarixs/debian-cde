@@ -1,7 +1,7 @@
-// src/scripts/features/emacs.ts
 import { logger } from '../utilities/logger';
 import { VFS } from '../core/vfs';
 import { CDEModal } from '../ui/modals';
+import { WindowManager } from '../core/windowmanager';
 
 /**
  * Emacs-style Editor Manager (Rebranded)
@@ -166,7 +166,7 @@ class EmacsManager {
 
     this.win.style.display = 'flex';
     this.win.style.zIndex = String(++this.zIndex);
-    if (window.centerWindow) window.centerWindow(this.win);
+    WindowManager.centerWindow(this.win);
     this.win.focus(); // Focus the window container for splash shortcuts
     if (window.focusWindow) window.focusWindow('emacs');
   }
@@ -187,7 +187,7 @@ class EmacsManager {
 
     this.win.style.display = 'flex';
     this.win.style.zIndex = String(++this.zIndex);
-    if (window.centerWindow) window.centerWindow(this.win);
+    WindowManager.centerWindow(this.win);
     if (window.focusWindow) window.focusWindow('emacs');
     this.textarea.focus();
   }

@@ -783,10 +783,38 @@
   opacity: 0.5;
 }
 
-.fm-file.drag-over,
-.fm-list-item.drag-over {
-  border: 1px dashed var(--cde-blue-dark);
-  background: rgba(0, 0, 255, 0.05) !important;
+/* ── Snapshot Viewer ── */
+.screenshot-preview-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: auto;
+  max-width: 85vw;
+  max-height: 70vh;
+  overflow: auto;
+  padding: 6px;
+  background: var(--cde-gray-dark);
+  border: 4px ridge var(--border-light);
+  box-shadow: inset 2px 2px 5px rgba(0,0,0,0.5);
+}
+
+.screenshot-preview-image {
+  max-width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+  border: 2px solid #000;
+  box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+}
+
+.screenshot-info {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: var(--text-color);
+  text-shadow: 1px 1px 0px #000;
+  background: rgba(0,0,0,0.3);
+  padding: 4px 8px;
+  border-radius: 2px;
 }
 
 .fm-btn {
@@ -1035,7 +1063,8 @@
 #cde-modal-global,
 .cde-retro-modal.cde-modal-global {
   position: absolute;
-  width: 400px;
+  width: auto;
+  min-width: 320px;
   max-width: 90vw;
   background: var(--modal-bg);
   border: 2px solid;
@@ -1127,10 +1156,12 @@
    Monitor de procesos estilo htop
    ================================================================== */
 #process-monitor {
-  top: 150px;
-  left: 300px;
-  width: 750px;
+  position: absolute;
+  width: min(750px, 95vw);
+  max-width: 95vw;
+  max-height: calc(100vh - 100px);
   display: none;
+  flex-direction: column;
   font-family: monospace;
   font-size: 13px;
   line-height: 1.3;
@@ -1337,11 +1368,18 @@
   left: 0 !important;
   width: 100% !important;
   height: calc(100% - 106px) !important;
-  max-width: none;
+  max-width: none !important;
   max-height: calc(100% - 106px) !important;
   transform: none !important;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+}
+
+/* --- Universal Window Constraints --- */
+.window, .cde-retro-modal {
+  max-width: 95vw !important;
+  max-height: 90vh !important;
   overflow: hidden;
 }
 
@@ -2350,7 +2388,8 @@
 
 /* Calendar Window */
 #calendar-window {
-  width: 280px;
+  position: absolute;
+  width: min(280px, 95vw) !important;
   display: none;
   flex-direction: column;
 }
@@ -2424,10 +2463,11 @@
    TERMINAL LABORATORY
    ------------------------------------------------------------------ */
 #terminal-lab {
-  width: min(820px, 100vw);
-  height: min(520px, 90vh);
-  max-width: 100vw;
-  max-height: calc(100vh - 28px);
+  position: absolute;
+  width: min(820px, 95vw);
+  height: min(520px, 80vh);
+  max-width: 95vw;
+  max-height: calc(100vh - 100px);
   display: none;
   flex-direction: column;
   font-family: var(--font-family-terminal);

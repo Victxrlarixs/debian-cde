@@ -1,6 +1,7 @@
 import { CONFIG } from '../core/config';
 import tutorialSequences from '../../data/tutorial.json';
 import { logger } from '../utilities/logger';
+import { WindowManager } from '../core/windowmanager';
 
 // ------------------------------------------------------------------
 // CONSTANTS AND CONFIGURATION (from CONFIG)
@@ -377,6 +378,7 @@ window.openTerminal = function openTerminal(): void {
       '[TerminalTutorial] openTerminal: terminal was hidden, displaying and starting tutorial'
     );
     terminal.style.display = 'block';
+    WindowManager.centerWindow(terminal);
     if (window.AudioManager) window.AudioManager.windowOpen();
     TerminalTutorial.start();
   } else {

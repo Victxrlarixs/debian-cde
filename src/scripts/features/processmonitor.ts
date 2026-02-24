@@ -1,5 +1,6 @@
 import { CONFIG } from '../core/config';
 import { logger } from '../utilities/logger';
+import { WindowManager } from '../core/windowmanager';
 
 // ============================================================================
 // Process Monitor - Live updating htop-style process viewer
@@ -299,6 +300,7 @@ const ProcessMonitor = (() => {
     isOpen = true;
     winElement.style.display = 'block';
     winElement.style.zIndex = String(++zIndex);
+    WindowManager.centerWindow(winElement);
     winElement.focus();
     if (window.focusWindow) window.focusWindow(WINDOW_ID);
 

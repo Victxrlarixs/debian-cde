@@ -1,5 +1,5 @@
-// src/scripts/features/appmanager.ts
 import { logger } from '../utilities/logger';
+import { WindowManager } from '../core/windowmanager';
 
 export class AppManager {
   private id = 'appManager';
@@ -31,9 +31,7 @@ export class AppManager {
       // Use requestAnimationFrame to ensure dimensions are ready for centering,
       // especially on mobile where layout changes might cause overflows.
       requestAnimationFrame(() => {
-        if (window.centerWindow) {
-          window.centerWindow(win);
-        }
+        WindowManager.centerWindow(win);
         if (window.focusWindow) {
           window.focusWindow(this.id);
         }

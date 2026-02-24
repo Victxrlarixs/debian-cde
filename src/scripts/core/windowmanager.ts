@@ -139,8 +139,8 @@ const WindowManager = (() => {
       newTop = (viewportHeight - rect.height) / 2;
     }
 
-    win.style.top = Math.max(minY, newTop) + 'px';
-    win.style.left = Math.max(0, newLeft) + 'px';
+    win.style.top = Math.max(minY, Math.min(maxY, newTop)) + 'px';
+    win.style.left = Math.max(0, Math.min(maxX, newLeft)) + 'px';
     win.style.transform = 'none';
 
     logger.log(`[WindowManager] Normalized "${win.id}" to top: ${win.style.top}, left: ${win.style.left}`);
@@ -151,13 +151,20 @@ const WindowManager = (() => {
     const winHeight = win.offsetHeight;
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
+    const TOP_BAR_HEIGHT = CONFIG.WINDOW.TOP_BAR_HEIGHT;
 
     let left = (viewportWidth - winWidth) / 2;
     let top = (viewportHeight - winHeight) / 2;
 
-    // Ensure it doesn't go above topbar even when centering
-    top = Math.max(CONFIG.WINDOW.TOP_BAR_HEIGHT, top);
-    left = Math.max(0, left);
+    // Strict clamping to prevent ANY desborde
+    const maxX = Math.max(0, viewportWidth - winWidth);
+    const maxY = Math.max(TOP_BAR_HEIGHT, viewportHeight - winHeight);
+
+    left = Math.max(0, Math.min(left, maxX));
+    top = Math.max(TOP_BAR_HEIGHT, Math.min(top, maxY));
+
+    // Ensure body doesn't scroll
+    document.body.style.overflow = 'hidden';
 
     win.style.position = 'absolute';
     win.style.left = `${left}px`;
