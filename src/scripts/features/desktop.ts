@@ -323,9 +323,12 @@ export const DesktopManager = (() => {
 
     interface ContextMenuItem {
       label: string;
+      icon?: string;
+      header?: boolean;
       disabled?: boolean;
       action: () => Promise<void>;
     }
+
 
     const isSystem = targetIcon?.dataset.system === 'true';
 
@@ -355,7 +358,103 @@ export const DesktopManager = (() => {
         ]
       : [
           {
+            label: '--- Programs ---',
+            header: true,
+            action: async () => {},
+          },
+          {
+            label: 'Terminal',
+            icon: '/icons/konsole.png',
+            action: async () => {
+              if (window.openTerminal) window.openTerminal();
+            },
+          },
+          {
+            label: 'FileManager',
+            icon: '/icons/filemanager.png',
+            action: async () => {
+              if (window.toggleFileManager) window.toggleFileManager();
+            },
+          },
+          {
+            label: 'Text Editor',
+            icon: '/icons/gedit.png',
+            action: async () => {
+              if (window.TextEditor?.open) window.TextEditor.open();
+            },
+          },
+          {
+            label: '--- Workspaces ---',
+            header: true,
+            action: async () => {},
+          },
+          {
+            label: 'Workspace 1',
+            action: async () => {
+              if (window.WindowManager?.switchWorkspace) window.WindowManager.switchWorkspace('1');
+            },
+          },
+          {
+            label: 'Workspace 2',
+            action: async () => {
+              if (window.WindowManager?.switchWorkspace) window.WindowManager.switchWorkspace('2');
+            },
+          },
+          {
+            label: 'Workspace 3',
+            action: async () => {
+              if (window.WindowManager?.switchWorkspace) window.WindowManager.switchWorkspace('3');
+            },
+          },
+          {
+            label: 'Workspace 4',
+            action: async () => {
+              if (window.WindowManager?.switchWorkspace) window.WindowManager.switchWorkspace('4');
+            },
+          },
+          {
+            label: '--- Quick Themes ---',
+            header: true,
+            action: async () => {},
+          },
+          {
+            label: 'Theme: Gold',
+            action: async () => {
+              if (window.styleManager) {
+                window.styleManager.theme.applyPreset('gold');
+                window.styleManager.theme.updateUI();
+                window.styleManager.saveColor();
+              }
+            },
+          },
+          {
+            label: 'Theme: Emerald',
+            action: async () => {
+              if (window.styleManager) {
+                window.styleManager.theme.applyPreset('emerald');
+                window.styleManager.theme.updateUI();
+                window.styleManager.saveColor();
+              }
+            },
+          },
+          {
+            label: 'Theme: Alpine',
+            action: async () => {
+              if (window.styleManager) {
+                window.styleManager.theme.applyPreset('alpine');
+                window.styleManager.theme.updateUI();
+                window.styleManager.saveColor();
+              }
+            },
+          },
+          {
+            label: '--- Tools ---',
+            header: true,
+            action: async () => {},
+          },
+          {
             label: 'New File',
+            icon: '/icons/gedit.png',
             action: async () => {
               const name = await (window as any).CDEModal.prompt('File name:');
               if (name) await VFS.touch(CONFIG.FS.DESKTOP, name);
@@ -363,33 +462,57 @@ export const DesktopManager = (() => {
           },
           {
             label: 'New Folder',
+            icon: '/icons/filemanager.png',
             action: async () => {
               const name = await (window as any).CDEModal.prompt('Folder name:');
               if (name) await VFS.mkdir(CONFIG.FS.DESKTOP, name);
             },
           },
           {
-            label: 'Change Backdrop',
+            label: 'Style Manager',
+            icon: '/icons/org.xfce.settings.appearance.png',
             action: async () => {
-              if (window.styleManager) {
-                window.styleManager.openBackdrop();
-              }
+              if (window.styleManager) window.styleManager.openMain();
+            },
+          },
+          {
+            label: 'Refresh Desktop',
+            icon: '/icons/org.xfce.session.png',
+            action: async () => {
+              window.location.reload();
             },
           },
         ];
 
-    items.forEach((item) => {
+    items.forEach((item: any) => {
       const div = document.createElement('div');
-      div.className = 'fm-context-item' + (item.disabled ? ' disabled' : '');
-      div.textContent = item.label;
-      if (!item.disabled) {
-        div.addEventListener('click', () => {
-          item.action();
-          closeContextMenu();
-        });
+      if (item.header) {
+        div.className = 'fm-context-header';
+        div.textContent = item.label;
+      } else {
+        div.className = 'fm-context-item' + (item.disabled ? ' disabled' : '');
+        if (item.icon) {
+          const img = document.createElement('img');
+          img.src = item.icon;
+          img.style.width = '14px';
+          img.style.height = '14px';
+          img.style.marginRight = '8px';
+          div.appendChild(img);
+        }
+        const span = document.createElement('span');
+        span.textContent = item.label;
+        div.appendChild(span);
+
+        if (!item.disabled) {
+          div.addEventListener('click', () => {
+            item.action();
+            closeContextMenu();
+          });
+        }
       }
       menu.appendChild(div);
     });
+
 
     document.body.appendChild(menu);
     activeContextMenu = menu;

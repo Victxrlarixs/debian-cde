@@ -13,6 +13,7 @@ import { DesktopManager } from '../features/desktop';
 import { CalendarManager } from '../features/calendar';
 import { VFS } from '../core/vfs';
 import { Preloader } from '../utilities/preloader';
+
 /**
  * Global interface declarations for CDE desktop environment.
  */
@@ -286,6 +287,7 @@ function initDesktop(): void {
       window.styleManager.init();
       logger.log('[initDesktop] Style manager initialized');
     }
+
 
     desktopInitialized = true;
     logger.log('[initDesktop] Desktop initialization completed successfully');

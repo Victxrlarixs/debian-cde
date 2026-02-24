@@ -18,8 +18,10 @@ import { settingsManager } from '../core/settingsmanager';
  * Orchestrates multiple specialized modules.
  */
 export class StyleManager {
-  private theme: ThemeModule;
-  private font: FontModule;
+  public theme: ThemeModule;
+
+  public font: FontModule;
+
   public mouse: MouseModule;
   public keyboard: KeyboardModule;
   public beep: BeepModule;
