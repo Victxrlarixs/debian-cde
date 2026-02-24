@@ -33,6 +33,13 @@ We've spent months ensuring the retro experience doesn't break on modern hardwar
 - **Interaction Parity**: Double-tap to open, long-press for context menus, and tap-to-focus for the terminal virtual keyboard.
 - **Zero-Overflow**: Strict window clamping ensures no horizontal scroll, ever.
 
+### 📟 GNU Emacs
+A core pillar of the Debian-CDE experience. Much more than a text editor, it's a faithful recreation of the classic environment:
+- **Interactive Minibuffer**: No pop-ups for system operations. All commands (`M-x`), file visits (`C-x C-f`), and saves (`C-x C-w`) happen natively in the interactive lower minibuffer.
+- **Classic Keybindings**: Support for `C-x`, `C-g` (abort), `C-k` (kill line), `M-w`/`C-y` (copy/paste), and many more.
+- **Visual Fidelity**: Accurate mode-line with line/column counters, file status indicators, and the iconic GNU Emacs splash screen.
+- **Scratch Buffer**: Starts with a fully functional `*scratch*` buffer for Lisp-style (or plain text) note-taking.
+
 ---
 
 ## 🎯 Iconic Experiences

@@ -268,7 +268,7 @@ function initDesktop(): void {
       window.AudioManager.success();
     }
 
-    // WindowManager owns drag for ALL windows (StyleManager, Terminal, FileManager, TextEditor).
+    // WindowManager owns drag for ALL windows (StyleManager, Terminal, FileManager, Emacs).
     // initDraggableTitlebars() runs after a 200ms delay to ensure the DOM is fully settled.
     WindowManager.init();
     logger.log('[initDesktop] Window manager initialized');

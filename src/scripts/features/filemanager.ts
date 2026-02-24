@@ -254,8 +254,8 @@ async function rename(oldName: string, newName: string): Promise<void> {
 }
 
 async function openTextWindow(name: string, content: string): Promise<void> {
-  if (window.openTextEditor) {
-    await window.openTextEditor(name, content);
+  if (window.openEmacs) {
+    await window.openEmacs(name, content);
   }
 }
 
