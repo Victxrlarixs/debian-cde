@@ -141,4 +141,4 @@ If the build succeeds, it means most of the component logic and types are correc
 
 ---
 
-_“Experience the legend. Built with passion for the pixel.”_
+_“Built with passion for the pixel.”_
