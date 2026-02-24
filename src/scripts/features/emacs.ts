@@ -1,17 +1,17 @@
-// src/scripts/features/texteditor.ts
+// src/scripts/features/emacs.ts
 import { logger } from '../utilities/logger';
 import { VFS } from '../core/vfs';
 import { CDEModal } from '../ui/modals';
 
 /**
- * Emacs-style Text Editor Manager
+ * Emacs-style Editor Manager (Rebranded)
  * Supports a splash screen and full editing mode with keybindings, mode line, and minibuffer.
  */
 declare global {
   interface Window {
-    openTextEditor: (filename: string, content: string, path?: string) => Promise<void>;
-    closeTextEditor: () => void;
-    TextEditor: {
+    openEmacs: (filename: string, content: string, path?: string) => Promise<void>;
+    closeEmacs: () => void;
+    Emacs: {
       open: (filename?: string, content?: string) => Promise<void>;
       openSplash: () => void;
       openFile: () => Promise<void>;
@@ -36,12 +36,19 @@ declare global {
   }
 }
 
-class TextEditorManager {
+class EmacsManager {
   private win: HTMLElement | null = null;
   private textarea: HTMLTextAreaElement | null = null;
   private minibuffer: HTMLElement | null = null;
+  private minibufferContent: HTMLElement | null = null;
+  private minibufferLabel: HTMLElement | null = null;
+  private minibufferInput: HTMLInputElement | null = null;
+  private minibufferMsg: HTMLElement | null = null;
   private splash: HTMLElement | null = null;
   private editorArea: HTMLElement | null = null;
+
+  private isMinibufferActive: boolean = false;
+  private minibufferResolver: ((val: string | null) => void) | null = null;
 
   private currentFilePath: string = '';
   private isModified: boolean = false;
@@ -60,18 +67,36 @@ class TextEditorManager {
   private init(): void {
     if (typeof document === 'undefined') return;
 
-    this.win = document.getElementById('text-editor');
-    this.textarea = document.getElementById('text-editor-textarea') as HTMLTextAreaElement;
-    this.minibuffer = document.getElementById('text-editor-minibuffer');
+    this.win = document.getElementById('emacs');
+    this.textarea = document.getElementById('emacs-textarea') as HTMLTextAreaElement;
+    this.minibuffer = document.getElementById('emacs-minibuffer');
+    this.minibufferContent = document.getElementById('emacs-minibuffer-content');
+    this.minibufferLabel = document.getElementById('emacs-minibuffer-label');
+    this.minibufferInput = document.getElementById('emacs-minibuffer-input') as HTMLInputElement;
+    this.minibufferMsg = document.getElementById('emacs-minibuffer-msg');
     this.splash = document.getElementById('emacs-splash');
-    this.editorArea = document.getElementById('emacs-editor');
+    this.editorArea = document.getElementById('emacs-editor-area');
 
-    if (!this.textarea) return;
+    if (!this.win || !this.textarea || !this.minibufferInput) return;
 
-    this.textarea.addEventListener('keydown', (e) => this.handleKeydown(e));
+    this.win.addEventListener('keydown', (e) => this.handleKeydown(e));
     this.textarea.addEventListener('input', () => this.onInput());
     this.textarea.addEventListener('keyup', () => this.updateModeLine());
-    this.textarea.addEventListener('click', () => this.updateModeLine());
+    this.textarea.addEventListener('click', () => {
+      this.textarea?.focus(); // Ensure it stays focused
+      this.updateModeLine();
+    });
+
+    // Minibuffer input listeners
+    this.minibufferInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const val = this.minibufferInput?.value ?? '';
+        this.resolveMinibuffer(val);
+      } else if (e.key === 'Escape' || (e.ctrlKey && e.key === 'g')) {
+        e.preventDefault();
+        this.resolveMinibuffer(null);
+      }
+    });
 
     // Find bar enter / escape
     const findInput = document.getElementById('te-find-input') as HTMLInputElement | null;
@@ -83,25 +108,25 @@ class TextEditorManager {
     }
 
     // ── Menubar dropdown toggle ────────────────────────────────────────
-    document.querySelectorAll('#text-editor .te-menu-label').forEach((lbl) => {
+    document.querySelectorAll('#emacs .te-menu-label').forEach((lbl) => {
       lbl.addEventListener('click', () => {
         const menu = lbl.parentElement as HTMLElement | null;
         if (!menu) return;
         const wasOpen = menu.classList.contains('open');
-        document.querySelectorAll('#text-editor .te-menu.open').forEach((m) => m.classList.remove('open'));
+        document.querySelectorAll('#emacs .te-menu.open').forEach((m) => m.classList.remove('open'));
         if (!wasOpen) menu.classList.add('open');
       });
     });
 
     document.addEventListener('click', (e) => {
-      if (!(e.target as Element).closest('#text-editor .te-menubar')) {
-        document.querySelectorAll('#text-editor .te-menu.open').forEach((m) => m.classList.remove('open'));
+      if (!(e.target as Element).closest('#emacs .te-menubar')) {
+        document.querySelectorAll('#emacs .te-menu.open').forEach((m) => m.classList.remove('open'));
       }
     }, true);
 
-    document.querySelectorAll('#text-editor .te-item').forEach((item) => {
+    document.querySelectorAll('#emacs .te-item').forEach((item) => {
       item.addEventListener('click', () => {
-        document.querySelectorAll('#text-editor .te-menu.open').forEach((m) => m.classList.remove('open'));
+        document.querySelectorAll('#emacs .te-menu.open').forEach((m) => m.classList.remove('open'));
       });
     });
 
@@ -129,13 +154,21 @@ class TextEditorManager {
     this.isModified = false;
     this.showSplash();
     this.updateTitle('*GNU Emacs*');
-    this.updateModeLineName('*GNU Emacs*');
-    this.message('');
+    this.updateModeLineName('*scratch*');
+    
+    // Set scratch buffer content
+    if (this.textarea) {
+      this.textarea.value = ';; This buffer is for text that is not saved, and for Lisp evaluation.\n;; To create a file, visit it with C-x C-f and enter text in its buffer.\n\n';
+      this.textarea.setSelectionRange(this.textarea.value.length, this.textarea.value.length);
+    }
+    
+    this.message('Welcome to GNU Emacs');
 
     this.win.style.display = 'flex';
     this.win.style.zIndex = String(++this.zIndex);
     if (window.centerWindow) window.centerWindow(this.win);
-    if (window.focusWindow) window.focusWindow('text-editor');
+    this.win.focus(); // Focus the window container for splash shortcuts
+    if (window.focusWindow) window.focusWindow('emacs');
   }
 
   /** Opens a specific file for editing. */
@@ -155,7 +188,7 @@ class TextEditorManager {
     this.win.style.display = 'flex';
     this.win.style.zIndex = String(++this.zIndex);
     if (window.centerWindow) window.centerWindow(this.win);
-    if (window.focusWindow) window.focusWindow('text-editor');
+    if (window.focusWindow) window.focusWindow('emacs');
     this.textarea.focus();
   }
 
@@ -168,21 +201,71 @@ class TextEditorManager {
   }
 
   private updateTitle(text: string): void {
-    const titleEl = document.getElementById('text-editor-title');
+    const titleEl = document.getElementById('emacs-title');
     if (titleEl) titleEl.textContent = text;
   }
 
   private updateModeLineName(name: string): void {
-    const fileNameEl = document.getElementById('editor-file-name');
+    const fileNameEl = document.getElementById('emacs-file-name');
     if (fileNameEl) fileNameEl.textContent = name;
+  }
+
+  // ── Minibuffer Prompter ──────────────────────────────────────────────────
+
+  private promptMinibuffer(label: string, defaultValue: string = ''): Promise<string | null> {
+    if (!this.minibufferContent || !this.minibufferLabel || !this.minibufferInput) return Promise.resolve(null);
+
+    this.isMinibufferActive = true;
+    
+    // Hide messages
+    if (this.minibufferMsg) this.minibufferMsg.style.display = 'none';
+    
+    this.minibufferLabel.textContent = label;
+    this.minibufferInput.value = defaultValue;
+    this.minibufferContent.style.display = 'flex';
+    this.minibufferInput.focus();
+
+    return new Promise((resolve) => {
+      this.minibufferResolver = resolve;
+    });
+  }
+
+  private resolveMinibuffer(val: string | null): void {
+    if (!this.isMinibufferActive) return;
+
+    this.isMinibufferActive = false;
+    if (this.minibufferContent) this.minibufferContent.style.display = 'none';
+    if (this.minibufferLabel) this.minibufferLabel.textContent = '';
+    
+    // Show messages space again
+    if (this.minibufferMsg) {
+      this.minibufferMsg.style.display = 'inline';
+      this.minibufferMsg.textContent = '';
+    }
+
+    if (this.minibufferInput) {
+      this.minibufferInput.value = '';
+      this.minibufferInput.blur();
+    }
+    
+    if (this.minibufferResolver) {
+      this.minibufferResolver(val);
+      this.minibufferResolver = null;
+    }
+
+    if (!this.editorArea?.classList.contains('emacs-hidden')) {
+      this.textarea?.focus();
+    } else {
+      this.win?.focus();
+    }
   }
 
   // ── File Menu ─────────────────────────────────────────────────────────────
 
   /** Called from splash "Open a File" link or File→Open */
   public async openFile(): Promise<void> {
-    const input = await CDEModal.prompt('Visit file:', '');
-    if (!input) return;
+    const input = await this.promptMinibuffer('Visit file: ', '');
+    if (!input) { this.message('Quit'); return; }
 
     let fullPath: string;
     if (input.startsWith('/')) {
@@ -238,8 +321,8 @@ class TextEditorManager {
 
   public async saveAs(): Promise<void> {
     const defaultPath = this.currentFilePath || 'untitled.txt';
-    const input = await CDEModal.prompt('Write file:', defaultPath);
-    if (!input) return;
+    const input = await this.promptMinibuffer('Write file: ', defaultPath);
+    if (!input) { this.message('Quit'); return; }
 
     const fullPath = input.startsWith('/') ? input : `/home/victxrlarixs/Desktop/${input}`;
     const parts = fullPath.split('/');
@@ -366,6 +449,8 @@ class TextEditorManager {
   // ── Keybindings ───────────────────────────────────────────────────────────
 
   private handleKeydown(e: KeyboardEvent): void {
+    if (this.isMinibufferActive) return; // Ignore main shortcuts when minibuffer is busy
+
     const isCtrl = e.ctrlKey;
     const key = e.key.toLowerCase();
 
@@ -383,15 +468,36 @@ class TextEditorManager {
       if (isCtrl && key === 'c') { e.preventDefault(); this.close(); return; }
       if (isCtrl && key === 'f') { e.preventDefault(); this.openFile(); return; }
       if (isCtrl && key === 'w') { e.preventDefault(); this.saveAs(); return; }
+      if (key === 'h') { e.preventDefault(); this.selectAll(); return; }
+    }
+
+    // M-x (Alt+x)
+    if (e.altKey && key === 'x') {
+      e.preventDefault();
+      this.executeCommand();
+      return;
     }
 
     if (isCtrl) {
       switch (key) {
+        case 'a': e.preventDefault(); this.moveCursor('home'); break;
+        case 'e': e.preventDefault(); this.moveCursor('end'); break;
+        case 'p': e.preventDefault(); this.moveCursor('up'); break;
+        case 'n': e.preventDefault(); this.moveCursor('down'); break;
+        case 'f': e.preventDefault(); this.moveCursor('right'); break;
+        case 'b': e.preventDefault(); this.moveCursor('left'); break;
+        case 'd': e.preventDefault(); this.deleteChar(); break;
         case 's': e.preventDefault(); this.findDialog(); break;
         case 'k': e.preventDefault(); this.killLine(); break;
         case 'g': e.preventDefault(); this.ctrlXPressed = false; this.message('Quit'); break;
         case '_': e.preventDefault(); this.undo(); break;
+        case 'l': e.preventDefault(); this.recenter(); break;
       }
+    } else if (isCtrl || e.altKey) {
+      // Allow other shortcuts to bubble if needed
+    } else if (document.activeElement !== this.textarea && this.editorArea && !this.editorArea.classList.contains('emacs-hidden')) {
+        // If the window is focused but not the textarea, and we are in editor mode, redirect focus
+        this.textarea?.focus();
     }
 
     this.updateModeLine();
@@ -399,6 +505,73 @@ class TextEditorManager {
 
   private onInput(): void {
     if (!this.isModified) { this.isModified = true; this.updateModeLine(); }
+  }
+
+  private moveCursor(dir: 'home' | 'end' | 'up' | 'down' | 'left' | 'right'): void {
+    if (!this.textarea) return;
+    const ta = this.textarea;
+    let pos = ta.selectionStart;
+    const text = ta.value;
+
+    switch (dir) {
+      case 'home':
+        const lineStart = text.lastIndexOf('\n', pos - 1) + 1;
+        ta.setSelectionRange(lineStart, lineStart);
+        break;
+      case 'end':
+        const nextNL = text.indexOf('\n', pos);
+        const lineEnd = nextNL === -1 ? text.length : nextNL;
+        ta.setSelectionRange(lineEnd, lineEnd);
+        break;
+      case 'up':
+      case 'down':
+        const event = new KeyboardEvent('keydown', { key: dir === 'up' ? 'ArrowUp' : 'ArrowDown', bubbles: true });
+        ta.dispatchEvent(event);
+        break;
+      case 'left':
+        ta.setSelectionRange(Math.max(0, pos - 1), Math.max(0, pos - 1));
+        break;
+      case 'right':
+        ta.setSelectionRange(Math.min(text.length, pos + 1), Math.min(text.length, pos + 1));
+        break;
+    }
+    this.updateModeLine();
+  }
+
+  private deleteChar(): void {
+    if (!this.textarea) return;
+    const ta = this.textarea;
+    const s = ta.selectionStart, e = ta.selectionEnd;
+    if (s === e) {
+      ta.value = ta.value.substring(0, s) + ta.value.substring(s + 1);
+      ta.setSelectionRange(s, s);
+    } else {
+      ta.value = ta.value.substring(0, s) + ta.value.substring(e);
+      ta.setSelectionRange(s, s);
+    }
+    this.onInput();
+  }
+
+  private recenter(): void {
+    this.message('Recentering locally...');
+    if (this.textarea) {
+      this.textarea.blur();
+      this.textarea.focus();
+    }
+  }
+
+  private async executeCommand(): Promise<void> {
+    const cmd = await this.promptMinibuffer('M-x ', '');
+    if (!cmd) { this.message('Quit'); return; }
+
+    switch (cmd.toLowerCase()) {
+      case 'help': this.showHelp(); break;
+      case 'save-buffer': this.save(); break;
+      case 'find-file': this.openFile(); break;
+      case 'kill-emacs': this.close(); break;
+      case 'eval-buffer': this.message('Lisp evaluation not implemented in this workstation.'); break;
+      default: this.message(`[M-x] [No match]: ${cmd}`); break;
+    }
   }
 
   private killLine(): void {
@@ -415,24 +588,28 @@ class TextEditorManager {
 
   private updateModeLine(): void {
     if (!this.textarea) return;
-    const statusEl = document.getElementById('editor-file-status');
+    const statusEl = document.getElementById('emacs-file-status');
     if (statusEl) statusEl.textContent = this.isModified ? '**' : '%%';
 
     const text = this.textarea.value;
     const pos = this.textarea.selectionStart;
-    const lines = text.substring(0, pos).split('\n');
-    const lineEl = document.getElementById('editor-line');
-    const colEl = document.getElementById('editor-col');
-    if (lineEl) lineEl.textContent = String(lines.length);
-    if (colEl) colEl.textContent = String(lines[lines.length - 1].length);
+    const textBefore = text.substring(0, pos);
+    const lines = textBefore.split('\n');
+    const lineNum = lines.length;
+    const colNum = lines[lines.length - 1].length;
+
+    const lineEl = document.getElementById('emacs-line');
+    const colEl = document.getElementById('emacs-col');
+    if (lineEl) lineEl.textContent = String(lineNum);
+    if (colEl) colEl.textContent = String(colNum);
   }
 
   private message(msg: string): void {
-    if (!this.minibuffer) return;
-    this.minibuffer.textContent = msg;
+    if (!this.minibufferMsg) return;
+    this.minibufferMsg.textContent = msg;
     if (msg && !msg.endsWith('-')) {
       setTimeout(() => {
-        if (this.minibuffer?.textContent === msg) this.minibuffer.textContent = '';
+        if (this.minibufferMsg?.textContent === msg) this.minibufferMsg.textContent = '';
       }, 5000);
     }
   }
@@ -440,24 +617,24 @@ class TextEditorManager {
 
 // ── Singleton & Global Exposure ───────────────────────────────────────────────
 
-let editorInstance: TextEditorManager | null = null;
-function getInstance(): TextEditorManager {
-  if (!editorInstance) editorInstance = new TextEditorManager();
+let editorInstance: EmacsManager | null = null;
+function getInstance(): EmacsManager {
+  if (!editorInstance) editorInstance = new EmacsManager();
   return editorInstance;
 }
 
-export async function openTextEditor(filename: string, content: string, path = ''): Promise<void> {
+export async function openEmacs(filename: string, content: string, path = ''): Promise<void> {
   await getInstance().open(filename, content, path);
 }
 
-export function closeTextEditor(): void {
+export function closeEmacs(): void {
   getInstance().close();
 }
 
 if (typeof window !== 'undefined') {
-  (window as any).openTextEditor = openTextEditor;
-  (window as any).closeTextEditor = closeTextEditor;
-  (window as any).TextEditor = {
+  (window as any).openEmacs = openEmacs;
+  (window as any).closeEmacs = closeEmacs;
+  (window as any).Emacs = {
     // Splash / lifecycle
     open:         (f?: string, c?: string) => getInstance().open(f || 'untitled.txt', c || ''),
     openSplash:   () => getInstance().openSplash(),

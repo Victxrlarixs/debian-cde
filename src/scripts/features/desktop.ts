@@ -21,7 +21,7 @@ const SYSTEM_ICONS: any[] = [
     name: 'Emacs',
     icon: '/icons/emacs22.png',
     action: () => {
-      if ((window as any).TextEditor?.openSplash) (window as any).TextEditor.openSplash();
+      if ((window as any).Emacs?.openSplash) (window as any).Emacs.openSplash();
     },
   },
   {
@@ -336,10 +336,10 @@ export const DesktopManager = (() => {
         if (window.openPath) window.openPath(path);
       }
     } else {
-      if ((window as any).openTextEditor) {
+      if ((window as any).openEmacs) {
         const node = VFS.getNode(path);
         const content = node && node.type === 'file' ? node.content : '';
-        await (window as any).openTextEditor(name, content, path);
+        await (window as any).openEmacs(name, content, path);
       }
     }
   }
@@ -522,10 +522,10 @@ export const DesktopManager = (() => {
             },
           },
           {
-            label: 'Text Editor',
+            label: 'Emacs',
             icon: '/icons/text-x-generic.png',
             action: async () => {
-              if (window.TextEditor?.open) window.TextEditor.open();
+              if (window.Emacs?.open) window.Emacs.open();
             },
           },
           {

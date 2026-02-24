@@ -5,7 +5,7 @@ import '../boot/init';
 import '../features/filemanager';
 import '../features/terminal';
 import '../features/stylemanager';
-import '../features/texteditor';
+import '../features/emacs';
 import '../features/lab';
 import '../features/appmanager';
 import '../features/timemanager';
