@@ -72,20 +72,37 @@ The following diagram illustrates what happens when a user interacts with a desk
 
 ```mermaid
 sequenceDiagram
-    participant User
-    participant Desktop as Desktop Icons / Panel
+    autonumber
+    participant U as User
+    participant D as Desktop / Panel
     participant WM as WindowManager
+    participant AM as AudioManager
+    participant SM as SettingsManager
     participant VFS as Virtual File System
-    participant App as App Logic (Terminal/FM)
+    participant App as App logic (Terminal, FM, etc.)
+
+    U->>D: Double-tap / Long-press (PointerEvent)
+    D->>AM: click()
+    D->>WM: focusWindow(appId)
+    WM->>WM: Increase Z-index & add .active class
     
-    User->>Desktop: Double-tap / Click Icon
-    Desktop->>WM: focusWindow(appId)
-    Desktop->>App: initializeApp()
+    D->>App: initialize()
+    App->>SM: getSession(appId)
+    SM-->>App: Last position/state
+    
     App->>VFS: readDirectory(path)
-    VFS-->>App: File Tree Data
+    VFS-->>App: Hierarchical File Data
+    
+    App->>App: Render UI (Astro/HTML)
     App->>WM: registerWindow(element)
-    WM->>WM: centerWindow(element)
-    WM-->>User: Window Appears (UI Updated)
+    
+    ALT isMobile()
+        WM->>WM: centerWindow(element)
+    ELSE Desktop
+        WM->>WM: normalizeWindowPosition(element)
+    END
+    
+    WM-->>U: Window displayed (Strictly clamped)
 ```
 
 ## 📂 Detailed Folder Breakdown
