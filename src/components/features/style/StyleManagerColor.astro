@@ -1,5 +1,6 @@
 ---
 import WindowControls from '../../common/WindowControls.astro';
+import cdePalettes from '../../../data/cde_palettes.json';
 ---
 
 <div class="cde-retro-modal style-manager-color" id="styleManagerColor">
@@ -18,15 +19,30 @@ import WindowControls from '../../common/WindowControls.astro';
 
   <div class="modal-body">
     <div class="color-palettes-section">
-      <h4 class="color-palettes-title">Palettes</h4>
+      <div class="color-header-row">
+        <h4 class="color-palettes-title">Original CDE Palettes</h4>
+        <div class="cde-status-indicator">
+          <span>Current:</span>
+          <span id="colorStatus" class="active-palette-name">Default</span>
+        </div>
+      </div>
       <div class="color-palette-scroll">
-        <button class="cde-preset color-palette-item" data-scheme="broica">Broica</button>
-        <button class="cde-preset color-palette-item" data-scheme="emerald">Emerald</button>
-        <button class="cde-preset color-palette-item" data-scheme="gold">Gold</button>
-        <button class="cde-preset color-palette-item" data-scheme="grayscale">GrayScale</button>
-        <button class="cde-preset color-palette-item" data-scheme="alpine">Alpine</button>
-        <button class="cde-preset color-palette-item" data-scheme="skyred">SkyRed</button>
-        <button class="cde-preset color-palette-item" data-scheme="charcoal">Charcoal</button>
+        {
+          cdePalettes.map((palette) => (
+            <button 
+              class="cde-preset color-palette-item" 
+              data-scheme={palette.id}
+              title={palette.name}
+            >
+              <span class="palette-preview-strip">
+                {palette.colors.slice(0, 4).map(color => (
+                  <span class="preview-color" style={`background-color: ${color}`}></span>
+                ))}
+              </span>
+              <span class="palette-name-label">{palette.name}</span>
+            </button>
+          ))
+        }
       </div>
     </div>
     <div class="color-swatches-section">

@@ -2838,3 +2838,100 @@
   margin-top: 10px;
 }
 
+/* ------------------------------------------------------------------
+   4. COLOR MANAGER (dtcolor) - Palette List
+   ------------------------------------------------------------------ */
+.color-palettes-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.color-palettes-title {
+  margin: 0;
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--text-color);
+  padding-bottom: 4px;
+}
+
+.color-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 2px solid var(--separator-color);
+  margin-bottom: 4px;
+}
+
+.cde-status-indicator {
+  font-size: 10px;
+  color: var(--text-color);
+  margin-bottom: 4px;
+}
+
+.active-palette-name {
+  font-weight: bold;
+  margin-left: 4px;
+  color: var(--titlebar-color);
+}
+
+.color-palette-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 2px solid;
+  border-top-color: var(--border-inset-dark);
+  border-left-color: var(--border-inset-dark);
+  border-right-color: var(--border-inset-light);
+  border-bottom-color: var(--border-inset-light);
+  background: var(--dock-icon-bg);
+  padding: 2px;
+}
+
+.color-palette-item {
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 8px;
+  width: 100%;
+  text-align: left;
+  border-radius: 0;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+}
+
+.color-palette-item:hover {
+  background: var(--dock-icon-hover) !important;
+}
+
+.color-palette-item.active {
+  background: var(--button-active) !important;
+  border: 1px solid var(--border-light);
+}
+
+.palette-preview-strip {
+  display: flex;
+  height: 14px;
+  width: 60px;
+  border: 1px solid var(--border-dark);
+  flex-shrink: 0;
+}
+
+.preview-color {
+  flex: 1;
+}
+
+.palette-name-label {
+  font-size: 11px;
+  font-weight: bold;
+  font-family: var(--font-family-base);
+  color: var(--text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+

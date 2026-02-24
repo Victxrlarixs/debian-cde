@@ -49,8 +49,8 @@ export class StyleManager {
   public get fontStyles() {
     return this.font.fontStyles;
   }
-  public get presets() {
-    return this.theme.presets;
+  public get cdePalettes() {
+    return this.theme.cdePalettes;
   }
   public get fontPresets() {
     return this.font.fontPresets;
@@ -61,7 +61,13 @@ export class StyleManager {
    */
   public init(): void {
     const themeSettings = settingsManager.getSection('theme');
-    this.theme.loadSavedColors(themeSettings.colors || {});
+    
+    // If no saved colors, apply Ashley as the system default
+    if (!themeSettings.colors || Object.keys(themeSettings.colors).length === 0) {
+      this.theme.applyCdePalette('ashley');
+    } else {
+      this.theme.loadSavedColors(themeSettings.colors);
+    }
     this.font.loadSavedFonts(themeSettings.fonts || {});
 
     this.mouse.load();
