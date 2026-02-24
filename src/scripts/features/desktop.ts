@@ -50,6 +50,12 @@ export const DesktopManager = (() => {
   let lastX = 0;
   let lastY = 0;
 
+  // Mobile support: Tap & Long-press state
+  let lastTapTime = 0;
+  let longPressTimer: number | null = null;
+  let tapStartX = 0;
+  let tapStartY = 0;
+
   /**
    * Initializes the desktop icons.
    */
@@ -354,6 +360,34 @@ export const DesktopManager = (() => {
       if (!target || typeof target.closest !== 'function') return;
 
       const icon = target.closest('.cde-desktop-icon') as HTMLElement | null;
+      
+      // --- MOBILE: Long-press support ---
+      if (longPressTimer) clearTimeout(longPressTimer);
+      tapStartX = e.clientX;
+      tapStartY = e.clientY;
+
+      longPressTimer = window.setTimeout(() => {
+        // Trigger context menu if we haven't moved much and still "pressing"
+        if (Math.abs(e.clientX - tapStartX) < 10 && Math.abs(e.clientY - tapStartY) < 10) {
+          logger.log('[DesktopManager] Long-press detected.');
+          showContextMenu(e as unknown as MouseEvent, icon);
+        }
+        longPressTimer = null;
+      }, 500);
+
+      // --- MOBILE: Double-tap support ---
+      const now = Date.now();
+      if (icon && now - lastTapTime < 300) {
+        logger.log('[DesktopManager] Double-tap detected.');
+        if (longPressTimer) clearTimeout(longPressTimer);
+        const name = icon.dataset.name || '';
+        const type = (icon.dataset.type as 'file' | 'folder') || 'file';
+        onIconDoubleClick(name, type);
+        lastTapTime = 0; // Reset
+        return;
+      }
+      lastTapTime = now;
+
       if (icon) {
         onIconPointerDown(e, icon);
       } else {
@@ -363,6 +397,21 @@ export const DesktopManager = (() => {
           deselectAll();
           closeContextMenu();
         }
+      }
+    });
+
+    container.addEventListener('pointermove', (e) => {
+      // Cancel long-press if user moves too much
+      if (longPressTimer && (Math.abs(e.clientX - tapStartX) > 10 || Math.abs(e.clientY - tapStartY) > 10)) {
+        clearTimeout(longPressTimer);
+        longPressTimer = null;
+      }
+    });
+
+    container.addEventListener('pointerup', () => {
+      if (longPressTimer) {
+        clearTimeout(longPressTimer);
+        longPressTimer = null;
       }
     });
 

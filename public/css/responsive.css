@@ -105,15 +105,15 @@
   /* Ventanas en general */
   .window,
   .cde-retro-modal {
-    max-width: 95vw !important;
-    max-height: 80vh !important;
+    max-width: 100vw !important;
+    max-height: calc(100vh - 30px) !important;
+    width: auto !important;
+    box-sizing: border-box !important;
   }
 
   /* Terminal */
   #terminal {
     width: 300px !important;
-    left: 10px !important;
-    top: 50px !important;
   }
   .terminal-body {
     height: 180px;
@@ -128,8 +128,6 @@
   #fm {
     width: 300px !important;
     height: 280px !important;
-    left: 20px !important;
-    top: 60px !important;
   }
   .fm-menubar {
     font-size: 10px;
@@ -276,8 +274,6 @@
   /* Process Monitor */
   #process-monitor {
     width: 95vw !important;
-    left: 2.5vw !important;
-    top: 100px !important;
   }
   #process-monitor .terminal-body {
     font-size: 11px;

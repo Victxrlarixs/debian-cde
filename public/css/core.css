@@ -68,7 +68,8 @@ body {
   background-position: center;
   background-attachment: fixed;
 
-  overflow: hidden;
+  overflow: hidden !important;
+  touch-action: none;
 
   /* Renderizado de fuentes auténtico (Aliased / Sin suavizado) */
   -webkit-font-smoothing: none;
