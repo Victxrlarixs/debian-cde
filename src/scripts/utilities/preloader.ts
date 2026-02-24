@@ -13,7 +13,7 @@ export const Preloader = (() => {
     '/icons/maximize-toggled-inactive.png',
     '/icons/close-inactive.png',
     '/icons/filemanager.png',
-    '/icons/gedit.png',
+    '/icons/text-x-generic.png',
     '/icons/konsole.png',
     '/icons/computer.png',
     '/icons/org.xfce.settings.appearance.png',

@@ -33,6 +33,7 @@ export interface IVFS {
   mkdir(path: string, name: string): Promise<void>;
   rm(path: string, name: string): Promise<boolean>;
   rename(path: string, oldName: string, newName: string): Promise<void>;
+  writeFile(path: string, content: string): Promise<void>;
 }
 
 declare global {
@@ -237,6 +238,21 @@ export const VFS: IVFS = {
 
       logger.log(`[VFS] rename: ${oldPath} -> ${newPath}`);
       dispatchChange(dirPath);
+    }
+  },
+
+  async writeFile(path: string, content: string): Promise<void> {
+    const node = this.getNode(path);
+    if (node && node.type === 'file') {
+      node.content = content;
+      logger.log(`[VFS] writeFile: ${path}`);
+      // Find parent directory to dispatch change
+      const parts = path.split('/').filter(Boolean);
+      parts.pop();
+      const parentPath = '/' + parts.join('/') + (parts.length > 0 ? '/' : '');
+      dispatchChange(parentPath);
+    } else {
+      logger.error(`[VFS] writeFile failed: ${path} is not a file or not found`);
     }
   },
 };

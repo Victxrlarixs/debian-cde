@@ -1,12 +1,171 @@
 ---
-// src/components/apps/TextEditor.astro
+// src/components/features/TextEditor.astro
 import WindowControls from '../common/WindowControls.astro';
 ---
 
 <div class="window" id="text-editor">
-  <div class="titlebar" id="text-editor-titlebar" onmousedown="window.drag(event, 'text-editor')">
-    <span class="titlebar-text" id="text-editor-title">Text Editor</span>
+  <div class="titlebar emacs-titlebar" id="text-editor-titlebar" onmousedown="window.drag(event, 'text-editor')">
+    <span class="titlebar-text" id="text-editor-title">*GNU Emacs*</span>
     <WindowControls windowId="text-editor" closeFunction="window.closeTextEditor" />
   </div>
-  <div class="terminal-body" id="text-editor-content"></div>
+
+  <!-- ── Emacs Menubar ─────────────────────────────────────────────────── -->
+  <div class="te-menubar emacs-menubar">
+
+    <div class="te-menu">
+      <span class="te-menu-label">File</span>
+      <div class="te-dropdown">
+        <div class="te-item" onclick="window.TextEditor.openFile()">Open File…<span class="te-accel">C-x C-f</span></div>
+        <div class="te-item" onclick="window.openFileManager && window.openFileManager()">Open Home Directory</div>
+        <div class="te-separator"></div>
+        <div class="te-item" onclick="window.TextEditor.save()">Save<span class="te-accel">C-x C-s</span></div>
+        <div class="te-item" onclick="window.TextEditor.saveAs()">Save As…<span class="te-accel">C-x C-w</span></div>
+        <div class="te-separator"></div>
+        <div class="te-item" onclick="window.TextEditor.newFile()">New File</div>
+        <div class="te-separator"></div>
+        <div class="te-item" onclick="window.closeTextEditor()">Quit<span class="te-accel">C-x C-c</span></div>
+      </div>
+    </div>
+
+    <div class="te-menu">
+      <span class="te-menu-label">Edit</span>
+      <div class="te-dropdown">
+        <div class="te-item" onclick="window.TextEditor.undo()">Undo<span class="te-accel">C-_</span></div>
+        <div class="te-separator"></div>
+        <div class="te-item" onclick="window.TextEditor.cut()">Cut Region<span class="te-accel">C-w</span></div>
+        <div class="te-item" onclick="window.TextEditor.copy()">Copy Region<span class="te-accel">M-w</span></div>
+        <div class="te-item" onclick="window.TextEditor.paste()">Paste (Yank)<span class="te-accel">C-y</span></div>
+        <div class="te-separator"></div>
+        <div class="te-item" onclick="window.TextEditor.selectAll()">Select All<span class="te-accel">C-x h</span></div>
+        <div class="te-separator"></div>
+        <div class="te-item" onclick="window.TextEditor.findDialog()">Search…<span class="te-accel">C-s</span></div>
+      </div>
+    </div>
+
+    <div class="te-menu">
+      <span class="te-menu-label">Options</span>
+      <div class="te-dropdown">
+        <div class="te-item" onclick="window.TextEditor.wrapToggle()">Toggle Word Wrap</div>
+        <div class="te-separator"></div>
+        <div class="te-item" onclick="window.TextEditor.setFont('14px')">Font Size: 14</div>
+        <div class="te-item" onclick="window.TextEditor.setFont('13px')">Font Size: 13</div>
+        <div class="te-item" onclick="window.TextEditor.setFont('11px')">Font Size: 11</div>
+      </div>
+    </div>
+
+    <div class="te-menu">
+      <span class="te-menu-label">Buffers</span>
+      <div class="te-dropdown">
+        <div class="te-item te-disabled" id="emacs-active-buffer">*GNU Emacs*</div>
+        <div class="te-separator"></div>
+        <div class="te-item" onclick="window.TextEditor.clearBuffer()">Clear Buffer</div>
+      </div>
+    </div>
+
+    <div class="te-menu">
+      <span class="te-menu-label">Tools</span>
+      <div class="te-dropdown">
+        <div class="te-item" onclick="window.TextEditor.findDialog()">Search Files<span class="te-accel">C-f</span></div>
+      </div>
+    </div>
+
+    <div class="te-menu">
+      <span class="te-menu-label">Help</span>
+      <div class="te-dropdown">
+        <div class="te-item" onclick="window.TextEditor.showHelp()">Describe Bindings</div>
+        <div class="te-separator"></div>
+        <div class="te-item te-disabled">About Emacs</div>
+      </div>
+    </div>
+
+  </div><!-- /menubar -->
+
+  <!-- ── Find Bar ──────────────────────────────────────────────────────── -->
+  <div id="te-find-bar" class="te-find-bar te-find-hidden">
+    <label>I-search:</label>
+    <input id="te-find-input" type="text" autocomplete="off" spellcheck="false" />
+    <button onclick="window.TextEditor.findNext()">↓</button>
+    <button onclick="window.TextEditor.findPrev()">↑</button>
+    <button onclick="window.TextEditor.closeFindBar()">✕</button>
+  </div>
+
+  <!-- ── Emacs Splash Screen ───────────────────────────────────────────── -->
+  <div id="emacs-splash" class="emacs-splash">
+
+    <div class="emacs-splash-logo">
+      <img src="/icons/Emacs-logo.png" alt="GNU Emacs" />
+    </div>
+
+    <div class="emacs-splash-welcome">
+      Welcome to <a class="emacs-link" onclick="window.TextEditor.showHelp()">GNU Emacs</a>,
+      one component of the <a class="emacs-link" href="https://www.gnu.org/gnu/linux-and-gnu.html" target="_blank">GNU/Linux</a> operating system.
+    </div>
+
+    <div class="emacs-splash-links">
+      <table>
+        <tr>
+          <td><a class="emacs-link" onclick="window.TextEditor.openFile()">Open a File</a></td>
+          <td>Open a file to edit in this buffer</td>
+        </tr>
+        <tr>
+          <td><a class="emacs-link" onclick="window.openFileManager && window.openFileManager()">Open Home Directory</a></td>
+          <td>Open the file manager for your home folder</td>
+        </tr>
+        <tr><td colspan="2">&nbsp;</td></tr>
+        <tr>
+          <td><a class="emacs-link" href="https://www.gnu.org/software/emacs/tour/index.html" target="_blank">Emacs Tutorial</a></td>
+          <td>Learn basic keystroke commands</td>
+        </tr>
+        <tr>
+          <td><a class="emacs-link" href="https://www.gnu.org/software/emacs/tour" target="_blank">Emacs Guided Tour</a></td>
+          <td>Overview of Emacs features at gnu.org</td>
+        </tr>
+        <tr>
+          <td><a class="emacs-link" href="https://www.gnu.org/software/emacs/manual/emacs.html" target="_blank">View Emacs Manual</a></td>
+          <td>View the Emacs manual online</td>
+        </tr>
+        <tr>
+          <td><a class="emacs-link" href="https://www.gnu.org/software/emacs/manual/html_node/emacs/No-Warranty.html" target="_blank">Absence of Warranty</a></td>
+          <td>GNU Emacs comes with <em>ABSOLUTELY NO WARRANTY</em></td>
+        </tr>
+        <tr>
+          <td><a class="emacs-link" href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Copying.html" target="_blank">Copying Conditions</a></td>
+          <td>Conditions for redistributing and changing Emacs</td>
+        </tr>
+        <tr>
+          <td><a class="emacs-link" href="https://shop.fsf.org/" target="_blank">Ordering Manuals</a></td>
+          <td>Purchasing printed copies of manuals</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="emacs-splash-start">
+      <p>To quit a partially entered command, type <code>Control-g</code>.</p>
+    </div>
+
+    <div class="emacs-splash-version">
+      This is GNU Emacs (CDE Edition), running on your Debian CDE Desktop.<br />
+      Copyright (C) 2025 Free Software Foundation, Inc.
+    </div>
+
+  </div><!-- /splash -->
+
+  <!-- ── Editing Area (hidden until file is opened) ────────────────────── -->
+  <div id="emacs-editor" class="emacs-editor emacs-hidden">
+    <textarea id="text-editor-textarea" spellcheck="false" autocomplete="off"></textarea>
+  </div>
+
+  <!-- ── Mode Line ─────────────────────────────────────────────────────── -->
+  <div id="text-editor-mode-line" class="emacs-modeline">
+    U:%%─&nbsp;&nbsp;<span id="editor-file-status">──</span>&nbsp;&nbsp;<span id="editor-file-name">*GNU Emacs*</span>&nbsp;&nbsp;All&nbsp;&nbsp;L<span id="editor-line">1</span>&nbsp;&nbsp;(<span id="editor-mode">Fundamental</span>)
+  </div>
+
+  <!-- ── Shortcuts Hint ────────────────────────────────────────────────── -->
+  <div id="text-editor-shortcuts" class="emacs-shortcuts">
+    [C-x C-s] Save &nbsp;[C-x C-c] Quit &nbsp;[C-s] Search &nbsp;[C-k] Kill Line &nbsp;[C-_] Undo &nbsp;[C-g] Abort
+  </div>
+
+  <!-- ── Minibuffer ────────────────────────────────────────────────────── -->
+  <div id="text-editor-minibuffer" class="emacs-minibuffer"></div>
+
 </div>

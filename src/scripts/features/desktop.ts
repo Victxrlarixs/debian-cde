@@ -17,6 +17,14 @@ interface IconPositions {
  */
 const SYSTEM_ICONS: any[] = [
   {
+    id: 'emacs-icon',
+    name: 'Emacs',
+    icon: '/icons/emacs22.png',
+    action: () => {
+      if ((window as any).TextEditor?.openSplash) (window as any).TextEditor.openSplash();
+    },
+  },
+  {
     id: 'terminal-lab-icon',
     name: 'Terminal Lab',
     icon: '/icons/konsole.png',
@@ -130,8 +138,11 @@ export const DesktopManager = (() => {
     icon.style.top = top + 'px';
 
     const img = document.createElement('img');
-    img.src = customIcon || (type === 'folder' ? '/icons/filemanager.png' : '/icons/gedit.png');
+    img.src = customIcon || (type === 'folder' ? '/icons/filemanager.png' : '/icons/text-x-generic.png');
     img.alt = name;
+    if (name === 'Emacs') {
+      img.classList.add('emacs-pixelated');
+    }
 
     const span = document.createElement('span');
     span.textContent = name;
@@ -319,10 +330,10 @@ export const DesktopManager = (() => {
         if (window.openPath) window.openPath(path);
       }
     } else {
-      if (window.openTextEditor) {
+      if ((window as any).openTextEditor) {
         const node = VFS.getNode(path);
         const content = node && node.type === 'file' ? node.content : '';
-        await window.openTextEditor(name, content);
+        await (window as any).openTextEditor(name, content, path);
       }
     }
   }
@@ -463,7 +474,7 @@ export const DesktopManager = (() => {
           },
           {
             label: 'Text Editor',
-            icon: '/icons/gedit.png',
+            icon: '/icons/text-x-generic.png',
             action: async () => {
               if (window.TextEditor?.open) window.TextEditor.open();
             },
@@ -539,7 +550,7 @@ export const DesktopManager = (() => {
           },
           {
             label: 'New File',
-            icon: '/icons/gedit.png',
+            icon: '/icons/text-x-generic.png',
             action: async () => {
               const name = await (window as any).CDEModal.prompt('File name:');
               if (name) await VFS.touch(CONFIG.FS.DESKTOP, name);
