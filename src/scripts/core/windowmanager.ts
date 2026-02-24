@@ -62,6 +62,13 @@ const WindowManager = (() => {
   let lastFocusedWindowId: string | null = null;
 
   /**
+   * Helper to detect mobile viewport.
+   */
+  function isMobile(): boolean {
+    return window.innerWidth < 768;
+  }
+
+  /**
    * Brings a window to the front (max z-index) and marks it as active.
    * @param id - The ID of the window element.
    */
@@ -114,33 +121,47 @@ const WindowManager = (() => {
 
     win.style.position = 'absolute';
 
-    // Ensure window titlebar is not covered by TopBar
-    const normalizedTop = Math.max(rect.top, TOP_BAR_HEIGHT);
-    win.style.top = normalizedTop + 'px';
+    // --- STRICT VIEWPORT CLAMPING ---
+    const minY = TOP_BAR_HEIGHT;
+    const minX = 0;
+    const maxX = Math.max(0, viewportWidth - rect.width);
+    const maxY = Math.max(minY, viewportHeight - rect.height);
 
+    let newTop = Math.max(rect.top, minY);
+    newTop = Math.min(newTop, maxY);
+    
+    let newLeft = Math.max(rect.left, minX);
+    newLeft = Math.min(newLeft, maxX);
+
+    // Force centering on mobile if requested or if normalization reveals desync
+    if (isMobile()) {
+      newLeft = (viewportWidth - rect.width) / 2;
+      newTop = (viewportHeight - rect.height) / 2;
+    }
+
+    win.style.top = Math.max(minY, newTop) + 'px';
+    win.style.left = Math.max(0, newLeft) + 'px';
     win.style.transform = 'none';
 
-    if (rect.right < MIN_VISIBLE) win.style.left = '0px';
-    if (rect.left > viewportWidth - MIN_VISIBLE)
-      win.style.left = `${viewportWidth - MIN_VISIBLE}px`;
-    if (rect.bottom < MIN_VISIBLE) win.style.top = `${CONFIG.WINDOW.TOP_BAR_HEIGHT}px`;
-    if (rect.top > viewportHeight - MIN_VISIBLE)
-      win.style.top = `${viewportHeight - MIN_VISIBLE}px`;
-
-    logger.log(`[WindowManager] Normalized "${win.id}" to top: ${win.style.top}`);
+    logger.log(`[WindowManager] Normalized "${win.id}" to top: ${win.style.top}, left: ${win.style.left}`);
   }
 
   function centerWindow(win: HTMLElement): void {
+    const winWidth = win.offsetWidth;
+    const winHeight = win.offsetHeight;
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
-    const rect = win.getBoundingClientRect();
 
-    const left = (viewportWidth - rect.width) / 2;
-    const top = (viewportHeight - rect.height) / 2;
+    let left = (viewportWidth - winWidth) / 2;
+    let top = (viewportHeight - winHeight) / 2;
+
+    // Ensure it doesn't go above topbar even when centering
+    top = Math.max(CONFIG.WINDOW.TOP_BAR_HEIGHT, top);
+    left = Math.max(0, left);
 
     win.style.position = 'absolute';
-    win.style.left = `${Math.max(0, left)}px`;
-    win.style.top = `${Math.max(CONFIG.WINDOW.TOP_BAR_HEIGHT, top)}px`;
+    win.style.left = `${left}px`;
+    win.style.top = `${top}px`;
     win.style.transform = 'none';
     win.style.margin = '0';
 
@@ -226,11 +247,22 @@ const WindowManager = (() => {
 
     const winWidth = dragState.element.offsetWidth;
     const winHeight = dragState.element.offsetHeight;
-    const maxX = window.innerWidth - MIN_VISIBLE;
-    const maxY = window.innerHeight - MIN_VISIBLE;
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const TOP_BAR_HEIGHT = CONFIG.WINDOW.TOP_BAR_HEIGHT;
+    const PANEL_HEIGHT = 80; // Estimated panel height
 
-    left = Math.min(Math.max(left, MIN_VISIBLE - winWidth), maxX);
-    top = Math.min(Math.max(top, MIN_VISIBLE - winHeight), maxY);
+    // --- STRICT VIEWPORT CLAMPING ---
+    // Prevent horizontal overflow (no right/left desborde)
+    const minX = 0;
+    const maxX = Math.max(0, viewportWidth - winWidth);
+    
+    // Prevent vertical overflow (no top/bottom desborde)
+    const minY = TOP_BAR_HEIGHT;
+    const maxY = Math.max(minY, viewportHeight - winHeight);
+
+    left = Math.max(minX, Math.min(left, maxX));
+    top = Math.max(minY, Math.min(top, maxY));
 
     // Apply wireframe mode if opaqueDragging is false
     const opaque = document.documentElement.getAttribute('data-opaque-drag') !== 'false';
@@ -328,6 +360,24 @@ const WindowManager = (() => {
       },
       true
     );
+
+    window.addEventListener('resize', () => {
+      // @ts-ignore
+      clearTimeout(window.resizeTimer);
+      // @ts-ignore
+      window.resizeTimer = window.setTimeout(() => {
+        logger.log('[WindowManager] Viewport resized, normalizing window positions...');
+        document.querySelectorAll('.window, .cde-retro-modal').forEach((win) => {
+          if (win instanceof HTMLElement) {
+            if (isMobile()) {
+              centerWindow(win);
+            } else {
+              normalizeWindowPosition(win);
+            }
+          }
+        });
+      }, CONFIG.TIMINGS.NORMALIZATION_DELAY);
+    });
   }
 
   function setupDropdown(btnId: string, menuId: string): void {

@@ -143,8 +143,8 @@ class TerminalLabManager {
     this.input.value = '';
 
     this.input.addEventListener('keydown', (e) => this.onKeyDown(e));
-    // Click anywhere in lab-terminal-body focuses input
-    this.body.addEventListener('click', () => this.focus());
+    // pointerdown is more responsive on mobile for focusing
+    this.body.addEventListener('pointerdown', () => this.focus());
 
     this.printWelcome();
     this.updateUI();

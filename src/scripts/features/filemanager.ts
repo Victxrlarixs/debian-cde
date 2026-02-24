@@ -39,6 +39,12 @@ let initialized: boolean = false;
 let activeMenu: HTMLElement | null = null;
 let activeContextMenu: HTMLElement | null = null;
 
+// Mobile support: Tap & Long-press state
+let lastTapTime = 0;
+let longPressTimer: number | null = null;
+let tapStartX = 0;
+let tapStartY = 0;
+
 // debounce for re-renders
 let renderTimeout: number | null = null;
 function debouncedRender(): void {
@@ -91,11 +97,56 @@ function renderFiles(): void {
     div.className = 'fm-file';
     div.dataset.name = name;
 
-    div.addEventListener('click', (e) => {
+    div.addEventListener('pointerdown', (e) => {
       e.stopPropagation();
+      
+      // Select icon
       document.querySelectorAll('.fm-file').forEach((el) => el.classList.remove('selected'));
       div.classList.add('selected');
       fmSelected = name;
+
+      // --- MOBILE: Long-press support ---
+      if (longPressTimer) clearTimeout(longPressTimer);
+      tapStartX = e.clientX;
+      tapStartY = e.clientY;
+
+      longPressTimer = window.setTimeout(() => {
+        if (Math.abs(e.clientX - tapStartX) < 10 && Math.abs(e.clientY - tapStartY) < 10) {
+          logger.log('[FileManager] Long-press on file detected.');
+          handleContextMenu(e as unknown as MouseEvent);
+        }
+        longPressTimer = null;
+      }, 500);
+
+      // --- MOBILE: Double-tap support ---
+      const now = Date.now();
+      if (now - lastTapTime < 300) {
+        logger.log('[FileManager] Double-tap detected.');
+        if (longPressTimer) clearTimeout(longPressTimer);
+        
+        if (item.type === 'folder') {
+          openPath(currentPath + name + '/');
+        } else {
+          openTextWindow(name, (item as VFSFile).content);
+        }
+        lastTapTime = 0;
+        return;
+      }
+      lastTapTime = now;
+    });
+
+    div.addEventListener('pointermove', (e) => {
+      if (longPressTimer && (Math.abs(e.clientX - tapStartX) > 10 || Math.abs(e.clientY - tapStartY) > 10)) {
+        clearTimeout(longPressTimer);
+        longPressTimer = null;
+      }
+    });
+
+    div.addEventListener('pointerup', () => {
+      if (longPressTimer) {
+        clearTimeout(longPressTimer);
+        longPressTimer = null;
+      }
     });
 
     const img = document.createElement('img');
@@ -106,14 +157,6 @@ function renderFiles(): void {
 
     div.appendChild(img);
     div.appendChild(span);
-
-    div.addEventListener('dblclick', () => {
-      if (item.type === 'folder') {
-        openPath(currentPath + name + '/');
-      } else {
-        openTextWindow(name, (item as VFSFile).content);
-      }
-    });
 
     fragment.appendChild(div);
   });
