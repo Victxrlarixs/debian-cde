@@ -27,13 +27,25 @@
       "settings": {
         "type": "folder",
         "children": {
-          "themes.json": {
-            "type": "file",
-            "content": "[Dinamic content: themes.json]"
-          },
           "fonts.json": {
             "type": "file",
             "content": "[Dinamic content: fonts.json]"
+          },
+          "cde_palettes.json": {
+            "type": "file",
+            "content": "[Dinamic content: cde_palettes.json]"
+          },
+          "boot-messages.json": {
+            "type": "file",
+            "content": "[Dinamic content: boot-messages.json]"
+          },
+          "backdrops.json": {
+            "type": "file",
+            "content": "[Dinamic content: backdrops.json]"
+          },
+          "tutorial.json": {
+            "type": "file",
+            "content": "[Dinamic content: tutorial.json]"
           }
         }
       }

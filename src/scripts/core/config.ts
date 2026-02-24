@@ -1,6 +1,5 @@
 // src/scripts/config.ts
 
-import themesData from '../../data/themes.json';
 import fontsData from '../../data/fonts.json';
 import { logger } from '../utilities/logger';
 
@@ -209,8 +208,6 @@ export interface Config {
   TASK_MANAGER: TaskManagerConfig;
   /** Default style values */
   DEFAULT_STYLES: DefaultStyles;
-  /** Available color themes */
-  THEMES: Record<string, Theme>;
   /** Available font presets */
   FONT_PRESETS: Record<string, FontPreset>;
   /** Dropdown menu configuration */
@@ -224,8 +221,35 @@ export interface Config {
 }
 
 // Extract data from JSON files
-const { __default__: defaultColors, ...themes } = themesData;
 const { __default__: defaultFonts, ...fontPresets } = fontsData;
+
+/**
+ * Default internal colors based on "Ashley" CDE Palette.
+ */
+const defaultColors = {
+  "--window-color": "#4d648d",
+  "--topbar-color": "#4d648d",
+  "--titlebar-color": "#faad49",
+  "--titlebar-text-color": "#000000",
+  "--terminal-bg-color": "#000000",
+  "--terminal-text-color": "#00ff00",
+  "--dock-color": "#4d648d",
+  "--menu-color": "#4d648d",
+  "--dock-icon-bg": "#495f86",
+  "--dock-icon-hover": "#5f7498",
+  "--dock-icon-active": "#354662",
+  "--button-bg": "#4d648d",
+  "--button-active": "#354662",
+  "--separator-color": "#354662",
+  "--modal-bg": "#4d648d",
+  "--scrollbar-color": "#faad49",
+  "--text-color": "#FFFFFF",
+  "--border-light": "#6f8fb8",
+  "--border-dark": "#354662",
+  "--border-inset-light": "#5f7498",
+  "--border-inset-dark": "#3d4f70",
+  "--shadow-color": "rgba(0, 0, 0, 0.3)"
+};
 
 /**
  * Central configuration object for the CDE application.
@@ -233,8 +257,8 @@ const { __default__: defaultFonts, ...fontPresets } = fontsData;
  * @remarks
  * This object aggregates all configuration values from various sources:
  * - Hardcoded constants for window management, audio, filesystem, etc.
- * - Default styles extracted from themes.json and fonts.json
- * - Theme and font preset collections from JSON files
+ * - Default styles based on Ashley palette.
+ * - Font preset collections from fonts.json
  *
  * The configuration is exposed globally as `window.CONFIG` for debugging
  * and legacy compatibility purposes.
@@ -335,7 +359,6 @@ export const CONFIG: Config = {
     COLORS: defaultColors,
     FONTS: defaultFonts,
   },
-  THEMES: themes,
   FONT_PRESETS: fontPresets,
   DROPDOWN: {
     Z_INDEX: 20000,
