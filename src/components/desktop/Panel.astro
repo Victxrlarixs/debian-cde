@@ -14,10 +14,8 @@ import { CONFIG } from '../../scripts/core/config';
       <div class="cde-icon-btn dropdown-btn" id="terminalBtn">
         <img src="/icons/go-up.png" alt="arrow" class="arrow-icon" />
       </div>
-      <div class="cde-icon-btn dropdown-btn" id="fileManagerBtn">
-        <img src="/icons/go-up.png" alt="arrow" class="arrow-icon" />
-      </div>
-      <div class="cde-icon-btn" id="browserBtn"></div>
+      <div class="cde-icon-btn cde-textured-btn" id="fileManagerBtn"></div>
+      <div class="cde-icon-btn cde-textured-btn" id="browserBtn"></div>
       <div class="cde-icon-btn dropdown-btn" id="styleManagerBtn">
         <img src="/icons/go-up.png" alt="arrow" class="arrow-icon" />
       </div>
@@ -42,7 +40,7 @@ import { CONFIG } from '../../scripts/core/config';
         <img src="/icons/org.xfce.settings.appearance.png" alt="Style Manager" />
       </div>
       <div class="cde-icon" id="utilitiesIcon" title="Run">
-        <img src="/icons/org.xfce.session.png" alt="Utilities" />
+        <img src="/icons/applications-other.png" alt="Utilities" />
       </div>
     </div>
   </div>
@@ -136,17 +134,5 @@ import { CONFIG } from '../../scripts/core/config';
   <div class="menu-separator"></div>
   <div class="menu-item" onclick="TerminalLab.open()">
     <img src="/icons/computer.png" alt="" /> Terminal Laboratory
-  </div>
-</div>
-
-<div class="dropdown-menu" id="fileManagerDropdown">
-  <div class="menu-item" onclick="openPath('/home/victxrlarixs/settings/')">
-    <img src="/icons/filemanager.png" alt="" /> Settings
-  </div>
-  <div class="menu-item" onclick="openPath('/home/victxrlarixs/man-pages/')">
-    <img src="/icons/filemanager.png" alt="" /> Manual Pages
-  </div>
-  <div class="menu-item" onclick="openPath('/home/victxrlarixs/Desktop/')">
-    <img src="/icons/filemanager.png" alt="" /> Desktop
   </div>
 </div>

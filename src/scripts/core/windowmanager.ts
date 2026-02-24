@@ -398,7 +398,6 @@ const WindowManager = (() => {
     setupDropdown('utilitiesBtn', 'utilitiesDropdown');
     setupDropdown('styleManagerBtn', 'styleManagerDropdown');
     setupDropdown('terminalBtn', 'terminalDropdown');
-    setupDropdown('fileManagerBtn', 'fileManagerDropdown');
   }
 
   /**

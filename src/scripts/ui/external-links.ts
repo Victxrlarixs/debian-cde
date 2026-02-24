@@ -35,7 +35,7 @@ export function confirmExternalLink(url: string): void {
 
   const content = `
     <div class="external-link-icon">
-      <img src="/icons/important.png" alt="Warning" width="48" height="48" />
+      <img src="/icons/dialog-question.png" alt="Warning" width="48" height="48" />
     </div>
     <p class="external-link-message">
       You are about to leave this site:
