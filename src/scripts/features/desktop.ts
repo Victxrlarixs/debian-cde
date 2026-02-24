@@ -15,7 +15,16 @@ interface IconPositions {
 /**
  * System icons that are always present and cannot be deleted.
  */
-const SYSTEM_ICONS: any[] = [];
+const SYSTEM_ICONS: any[] = [
+  {
+    id: 'terminal-lab-icon',
+    name: 'Terminal Lab',
+    icon: '/icons/konsole.png',
+    action: () => {
+      if ((window as any).TerminalLab?.open) (window as any).TerminalLab.open();
+    },
+  },
+];
 
 /**
  * Desktop Manager: Handles icons, shortcuts and desktop background interactions.
@@ -72,10 +81,7 @@ export const DesktopManager = (() => {
       const node = desktopChildren[name];
       if (!existingNames.has(name)) {
         // Create only if it doesn't exist
-        const pos = savedPositions[name] || {
-          left: 20,
-          top: 15 + index * CONFIG.DESKTOP_ICONS.GRID_SIZE,
-        };
+        const pos = savedPositions[name] || findNextAvailableSlot();
         createIcon(name, node.type, pos.left, pos.top);
       }
     });
@@ -92,10 +98,7 @@ export const DesktopManager = (() => {
     // 4. Handle System Icons (Ensure they exist only once)
     SYSTEM_ICONS.forEach((sys) => {
       if (!container.querySelector(`[data-id="${sys.id}"]`)) {
-        const pos = savedPositions[sys.id] || {
-          left: 100,
-          top: 100,
-        };
+        const pos = savedPositions[sys.id] || findNextAvailableSlot();
         createIcon(sys.name, 'file', pos.left, pos.top, true, sys.id, sys.icon);
       }
     });
@@ -165,6 +168,66 @@ export const DesktopManager = (() => {
     logger.log(`[DesktopManager] Started dragging icon: ${icon.dataset.name}`);
   }
 
+  /**
+   * Snaps a coordinate to the predefined grid.
+   */
+  function snapToGrid(x: number, y: number): { x: number; y: number } {
+    const gridSize = CONFIG.DESKTOP_ICONS.GRID_SIZE;
+    const padding = 20; // Margin from edges
+
+    const gridX = Math.round((x - padding) / gridSize) * gridSize + padding;
+    const gridY = Math.round((y - padding) / gridSize) * gridSize + padding;
+
+    return { x: gridX, y: gridY };
+  }
+
+  /**
+   * Checks if a grid slot is already occupied by another icon.
+   */
+  function isSlotOccupied(x: number, y: number, excludeId?: string): boolean {
+    const container = document.getElementById('desktop-icons-container');
+    if (!container) return false;
+
+    const currentIcons = container.querySelectorAll('.cde-desktop-icon');
+    for (const icon of Array.from(currentIcons)) {
+      const el = icon as HTMLElement;
+      const id = el.dataset.id || el.dataset.name;
+      if (id === excludeId) continue;
+
+      const iconX = parseInt(el.style.left);
+      const iconY = parseInt(el.style.top);
+
+      // Simple coordinate match (with small tolerance)
+      if (Math.abs(iconX - x) < 5 && Math.abs(iconY - y) < 5) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Finds the next available empty slot in the grid (filling columns first, CDE style).
+   */
+  function findNextAvailableSlot(): { left: number; top: number } {
+    const container = document.getElementById('desktop-icons-container');
+    if (!container) return { left: 20, top: 20 };
+
+    const gridSize = CONFIG.DESKTOP_ICONS.GRID_SIZE;
+    const padding = 20;
+    const height = container.offsetHeight;
+
+    // Iterate through grid (Columns first: left-to-right, then top-to-bottom within column)
+    for (let x = padding; x < container.offsetWidth - gridSize; x += gridSize) {
+      for (let y = padding; y < height - gridSize; y += gridSize) {
+        if (!isSlotOccupied(x, y)) {
+          return { left: x, top: y };
+        }
+      }
+    }
+
+    return { left: padding, top: padding }; // Fallback
+  }
+
   function onPointerMove(e: PointerEvent): void {
     if (!isDragging || !dragTarget) return;
 
@@ -204,12 +267,35 @@ export const DesktopManager = (() => {
     dragTarget.releasePointerCapture(e.pointerId);
     dragTarget.removeEventListener('pointermove', onPointerMove);
 
-    // Save position
+    // Snap to grid
+    const currentX = parseFloat(dragTarget.style.left);
+    const currentY = parseFloat(dragTarget.style.top);
+    const id = dragTarget.dataset.id || dragTarget.dataset.name;
+
+    let { x: snappedX, y: snappedY } = snapToGrid(currentX, currentY);
+
+    // Collision Detection: If occupied, try to find nearest empty space
+    if (isSlotOccupied(snappedX, snappedY, id)) {
+      logger.log(`[DesktopManager] Slot ${snappedX},${snappedY} occupied. Finding nearest...`);
+      // Simple logic: if occupied, move back to original or leave as is but it's better to find nearest
+      // For now, we revert or shift slightly. Let's try to revert to saved position if possible
+      const savedPositions = (settingsManager.getSection('desktop') as IconPositions) || {};
+      const prev = savedPositions[id || ''];
+      if (prev) {
+        snappedX = prev.left;
+        snappedY = prev.top;
+      }
+    }
+
+    dragTarget.style.left = snappedX + 'px';
+    dragTarget.style.top = snappedY + 'px';
+
+    // Save final position
     savePosition(dragTarget);
 
     isDragging = false;
     dragTarget = null;
-    logger.log('[DesktopManager] Icon drag finished and position saved.');
+    logger.log('[DesktopManager] Icon drag finished and snapped to grid.');
   }
 
   async function onIconDoubleClick(name: string, type: 'file' | 'folder'): Promise<void> {
@@ -328,7 +414,6 @@ export const DesktopManager = (() => {
       disabled?: boolean;
       action: () => Promise<void>;
     }
-
 
     const isSystem = targetIcon?.dataset.system === 'true';
 
@@ -512,7 +597,6 @@ export const DesktopManager = (() => {
       }
       menu.appendChild(div);
     });
-
 
     document.body.appendChild(menu);
     activeContextMenu = menu;

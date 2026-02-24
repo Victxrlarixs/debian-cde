@@ -889,7 +889,6 @@
   margin-bottom: 2px;
 }
 
-
 .fm-context-item:hover {
   background: var(--titlebar-color);
   color: var(--titlebar-text-color);
@@ -2937,4 +2936,3 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-

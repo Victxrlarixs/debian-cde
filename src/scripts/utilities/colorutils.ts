@@ -20,18 +20,20 @@ export function normalizeCdeColor(hex: string): string {
  */
 export function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ? {
-    r: parseInt(result[1], 16),
-    g: parseInt(result[2], 16),
-    b: parseInt(result[3], 16)
-  } : null;
+  return result
+    ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16),
+      }
+    : null;
 }
 
 /**
  * Converts RGB to hex.
  */
 export function rgbToHex(r: number, g: number, b: number): string {
-  return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+  return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
 }
 
 /**
@@ -42,22 +44,22 @@ export function getCdeShades(baseHex: string) {
   if (!rgb) return { light: '#FFFFFF', dark: '#000000' };
 
   const factor = 0.3; // Approx 30% lighter/darker
-  
+
   const light = {
     r: Math.min(255, rgb.r + (255 - rgb.r) * factor),
     g: Math.min(255, rgb.g + (255 - rgb.g) * factor),
-    b: Math.min(255, rgb.b + (255 - rgb.b) * factor)
+    b: Math.min(255, rgb.b + (255 - rgb.b) * factor),
   };
 
   const dark = {
     r: Math.max(0, rgb.r * (1 - factor)),
     g: Math.max(0, rgb.g * (1 - factor)),
-    b: Math.max(0, rgb.b * (1 - factor))
+    b: Math.max(0, rgb.b * (1 - factor)),
   };
 
   return {
     light: rgbToHex(Math.round(light.r), Math.round(light.g), Math.round(light.b)),
-    dark: rgbToHex(Math.round(dark.r), Math.round(dark.g), Math.round(dark.b))
+    dark: rgbToHex(Math.round(dark.r), Math.round(dark.g), Math.round(dark.b)),
   };
 }
 
@@ -67,7 +69,7 @@ export function getCdeShades(baseHex: string) {
 export function getContrastColor(backgroundHex: string): string {
   const rgb = hexToRgb(backgroundHex);
   if (!rgb) return '#000000';
-  
+
   // Perceptive luminance
   const luminance = (0.299 * rgb.r + 0.587 * rgb.g + 0.114 * rgb.b) / 255;
   return luminance > 0.5 ? '#000000' : '#FFFFFF';

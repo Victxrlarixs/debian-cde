@@ -1,78 +1,1066 @@
 [
-  { "id": "africa", "name": "Africa", "colors": ["#d5a118", "#5a6c81", "#5e656e", "#556470", "#64698a", "#506074", "#73738f", "#574f76"] },
-  { "id": "alpine", "name": "Alpine", "colors": ["#afbfbf", "#78aaab", "#7ab9d8", "#bfc0c5", "#bf9279", "#bfc0c5", "#bdbdeb", "#bfc0c5"] },
-  { "id": "arizona", "name": "Arizona", "colors": ["#8a00da00e100", "#bd009dc58272", "#a70078007bc0", "#d9009500874e", "#9e007e1e7772", "#b2004b006e8a", "#ce005e84623b", "#89ff5900764d"] },
-  { "id": "ashley", "name": "Ashley", "colors": ["#faad49", "#4d648d", "#be826f", "#47634f", "#757ca6", "#3d7777", "#2b7985", "#b1705f"] },
-  { "id": "autumn", "name": "Autumn", "colors": ["#d4c77d", "#bec6b7", "#5e9c7b", "#e2f3e2", "#a4a9aa", "#90a793", "#60879e", "#829694"] },
-  { "id": "beigerose", "name": "BeigeRose", "colors": ["#c3c3c3", "#787777", "#bdbdbd", "#949493", "#bcbcbc", "#939393", "#7f7f7f", "#939393"] },
-  { "id": "bluenight", "name": "BlueNight", "colors": ["#708080", "#4b5352", "#607872", "#686f82", "#a4a48b", "#99a79c", "#b7878d", "#70978e"] },
-  { "id": "blueshades", "name": "BlueShades", "colors": ["#a59f80", "#c1c1c1", "#4c719e", "#b8b8ab", "#999999", "#729c9c", "#b98e8e", "#88aacb"] },
-  { "id": "broica", "name": "Broica", "colors": ["#eda870", "#999999", "#8998aa", "#686f82", "#c6b2a8", "#4992a7", "#b7878d", "#93ab73"] },
-  { "id": "broicaltvue", "name": "BroicaLtVUE", "colors": ["#e6bc8e", "#687580", "#7595a9", "#cfa5a4", "#847982", "#856565", "#84948f", "#b19f98"] },
-  { "id": "broicavue", "name": "BroicaVUE", "colors": ["#face9d", "#6d7a85", "#7595a9", "#b18f90", "#847982", "#956970", "#b19f98", "#777b9d"] },
-  { "id": "brownshades", "name": "BrownShades", "colors": ["#ba7c52", "#8f6855", "#785d5d", "#5c4236", "#a48b8b", "#cabb9d", "#b7a387", "#a88c77"] },
-  { "id": "cabernet", "name": "Cabernet", "colors": ["#d88775", "#638a7a", "#456256", "#4b5e61", "#b65c71", "#833b47", "#794655", "#495c65"] },
-  { "id": "camouflage", "name": "Camouflage", "colors": ["#acbeb4", "#6e7d76", "#907b7b", "#82829b", "#8e8e77", "#7f6c6c", "#8e8e85", "#4e6b65"] },
-  { "id": "charcoal", "name": "Charcoal", "colors": ["#87b4b0", "#767279", "#696363", "#896d6d", "#828585", "#636f6d", "#919191", "#af9696"] },
-  { "id": "chocolate", "name": "Chocolate", "colors": ["#a9a9ff", "#708c8d", "#8787af", "#967878", "#b9a0a0", "#a58282", "#bbbbd9", "#9696b9"] },
-  { "id": "cinnamon", "name": "Cinnamon", "colors": ["#b14b50", "#926866", "#796e6d", "#836960", "#9b6862", "#a28d8c", "#847574", "#78695d"] },
-  { "id": "clay", "name": "Clay", "colors": ["#ffaaaa", "#968282", "#5a8b8d", "#8c6464", "#af9191", "#a56e6e", "#ac8383", "#2f8b8d"] },
-  { "id": "coalmine", "name": "Coalmine", "colors": ["#5f948a", "#6e6762", "#605656", "#504b46", "#747c74", "#5e6a68", "#847c6b", "#9c8f75"] },
-  { "id": "coralreef", "name": "CoralReef", "colors": ["#fe8282", "#7a98c5", "#7848a0", "#9f9bb f", "#3297c7", "#e29c83", "#768ca1", "#4f5e86"] },
-  { "id": "crimson", "name": "Crimson", "colors": ["#b24d7a", "#aeb2c3", "#718ba5", "#fff7e9", "#68a6a0", "#8dadc7", "#d39798", "#9793b5"] },
-  { "id": "dakota", "name": "Dakota", "colors": ["#8adae1", "#bd9d82", "#a7787b", "#d99587", "#9e7e77", "#b24b6e", "#ce5e62", "#895976"] },
-  { "id": "dalla", "name": "Dalla", "colors": ["#e2ebbb", "#b6d4cb", "#85adeb", "#bd94c9", "#7b8f98", "#839ed7", "#b0aea9", "#8f7e8d"] },
-  { "id": "darkblue", "name": "DarkBlue", "colors": ["#d5a118", "#5a6c81", "#5e656e", "#556470", "#64698a", "#506074", "#73738f", "#574f76"] },
-  { "id": "darkgold", "name": "DarkGold", "colors": ["#b89663", "#7a7c7f", "#535570", "#ffffe2", "#a8a8a8", "#799ca1", "#867fb5", "#6b94af"] },
-  { "id": "delphinium", "name": "Delphinium", "colors": ["#85c4ed", "#c8c8c8", "#858cd9", "#ffffe6", "#78b4be", "#55a586", "#ba9d91", "#90a0be"] },
-  { "id": "desert", "name": "Desert", "colors": ["#e5b793", "#c2bba7", "#8c8f98", "#fdfdfa", "#9faeb5", "#6f98a2", "#739e6d", "#c4929b"] },
-  { "id": "dierra", "name": "Dierra", "colors": ["#e5c9db", "#a4829c", "#dcd1ba", "#554799", "#84799a", "#85c1a2", "#988f9f", "#676684"] },
-  { "id": "esquire", "name": "Esquire", "colors": ["#e5ae36", "#847171", "#ab8186", "#dfba87", "#be8279", "#909ba7", "#b19898", "#8a6c6b"] },
-  { "id": "forest", "name": "Forest", "colors": ["#e69320", "#6c7a71", "#467070", "#38706e", "#be8671", "#397a73", "#506093", "#727fa7"] },
-  { "id": "fvwm", "name": "FVWM", "colors": ["#003c3c", "#8f9f8f", "#1a6e99", "#dedede", "#31658b", "#006c6c", "#4d4d4d", "#90903f"] },
-  { "id": "golden", "name": "Golden", "colors": ["#faad49", "#4d648d", "#be826f", "#47634f", "#757ca6", "#3d7777", "#2bc779", "#b1705f"] },
-  { "id": "grass", "name": "Grass", "colors": ["#d4c77d", "#bec6b7", "#5e9c7b", "#e2f3e2", "#a4aaa9", "#90a793", "#60879e", "#829694"] },
-  { "id": "grayscale", "name": "GrayScale", "colors": ["#c3c3c3", "#787777", "#bdbdbd", "#949493", "#bcbcbc", "#939393", "#7f7f7f", "#939393"] },
-  { "id": "greenshades", "name": "GreenShades", "colors": ["#708080", "#4b5352", "#609c78", "#686f82", "#a4a48b", "#99a3a7", "#b7878d", "#70978e"] },
-  { "id": "iris", "name": "Iris", "colors": ["#a59f80", "#c1c1c1", "#4c719e", "#b8b8ab", "#999999", "#729c9c", "#b98e8e", "#88aacb"] },
-  { "id": "kamari", "name": "Kamari", "colors": ["#ffebc9", "#97958f", "#9ca197", "#8facae", "#847983", "#9e8386", "#b8a49d", "#8fa9ac"] },
-  { "id": "latesummer", "name": "LateSummer", "colors": ["#da5b66", "#7a728c", "#aa7466", "#dcc295", "#6b627c", "#55866e", "#847e46", "#406864"] },
-  { "id": "lilac", "name": "Lilac", "colors": ["#d3d178", "#a5a5ac", "#a68792", "#c37bc3", "#a5a5ac", "#c6b1b1", "#c25ac2", "#917e9f"] },
-  { "id": "metro", "name": "Metro", "colors": ["#f8bb88", "#9f9f9f", "#978c95", "#d7b787", "#806b6c", "#c6987c", "#9b8381", "#8f7065"] },
-  { "id": "mocha", "name": "Mocha", "colors": ["#e5dcc9", "#b7a49b", "#958078", "#d6b5a2", "#7b5f46", "#8f665f", "#ae998d", "#866757"] },
-  { "id": "mustard", "name": "Mustard", "colors": ["#d5802e", "#b75f5f", "#4d648d", "#5c526a", "#885a7c", "#be826f", "#467976", "#2a2a68"] },
-  { "id": "neptune", "name": "Neptune", "colors": ["#a2e5c6", "#3f938d", "#2d2d4e", "#7889a5", "#637e95", "#3e708a", "#3d157d", "#616d8e"] },
-  { "id": "nordic", "name": "Nordic", "colors": ["#b48ead", "#4c566a", "#3b4252", "#2e3440", "#94c3c2", "#434c5e", "#81a1c1", "#5e81ac"] },
-  { "id": "northernsky", "name": "NorthernSky", "colors": ["#a47591", "#1b5d6c", "#0cb45a", "#00577a", "#41a952", "#4b1b7b", "#27ca70", "#3d4540"] },
-  { "id": "nutmeg", "name": "Nutmeg", "colors": ["#cec2bb", "#257865", "#9f8881", "#cdb2a6", "#b39c8f", "#cfb8aa", "#9048ac", "#45c072"] },
-  { "id": "oasis", "name": "Oasis", "colors": ["#8872a0", "#a48e5f", "#92754e", "#e0d8b2", "#cebd8d", "#858a55", "#c4856e", "#707450"] },
-  { "id": "olive", "name": "Olive", "colors": ["#83835a", "#c3c3b9", "#877987", "#cec2b8", "#cdbdaa", "#e1a897", "#b5a1b5", "#9a919a"] },
-  { "id": "orchid", "name": "Orchid", "colors": ["#b9b9ff", "#9b9bb9", "#a8a8cd", "#8282ab", "#9bb ed7", "#9898c8", "#8c8caa", "#b0b0bf"] },
-  { "id": "orchidvue", "name": "OrchidVUE", "colors": ["#d7aef0", "#9190a4", "#727786", "#9f93c5", "#5ebd5d", "#8c5b7a", "#61939a", "#68c06b"] },
-  { "id": "orient", "name": "Orient", "colors": ["#d8a892", "#127a75", "#6c698b", "#0f6763", "#3890a1", "#188c87", "#8a9b90", "#36838d"] },
-  { "id": "pastel", "name": "Pastel", "colors": ["#9fc0d6", "#9e96bc", "#939aca", "#b3b4be", "#b6b7fd", "#7e85a7", "#8e8cae", "#acadd1"] },
-  { "id": "pavia", "name": "Pavia", "colors": ["#ffe2ac", "#b0b0cd", "#9f9faf", "#acb97c", "#84799a", "#c6a3bb", "#78bcac", "#7fd679"] },
-  { "id": "pbnj", "name": "PBNJ", "colors": ["#b65c61", "#d9c1b2", "#dea17f", "#f1e3d2", "#c690ae", "#cba08d", "#9eb386", "#ebd7bf"] },
-  { "id": "rainforest", "name": "RainForest", "colors": ["#ffe062", "#906cb4", "#727295", "#939a6a", "#5c8f91", "#ac8963", "#99925b", "#56bd6f"] },
-  { "id": "regal", "name": "Regal", "colors": ["#95b4ec", "#8792a4", "#7e7e88", "#5470aa", "#6a6a8d", "#6882b0", "#51cd6d", "#7c7c97"] },
-  { "id": "safari", "name": "Safari", "colors": ["#faf5a0", "#c2beaa", "#9d8f83", "#9d7c81", "#918589", "#819f8d", "#b5a48d", "#baa49d"] },
-  { "id": "sand", "name": "Sand", "colors": ["#eabe93", "#c7afaf", "#8e4aa2", "#d4d4da", "#af1181", "#bbb5a8", "#bfbed6", "#969696"] },
-  { "id": "santaclaus", "name": "SantaClaus", "colors": ["#f7d782", "#30609e", "#8898aa", "#686f82", "#30609e", "#386094", "#b8878c", "#92abbe"] },
-  { "id": "santafe", "name": "SantaFe", "colors": ["#ef9d9d", "#7ebdab", "#bd6e94", "#ceaf9a", "#8353a5", "#7fdb9c", "#7272ab", "#9c9992"] },
-  { "id": "savannah", "name": "Savannah", "colors": ["#da9a68", "#b4aa94", "#a0c8b2", "#d2bfa8", "#c6b2a8", "#976fa7", "#b7aea9", "#93ab73"] },
-  { "id": "seafoam", "name": "SeaFoam", "colors": ["#aa0ccb", "#a757a8", "#7d66b7", "#9779b0", "#af45bf", "#c500af", "#98aaaa", "#c800ad"] },
-  { "id": "skyred", "name": "SkyRed", "colors": ["#cc686f", "#afbdc0", "#6da7b4", "#e1ebe1", "#6e91aa", "#8b7b97", "#b7b58d", "#5e5084"] },
-  { "id": "softblue", "name": "SoftBlue", "colors": ["#7fa9eb", "#76a99c", "#5b85d0", "#6c6c6c", "#94d5df", "#b8cebc", "#bdbdeb", "#5d7cb8"] },
-  { "id": "solyaris", "name": "Solyaris", "colors": ["#b24d7a", "#aeb2c3", "#63639c", "#fff7e9", "#68a6a0", "#8dadc7", "#d39798", "#9793b5"] },
-  { "id": "sotto", "name": "Sotto", "colors": ["#b4146c", "#736d81", "#dcc9c9", "#a6a667", "#84799a", "#8a6576", "#6ede7d", "#689064"] },
-  { "id": "southwest", "name": "SouthWest", "colors": ["#ff7d79", "#a97561", "#c09b80", "#b18885", "#b86f4b", "#887261", "#b88a75", "#98309c"] },
-  { "id": "summer", "name": "Summer", "colors": ["#ff5664", "#ffd690", "#829fff", "#ffffff", "#86eac4", "#b8c8ff", "#64c1ff", "#bcf0c5"] },
-  { "id": "terracotta", "name": "Terracotta", "colors": ["#fbabad", "#948187", "#896566", "#aa6b71", "#ac958e", "#b0817e", "#5c8e8f", "#2f8a90"] },
-  { "id": "tundra", "name": "Tundra", "colors": ["#f1bc7f", "#a59680", "#7cc892", "#76947e", "#859680", "#7ab493", "#82367a", "#837e75"] },
-  { "id": "tust", "name": "Tust", "colors": ["#eda870", "#999999", "#8998aa", "#686f82", "#c6b2a8", "#67676a", "#b7878d", "#93ab73"] },
-  { "id": "urchin", "name": "Urchin", "colors": ["#d5a591", "#0f8f7c", "#706817", "#0ca468", "#373792", "#12ee8e", "#88149a", "#326283"] },
-  { "id": "vetro", "name": "Vetro", "colors": ["#cefbea", "#c9ffb1", "#9d8194", "#81ce75", "#84799a", "#7c279f", "#9d7636", "#70e656"] },
-  { "id": "wheat", "name": "Wheat", "colors": ["#d1a57a", "#dbbc26", "#48376d", "#bfbfc0", "#94d5df", "#b8cebc", "#bdbdeb", "#5d877c"] },
-  { "id": "yukon", "name": "Yukon", "colors": ["#dfdfdf", "#a559a5", "#adedbd", "#89ff90", "#a57fff", "#b9b4a4", "#b8a49d", "#7a3290"] },
-  { "id": "zutto", "name": "Zutto", "colors": ["#e5ae36", "#847171", "#ab8186", "#dfba87", "#be8279", "#909ba7", "#b19898", "#876968"] }
+  {
+    "id": "africa",
+    "name": "Africa",
+    "colors": [
+      "#d5a118",
+      "#5a6c81",
+      "#5e656e",
+      "#556470",
+      "#64698a",
+      "#506074",
+      "#73738f",
+      "#574f76"
+    ]
+  },
+  {
+    "id": "alpine",
+    "name": "Alpine",
+    "colors": [
+      "#afbfbf",
+      "#78aaab",
+      "#7ab9d8",
+      "#bfc0c5",
+      "#bf9279",
+      "#bfc0c5",
+      "#bdbdeb",
+      "#bfc0c5"
+    ]
+  },
+  {
+    "id": "arizona",
+    "name": "Arizona",
+    "colors": [
+      "#8a00da00e100",
+      "#bd009dc58272",
+      "#a70078007bc0",
+      "#d9009500874e",
+      "#9e007e1e7772",
+      "#b2004b006e8a",
+      "#ce005e84623b",
+      "#89ff5900764d"
+    ]
+  },
+  {
+    "id": "ashley",
+    "name": "Ashley",
+    "colors": [
+      "#faad49",
+      "#4d648d",
+      "#be826f",
+      "#47634f",
+      "#757ca6",
+      "#3d7777",
+      "#2b7985",
+      "#b1705f"
+    ]
+  },
+  {
+    "id": "autumn",
+    "name": "Autumn",
+    "colors": [
+      "#d4c77d",
+      "#bec6b7",
+      "#5e9c7b",
+      "#e2f3e2",
+      "#a4a9aa",
+      "#90a793",
+      "#60879e",
+      "#829694"
+    ]
+  },
+  {
+    "id": "beigerose",
+    "name": "BeigeRose",
+    "colors": [
+      "#c3c3c3",
+      "#787777",
+      "#bdbdbd",
+      "#949493",
+      "#bcbcbc",
+      "#939393",
+      "#7f7f7f",
+      "#939393"
+    ]
+  },
+  {
+    "id": "bluenight",
+    "name": "BlueNight",
+    "colors": [
+      "#708080",
+      "#4b5352",
+      "#607872",
+      "#686f82",
+      "#a4a48b",
+      "#99a79c",
+      "#b7878d",
+      "#70978e"
+    ]
+  },
+  {
+    "id": "blueshades",
+    "name": "BlueShades",
+    "colors": [
+      "#a59f80",
+      "#c1c1c1",
+      "#4c719e",
+      "#b8b8ab",
+      "#999999",
+      "#729c9c",
+      "#b98e8e",
+      "#88aacb"
+    ]
+  },
+  {
+    "id": "broica",
+    "name": "Broica",
+    "colors": [
+      "#eda870",
+      "#999999",
+      "#8998aa",
+      "#686f82",
+      "#c6b2a8",
+      "#4992a7",
+      "#b7878d",
+      "#93ab73"
+    ]
+  },
+  {
+    "id": "broicaltvue",
+    "name": "BroicaLtVUE",
+    "colors": [
+      "#e6bc8e",
+      "#687580",
+      "#7595a9",
+      "#cfa5a4",
+      "#847982",
+      "#856565",
+      "#84948f",
+      "#b19f98"
+    ]
+  },
+  {
+    "id": "broicavue",
+    "name": "BroicaVUE",
+    "colors": [
+      "#face9d",
+      "#6d7a85",
+      "#7595a9",
+      "#b18f90",
+      "#847982",
+      "#956970",
+      "#b19f98",
+      "#777b9d"
+    ]
+  },
+  {
+    "id": "brownshades",
+    "name": "BrownShades",
+    "colors": [
+      "#ba7c52",
+      "#8f6855",
+      "#785d5d",
+      "#5c4236",
+      "#a48b8b",
+      "#cabb9d",
+      "#b7a387",
+      "#a88c77"
+    ]
+  },
+  {
+    "id": "cabernet",
+    "name": "Cabernet",
+    "colors": [
+      "#d88775",
+      "#638a7a",
+      "#456256",
+      "#4b5e61",
+      "#b65c71",
+      "#833b47",
+      "#794655",
+      "#495c65"
+    ]
+  },
+  {
+    "id": "camouflage",
+    "name": "Camouflage",
+    "colors": [
+      "#acbeb4",
+      "#6e7d76",
+      "#907b7b",
+      "#82829b",
+      "#8e8e77",
+      "#7f6c6c",
+      "#8e8e85",
+      "#4e6b65"
+    ]
+  },
+  {
+    "id": "charcoal",
+    "name": "Charcoal",
+    "colors": [
+      "#87b4b0",
+      "#767279",
+      "#696363",
+      "#896d6d",
+      "#828585",
+      "#636f6d",
+      "#919191",
+      "#af9696"
+    ]
+  },
+  {
+    "id": "chocolate",
+    "name": "Chocolate",
+    "colors": [
+      "#a9a9ff",
+      "#708c8d",
+      "#8787af",
+      "#967878",
+      "#b9a0a0",
+      "#a58282",
+      "#bbbbd9",
+      "#9696b9"
+    ]
+  },
+  {
+    "id": "cinnamon",
+    "name": "Cinnamon",
+    "colors": [
+      "#b14b50",
+      "#926866",
+      "#796e6d",
+      "#836960",
+      "#9b6862",
+      "#a28d8c",
+      "#847574",
+      "#78695d"
+    ]
+  },
+  {
+    "id": "clay",
+    "name": "Clay",
+    "colors": [
+      "#ffaaaa",
+      "#968282",
+      "#5a8b8d",
+      "#8c6464",
+      "#af9191",
+      "#a56e6e",
+      "#ac8383",
+      "#2f8b8d"
+    ]
+  },
+  {
+    "id": "coalmine",
+    "name": "Coalmine",
+    "colors": [
+      "#5f948a",
+      "#6e6762",
+      "#605656",
+      "#504b46",
+      "#747c74",
+      "#5e6a68",
+      "#847c6b",
+      "#9c8f75"
+    ]
+  },
+  {
+    "id": "coralreef",
+    "name": "CoralReef",
+    "colors": [
+      "#fe8282",
+      "#7a98c5",
+      "#7848a0",
+      "#9f9bb f",
+      "#3297c7",
+      "#e29c83",
+      "#768ca1",
+      "#4f5e86"
+    ]
+  },
+  {
+    "id": "crimson",
+    "name": "Crimson",
+    "colors": [
+      "#b24d7a",
+      "#aeb2c3",
+      "#718ba5",
+      "#fff7e9",
+      "#68a6a0",
+      "#8dadc7",
+      "#d39798",
+      "#9793b5"
+    ]
+  },
+  {
+    "id": "dakota",
+    "name": "Dakota",
+    "colors": [
+      "#8adae1",
+      "#bd9d82",
+      "#a7787b",
+      "#d99587",
+      "#9e7e77",
+      "#b24b6e",
+      "#ce5e62",
+      "#895976"
+    ]
+  },
+  {
+    "id": "dalla",
+    "name": "Dalla",
+    "colors": [
+      "#e2ebbb",
+      "#b6d4cb",
+      "#85adeb",
+      "#bd94c9",
+      "#7b8f98",
+      "#839ed7",
+      "#b0aea9",
+      "#8f7e8d"
+    ]
+  },
+  {
+    "id": "darkblue",
+    "name": "DarkBlue",
+    "colors": [
+      "#d5a118",
+      "#5a6c81",
+      "#5e656e",
+      "#556470",
+      "#64698a",
+      "#506074",
+      "#73738f",
+      "#574f76"
+    ]
+  },
+  {
+    "id": "darkgold",
+    "name": "DarkGold",
+    "colors": [
+      "#b89663",
+      "#7a7c7f",
+      "#535570",
+      "#ffffe2",
+      "#a8a8a8",
+      "#799ca1",
+      "#867fb5",
+      "#6b94af"
+    ]
+  },
+  {
+    "id": "delphinium",
+    "name": "Delphinium",
+    "colors": [
+      "#85c4ed",
+      "#c8c8c8",
+      "#858cd9",
+      "#ffffe6",
+      "#78b4be",
+      "#55a586",
+      "#ba9d91",
+      "#90a0be"
+    ]
+  },
+  {
+    "id": "desert",
+    "name": "Desert",
+    "colors": [
+      "#e5b793",
+      "#c2bba7",
+      "#8c8f98",
+      "#fdfdfa",
+      "#9faeb5",
+      "#6f98a2",
+      "#739e6d",
+      "#c4929b"
+    ]
+  },
+  {
+    "id": "dierra",
+    "name": "Dierra",
+    "colors": [
+      "#e5c9db",
+      "#a4829c",
+      "#dcd1ba",
+      "#554799",
+      "#84799a",
+      "#85c1a2",
+      "#988f9f",
+      "#676684"
+    ]
+  },
+  {
+    "id": "esquire",
+    "name": "Esquire",
+    "colors": [
+      "#e5ae36",
+      "#847171",
+      "#ab8186",
+      "#dfba87",
+      "#be8279",
+      "#909ba7",
+      "#b19898",
+      "#8a6c6b"
+    ]
+  },
+  {
+    "id": "forest",
+    "name": "Forest",
+    "colors": [
+      "#e69320",
+      "#6c7a71",
+      "#467070",
+      "#38706e",
+      "#be8671",
+      "#397a73",
+      "#506093",
+      "#727fa7"
+    ]
+  },
+  {
+    "id": "fvwm",
+    "name": "FVWM",
+    "colors": [
+      "#003c3c",
+      "#8f9f8f",
+      "#1a6e99",
+      "#dedede",
+      "#31658b",
+      "#006c6c",
+      "#4d4d4d",
+      "#90903f"
+    ]
+  },
+  {
+    "id": "golden",
+    "name": "Golden",
+    "colors": [
+      "#faad49",
+      "#4d648d",
+      "#be826f",
+      "#47634f",
+      "#757ca6",
+      "#3d7777",
+      "#2bc779",
+      "#b1705f"
+    ]
+  },
+  {
+    "id": "grass",
+    "name": "Grass",
+    "colors": [
+      "#d4c77d",
+      "#bec6b7",
+      "#5e9c7b",
+      "#e2f3e2",
+      "#a4aaa9",
+      "#90a793",
+      "#60879e",
+      "#829694"
+    ]
+  },
+  {
+    "id": "grayscale",
+    "name": "GrayScale",
+    "colors": [
+      "#c3c3c3",
+      "#787777",
+      "#bdbdbd",
+      "#949493",
+      "#bcbcbc",
+      "#939393",
+      "#7f7f7f",
+      "#939393"
+    ]
+  },
+  {
+    "id": "greenshades",
+    "name": "GreenShades",
+    "colors": [
+      "#708080",
+      "#4b5352",
+      "#609c78",
+      "#686f82",
+      "#a4a48b",
+      "#99a3a7",
+      "#b7878d",
+      "#70978e"
+    ]
+  },
+  {
+    "id": "iris",
+    "name": "Iris",
+    "colors": [
+      "#a59f80",
+      "#c1c1c1",
+      "#4c719e",
+      "#b8b8ab",
+      "#999999",
+      "#729c9c",
+      "#b98e8e",
+      "#88aacb"
+    ]
+  },
+  {
+    "id": "kamari",
+    "name": "Kamari",
+    "colors": [
+      "#ffebc9",
+      "#97958f",
+      "#9ca197",
+      "#8facae",
+      "#847983",
+      "#9e8386",
+      "#b8a49d",
+      "#8fa9ac"
+    ]
+  },
+  {
+    "id": "latesummer",
+    "name": "LateSummer",
+    "colors": [
+      "#da5b66",
+      "#7a728c",
+      "#aa7466",
+      "#dcc295",
+      "#6b627c",
+      "#55866e",
+      "#847e46",
+      "#406864"
+    ]
+  },
+  {
+    "id": "lilac",
+    "name": "Lilac",
+    "colors": [
+      "#d3d178",
+      "#a5a5ac",
+      "#a68792",
+      "#c37bc3",
+      "#a5a5ac",
+      "#c6b1b1",
+      "#c25ac2",
+      "#917e9f"
+    ]
+  },
+  {
+    "id": "metro",
+    "name": "Metro",
+    "colors": [
+      "#f8bb88",
+      "#9f9f9f",
+      "#978c95",
+      "#d7b787",
+      "#806b6c",
+      "#c6987c",
+      "#9b8381",
+      "#8f7065"
+    ]
+  },
+  {
+    "id": "mocha",
+    "name": "Mocha",
+    "colors": [
+      "#e5dcc9",
+      "#b7a49b",
+      "#958078",
+      "#d6b5a2",
+      "#7b5f46",
+      "#8f665f",
+      "#ae998d",
+      "#866757"
+    ]
+  },
+  {
+    "id": "mustard",
+    "name": "Mustard",
+    "colors": [
+      "#d5802e",
+      "#b75f5f",
+      "#4d648d",
+      "#5c526a",
+      "#885a7c",
+      "#be826f",
+      "#467976",
+      "#2a2a68"
+    ]
+  },
+  {
+    "id": "neptune",
+    "name": "Neptune",
+    "colors": [
+      "#a2e5c6",
+      "#3f938d",
+      "#2d2d4e",
+      "#7889a5",
+      "#637e95",
+      "#3e708a",
+      "#3d157d",
+      "#616d8e"
+    ]
+  },
+  {
+    "id": "nordic",
+    "name": "Nordic",
+    "colors": [
+      "#b48ead",
+      "#4c566a",
+      "#3b4252",
+      "#2e3440",
+      "#94c3c2",
+      "#434c5e",
+      "#81a1c1",
+      "#5e81ac"
+    ]
+  },
+  {
+    "id": "northernsky",
+    "name": "NorthernSky",
+    "colors": [
+      "#a47591",
+      "#1b5d6c",
+      "#0cb45a",
+      "#00577a",
+      "#41a952",
+      "#4b1b7b",
+      "#27ca70",
+      "#3d4540"
+    ]
+  },
+  {
+    "id": "nutmeg",
+    "name": "Nutmeg",
+    "colors": [
+      "#cec2bb",
+      "#257865",
+      "#9f8881",
+      "#cdb2a6",
+      "#b39c8f",
+      "#cfb8aa",
+      "#9048ac",
+      "#45c072"
+    ]
+  },
+  {
+    "id": "oasis",
+    "name": "Oasis",
+    "colors": [
+      "#8872a0",
+      "#a48e5f",
+      "#92754e",
+      "#e0d8b2",
+      "#cebd8d",
+      "#858a55",
+      "#c4856e",
+      "#707450"
+    ]
+  },
+  {
+    "id": "olive",
+    "name": "Olive",
+    "colors": [
+      "#83835a",
+      "#c3c3b9",
+      "#877987",
+      "#cec2b8",
+      "#cdbdaa",
+      "#e1a897",
+      "#b5a1b5",
+      "#9a919a"
+    ]
+  },
+  {
+    "id": "orchid",
+    "name": "Orchid",
+    "colors": [
+      "#b9b9ff",
+      "#9b9bb9",
+      "#a8a8cd",
+      "#8282ab",
+      "#9bb ed7",
+      "#9898c8",
+      "#8c8caa",
+      "#b0b0bf"
+    ]
+  },
+  {
+    "id": "orchidvue",
+    "name": "OrchidVUE",
+    "colors": [
+      "#d7aef0",
+      "#9190a4",
+      "#727786",
+      "#9f93c5",
+      "#5ebd5d",
+      "#8c5b7a",
+      "#61939a",
+      "#68c06b"
+    ]
+  },
+  {
+    "id": "orient",
+    "name": "Orient",
+    "colors": [
+      "#d8a892",
+      "#127a75",
+      "#6c698b",
+      "#0f6763",
+      "#3890a1",
+      "#188c87",
+      "#8a9b90",
+      "#36838d"
+    ]
+  },
+  {
+    "id": "pastel",
+    "name": "Pastel",
+    "colors": [
+      "#9fc0d6",
+      "#9e96bc",
+      "#939aca",
+      "#b3b4be",
+      "#b6b7fd",
+      "#7e85a7",
+      "#8e8cae",
+      "#acadd1"
+    ]
+  },
+  {
+    "id": "pavia",
+    "name": "Pavia",
+    "colors": [
+      "#ffe2ac",
+      "#b0b0cd",
+      "#9f9faf",
+      "#acb97c",
+      "#84799a",
+      "#c6a3bb",
+      "#78bcac",
+      "#7fd679"
+    ]
+  },
+  {
+    "id": "pbnj",
+    "name": "PBNJ",
+    "colors": [
+      "#b65c61",
+      "#d9c1b2",
+      "#dea17f",
+      "#f1e3d2",
+      "#c690ae",
+      "#cba08d",
+      "#9eb386",
+      "#ebd7bf"
+    ]
+  },
+  {
+    "id": "rainforest",
+    "name": "RainForest",
+    "colors": [
+      "#ffe062",
+      "#906cb4",
+      "#727295",
+      "#939a6a",
+      "#5c8f91",
+      "#ac8963",
+      "#99925b",
+      "#56bd6f"
+    ]
+  },
+  {
+    "id": "regal",
+    "name": "Regal",
+    "colors": [
+      "#95b4ec",
+      "#8792a4",
+      "#7e7e88",
+      "#5470aa",
+      "#6a6a8d",
+      "#6882b0",
+      "#51cd6d",
+      "#7c7c97"
+    ]
+  },
+  {
+    "id": "safari",
+    "name": "Safari",
+    "colors": [
+      "#faf5a0",
+      "#c2beaa",
+      "#9d8f83",
+      "#9d7c81",
+      "#918589",
+      "#819f8d",
+      "#b5a48d",
+      "#baa49d"
+    ]
+  },
+  {
+    "id": "sand",
+    "name": "Sand",
+    "colors": [
+      "#eabe93",
+      "#c7afaf",
+      "#8e4aa2",
+      "#d4d4da",
+      "#af1181",
+      "#bbb5a8",
+      "#bfbed6",
+      "#969696"
+    ]
+  },
+  {
+    "id": "santaclaus",
+    "name": "SantaClaus",
+    "colors": [
+      "#f7d782",
+      "#30609e",
+      "#8898aa",
+      "#686f82",
+      "#30609e",
+      "#386094",
+      "#b8878c",
+      "#92abbe"
+    ]
+  },
+  {
+    "id": "santafe",
+    "name": "SantaFe",
+    "colors": [
+      "#ef9d9d",
+      "#7ebdab",
+      "#bd6e94",
+      "#ceaf9a",
+      "#8353a5",
+      "#7fdb9c",
+      "#7272ab",
+      "#9c9992"
+    ]
+  },
+  {
+    "id": "savannah",
+    "name": "Savannah",
+    "colors": [
+      "#da9a68",
+      "#b4aa94",
+      "#a0c8b2",
+      "#d2bfa8",
+      "#c6b2a8",
+      "#976fa7",
+      "#b7aea9",
+      "#93ab73"
+    ]
+  },
+  {
+    "id": "seafoam",
+    "name": "SeaFoam",
+    "colors": [
+      "#aa0ccb",
+      "#a757a8",
+      "#7d66b7",
+      "#9779b0",
+      "#af45bf",
+      "#c500af",
+      "#98aaaa",
+      "#c800ad"
+    ]
+  },
+  {
+    "id": "skyred",
+    "name": "SkyRed",
+    "colors": [
+      "#cc686f",
+      "#afbdc0",
+      "#6da7b4",
+      "#e1ebe1",
+      "#6e91aa",
+      "#8b7b97",
+      "#b7b58d",
+      "#5e5084"
+    ]
+  },
+  {
+    "id": "softblue",
+    "name": "SoftBlue",
+    "colors": [
+      "#7fa9eb",
+      "#76a99c",
+      "#5b85d0",
+      "#6c6c6c",
+      "#94d5df",
+      "#b8cebc",
+      "#bdbdeb",
+      "#5d7cb8"
+    ]
+  },
+  {
+    "id": "solyaris",
+    "name": "Solyaris",
+    "colors": [
+      "#b24d7a",
+      "#aeb2c3",
+      "#63639c",
+      "#fff7e9",
+      "#68a6a0",
+      "#8dadc7",
+      "#d39798",
+      "#9793b5"
+    ]
+  },
+  {
+    "id": "sotto",
+    "name": "Sotto",
+    "colors": [
+      "#b4146c",
+      "#736d81",
+      "#dcc9c9",
+      "#a6a667",
+      "#84799a",
+      "#8a6576",
+      "#6ede7d",
+      "#689064"
+    ]
+  },
+  {
+    "id": "southwest",
+    "name": "SouthWest",
+    "colors": [
+      "#ff7d79",
+      "#a97561",
+      "#c09b80",
+      "#b18885",
+      "#b86f4b",
+      "#887261",
+      "#b88a75",
+      "#98309c"
+    ]
+  },
+  {
+    "id": "summer",
+    "name": "Summer",
+    "colors": [
+      "#ff5664",
+      "#ffd690",
+      "#829fff",
+      "#ffffff",
+      "#86eac4",
+      "#b8c8ff",
+      "#64c1ff",
+      "#bcf0c5"
+    ]
+  },
+  {
+    "id": "terracotta",
+    "name": "Terracotta",
+    "colors": [
+      "#fbabad",
+      "#948187",
+      "#896566",
+      "#aa6b71",
+      "#ac958e",
+      "#b0817e",
+      "#5c8e8f",
+      "#2f8a90"
+    ]
+  },
+  {
+    "id": "tundra",
+    "name": "Tundra",
+    "colors": [
+      "#f1bc7f",
+      "#a59680",
+      "#7cc892",
+      "#76947e",
+      "#859680",
+      "#7ab493",
+      "#82367a",
+      "#837e75"
+    ]
+  },
+  {
+    "id": "tust",
+    "name": "Tust",
+    "colors": [
+      "#eda870",
+      "#999999",
+      "#8998aa",
+      "#686f82",
+      "#c6b2a8",
+      "#67676a",
+      "#b7878d",
+      "#93ab73"
+    ]
+  },
+  {
+    "id": "urchin",
+    "name": "Urchin",
+    "colors": [
+      "#d5a591",
+      "#0f8f7c",
+      "#706817",
+      "#0ca468",
+      "#373792",
+      "#12ee8e",
+      "#88149a",
+      "#326283"
+    ]
+  },
+  {
+    "id": "vetro",
+    "name": "Vetro",
+    "colors": [
+      "#cefbea",
+      "#c9ffb1",
+      "#9d8194",
+      "#81ce75",
+      "#84799a",
+      "#7c279f",
+      "#9d7636",
+      "#70e656"
+    ]
+  },
+  {
+    "id": "wheat",
+    "name": "Wheat",
+    "colors": [
+      "#d1a57a",
+      "#dbbc26",
+      "#48376d",
+      "#bfbfc0",
+      "#94d5df",
+      "#b8cebc",
+      "#bdbdeb",
+      "#5d877c"
+    ]
+  },
+  {
+    "id": "yukon",
+    "name": "Yukon",
+    "colors": [
+      "#dfdfdf",
+      "#a559a5",
+      "#adedbd",
+      "#89ff90",
+      "#a57fff",
+      "#b9b4a4",
+      "#b8a49d",
+      "#7a3290"
+    ]
+  },
+  {
+    "id": "zutto",
+    "name": "Zutto",
+    "colors": [
+      "#e5ae36",
+      "#847171",
+      "#ab8186",
+      "#dfba87",
+      "#be8279",
+      "#909ba7",
+      "#b19898",
+      "#876968"
+    ]
+  }
 ]

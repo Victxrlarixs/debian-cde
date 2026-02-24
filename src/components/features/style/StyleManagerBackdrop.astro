@@ -54,16 +54,16 @@ import XPM_BACKDROPS from '../../../data/backdrops.json';
   async function renderThumbnail(canvas: HTMLCanvasElement) {
     if (canvas.dataset.rendered || canvas.dataset.loading) return;
     canvas.dataset.loading = 'true';
-    
+
     const path = canvas.dataset.xpm!;
     try {
       let dataUrl = thumbnailCache.get(path);
-      
+
       if (!dataUrl) {
         const res = await fetch(path);
         if (!res.ok) throw new Error('Fetch failed');
         const text = await res.text();
-        dataUrl = await parseXpmToDataUrl(text) ?? undefined;
+        dataUrl = (await parseXpmToDataUrl(text)) ?? undefined;
         if (dataUrl) thumbnailCache.set(path, dataUrl);
       }
 
@@ -89,19 +89,22 @@ import XPM_BACKDROPS from '../../../data/backdrops.json';
   }
 
   function setupIntersectionObserver() {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          renderThumbnail(entry.target as HTMLCanvasElement);
-        }
-      });
-    }, {
-      root: document.querySelector('.backdrop-modal-body'),
-      rootMargin: '100px', // Pre-load thumbnails before they enter view
-      threshold: 0.1
-    });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            renderThumbnail(entry.target as HTMLCanvasElement);
+          }
+        });
+      },
+      {
+        root: document.querySelector('.backdrop-modal-body'),
+        rootMargin: '100px', // Pre-load thumbnails before they enter view
+        threshold: 0.1,
+      }
+    );
 
-    document.querySelectorAll('.backdrop-preview-canvas').forEach(canvas => {
+    document.querySelectorAll('.backdrop-preview-canvas').forEach((canvas) => {
       observer.observe(canvas);
     });
   }
@@ -109,13 +112,13 @@ import XPM_BACKDROPS from '../../../data/backdrops.json';
   document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('styleManagerBackdrop');
     if (!modal) return;
-    
+
     const observer = new MutationObserver(() => {
       if (modal.offsetParent !== null) {
         setupIntersectionObserver();
       }
     });
-    
+
     observer.observe(modal, { attributes: true, attributeFilter: ['style', 'class'] });
     if (modal.offsetParent !== null) setupIntersectionObserver();
   });

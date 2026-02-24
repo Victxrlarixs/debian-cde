@@ -27,7 +27,7 @@ export class ThemeModule {
    * Maps CDE ColorSets to CSS variables and generates shades.
    */
   public applyCdePalette(id: string): void {
-    const palette = this.cdePalettes.find(p => p.id === id);
+    const palette = this.cdePalettes.find((p) => p.id === id);
     if (!palette) {
       logger.warn(`[ThemeModule] Palette not found: ${id}`);
       return;
@@ -40,7 +40,7 @@ export class ThemeModule {
     // 2: Workspace Background
     // 3: Secondary Accent
     // 4-7: Additional UI variations
-    
+
     const titlebarBg = c[0];
     const windowBg = c[1];
     const titlebarShades = getCdeShades(titlebarBg);
@@ -53,12 +53,12 @@ export class ThemeModule {
       '--button-bg': windowBg,
       '--dock-color': windowBg,
       '--menu-color': windowBg,
-      
+
       '--titlebar-color': titlebarBg,
       '--scrollbar-color': titlebarBg,
       '--titlebar-text-color': getContrastColor(titlebarBg),
       '--text-color': getContrastColor(windowBg),
-      
+
       '--border-light': windowShades.light,
       '--border-dark': windowShades.dark,
       '--border-inset-light': blendColors(windowBg, '#FFFFFF', 0.1),
@@ -69,7 +69,7 @@ export class ThemeModule {
       '--dock-icon-active': windowShades.dark,
       '--button-active': windowShades.dark,
       '--separator-color': windowShades.dark,
-      '--shadow-color': 'rgba(0, 0, 0, 0.3)'
+      '--shadow-color': 'rgba(0, 0, 0, 0.3)',
     };
 
     for (const [cssVar, value] of Object.entries(newTheme)) {
@@ -98,10 +98,9 @@ export class ThemeModule {
 
   public applyPreset(scheme: string): void {
     // If it's a CDE palette ID, use the new logic
-    if (this.cdePalettes.some(p => p.id === scheme)) {
+    if (this.cdePalettes.some((p) => p.id === scheme)) {
       this.applyCdePalette(scheme);
     } else {
-      // Legacy fallback removed as themes.json is phased out
       logger.warn(`[ThemeModule] Preset not found in CDE palettes: ${scheme}`);
     }
   }
