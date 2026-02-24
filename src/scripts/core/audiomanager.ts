@@ -20,7 +20,6 @@ export interface IAudioManager {
 declare global {
   interface Window {
     AudioManager: IAudioManager;
-    retroBeep: () => void;
   }
 }
 
