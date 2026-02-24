@@ -312,6 +312,11 @@
 #fileManagerBtn {
   grid-column: 2;
 }
+#browserBtn {
+  grid-column: 3;
+  background-image: radial-gradient(var(--separator-color) 1px, transparent 1px);
+  background-size: 3px 3px;
+}
 #styleManagerBtn {
   grid-column: 4;
 }
