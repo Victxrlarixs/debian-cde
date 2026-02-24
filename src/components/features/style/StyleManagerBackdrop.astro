@@ -1,55 +1,6 @@
 ---
 import WindowControls from '../../common/WindowControls.astro';
-
-const XPM_BACKDROPS = [
-  // Stone & Marble
-  { name: 'Marble', file: 'Marble.pm' },
-  { name: 'Rocks', file: 'Rocks.pm' },
-  { name: 'Fossil', file: 'Fossil.pm' },
-  { name: 'Pebbles', file: 'Pebbles.pm' },
-  { name: 'K2', file: 'K2.pm' },
-  // Wood & Fabric
-  { name: 'Burl', file: 'Burl.pm' },
-  { name: 'Canvas', file: 'Canvas.pm' },
-  { name: 'Cotton', file: 'Cotton.pm' },
-  { name: 'Corduroy', file: 'Corduroy.pm' },
-  { name: 'Linen', file: 'Linen.pm' },
-  { name: 'Leather', file: 'Leather.pm' },
-  { name: 'Tartan', file: 'Tartan.pm' },
-  { name: 'Parquet', file: 'Parquet.pm' },
-  // Natural
-  { name: 'Sand Dark', file: 'SandDark.pm' },
-  { name: 'Sand Light', file: 'SandLight.pm' },
-  { name: 'Dune', file: 'Dune.pm' },
-  { name: 'Wave', file: 'Wave.pm' },
-  { name: 'Rain', file: 'Rain.pm' },
-  { name: 'Water Drops', file: 'WaterDrops.pm' },
-  { name: 'Rice Paper', file: 'RicePaper.pm' },
-  // Sky & Space
-  { name: 'Sky Dark', file: 'SkyDark.pm' },
-  { name: 'Sky Light', file: 'SkyLight.pm' },
-  { name: 'Space', file: 'Space.pm' },
-  // Geometric
-  { name: 'Cubes', file: 'Cubes.pm' },
-  { name: 'Brick Wall', file: 'BrickWall.pm' },
-  { name: 'Rivets', file: 'Rivets.pm' },
-  { name: 'Maze', file: 'Maze.pm' },
-  { name: 'Structure', file: 'Structure.pm' },
-  { name: 'Greece', file: 'Greece.pm' },
-  { name: 'Celtic', file: 'Celtic.pm' },
-  // Industrial / Retro
-  { name: 'Circuit', file: 'CircuitBoards.pm' },
-  { name: 'Memphis', file: 'Memphis.pm' },
-  { name: 'Noise', file: 'Noise.pm' },
-  { name: 'Old Paper', file: 'OldPaper.pm' },
-  { name: 'Stix', file: 'Stix.pm' },
-  { name: 'Ebony', file: 'Ebony.pm' },
-  // Special CDE
-  { name: 'Toronto', file: 'Toronto.pm' },
-  { name: 'Southwest', file: 'Southwest.pm' },
-  { name: 'Fibre', file: 'Fibre.pm' },
-  { name: 'Snake Skin', file: 'SnakeLeather.pm' },
-];
+import XPM_BACKDROPS from '../../../data/backdrops.json';
 ---
 
 <div class="cde-retro-modal" id="styleManagerBackdrop">
@@ -98,49 +49,74 @@ const XPM_BACKDROPS = [
 <script>
   import { parseXpmToDataUrl } from '../../../scripts/core/xpmparser';
 
-  async function renderXpmThumbnails() {
-    const canvases = document.querySelectorAll<HTMLCanvasElement>(
-      '.backdrop-preview-canvas[data-xpm]'
-    );
-    for (const canvas of canvases) {
-      if (canvas.dataset.rendered) continue;
-      const path = canvas.dataset.xpm!;
-      try {
+  const thumbnailCache = new Map<string, string>();
+
+  async function renderThumbnail(canvas: HTMLCanvasElement) {
+    if (canvas.dataset.rendered || canvas.dataset.loading) return;
+    canvas.dataset.loading = 'true';
+    
+    const path = canvas.dataset.xpm!;
+    try {
+      let dataUrl = thumbnailCache.get(path);
+      
+      if (!dataUrl) {
         const res = await fetch(path);
-        if (!res.ok) continue;
+        if (!res.ok) throw new Error('Fetch failed');
         const text = await res.text();
-        const dataUrl = await parseXpmToDataUrl(text);
-        if (dataUrl) {
-          const img = new Image();
-          img.onload = () => {
-            const ctx = canvas.getContext('2d');
-            if (ctx) {
-              const pat = ctx.createPattern(img, 'repeat');
-              if (pat) {
-                ctx.fillStyle = pat;
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-              }
-            }
-          };
-          img.src = dataUrl;
-          canvas.dataset.rendered = '1';
-        }
-      } catch {
-        // silent fail for thumbnail
+        dataUrl = await parseXpmToDataUrl(text) ?? undefined;
+        if (dataUrl) thumbnailCache.set(path, dataUrl);
       }
+
+      if (dataUrl) {
+        const img = new Image();
+        img.onload = () => {
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            const pat = ctx.createPattern(img, 'repeat');
+            if (pat) {
+              ctx.fillStyle = pat;
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+          }
+          canvas.dataset.rendered = '1';
+          delete canvas.dataset.loading;
+        };
+        img.src = dataUrl;
+      }
+    } catch {
+      delete canvas.dataset.loading;
     }
+  }
+
+  function setupIntersectionObserver() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          renderThumbnail(entry.target as HTMLCanvasElement);
+        }
+      });
+    }, {
+      root: document.querySelector('.backdrop-modal-body'),
+      rootMargin: '100px', // Pre-load thumbnails before they enter view
+      threshold: 0.1
+    });
+
+    document.querySelectorAll('.backdrop-preview-canvas').forEach(canvas => {
+      observer.observe(canvas);
+    });
   }
 
   document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('styleManagerBackdrop');
     if (!modal) return;
+    
     const observer = new MutationObserver(() => {
       if (modal.offsetParent !== null) {
-        renderXpmThumbnails();
+        setupIntersectionObserver();
       }
     });
+    
     observer.observe(modal, { attributes: true, attributeFilter: ['style', 'class'] });
-    // Also try on first load if already visible
-    if (modal.offsetParent !== null) renderXpmThumbnails();
+    if (modal.offsetParent !== null) setupIntersectionObserver();
   });
 </script>
