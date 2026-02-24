@@ -15,7 +15,9 @@ import { CONFIG } from '../../scripts/core/config';
         <img src="/icons/go-up.png" alt="arrow" class="arrow-icon" />
       </div>
       <div class="cde-icon-btn cde-textured-btn" id="fileManagerBtn"></div>
-      <div class="cde-icon-btn cde-textured-btn" id="browserBtn"></div>
+      <div class="cde-icon-btn dropdown-btn" id="browserBtn">
+        <img src="/icons/go-up.png" alt="arrow" class="arrow-icon" />
+      </div>
       <div class="cde-icon-btn dropdown-btn" id="styleManagerBtn">
         <img src="/icons/go-up.png" alt="arrow" class="arrow-icon" />
       </div>
@@ -37,7 +39,7 @@ import { CONFIG } from '../../scripts/core/config';
         </div>
       </div>
       <div class="cde-icon" onclick="styleManager.openMain()" title="Style Manager">
-        <img src="/icons/org.xfce.settings.appearance.png" alt="Style Manager" />
+        <img src="/icons/org.xfce.settings.manager.png" alt="Style Manager" />
       </div>
       <div class="cde-icon" id="utilitiesIcon" title="Run">
         <img src="/icons/applications-other.png" alt="Utilities" />
@@ -79,14 +81,17 @@ import { CONFIG } from '../../scripts/core/config';
     <img src="/icons/org.xfce.taskmanager.png" alt="TaskManager" />
   </div>
 
-  <div class="tray-icon" onclick="TerminalLab.open()" title="Terminal Laboratory">
-    <img src="/icons/computer.png" alt="Terminal Laboratory" />
+  <div class="tray-icon" onclick="window.TextEditor?.openSplash()" title="Emacs">
+    <img src="/icons/emacs22.png" alt="Emacs" class="emacs-pixelated" />
   </div>
 </div>
 
 <div class="dropdown-menu" id="utilitiesDropdown">
   <div class="menu-item" onclick="captureFullPageScreenshot()">
     <img src="/icons/org.xfce.screenshooter.png" alt="" /> Screenshot
+  </div>
+  <div class="menu-item" onclick="window.TextEditor?.openSplash()">
+    <img src="/icons/emacs22.png" alt="" class="emacs-pixelated" /> Emacs
   </div>
   <div class="menu-item" onclick="openCalendar()">
     <img src="/icons/calendar.png" alt="" /> Calendar
@@ -134,5 +139,14 @@ import { CONFIG } from '../../scripts/core/config';
   <div class="menu-separator"></div>
   <div class="menu-item" onclick="TerminalLab.open()">
     <img src="/icons/computer.png" alt="" /> Terminal Laboratory
+  </div>
+</div>
+
+<div class="dropdown-menu" id="browserDropdown">
+  <div class="menu-item" onclick="window.open('https://gnu.org', '_blank')">
+    <img src="/icons/gnu.png" alt="" class="emacs-pixelated" /> GNU
+  </div>
+  <div class="menu-item" onclick="window.open('https://www.fsf.org', '_blank')">
+    <img src="/icons/fsf.svg" alt="" class="emacs-pixelated" /> FSF
   </div>
 </div>

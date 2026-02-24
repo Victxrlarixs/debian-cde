@@ -2315,7 +2315,8 @@
    ------------------------------------------------------------------ */
 #terminal-lab {
   width: 820px;
-  min-height: 520px;
+  height: 520px;
+  max-height: 85vh;
   display: none;
   flex-direction: column;
   font-family: var(--font-family-terminal);
@@ -2935,4 +2936,458 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* ------------------------------------------------------------------
+   EMACS TEXT EDITOR
+   ------------------------------------------------------------------ */
+
+#text-editor {
+  width: 760px;
+  height: 580px;
+  display: none;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #888;
+}
+
+/* Emacs titlebar override - plain gray like GTK Emacs */
+.emacs-titlebar {
+  background: #e0e0e0 !important;
+  color: #000 !important;
+  font-family: 'DejaVu Sans', sans-serif !important;
+  font-size: 12px !important;
+  border-bottom: 1px solid #aaa;
+}
+
+/* ── Emacs Menubar ── */
+.emacs-menubar {
+  background: #e8e8e8;
+  border-bottom: 1px solid #aaa;
+  font-family: 'DejaVu Sans', Helvetica, sans-serif;
+  font-size: 13px;
+  color: #000;
+}
+
+.emacs-menubar .te-menu-label {
+  padding: 3px 10px;
+  color: #000;
+}
+
+.emacs-menubar .te-menu-label:hover,
+.emacs-menubar .te-menu.open .te-menu-label {
+  background: #316ecb;
+  color: #fff;
+}
+
+.emacs-menubar .te-dropdown {
+  background: #f0f0f0;
+  border: 1px solid #888;
+  border-top: none;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.25);
+  font-family: 'DejaVu Sans', Helvetica, sans-serif;
+  font-size: 13px;
+}
+
+.emacs-menubar .te-item {
+  color: #000;
+  padding: 4px 20px;
+  font-size: 13px;
+}
+
+.emacs-menubar .te-item:hover {
+  background: #316ecb;
+  color: #fff;
+}
+
+.emacs-menubar .te-item.te-disabled {
+  color: #888;
+  pointer-events: none;
+}
+
+.emacs-menubar .te-accel {
+  color: inherit;
+  opacity: 0.7;
+  font-size: 11px;
+}
+
+.emacs-menubar .te-separator {
+  background: #bbb;
+  margin: 2px 0;
+}
+
+/* ── Find Bar ── */
+.te-find-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f0f0f0;
+  border-bottom: 1px solid #aaa;
+  padding: 3px 8px;
+  font-family: 'DejaVu Mono', monospace;
+  font-size: 13px;
+  color: #000;
+}
+
+.te-find-hidden { display: none; }
+
+#te-find-input {
+  flex: 1;
+  max-width: 260px;
+  background: #fff;
+  border: 1px solid #888;
+  font-family: 'DejaVu Mono', monospace;
+  font-size: 13px;
+  padding: 1px 6px;
+  color: #000;
+  outline: none;
+}
+
+.te-find-bar button {
+  padding: 2px 8px;
+  background: #e0e0e0;
+  border: 1px solid #888;
+  font-size: 12px;
+  cursor: pointer;
+  color: #000;
+}
+
+/* ── Splash Screen ── */
+.emacs-splash {
+  flex: 1;
+  overflow-y: auto;
+  background: #fff;
+  color: #000;
+  padding: 20px 30px;
+  font-family: 'DejaVu Sans', Helvetica, sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.emacs-hidden { display: none !important; }
+
+.emacs-splash-logo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.emacs-splash-logo img {
+  height: 180px;
+  width: auto;
+  image-rendering: pixelated;
+}
+
+.emacs-splash-welcome {
+  color: #c00;
+  margin-bottom: 16px;
+  font-size: 13px;
+}
+
+.emacs-link {
+  color: #00048b;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.emacs-link:hover { color: #0055cc; }
+
+.emacs-splash-links {
+  margin-bottom: 16px;
+}
+
+.emacs-splash-links table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.emacs-splash-links td {
+  padding: 2px 12px 2px 0;
+  vertical-align: top;
+  font-size: 13px;
+  color: #000;
+}
+
+.emacs-splash-links td:first-child {
+  white-space: nowrap;
+  min-width: 180px;
+}
+
+.emacs-splash-start {
+  margin: 8px 0;
+  font-size: 13px;
+  color: #000;
+}
+
+.emacs-splash-start code {
+  font-family: 'DejaVu Mono', monospace;
+  background: transparent;
+}
+
+.emacs-splash-version {
+  color: #00048b;
+  font-size: 12px;
+  margin-top: 12px;
+  line-height: 1.5;
+}
+
+/* ── Editor Area ── */
+.emacs-editor {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  overflow: hidden;
+}
+
+#text-editor-textarea {
+  flex: 1;
+  background: #fff;
+  color: #000;
+  font-family: 'DejaVu Mono', 'Courier New', monospace;
+  font-size: 13px;
+  border: none;
+  outline: none;
+  padding: 6px 10px;
+  resize: none;
+  line-height: 1.5;
+  white-space: pre;
+  tab-size: 4;
+}
+
+/* ── Mode Line ── */
+.emacs-modeline {
+  background: #316ecb;
+  color: #fff;
+  font-family: 'DejaVu Mono', monospace;
+  font-size: 12px;
+  height: 20px;
+  line-height: 20px;
+  padding: 0 8px;
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  letter-spacing: 0.3px;
+}
+
+/* ── Shortcuts Hint ── */
+.emacs-shortcuts {
+  background: #1a1a1a;
+  color: #00e000;
+  font-family: 'DejaVu Mono', monospace;
+  font-size: 10px;
+  height: 18px;
+  line-height: 18px;
+  padding: 0 8px;
+  user-select: none;
+  letter-spacing: 0.4px;
+}
+
+/* ── Minibuffer ── */
+.emacs-minibuffer {
+  background: #fff;
+  color: #000;
+  font-family: 'DejaVu Mono', monospace;
+  font-size: 13px;
+  height: 20px;
+  line-height: 20px;
+  padding: 0 8px;
+  border-top: 1px solid #bbb;
+}
+
+/* ── Menubar ── */
+.te-menubar {
+  display: flex;
+  background: var(--button-bg);
+  border-bottom: 2px solid var(--separator-color);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-small);
+  color: var(--text-color);
+  user-select: none;
+  position: relative;
+  z-index: 9999;
+}
+
+.te-menu {
+  position: relative;
+}
+
+.te-menu-label {
+  display: block;
+  padding: 3px 8px;
+  cursor: pointer;
+}
+
+.te-menu-label:hover,
+.te-menu.open .te-menu-label {
+  background: var(--titlebar-color);
+  color: var(--titlebar-text-color);
+}
+
+/* ── Dropdown panel ── */
+.te-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  background: var(--button-bg);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  z-index: 10000;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.35);
+}
+
+.te-menu.open .te-dropdown {
+  display: block;
+}
+
+.te-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-small);
+  color: var(--text-color);
+}
+
+.te-item:hover {
+  background: var(--titlebar-color);
+  color: var(--titlebar-text-color);
+}
+
+.te-item.te-disabled {
+  opacity: 0.5;
+  cursor: default;
+  pointer-events: none;
+}
+
+.te-accel {
+  font-size: 10px;
+  opacity: 0.6;
+  margin-left: 20px;
+}
+
+.te-accel:before {
+  content: none;
+}
+
+.te-separator {
+  height: 1px;
+  background: var(--separator-color);
+  margin: 2px 6px;
+}
+
+/* ── Find bar ── */
+.te-find-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--button-bg);
+  border-bottom: 2px solid var(--separator-color);
+  padding: 3px 8px;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-small);
+  color: var(--text-color);
+}
+
+.te-find-hidden {
+  display: none;
+}
+
+#te-find-input {
+  flex: 1;
+  max-width: 260px;
+  background: #fff;
+  border: 1px solid #888;
+  font-family: 'DejaVu Mono', monospace;
+  font-size: 13px;
+  padding: 1px 6px;
+  color: #000;
+  outline: none;
+}
+
+.te-find-bar button {
+  padding: 2px 8px;
+  background: #e0e0e0;
+  border: 1px solid #888;
+  font-size: 12px;
+  cursor: pointer;
+  color: #000;
+}
+
+/* ── Editor container ── */
+.editor-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #bbb;
+  overflow: hidden;
+  position: relative;
+}
+
+#text-editor-textarea {
+  flex: 1;
+  background: #fff;
+  color: #000 !important;
+  font-family: 'DejaVu Mono', monospace !important;
+  font-size: 13px !important;
+  border: none;
+  outline: none;
+  padding: 10px;
+  resize: none;
+  line-height: 1.5;
+  white-space: pre;
+  tab-size: 4;
+}
+
+/* Mode Line */
+#text-editor-mode-line {
+  background: #316ecb;
+  color: #fff;
+  font-family: 'DejaVu Mono', monospace;
+  font-size: 12px;
+  height: 20px;
+  line-height: 20px;
+  padding: 0 8px;
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* Shortcuts hint bar */
+#text-editor-shortcuts {
+  background: #1a1a1a;
+  color: #00e000;
+  font-family: 'DejaVu Mono', monospace;
+  font-size: 10px;
+  height: 18px;
+  line-height: 18px;
+  padding: 0 8px;
+  user-select: none;
+  letter-spacing: 0.4px;
+}
+
+/* Minibuffer */
+#text-editor-minibuffer {
+  background: #fff;
+  color: #000;
+  font-family: 'DejaVu Mono', monospace;
+  font-size: 13px;
+  height: 20px;
+  line-height: 20px;
+  padding: 0 8px;
+  border-top: 1px solid #bbb;
+}
+
+.emacs-pixelated {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
 }

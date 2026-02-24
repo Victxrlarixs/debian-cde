@@ -59,7 +59,7 @@ export interface ModalButton {
 class CDEModalClass {
   private modalElement: HTMLElement | null = null;
   private currentResolver: ((value: any) => void) | null = null;
-  private zIndex: number = 10000;
+  private zIndex: number = 99000;
 
   /**
    * Initializes or reuses the CDE modal instance.

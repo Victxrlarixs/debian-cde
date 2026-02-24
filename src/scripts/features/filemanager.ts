@@ -99,7 +99,7 @@ function renderFiles(): void {
     });
 
     const img = document.createElement('img');
-    img.src = item.type === 'folder' ? '/icons/filemanager.png' : '/icons/gedit.png';
+    img.src = item.type === 'folder' ? '/icons/filemanager.png' : '/icons/text-x-generic.png';
 
     const span = document.createElement('span');
     span.textContent = name;
