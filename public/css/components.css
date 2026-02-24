@@ -233,7 +233,7 @@
 .scroll-btn {
   width: 18px;
   height: 23px;
-  background: var(--button-bg);
+  background: var(--titlebar-color);
   font-size: 8px;
   font-weight: bold;
   cursor: pointer;
@@ -252,6 +252,7 @@
   border-left-color: var(--border-dark);
   border-right-color: var(--border-light);
   border-bottom-color: var(--border-light);
+  background: var(--button-active);
 }
 
 /* ----- Bloque de iconos (doble fila) ----- */

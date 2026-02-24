@@ -159,6 +159,8 @@
   border-bottom-color: var(--border-dark);
 }
 
+
+
 .pager-workspace.active {
   background: var(--titlebar-color);
   color: var(--titlebar-text-color);
@@ -168,6 +170,9 @@
   border-right-color: var(--border-light);
   border-bottom-color: var(--border-light);
 }
+
+
+
 
 /* Scroll Buttons */
 .cde-scroll {
