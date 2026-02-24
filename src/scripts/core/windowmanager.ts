@@ -545,8 +545,9 @@ const WindowManager = (() => {
     logger.log('[WindowManager] Initialized');
   }
 
-  return { init, drag, focusWindow, registerWindow, centerWindow };
+  return { init, drag, focusWindow, registerWindow, centerWindow, switchWorkspace };
 })();
+
 
 function minimizeWindow(id: string): void {
   const win = document.getElementById(id);
