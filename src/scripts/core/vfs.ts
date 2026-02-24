@@ -10,16 +10,23 @@ import filesystemData from '../../data/filesystem.json';
 
 // --- Types ---
 
-export type VFSNodeType = 'file' | 'folder';
+export interface VFSMetadata {
+  size: number;
+  mtime: string; // ISO string
+  owner: string;
+  permissions: string;
+}
 
 export interface VFSFile {
   type: 'file';
   content: string;
+  metadata?: VFSMetadata;
 }
 
 export interface VFSFolder {
   type: 'folder';
   children: Record<string, VFSNode>;
+  metadata?: VFSMetadata;
 }
 
 export type VFSNode = VFSFile | VFSFolder;
@@ -33,7 +40,10 @@ export interface IVFS {
   mkdir(path: string, name: string): Promise<void>;
   rm(path: string, name: string): Promise<boolean>;
   rename(path: string, oldName: string, newName: string): Promise<void>;
+  move(oldPath: string, newPath: string): Promise<void>;
   writeFile(path: string, content: string): Promise<void>;
+  moveToTrash(path: string): Promise<void>;
+  restoreFromTrash(name: string): Promise<void>;
 }
 
 declare global {
@@ -56,6 +66,16 @@ let rootNode: VFSFolder | null = null;
  * Recursively flattens the nested filesystem structure.
  */
 function flatten(basePath: string, node: VFSNode): void {
+  // Ensure default metadata if missing
+  if (!node.metadata) {
+    node.metadata = {
+      size: node.type === 'file' ? node.content.length : 0,
+      mtime: new Date().toISOString(),
+      owner: 'victx',
+      permissions: node.type === 'folder' ? 'rwxr-xr-x' : 'rw-r--r--',
+    };
+  }
+
   fsMap[basePath] = node;
   if (node.type === 'folder') {
     for (const [name, child] of Object.entries((node as VFSFolder).children)) {
@@ -143,16 +163,61 @@ async function syncDynamicContent(): Promise<void> {
 
 export const VFS: IVFS = {
   init(): void {
-    const rootPath = CONFIG.FS.HOME;
-    rootNode = (filesystemData as Record<string, VFSFolder>)[rootPath];
+    const rootPath = '/';
+    const homePath = CONFIG.FS.HOME;
+    
+    // Build a proper root structure
+    const root: VFSFolder = {
+      type: 'folder',
+      children: {
+        'bin': { type: 'folder', children: {} },
+        'etc': { type: 'folder', children: {
+          'hostname': { type: 'file', content: 'Debian-CDE' },
+          'motd': { type: 'file', content: 'Welcome to Debian CDE Workstation' },
+          'os-release': { type: 'file', content: 'PRETTY_NAME="Debian GNU/Linux CDE Edition"\nNAME="Debian GNU/Linux"\nID=debian' },
+          'passwd': { type: 'file', content: 'root:x:0:0:root:/root:/bin/bash\nvictx:x:1000:1000:victx:/home/victxrlarixs:/bin/bash' }
+        } },
+        'usr': { type: 'folder', children: {
+          'bin': { type: 'folder', children: {} },
+          'lib': { type: 'folder', children: {} },
+          'src': { type: 'folder', children: {
+            'debian-cde': { type: 'folder', children: {
+              'src': { type: 'folder', children: {
+                'components': { type: 'folder', children: {} },
+                'scripts': { type: 'folder', children: {} },
+                'layouts': { type: 'folder', children: {} }
+              }},
+              'public': { type: 'folder', children: {
+                'icons': { type: 'folder', children: {} },
+                'css': { type: 'folder', children: {} }
+              }},
+              'package.json': { type: 'file', content: '{\n  "name": "debian-cde",\n  "version": "1.0.0",\n  "dependencies": {\n    "astro": "latest",\n    "typescript": "latest"\n  }\n}' },
+              'README.md': { type: 'file', content: '# Debian CDE\nClassic Desktop Environment for the web.' },
+              'tsconfig.json': { type: 'file', content: '{\n  "compilerOptions": { ... }\n}' }
+            }}
+          }}
+        }},
+        'var': { type: 'folder', children: {} },
+        'tmp': { type: 'folder', children: {} },
+        'home': { type: 'folder', children: {
+          'victxrlarixs': (filesystemData as any)[homePath]
+        }}
+      }
+    };
 
-    if (rootNode) {
-      flatten(rootPath, rootNode);
-      syncDynamicContent(); // Non-blocking sync
-      logger.log('[VFS] Initialized, entries:', Object.keys(fsMap).length);
-    } else {
-      logger.error('[VFS] Root path not found in filesystem data');
+    rootNode = root;
+    flatten(rootPath, rootNode);
+    
+    // Ensure Trash exists on init
+    if (!fsMap[CONFIG.FS.TRASH]) {
+      const parts = CONFIG.FS.TRASH.split('/').filter(Boolean);
+      const trashName = parts.pop()!;
+      const parentPath = '/' + parts.join('/') + (parts.length > 0 ? '/' : '');
+      this.mkdir(parentPath, trashName);
     }
+
+    syncDynamicContent(); // Non-blocking sync
+    logger.log('[VFS] Initialized with System Root, entries:', Object.keys(fsMap).length);
   },
 
   resolvePath(cwd: string, path: string): string {
@@ -187,9 +252,22 @@ export const VFS: IVFS = {
     const dirPath = path.endsWith('/') ? path : path + '/';
     const node = this.getNode(dirPath);
     if (node?.type === 'folder') {
-      const newFile: VFSFile = { type: 'file', content: '' };
+      const newFile: VFSFile = { 
+        type: 'file', 
+        content: '',
+        metadata: {
+          size: 0,
+          mtime: new Date().toISOString(),
+          owner: 'victx',
+          permissions: 'rw-r--r--'
+        }
+      };
       node.children[name] = newFile;
       fsMap[dirPath + name] = newFile;
+      
+      // Update folder mtime
+      if (node.metadata) node.metadata.mtime = new Date().toISOString();
+      
       logger.log(`[VFS] touch: ${dirPath}${name}`);
       dispatchChange(dirPath);
     }
@@ -199,9 +277,22 @@ export const VFS: IVFS = {
     const dirPath = path.endsWith('/') ? path : path + '/';
     const node = this.getNode(dirPath);
     if (node?.type === 'folder') {
-      const newFolder: VFSFolder = { type: 'folder', children: {} };
+      const newFolder: VFSFolder = { 
+        type: 'folder', 
+        children: {},
+        metadata: {
+          size: 0,
+          mtime: new Date().toISOString(),
+          owner: 'victx',
+          permissions: 'rwxr-xr-x'
+        }
+      };
       node.children[name] = newFolder;
       fsMap[dirPath + name + '/'] = newFolder;
+      
+      // Update parent mtime
+      if (node.metadata) node.metadata.mtime = new Date().toISOString();
+
       logger.log(`[VFS] mkdir: ${dirPath}${name}/`);
       dispatchChange(dirPath);
     }
@@ -245,15 +336,89 @@ export const VFS: IVFS = {
     const node = this.getNode(path);
     if (node && node.type === 'file') {
       node.content = content;
+      if (node.metadata) {
+        node.metadata.size = content.length;
+        node.metadata.mtime = new Date().toISOString();
+      }
       logger.log(`[VFS] writeFile: ${path}`);
       // Find parent directory to dispatch change
       const parts = path.split('/').filter(Boolean);
       parts.pop();
       const parentPath = '/' + parts.join('/') + (parts.length > 0 ? '/' : '');
+      const parent = this.getNode(parentPath);
+      if (parent?.metadata) parent.metadata.mtime = new Date().toISOString();
+      
       dispatchChange(parentPath);
     } else {
       logger.error(`[VFS] writeFile failed: ${path} is not a file or not found`);
     }
+  },
+
+  async move(oldPath: string, newPath: string): Promise<void> {
+    const node = this.getNode(oldPath);
+    if (!node) return;
+
+    // Get parent of oldPath
+    const oldParts = oldPath.split('/').filter(Boolean);
+    const name = oldParts.pop()!;
+    const oldParentPath = '/' + oldParts.join('/') + (oldParts.length > 0 ? '/' : '');
+    const oldParent = this.getNode(oldParentPath);
+
+    // Get parent of newPath
+    const newParts = newPath.split('/').filter(Boolean);
+    const newName = newParts.pop()!;
+    const newParentPath = '/' + newParts.join('/') + (newParts.length > 0 ? '/' : '');
+    const newParent = this.getNode(newParentPath);
+
+    if (oldParent?.type === 'folder' && newParent?.type === 'folder') {
+      // Remove from old parent
+      delete oldParent.children[name];
+      delete fsMap[oldPath];
+
+      // Add to new parent
+      newParent.children[newName] = node;
+      fsMap[newPath] = node;
+
+      // If it's a folder, we need to recursively update fsMap keys
+      if (node.type === 'folder') {
+        const updateMap = (base: string, n: VFSNode) => {
+          if (n.type === 'folder') {
+            for (const [cName, child] of Object.entries(n.children)) {
+              const cp = base + cName + (child.type === 'folder' ? '/' : '');
+              const oldCp = oldPath + cp.slice(newPath.length);
+              delete fsMap[oldCp];
+              fsMap[cp] = child;
+              updateMap(cp, child);
+            }
+          }
+        };
+        updateMap(newPath, node);
+      }
+
+      logger.log(`[VFS] move: ${oldPath} -> ${newPath}`);
+      dispatchChange(oldParentPath);
+      dispatchChange(newParentPath);
+    }
+  },
+
+  async moveToTrash(path: string): Promise<void> {
+    const trashPath = CONFIG.FS.TRASH;
+    if (!this.getNode(trashPath)) {
+      const parts = trashPath.split('/').filter(Boolean);
+      const trashName = parts.pop()!;
+      const parentPath = '/' + parts.join('/') + (parts.length > 0 ? '/' : '');
+      await this.mkdir(parentPath, trashName);
+    }
+
+    const parts = path.split('/').filter(Boolean);
+    const name = parts.pop()!;
+    await this.move(path, trashPath + name);
+  },
+
+  async restoreFromTrash(name: string): Promise<void> {
+    const trashItemPath = CONFIG.FS.TRASH + name;
+    const restorePath = CONFIG.FS.DESKTOP + name;
+    await this.move(trashItemPath, restorePath);
   },
 };
 

@@ -500,6 +500,22 @@ export const DesktopManager = (() => {
               await VFS.rm(CONFIG.FS.DESKTOP, name);
             },
           },
+          {
+            label: 'Properties',
+            action: async () => {
+              const name = targetIcon.dataset.name;
+              if (!name) return;
+              if (isSystem) {
+                const sysId = targetIcon.dataset.id;
+                const path = sysId === 'emacs-icon' ? '/usr/bin/emacs' : '/usr/bin/terminal-lab';
+                const { showProperties } = await import('./filemanager');
+                showProperties(path);
+              } else {
+                const { showProperties } = await import('./filemanager');
+                showProperties(CONFIG.FS.DESKTOP + name);
+              }
+            },
+          },
         ]
       : [
           {

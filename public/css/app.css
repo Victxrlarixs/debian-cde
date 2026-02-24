@@ -622,26 +622,19 @@
 }
 
 #terminal {
-  top: 80px;
-  left: 40px;
-  width: 380px;
+  position: absolute;
+  width: min(380px, 95vw);
   display: none;
 }
 
 #fm {
-  top: 100px;
-  left: 460px;
-  width: 420px;
-  height: 320px;
+  position: absolute;
+  width: min(420px, 95vw);
+  height: min(320px, 80vh);
   display: none;
 }
 
 #styleManager {
-  display: none;
-  /* pero ya tiene display:flex cuando se abre, cuidado: en CSS podría sobrescribir */
-}
-
-/* Nota: para styleManager, su display se controla con JS, pero el valor por defecto debe ser none */
-#styleManager {
+  position: absolute;
   display: none;
 }

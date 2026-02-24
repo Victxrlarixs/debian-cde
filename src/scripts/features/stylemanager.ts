@@ -12,6 +12,7 @@ import { WindowModule } from './style/windowmodule';
 import { ScreenModule } from './style/screen';
 import { StartupModule } from './style/startup';
 import { settingsManager } from '../core/settingsmanager';
+import { WindowManager } from '../core/windowmanager';
 
 /**
  * CDE Style Manager for system customization.
@@ -302,9 +303,7 @@ export class StyleManager {
 
       // Center on next frame to ensure dimensions are calculated after display: flex
       requestAnimationFrame(() => {
-        if (window.centerWindow) {
-          window.centerWindow(win);
-        }
+        WindowManager.centerWindow(win);
         if (window.focusWindow) window.focusWindow(id);
       });
     }

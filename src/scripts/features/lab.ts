@@ -1,7 +1,6 @@
-// src/scripts/features/lab.ts
-// Terminal Laboratory — guided tutorial engine + virtual filesystem
 import tutorialData from '../../data/tutorial.json';
 import { VFS, type VFSNode, type VFSFile, type VFSFolder } from '../core/vfs';
+import { WindowManager } from '../core/windowmanager';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 type Lesson = Array<{ user: string; command: string; output: string }>;
@@ -75,13 +74,13 @@ class TerminalLabManager {
     if (!win) return;
     win.style.display = 'flex';
     win.style.flexDirection = 'column';
-    if (!win.style.left) {
-      win.style.left = '12%';
-      win.style.top = '5%';
-    }
+    
+    WindowManager.centerWindow(win);
+
     this.init();
     if (window.AudioManager) window.AudioManager.windowOpen();
     this.focus();
+    if (window.focusWindow) window.focusWindow('terminal-lab');
   }
 
   public close(): void {

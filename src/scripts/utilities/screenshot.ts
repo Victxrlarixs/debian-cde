@@ -1,6 +1,7 @@
 import { CONFIG } from '../core/config';
 import { CDEModal } from '../ui/modals';
 import { logger } from './logger';
+import { WindowManager } from '../core/windowmanager';
 
 // ============================================================================
 // Screenshot capture
@@ -79,35 +80,64 @@ export function captureFullPageScreenshot(): void {
   logger.log(`[Screenshot] Capture options: scale=${CONFIG.SCREENSHOT.SCALE}, useCORS=true`);
 
   html2canvas(document.documentElement, options)
-    .then((canvas: HTMLCanvasElement) => {
+    .then(async (canvas: HTMLCanvasElement) => {
       logger.log('[Screenshot] Canvas generated successfully');
 
-      // Generate timestamp-based filename
-      const now = new Date();
-      const filename = `${CONFIG.SCREENSHOT.FILENAME_PREFIX}-${now.getFullYear()}-${(
-        now.getMonth() + 1
-      )
-        .toString()
-        .padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')} ${now
-        .getHours()
-        .toString()
-        .padStart(2, '0')}.${now.getMinutes().toString().padStart(2, '0')}.${now
-        .getSeconds()
-        .toString()
-        .padStart(2, '0')}.png`;
+      const dataUrl = canvas.toDataURL('image/png');
+      const resolution = `${canvas.width}x${canvas.height}`;
+      const sizeBytes = Math.round((dataUrl.length * 3) / 4); // Approx size from base64
+      const sizeStr = formatBytes(sizeBytes);
 
-      logger.log(`[Screenshot] Generated filename: ${filename}`);
+      const html = `
+        <div class="screenshot-preview-container">
+          <img src="${dataUrl}" class="screenshot-preview-image" />
+          <div class="screenshot-info">
+            Resolution: ${resolution} | Est. Size: ${sizeStr}
+          </div>
+        </div>
+      `;
 
-      // Create download link
-      const link = document.createElement('a');
-      link.download = filename;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-      logger.log('[Screenshot] Download triggered');
+      // Clean up toast immediately after capture
+      if (document.body.contains(toast)) document.body.removeChild(toast);
 
-      // Clean up
-      document.body.removeChild(toast);
-      logger.log('[Screenshot] Toast removed');
+      const modalPromise = CDEModal.open('SnapShot Viewer', html, [
+        { label: 'Save', value: 'SAVE', isDefault: true },
+        { label: 'Discard', value: 'DISCARD' }
+      ]);
+
+      // Center again after a short delay to account for image layout
+      const modal = document.getElementById('cde-modal-global');
+      if (modal) {
+        requestAnimationFrame(() => WindowManager.centerWindow(modal));
+        setTimeout(() => WindowManager.centerWindow(modal), 100);
+      }
+
+      const result = await modalPromise;
+
+      if (result === 'SAVE') {
+        // Generate timestamp-based filename
+        const now = new Date();
+        const filename = `${CONFIG.SCREENSHOT.FILENAME_PREFIX}-${now.getFullYear()}-${(
+          now.getMonth() + 1
+        )
+          .toString()
+          .padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')} ${now
+          .getHours()
+          .toString()
+          .padStart(2, '0')}.${now.getMinutes().toString().padStart(2, '0')}.${now
+          .getSeconds()
+          .toString()
+          .padStart(2, '0')}.png`;
+
+        logger.log(`[Screenshot] Generated filename: ${filename}`);
+
+        // Create download link
+        const link = document.createElement('a');
+        link.download = filename;
+        link.href = dataUrl;
+        link.click();
+        logger.log('[Screenshot] Download triggered');
+      }
 
       if (btn) {
         btn.style.opacity = '1';
@@ -115,7 +145,7 @@ export function captureFullPageScreenshot(): void {
         logger.log('[Screenshot] Button restored to normal state');
       }
 
-      logger.log(`[Screenshot] Capture complete: saved as ${filename}`);
+      logger.log(`[Screenshot] Capture process finished`);
     })
     .catch((error: any) => {
       console.error('[Screenshot] Error during capture:', error);
@@ -137,6 +167,12 @@ export function captureFullPageScreenshot(): void {
         logger.log('[Screenshot] Error alert displayed to user');
       });
     });
+}
+
+function formatBytes(bytes: number): string {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
 }
 
 // ============================================================================

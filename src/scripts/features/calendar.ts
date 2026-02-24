@@ -1,6 +1,7 @@
 // src/scripts/features/calendar.ts
 
 import { logger } from '../utilities/logger';
+import { WindowManager } from '../core/windowmanager';
 
 /**
  * Calendar Manager for the interactive CDE calendar.
@@ -98,7 +99,7 @@ export const CalendarManager = (() => {
       win.style.display = 'flex';
       // Use requestAnimationFrame to ensure display: flex is applied and dimensions are available
       requestAnimationFrame(() => {
-        if (window.centerWindow) window.centerWindow(win);
+        WindowManager.centerWindow(win);
         if (window.focusWindow) window.focusWindow('calendar-window');
       });
       render();

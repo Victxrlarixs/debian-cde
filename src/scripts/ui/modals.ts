@@ -1,6 +1,7 @@
 // src/scripts/modals.ts
 
 import { logger } from '../utilities/logger';
+import { WindowManager } from '../core/windowmanager';
 
 /**
  * @fileoverview CDE-style modal dialogs
@@ -150,6 +151,17 @@ class CDEModalClass {
       };
     }
 
+    // --- INTEGRATION: Make modal draggable via its titlebar ---
+    const titlebarEl = this.modalElement.querySelector('.titlebar');
+    if (titlebarEl) {
+      (titlebarEl as HTMLElement).onpointerdown = (e: PointerEvent) => {
+        // Only trigger drag if it's not the close button
+        if (!(e.target as HTMLElement).closest('.close-btn')) {
+          WindowManager.drag(e, this.modalElement!.id);
+        }
+      };
+    }
+
     document.body.appendChild(this.modalElement);
     logger.log('[CDEModal] Modal appended to DOM');
     return this.modalElement;
@@ -207,9 +219,7 @@ class CDEModalClass {
       modal.style.zIndex = String(newZIndex);
 
       requestAnimationFrame(() => {
-        if (window.centerWindow) {
-          window.centerWindow(modal);
-        }
+        WindowManager.centerWindow(modal);
       });
 
       logger.log(`[CDEModal] Modal displayed with z-index: ${newZIndex}`);
