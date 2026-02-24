@@ -288,7 +288,6 @@ function initDesktop(): void {
       logger.log('[initDesktop] Style manager initialized');
     }
 
-
     desktopInitialized = true;
     logger.log('[initDesktop] Desktop initialization completed successfully');
   } catch (error) {

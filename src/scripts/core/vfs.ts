@@ -120,16 +120,20 @@ async function syncDynamicContent(): Promise<void> {
   if (fsMap[fontsPath]) (fsMap[fontsPath] as VFSFile).content = JSON.stringify(fontsData, null, 2);
 
   const palettesPath = CONFIG.FS.HOME + 'settings/cde_palettes.json';
-  if (fsMap[palettesPath]) (fsMap[palettesPath] as VFSFile).content = JSON.stringify(cdePalettesData, null, 2);
+  if (fsMap[palettesPath])
+    (fsMap[palettesPath] as VFSFile).content = JSON.stringify(cdePalettesData, null, 2);
 
   const bootPath = CONFIG.FS.HOME + 'settings/boot-messages.json';
-  if (fsMap[bootPath]) (fsMap[bootPath] as VFSFile).content = JSON.stringify(bootMessagesData, null, 2);
+  if (fsMap[bootPath])
+    (fsMap[bootPath] as VFSFile).content = JSON.stringify(bootMessagesData, null, 2);
 
   const backdropPath = CONFIG.FS.HOME + 'settings/backdrops.json';
-  if (fsMap[backdropPath]) (fsMap[backdropPath] as VFSFile).content = JSON.stringify(backdropsData, null, 2);
+  if (fsMap[backdropPath])
+    (fsMap[backdropPath] as VFSFile).content = JSON.stringify(backdropsData, null, 2);
 
   const tutorialPath = CONFIG.FS.HOME + 'settings/tutorial.json';
-  if (fsMap[tutorialPath]) (fsMap[tutorialPath] as VFSFile).content = JSON.stringify(tutorialData, null, 2);
+  if (fsMap[tutorialPath])
+    (fsMap[tutorialPath] as VFSFile).content = JSON.stringify(tutorialData, null, 2);
 
   logger.log('[VFS] Dynamic content synced (Lazy)');
 }

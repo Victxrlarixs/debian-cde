@@ -29,14 +29,14 @@ import cdePalettes from '../../../data/cde_palettes.json';
       <div class="color-palette-scroll">
         {
           cdePalettes.map((palette) => (
-            <button 
-              class="cde-preset color-palette-item" 
+            <button
+              class="cde-preset color-palette-item"
               data-scheme={palette.id}
               title={palette.name}
             >
               <span class="palette-preview-strip">
-                {palette.colors.slice(0, 4).map(color => (
-                  <span class="preview-color" style={`background-color: ${color}`}></span>
+                {palette.colors.slice(0, 4).map((color) => (
+                  <span class="preview-color" style={`background-color: ${color}`} />
                 ))}
               </span>
               <span class="palette-name-label">{palette.name}</span>

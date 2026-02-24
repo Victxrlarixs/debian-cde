@@ -547,7 +547,6 @@ const WindowManager = (() => {
   return { init, drag, focusWindow, registerWindow, centerWindow, switchWorkspace };
 })();
 
-
 function minimizeWindow(id: string): void {
   const win = document.getElementById(id);
   if (!win) return;
@@ -608,6 +607,7 @@ declare global {
     centerWindow: (win: HTMLElement) => void;
     minimizeWindow: typeof minimizeWindow;
     maximizeWindow: typeof maximizeWindow;
+    WindowManager: typeof WindowManager;
   }
 }
 
@@ -616,5 +616,6 @@ window.focusWindow = WindowManager.focusWindow;
 window.centerWindow = WindowManager.centerWindow;
 window.minimizeWindow = minimizeWindow;
 window.maximizeWindow = maximizeWindow;
+window.WindowManager = WindowManager;
 
 export { WindowManager, minimizeWindow, maximizeWindow };
