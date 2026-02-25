@@ -27,19 +27,25 @@ if (typeof window !== 'undefined') {
     event.preventDefault();
     deferredInstallPrompt = event as any;
 
-    const shouldInstall = window.confirm(
-      '¿Quieres instalar el escritorio Debian CDE en tu dispositivo?'
-    );
+    window.dispatchEvent(new CustomEvent('cde-pwa-install-available'));
+  });
 
-    if (!shouldInstall || !deferredInstallPrompt) {
-      deferredInstallPrompt = null;
+  (window as any).installCDEAsApp = async () => {
+    if (!deferredInstallPrompt) {
+      window.alert(
+        'Installation is not available yet. Make sure you open this site from a compatible browser and that it is not already installed.'
+      );
       return;
     }
 
-    deferredInstallPrompt.prompt();
+    const promptEvent = deferredInstallPrompt;
+    deferredInstallPrompt = null;
 
-    deferredInstallPrompt.userChoice.finally(() => {
-      deferredInstallPrompt = null;
-    });
-  });
+    try {
+      await promptEvent.prompt();
+      await promptEvent.userChoice;
+    } catch (error) {
+      console.error('PWA installation prompt failed', error);
+    }
+  };
 }

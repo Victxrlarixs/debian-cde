@@ -118,6 +118,19 @@ export const DesktopManager = (() => {
     });
   }
 
+  function ensureInstallPWAIcon(): void {
+    const container = document.getElementById('desktop-icons-container');
+    if (!container) return;
+
+    const existing = container.querySelector('[data-id="install-pwa-icon"]') as HTMLElement | null;
+    if (existing) return;
+
+    const savedPositions = (settingsManager.getSection('desktop') as IconPositions) || {};
+    const pos = savedPositions['install-pwa-icon'] || findNextAvailableSlot();
+
+    createIcon('Install CDE', 'file', pos.left, pos.top, true, 'install-pwa-icon', '/icons/Debian.png');
+  }
+
   /**
    * Creates a single desktop icon element.
    */
@@ -452,6 +465,10 @@ export const DesktopManager = (() => {
           syncTimeout = null;
         }, 50);
       }
+    });
+
+    window.addEventListener('cde-pwa-install-available', () => {
+      ensureInstallPWAIcon();
     });
   }
 
