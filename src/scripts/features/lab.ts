@@ -74,7 +74,7 @@ class TerminalLabManager {
     if (!win) return;
     win.style.display = 'flex';
     win.style.flexDirection = 'column';
-    
+
     WindowManager.centerWindow(win);
 
     this.init();

@@ -796,7 +796,7 @@
   padding: 6px;
   background: var(--cde-gray-dark);
   border: 4px ridge var(--border-light);
-  box-shadow: inset 2px 2px 5px rgba(0,0,0,0.5);
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 .screenshot-preview-image {
@@ -804,7 +804,7 @@
   height: auto;
   image-rendering: pixelated;
   border: 2px solid #000;
-  box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
 }
 
 .screenshot-info {
@@ -812,7 +812,7 @@
   font-size: 11px;
   color: var(--text-color);
   text-shadow: 1px 1px 0px #000;
-  background: rgba(0,0,0,0.3);
+  background: rgba(0, 0, 0, 0.3);
   padding: 4px 8px;
   border-radius: 2px;
 }
@@ -1377,7 +1377,8 @@
 }
 
 /* --- Universal Window Constraints --- */
-.window, .cde-retro-modal {
+.window,
+.cde-retro-modal {
   max-width: 95vw !important;
   max-height: 90vh !important;
   overflow: hidden;
@@ -3137,7 +3138,7 @@
   background: #f0f0f0;
   border: 1px solid #888;
   border-top: none;
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.25);
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.25);
   font-family: 'DejaVu Sans', Helvetica, sans-serif;
   font-size: 13px;
 }
@@ -3182,7 +3183,9 @@
   color: #000;
 }
 
-.te-find-hidden { display: none; }
+.te-find-hidden {
+  display: none;
+}
 
 #te-find-input {
   flex: 1;
@@ -3217,7 +3220,9 @@
   line-height: 1.6;
 }
 
-.emacs-hidden { display: none !important; }
+.emacs-hidden {
+  display: none !important;
+}
 
 .emacs-splash-logo {
   text-align: center;
@@ -3242,7 +3247,9 @@
   cursor: pointer;
 }
 
-.emacs-link:hover { color: #0055cc; }
+.emacs-link:hover {
+  color: #0055cc;
+}
 
 .emacs-splash-links {
   margin-bottom: 16px;
@@ -3515,7 +3522,6 @@
   cursor: pointer;
   color: #000;
 }
-
 
 .emacs-pixelated {
   image-rendering: pixelated;

@@ -102,7 +102,7 @@ export function captureFullPageScreenshot(): void {
 
       const modalPromise = CDEModal.open('SnapShot Viewer', html, [
         { label: 'Save', value: 'SAVE', isDefault: true },
-        { label: 'Discard', value: 'DISCARD' }
+        { label: 'Discard', value: 'DISCARD' },
       ]);
 
       // Center again after a short delay to account for image layout

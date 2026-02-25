@@ -142,7 +142,10 @@ function setupFileEvents(div: HTMLElement, name: string, item: VFSNode): void {
 
   div.addEventListener('dragstart', (e) => {
     if (e.dataTransfer) {
-      e.dataTransfer.setData('text/plain', currentPath + name + (item.type === 'folder' ? '/' : ''));
+      e.dataTransfer.setData(
+        'text/plain',
+        currentPath + name + (item.type === 'folder' ? '/' : '')
+      );
       e.dataTransfer.effectAllowed = 'move';
     }
     div.classList.add('dragging');
@@ -176,7 +179,9 @@ function setupFileEvents(div: HTMLElement, name: string, item: VFSNode): void {
 
   div.addEventListener('pointerdown', (e) => {
     e.stopPropagation();
-    document.querySelectorAll('.fm-file, .fm-list-item').forEach((el) => el.classList.remove('selected'));
+    document
+      .querySelectorAll('.fm-file, .fm-list-item')
+      .forEach((el) => el.classList.remove('selected'));
     div.classList.add('selected');
     fmSelected = name;
 
@@ -203,7 +208,10 @@ function setupFileEvents(div: HTMLElement, name: string, item: VFSNode): void {
   });
 
   div.addEventListener('pointermove', (e) => {
-    if (longPressTimer && (Math.abs(e.clientX - tapStartX) > 10 || Math.abs(e.clientY - tapStartY) > 10)) {
+    if (
+      longPressTimer &&
+      (Math.abs(e.clientX - tapStartX) > 10 || Math.abs(e.clientY - tapStartY) > 10)
+    ) {
       clearTimeout(longPressTimer);
       longPressTimer = null;
     }
@@ -250,7 +258,10 @@ function renderBreadcrumbs(): void {
   const root = document.createElement('span');
   root.className = 'fm-breadcrumb-segment';
   root.textContent = '/';
-  root.onclick = (e) => { e.stopPropagation(); openPath('/'); };
+  root.onclick = (e) => {
+    e.stopPropagation();
+    openPath('/');
+  };
   fragment.appendChild(root);
 
   let full = '/';
@@ -265,7 +276,10 @@ function renderBreadcrumbs(): void {
     segment.className = 'fm-breadcrumb-segment';
     segment.textContent = part;
     const thisPath = full;
-    segment.onclick = (e) => { e.stopPropagation(); openPath(thisPath); };
+    segment.onclick = (e) => {
+      e.stopPropagation();
+      openPath(thisPath);
+    };
     fragment.appendChild(segment);
   });
 
@@ -350,7 +364,10 @@ async function rm(name: string): Promise<void> {
   const confirmed = await CDEModal.confirm(msg);
   if (confirmed) {
     if (isTrash) await VFS.rm(currentPath, name);
-    else await VFS.moveToTrash(currentPath + name + (VFS.getNode(currentPath + name + '/') ? '/' : ''));
+    else
+      await VFS.moveToTrash(
+        currentPath + name + (VFS.getNode(currentPath + name + '/') ? '/' : '')
+      );
     fmSelected = null;
   }
 }
@@ -385,7 +402,9 @@ async function openTextWindow(name: string, content: string): Promise<void> {
 }
 
 async function showProperties(fullPath: string): Promise<void> {
-  const node = VFS.getNode(fullPath + (VFS.getNode(fullPath + '/') && !fullPath.endsWith('/') ? '/' : ''));
+  const node = VFS.getNode(
+    fullPath + (VFS.getNode(fullPath + '/') && !fullPath.endsWith('/') ? '/' : '')
+  );
   if (!node) return;
 
   const parts = fullPath.split('/').filter(Boolean);
@@ -507,9 +526,9 @@ function setupMenuBar(): void {
       // Conditional items: Empty Trash only in trash
       if (name === 'File') {
         // Robust check for trash path (ignoring trailing slashes)
-        const normalize = (p: string) => p.endsWith('/') ? p : p + '/';
+        const normalize = (p: string) => (p.endsWith('/') ? p : p + '/');
         const isTrash = normalize(currentPath) === normalize(CONFIG.FS.TRASH);
-        items = items.filter(item => item.label !== 'Empty Trash' || isTrash);
+        items = items.filter((item) => item.label !== 'Empty Trash' || isTrash);
       }
 
       if (!items || items.length === 0) return;
@@ -570,7 +589,7 @@ function handleContextMenu(e: MouseEvent): void {
     fileEl.classList.add('selected');
 
     const isTrashDir = currentPath.includes('/.trash/');
-    
+
     items = [
       {
         label: isTrashDir ? 'Restore' : 'Open',
@@ -636,7 +655,7 @@ function initFileManager(): void {
   const fmFiles = document.getElementById('fmFiles');
   if (fmFiles) {
     fmFiles.addEventListener('contextmenu', handleContextMenu);
-    
+
     // Drop on background to move to current dir
     fmFiles.addEventListener('dragover', (e) => e.preventDefault());
     fmFiles.addEventListener('drop', async (e) => {

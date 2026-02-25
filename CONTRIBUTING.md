@@ -85,23 +85,23 @@ sequenceDiagram
     D->>AM: click()
     D->>WM: focusWindow(appId)
     WM->>WM: Increase Z-index & add .active class
-    
+
     D->>App: initialize()
     App->>SM: getSession(appId)
     SM-->>App: Last position/state
-    
+
     App->>VFS: readDirectory(path)
     VFS-->>App: Hierarchical File Data
-    
+
     App->>App: Render UI (Astro/HTML)
     App->>WM: registerWindow(element)
-    
+
     ALT isMobile()
         WM->>WM: centerWindow(element)
     ELSE Desktop
         WM->>WM: normalizeWindowPosition(element)
     END
-    
+
     WM-->>U: Window displayed (Strictly clamped)
 ```
 
