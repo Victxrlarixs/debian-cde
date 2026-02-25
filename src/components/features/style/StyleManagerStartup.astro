@@ -1,11 +1,21 @@
 ---
 import WindowControls from '../../common/WindowControls.astro';
+import WindowMinimize from '../../common/WindowMinimize.astro';
 ---
 
 <div class="cde-retro-modal" id="styleManagerStartup">
-  <div class="titlebar" id="styleManagerStartupTitlebar">
+  <div
+    class="titlebar"
+    id="styleManagerStartupTitlebar"
+    onmousedown="window.drag(event, 'styleManagerStartup')"
+  >
+    <WindowMinimize windowId="styleManagerStartup" />
     <span class="titlebar-text">Style Manager - Startup</span>
-    <WindowControls windowId="styleManagerStartup" closeFunction="styleManager.closeStartup" />
+    <WindowControls
+      windowId="styleManagerStartup"
+      closeFunction="styleManager.closeStartup"
+      disableMaximize={true}
+    />
   </div>
 
   <div class="modal-body">

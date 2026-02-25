@@ -118,7 +118,7 @@ function renderIconView(container: HTMLElement, items: { name: string; node: VFS
     setupFileEvents(div, name, node);
 
     const img = document.createElement('img');
-    img.src = node.type === 'folder' ? '/icons/filemanager.png' : '/icons/text-x-generic.png';
+    img.src = node.type === 'folder' ? '/icons/filemanager.png' : '/icons/gtk-file.png';
     img.draggable = false;
 
     const span = document.createElement('span');
@@ -199,8 +199,11 @@ function setupFileEvents(div: HTMLElement, name: string, item: VFSNode): void {
     const now = Date.now();
     if (now - lastTapTime < 300) {
       if (longPressTimer) clearTimeout(longPressTimer);
-      if (item.type === 'folder') openPath(currentPath + name + '/');
-      else openTextWindow(name, (item as VFSFile).content);
+      if (item.type === 'folder') {
+        const img = div.querySelector('img');
+        if (img) img.src = '/icons/folder_open.png';
+        setTimeout(() => openPath(currentPath + name + '/'), 50);
+      } else openTextWindow(name, (item as VFSFile).content);
       lastTapTime = 0;
       return;
     }
@@ -416,7 +419,7 @@ async function showProperties(fullPath: string): Promise<void> {
   const html = `
     <div class="fm-properties">
       <div style="display: flex; gap: 15px; margin-bottom: 10px;">
-        <img src="${node.type === 'folder' ? '/icons/filemanager.png' : '/icons/text-x-generic.png'}" style="width: 48px; height: 48px;" />
+        <img src="${node.type === 'folder' ? '/icons/filemanager.png' : '/icons/gtk-file.png'}" style="width: 48px; height: 48px;" />
         <div>
           <b style="font-size: 14px;">${name}</b><br/>
           <span style="color: #666;">Type: ${node.type}</span>
@@ -442,6 +445,7 @@ async function showProperties(fullPath: string): Promise<void> {
 
 interface MenuItem {
   label: string;
+  icon?: string;
   action: () => Promise<void> | void;
 }
 
@@ -449,6 +453,7 @@ const fmMenus: Record<string, MenuItem[]> = {
   File: [
     {
       label: 'New File',
+      icon: '/icons/gtk-file.png',
       action: async () => {
         const name = await CDEModal.prompt('File name:');
         if (name) await touch(name);
@@ -456,6 +461,7 @@ const fmMenus: Record<string, MenuItem[]> = {
     },
     {
       label: 'New Folder',
+      icon: '/icons/folder_open.png',
       action: async () => {
         const name = await CDEModal.prompt('Folder name:');
         if (name) await mkdir(name);
@@ -463,12 +469,14 @@ const fmMenus: Record<string, MenuItem[]> = {
     },
     {
       label: 'Empty Trash',
+      icon: '/icons/user-trash-full.png',
       action: emptyTrash,
     },
   ],
   Edit: [
     {
       label: 'Rename',
+      icon: '/icons/edit-copy.png',
       action: async () => {
         if (!fmSelected) return;
         const newName = await CDEModal.prompt('New name:', fmSelected);
@@ -486,26 +494,30 @@ const fmMenus: Record<string, MenuItem[]> = {
     },
     {
       label: 'Refresh',
+      icon: '/icons/view-refresh.png',
       action: () => renderFiles(),
     },
   ],
   Go: [
-    { label: 'Back', action: goBack },
-    { label: 'Forward', action: goForward },
-    { label: 'Up', action: goUp },
-    { label: 'Home', action: goHome },
+    { label: 'Back', icon: '/icons/previous.png', action: goBack },
+    { label: 'Forward', icon: '/icons/right.png', action: goForward },
+    { label: 'Up', icon: '/icons/go-up.png', action: goUp },
+    { label: 'Home', icon: '/icons/gohome.png', action: goHome },
   ],
   Places: [
     {
       label: 'Settings',
+      icon: '/icons/org.xfce.settings.manager.png',
       action: () => openPath(CONFIG.FS.HOME + 'settings/'),
     },
     {
       label: 'Manual Pages',
+      icon: '/icons/help.png',
       action: () => openPath(CONFIG.FS.HOME + 'man-pages/'),
     },
     {
       label: 'Desktop',
+      icon: '/icons/desktop.png',
       action: () => openPath(CONFIG.FS.DESKTOP),
     },
   ],
@@ -630,7 +642,21 @@ function handleContextMenu(e: MouseEvent): void {
   items.forEach((item) => {
     const option = document.createElement('div');
     option.className = 'fm-context-item';
-    option.textContent = item.label;
+
+    if (item.icon) {
+      const img = document.createElement('img');
+      img.src = item.icon;
+      img.style.width = '16px';
+      img.style.height = '16px';
+      img.style.marginRight = '8px';
+      img.style.imageRendering = 'pixelated';
+      option.appendChild(img);
+    }
+
+    const text = document.createElement('span');
+    text.textContent = item.label;
+    option.appendChild(text);
+
     option.addEventListener('click', async () => {
       await item.action();
       menu.remove();
@@ -735,6 +761,14 @@ window.closeFileManager = () => {
 
 window.toggleFileManager = () => {
   const win = document.getElementById('fm');
+  const panelIcon = document.querySelector('.cde-icon[onclick="toggleFileManager()"] img');
+  if (panelIcon instanceof HTMLImageElement) {
+    const original = panelIcon.src;
+    panelIcon.src = '/icons/folder_open.png';
+    setTimeout(() => {
+      panelIcon.src = original;
+    }, 300);
+  }
   if (win?.style.display === 'none' || !win?.style.display) window.openFileManager();
   else window.closeFileManager();
 };

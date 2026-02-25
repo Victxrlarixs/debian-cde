@@ -1,5 +1,5 @@
 ---
-// src/components/WindowControls.astro
+// src/components/common/WindowControls.astro
 export interface Props {
   windowId: string;
   closeFunction: string;
@@ -9,20 +9,15 @@ export interface Props {
 const { windowId, closeFunction, disableMaximize = false } = Astro.props;
 ---
 
-<div class="window-controls">
+<div class="window-controls-right">
   {
     !disableMaximize && (
-      <>
-        <div class="min-btn" onclick={`minimizeWindow('${windowId}')`}>
-          <img src="/icons/shade-inactive.png" alt="Minimize" />
-        </div>
-        <div class="max-btn" onclick={`maximizeWindow('${windowId}')`}>
-          <img src="/icons/maximize-inactive.png" alt="Maximize" />
-        </div>
-      </>
+      <div class="max-btn" onclick={`maximizeWindow('${windowId}')`} title="Maximize">
+        <img src="/icons/maximize-inactive.png" alt="Maximize" />
+      </div>
     )
   }
-  <div class="close-btn" onclick={`${closeFunction}()`}>
-    <img src="/icons/close-inactive.png" alt="Close" />
+  <div class="close-btn" onclick={`${closeFunction}()`} title="Close">
+    <img src="/icons/window-close.png" alt="Close" />
   </div>
 </div>

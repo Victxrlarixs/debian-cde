@@ -1,11 +1,13 @@
 ---
 // src/components/FileManager.astro
 import WindowControls from '../common/WindowControls.astro';
+import WindowMinimize from '../common/WindowMinimize.astro';
 import { CONFIG } from '../../scripts/core/config';
 ---
 
 <div class="window" id="fm">
   <div class="titlebar" onmousedown="drag(event, 'fm')">
+    <WindowMinimize windowId="fm" />
     <span class="titlebar-text">victxrlarixs</span>
     <WindowControls windowId="fm" closeFunction="closeFileManager" />
   </div>
@@ -56,7 +58,7 @@ import { CONFIG } from '../../scripts/core/config';
         </div>
         <div class="fm-section">Devices</div>
         <div class="fm-item" onclick="openPath('/')">
-          <img src="/icons/drive-harddisk.png" class="fm-icon" /> File System
+          <img src="/icons/floppy.png" class="fm-icon" /> File System
         </div>
         <div class="fm-section">Network</div>
         <div class="fm-item">

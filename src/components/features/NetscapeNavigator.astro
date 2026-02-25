@@ -1,11 +1,13 @@
 ---
 // src/components/features/NetscapeNavigator.astro
 import WindowControls from '../common/WindowControls.astro';
+import WindowMinimize from '../common/WindowMinimize.astro';
 ---
 
-<div class="window" id="netscape" style="display:none;">
-  <div class="titlebar" id="netscapeTitlebar" onmousedown="window.drag(event, 'netscape')">
-    <span class="titlebar-text" id="netscape-title">What's New! - Netscape</span>
+<div class="window" id="netscape">
+  <div class="titlebar" id="netscapeTitlebar" onmousedown="drag(event, 'netscape')">
+    <WindowMinimize windowId="netscape" />
+    <span class="titlebar-text">Netscape Navigator — victxrlarixs@debian</span>
     <WindowControls windowId="netscape" closeFunction="window.Netscape.close" />
   </div>
 
@@ -164,7 +166,7 @@ import WindowControls from '../common/WindowControls.astro';
         <span>Home</span>
       </button>
       <button class="ns-tool-btn" onclick="window.Netscape.reload()" title="Reload">
-        <div class="ns-btn-icon ns-icon-reload"></div>
+        <img src="/icons/view-refresh.png" class="ns-btn-img" alt="Reload" />
         <span>Reload</span>
       </button>
       <button class="ns-tool-btn" onclick="window.Netscape.loadImages()" title="Images">
@@ -172,7 +174,7 @@ import WindowControls from '../common/WindowControls.astro';
         <span>Images</span>
       </button>
       <button class="ns-tool-btn" onclick="window.Netscape.openLocation()" title="Open">
-        <img src="/icons/filemanager.png" class="ns-btn-img" alt="Open" />
+        <img src="/icons/folder_open.png" class="ns-btn-img" alt="Open" />
         <span>Open</span>
       </button>
       <button class="ns-tool-btn" onclick="window.Netscape.printPage()" title="Print">
@@ -184,7 +186,7 @@ import WindowControls from '../common/WindowControls.astro';
         <span>Find</span>
       </button>
       <button class="ns-tool-btn" id="ns-btn-stop" onclick="window.Netscape.stop()" title="Stop">
-        <div class="ns-btn-icon ns-icon-stop"></div>
+        <img src="/icons/process-stop.png" class="ns-btn-img" alt="Stop" />
         <span>Stop</span>
       </button>
     </div>
@@ -230,28 +232,15 @@ import WindowControls from '../common/WindowControls.astro';
 
   <!-- ── Content Area ───────────────────────────────────────────────────── -->
   <div class="ns-content-wrapper">
-    <div class="ns-content" id="nsContent">
-      <!-- Pages are injected by JS -->
-    </div>
-
-    <!-- Scrollbar (decorative, native scroll on ns-content) -->
-    <div class="ns-scrollbar">
-      <div class="ns-scroll-up" onclick="document.getElementById('nsContent').scrollBy(0,-40)">
-        ▲
-      </div>
-      <div class="ns-scroll-track">
-        <div class="ns-scroll-thumb" id="nsScrollThumb"></div>
-      </div>
-      <div class="ns-scroll-down" onclick="document.getElementById('nsContent').scrollBy(0,40)">
-        ▼
-      </div>
-    </div>
+    <div class="ns-content" id="nsContent"></div>
   </div>
 
   <!-- ── Status Bar ─────────────────────────────────────────────────────── -->
   <div class="ns-statusbar">
     <div class="ns-status-security">
-      <div class="ns-lock" id="nsLock" title="Unsecure connection">🔓</div>
+      <div class="ns-lock" id="nsLock" title="Unsecure connection">
+        <img src="/icons/gcr-key.png" alt="Lock" style="width: 16px; height: 16px;" />
+      </div>
     </div>
     <div class="ns-status-text" id="nsStatusText">Document: Done</div>
     <div class="ns-status-progress">

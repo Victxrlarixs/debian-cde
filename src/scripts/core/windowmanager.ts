@@ -352,6 +352,39 @@ const WindowManager = (() => {
       if (win) {
         focusWindow(win.id);
       }
+
+      // 3. BUTTON FEEDBACK (Temporary toggled icons)
+      const minBtn = target.closest('.min-btn');
+      if (minBtn) {
+        const img = minBtn.querySelector('img');
+        if (img) {
+          const original = img.src;
+          img.src = '/icons/shade-toggled-inactive.png';
+          const restore = () => {
+            img.src = original;
+            window.removeEventListener('pointerup', restore);
+          };
+          window.addEventListener('pointerup', restore);
+        }
+      }
+
+      const maxBtn = target.closest('.max-btn');
+      if (maxBtn) {
+        const img = maxBtn.querySelector('img');
+        if (img) {
+          const original = img.src;
+          // Use toggled icon while pressed
+          img.src = '/icons/maximize-toggled-inactive.png';
+          const restore = () => {
+            // Note: maximizeWindow will update the icon permanently if state changes,
+            // so we only restore here if the click wasn't completed or if we need a base state.
+            // Actually, maximizeWindow handles the final state.
+            img.src = original;
+            window.removeEventListener('pointerup', restore);
+          };
+          window.addEventListener('pointerup', restore);
+        }
+      }
     });
 
     // Point to focus implementation
@@ -479,6 +512,8 @@ const WindowManager = (() => {
         win.style.top = session.top;
         if (session.maximized && !win.hasAttribute('data-no-maximize')) {
           win.classList.add('maximized');
+          const maxBtnImg = win.querySelector('.max-btn img') as HTMLImageElement;
+          if (maxBtnImg) maxBtnImg.src = '/icons/maximize-toggled-inactive.png';
         }
         logger.log(`[WindowManager] Restored session for: ${id}`);
       } else {
@@ -635,6 +670,11 @@ function maximizeWindow(id: string): void {
   if (win.classList.contains('maximized')) {
     win.classList.remove('maximized');
     AudioManager.click();
+
+    // Icon update
+    const maxBtnImg = win.querySelector('.max-btn img') as HTMLImageElement;
+    if (maxBtnImg) maxBtnImg.src = '/icons/maximize-inactive.png';
+
     if (windowStates[id]) {
       win.style.left = windowStates[id].left || '';
       win.style.top = windowStates[id].top || '';
@@ -655,6 +695,11 @@ function maximizeWindow(id: string): void {
     };
     win.classList.add('maximized');
     AudioManager.click();
+
+    // Icon update
+    const maxBtnImg = win.querySelector('.max-btn img') as HTMLImageElement;
+    if (maxBtnImg) maxBtnImg.src = '/icons/maximize-toggled-inactive.png';
+
     WindowManager.focusWindow(id);
 
     settingsManager.updateWindowSession(id, { maximized: true });

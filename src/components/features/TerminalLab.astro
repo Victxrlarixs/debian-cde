@@ -1,10 +1,12 @@
 ---
 // src/components/features/TerminalLab.astro
 import WindowControls from '../common/WindowControls.astro';
+import WindowMinimize from '../common/WindowMinimize.astro';
 ---
 
 <div class="window" id="terminal-lab">
   <div class="titlebar" onmousedown="drag(event, 'terminal-lab')">
+    <WindowMinimize windowId="terminal-lab" />
     <span class="titlebar-text">Terminal Laboratory — victxrlarixs@debian</span>
     <WindowControls windowId="terminal-lab" closeFunction="TerminalLab.close" />
   </div>

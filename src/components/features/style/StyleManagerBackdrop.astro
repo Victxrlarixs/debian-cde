@@ -1,12 +1,22 @@
 ---
 import WindowControls from '../../common/WindowControls.astro';
+import WindowMinimize from '../../common/WindowMinimize.astro';
 import XPM_BACKDROPS from '../../../data/backdrops.json';
 ---
 
 <div class="cde-retro-modal" id="styleManagerBackdrop">
-  <div class="titlebar" id="styleManagerBackdropTitlebar">
+  <div
+    class="titlebar"
+    id="styleManagerBackdropTitlebar"
+    onmousedown="window.drag(event, 'styleManagerBackdrop')"
+  >
+    <WindowMinimize windowId="styleManagerBackdrop" />
     <span class="titlebar-text">Style Manager - Backdrop</span>
-    <WindowControls windowId="styleManagerBackdrop" closeFunction="styleManager.closeBackdrop" />
+    <WindowControls
+      windowId="styleManagerBackdrop"
+      closeFunction="styleManager.closeBackdrop"
+      disableMaximize={true}
+    />
   </div>
 
   <div class="modal-body backdrop-modal-body">

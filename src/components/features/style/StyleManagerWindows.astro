@@ -1,5 +1,6 @@
 ---
 import WindowControls from '../../common/WindowControls.astro';
+import WindowMinimize from '../../common/WindowMinimize.astro';
 ---
 
 <div class="cde-retro-modal style-manager-window" id="styleManagerWindow">
@@ -8,6 +9,7 @@ import WindowControls from '../../common/WindowControls.astro';
     id="styleManagerWindowTitlebar"
     onmousedown="window.drag(event, 'styleManagerWindow')"
   >
+    <WindowMinimize windowId="styleManagerWindow" />
     <span class="titlebar-text">Style Manager - Window</span>
     <WindowControls
       windowId="styleManagerWindow"

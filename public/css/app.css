@@ -84,6 +84,7 @@
   border-bottom: 2px solid var(--separator-color);
   color: var(--text-color);
 }
+
 /* ----- Barra de herramientas ----- */
 .fm-toolbar {
   background: var(--button-bg);
@@ -413,6 +414,7 @@
   max-width: 200px;
   margin: 0 10px;
   -webkit-appearance: none;
+  appearance: none;
   height: 8px;
   background: var(--button-bg);
   border: 1px solid var(--separator-color);
@@ -637,4 +639,16 @@
 #styleManager {
   position: absolute;
   display: none;
+}
+
+#netscape {
+  position: absolute;
+  display: none;
+}
+
+#emacs {
+  position: absolute;
+  display: none;
+  max-width: 95vw;
+  max-height: 85vh;
 }

@@ -527,29 +527,47 @@
   border-bottom-color: var(--border-dark);
   box-shadow: 4px 4px 0 var(--shadow-color);
   user-select: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.cde-retro-modal {
+  display: flex;
+  flex-direction: column;
 }
 
 .titlebar {
   background: var(--titlebar-color);
   color: var(--titlebar-text-color);
-  padding: 4px 8px;
+  padding: 2px 4px;
   cursor: move;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   font-size: var(--font-size-title);
   font-family: var(--font-family-base);
   font-weight: var(--font-weight-bold);
   border-bottom: 2px solid var(--border-dark);
+  height: 30px;
+  user-select: none;
+}
+
+.titlebar-text {
+  flex: 1;
+  margin: 0 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
 }
 
 /* Botones de ventana (minimizar, cerrar) */
 .min-btn,
 .close-btn,
+.max-btn,
 .cde-window-btn {
-  width: 25px;
-  height: 25px;
-  background: var(--button-active);
+  width: 24px;
+  height: 24px;
+  background: var(--button-bg);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -559,26 +577,37 @@
   border-left-color: var(--border-light);
   border-right-color: var(--border-dark);
   border-bottom-color: var(--border-dark);
+  flex-shrink: 0;
+}
+
+.window-controls-right {
+  display: flex;
+  gap: 2px;
+  align-items: center;
 }
 
 .min-btn img,
-.close-btn img {
-  width: 24px;
-  height: 24px;
+.close-btn img,
+.max-btn img {
+  width: 20px;
+  height: 20px;
+  image-rendering: pixelated;
 }
 
 .min-btn:active,
 .close-btn:active,
+.max-btn:active,
 .cde-window-btn:active {
-  border: 2px solid;
   border-top-color: var(--border-dark);
   border-left-color: var(--border-dark);
   border-right-color: var(--border-light);
   border-bottom-color: var(--border-light);
+  background: var(--button-active);
 }
 
 .min-btn:hover,
-.close-btn:hover {
+.close-btn:hover,
+.max-btn:hover {
   background: var(--dock-icon-hover);
 }
 
@@ -3224,13 +3253,80 @@
 }
 
 /* ── Splash Screen ── */
+/* ── XEmacs Rebrand ── */
+#emacs-titlebar {
+  background: #bfbfbf !important;
+  color: #000 !important;
+  border-bottom: 2px solid #808080;
+}
+
+.xemacs-toolbar {
+  display: flex;
+  background: #bfbfbf;
+  padding: 2px;
+  gap: 1px;
+  border-bottom: 1px solid #808080;
+  overflow-x: auto;
+}
+
+.xe-tool-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: #bfbfbf;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 9px;
+  color: #000;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.xe-tool-btn:hover {
+  border: 1px solid #fff;
+  border-right-color: #808080;
+  border-bottom-color: #808080;
+}
+
+.xe-tool-btn img {
+  width: 24px;
+  height: 24px;
+  image-rendering: pixelated;
+}
+
+.xemacs-tabs {
+  display: flex;
+  background: #bfbfbf;
+  border-bottom: 1px solid #808080;
+  padding-left: 10px;
+}
+
+.xe-tab {
+  background: #d0d0d0;
+  padding: 2px 12px;
+  font-size: 11px;
+  border: 1px solid #808080;
+  border-bottom: none;
+  margin-top: 4px;
+  margin-right: 2px;
+  cursor: pointer;
+}
+
+.xe-tab.active {
+  background: #fff;
+  font-weight: bold;
+}
+
 .emacs-splash {
   flex: 1;
   overflow-y: auto;
-  background: #fff;
+  background: #bfbfbf;
   color: #000;
-  padding: 20px 30px;
-  font-family: 'DejaVu Sans', Helvetica, sans-serif;
+  padding: 40px;
+  font-family: 'Helvetica', 'Arial', sans-serif;
   font-size: 13px;
   line-height: 1.6;
 }
@@ -3251,9 +3347,16 @@
 }
 
 .emacs-splash-welcome {
-  color: #c00;
+  color: #00048b;
   margin-bottom: 16px;
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.xe-experimental {
+  color: #ff0000;
+  font-weight: bold;
 }
 
 .emacs-link {
@@ -3299,10 +3402,11 @@
 }
 
 .emacs-splash-version {
-  color: #00048b;
+  color: #000;
   font-size: 12px;
-  margin-top: 12px;
-  line-height: 1.5;
+  margin-top: 20px;
+  line-height: 1.4;
+  font-family: 'DejaVu Mono', monospace;
 }
 
 /* ── Editor Container & Area ── */
@@ -3337,20 +3441,25 @@
   outline: none;
 }
 
-/* ── Mode Line (Classic Gray) ── */
+/* ── Mode Line (XEmacs Style) ── */
 #emacs-mode-line {
-  background: #bfbfbf;
+  background: #8080ff;
+  /* Light blue from image */
   color: #000;
   font-family: 'DejaVu Mono', monospace;
   font-size: 11px;
-  height: 20px;
-  line-height: 20px;
-  padding: 0 8px;
+  height: 22px;
+  line-height: 22px;
+  padding: 0 4px;
   user-select: none;
   white-space: nowrap;
   overflow: hidden;
-  border-top: 1px solid #808080;
-  border-bottom: 2px solid #555;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+}
+
+.xe-modeline-sep {
+  color: #ff0000;
   font-weight: bold;
 }
 
@@ -3731,14 +3840,6 @@
   line-height: 1;
 }
 
-/* ── Toolbar icon drawings (pure CSS icons) ────────────────────────────────── */
-.ns-btn-icon {
-  width: 28px;
-  height: 28px;
-  position: relative;
-  flex-shrink: 0;
-}
-
 /* Real image icons (replace CSS-drawn icons) */
 .ns-btn-img,
 .ns-tool-btn img {
@@ -3753,113 +3854,6 @@
   flex-shrink: 0;
   display: block;
   margin: 0 auto;
-}
-
-/* Back arrow */
-.ns-icon-back::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  border-right: 18px solid #1a1a7a;
-  border-top: 8px solid transparent;
-  border-bottom: 8px solid transparent;
-}
-
-.ns-icon-back::after {
-  content: '';
-  position: absolute;
-  left: 12px;
-  top: 40%;
-  width: 14px;
-  height: 5px;
-  background: #1a1a7a;
-}
-
-/* Forward arrow */
-.ns-icon-forward::before {
-  content: '';
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  border-left: 18px solid #1a1a7a;
-  border-top: 8px solid transparent;
-  border-bottom: 8px solid transparent;
-}
-
-.ns-icon-forward::after {
-  content: '';
-  position: absolute;
-  right: 12px;
-  top: 40%;
-  width: 14px;
-  height: 5px;
-  background: #1a1a7a;
-}
-
-/* Home — now uses /icons/gohome.png via .ns-btn-img */
-
-/* Reload */
-.ns-icon-reload {
-  overflow: visible;
-}
-
-.ns-icon-reload::before {
-  content: '↻';
-  position: absolute;
-  left: 50%;
-  top: 48%;
-  /* Adjust for baseline */
-  transform: translate(-50%, -50%);
-  font-size: 28px;
-  color: #1a1a7a;
-  font-weight: 900;
-  line-height: 1;
-}
-
-/* Images */
-.ns-icon-images::before {
-  content: '';
-  position: absolute;
-  left: 3px;
-  top: 3px;
-  width: 22px;
-  height: 16px;
-  background: linear-gradient(135deg, #87ceeb 0%, #4169e1 50%, #228b22 100%);
-  border: 1px solid #404040;
-}
-
-.ns-icon-images::after {
-  content: '';
-  position: absolute;
-  left: 7px;
-  top: 6px;
-  width: 0;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-bottom: 7px solid #ffd700;
-}
-
-/* Open — now uses /icons/filemanager.png via .ns-btn-img */
-
-/* Print — now uses /icons/printer.png via .ns-btn-img */
-
-/* Find — now uses /icons/org.xfce.catfish.png via .ns-btn-img */
-
-/* Stop */
-.ns-icon-stop::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 24px;
-  height: 24px;
-  background: #cc0000;
-  border-radius: 50%;
-  border: 2px solid #990000;
 }
 
 /* ── Animated N logo ───────────────────────────────────────────────────────── */

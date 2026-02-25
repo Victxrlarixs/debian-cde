@@ -1,5 +1,6 @@
 ---
 import WindowControls from '../../common/WindowControls.astro';
+import WindowClose from '../../common/WindowClose.astro';
 import StyleManagerColor from './StyleManagerColor.astro';
 import StyleManagerFont from './StyleManagerFont.astro';
 import StyleManagerMouse from './StyleManagerMouse.astro';
@@ -9,6 +10,7 @@ import StyleManagerWindow from './StyleManagerWindows.astro';
 import StyleManagerScreen from './StyleManagerScreen.astro';
 import StyleManagerStartup from './StyleManagerStartup.astro';
 import StyleManagerBeep from './StyleManagerBeep.astro';
+import WindowMinimize from '../../common/WindowMinimize.astro';
 ---
 
 <div class="cde-retro-modal style-manager-main" id="styleManagerMain">
@@ -17,6 +19,7 @@ import StyleManagerBeep from './StyleManagerBeep.astro';
     id="styleManagerMainTitlebar"
     onmousedown="window.drag(event, 'styleManagerMain')"
   >
+    <WindowMinimize windowId="styleManagerMain" />
     <span class="titlebar-text">Style Manager</span>
     <WindowControls
       windowId="styleManagerMain"

@@ -1,10 +1,12 @@
 ---
 // src/components/ProcessMonitor.astro
 import WindowControls from '../common/WindowControls.astro';
+import WindowMinimize from '../common/WindowMinimize.astro';
 ---
 
 <div class="window" id="process-monitor">
   <div class="titlebar" id="process-monitor-titlebar">
+    <WindowMinimize windowId="process-monitor" />
     <span class="titlebar-text">Process Monitor</span>
     <WindowControls windowId="process-monitor" closeFunction="ProcessMonitor.close" />
   </div>

@@ -1,5 +1,6 @@
 ---
 import WindowControls from '../../common/WindowControls.astro';
+import WindowMinimize from '../../common/WindowMinimize.astro';
 ---
 
 <div class="cde-retro-modal" id="styleManagerScreen">
@@ -8,8 +9,13 @@ import WindowControls from '../../common/WindowControls.astro';
     id="styleManagerScreenTitlebar"
     onmousedown="window.drag(event, 'styleManagerScreen')"
   >
+    <WindowMinimize windowId="styleManagerScreen" />
     <span class="titlebar-text">Style Manager - Screen</span>
-    <WindowControls windowId="styleManagerScreen" closeFunction="styleManager.closeScreen" />
+    <WindowControls
+      windowId="styleManagerScreen"
+      closeFunction="styleManager.closeScreen"
+      disableMaximize={true}
+    />
   </div>
 
   <div class="modal-body">

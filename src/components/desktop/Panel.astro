@@ -57,8 +57,16 @@ import { CONFIG } from '../../scripts/core/config';
   </div>
 
   <div class="cde-scroll">
-    <div class="scroll-btn">▲</div>
-    <div class="scroll-btn">▼</div>
+    <div class="scroll-btn">
+      <img src="/icons/go-up.png" alt="Up" style="width: 12px; height: 12px;" />
+    </div>
+    <div class="scroll-btn">
+      <img
+        src="/icons/go-up.png"
+        alt="Down"
+        style="width: 12px; height: 12px; transform: rotate(180deg);"
+      />
+    </div>
   </div>
 
   <div class="cde-sep"></div>
@@ -81,8 +89,8 @@ import { CONFIG } from '../../scripts/core/config';
     <img src="/icons/org.xfce.taskmanager.png" alt="TaskManager" />
   </div>
 
-  <div class="tray-icon" onclick="window.Emacs?.openSplash()" title="Emacs">
-    <img src="/icons/emacs22.png" alt="Emacs" class="emacs-pixelated" />
+  <div class="tray-icon" onclick="window.Emacs?.openSplash()" title="XEmacs">
+    <img src="/icons/xemacs.png" alt="XEmacs" class="emacs-pixelated" />
   </div>
 </div>
 
@@ -91,7 +99,7 @@ import { CONFIG } from '../../scripts/core/config';
     <img src="/icons/org.xfce.screenshooter.png" alt="" /> Screenshot
   </div>
   <div class="menu-item" onclick="window.Emacs?.openSplash()">
-    <img src="/icons/emacs22.png" alt="" class="emacs-pixelated" /> Emacs
+    <img src="/icons/xemacs.png" alt="" class="emacs-pixelated" /> XEmacs
   </div>
   <div class="menu-item" onclick="openCalendar()">
     <img src="/icons/calendar.png" alt="" /> Calendar

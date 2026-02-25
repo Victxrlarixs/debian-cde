@@ -1,0 +1,12 @@
+---
+// src/components/common/WindowClose.astro
+export interface Props {
+  closeFunction: string;
+}
+
+const { closeFunction } = Astro.props;
+---
+
+<div class="close-btn" onclick={`${closeFunction}()`} title="Close">
+  <img src="/icons/window-close.png" alt="Close" />
+</div>
