@@ -13,6 +13,9 @@ const { title } = Astro.props;
     <meta name="description" content="Retro Debian CDE Desktop UI inspirado en Unix y Linux." />
     <meta name="keywords" content="Debian, Linux, CDE, Retro Desktop, Unix" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title>{title}</title>
 
     <!-- Critical CSS for Boot Sequence - Inlined to prevent Render Blocking -->
@@ -54,7 +57,9 @@ const { title } = Astro.props;
       }
     </style>
 
-    <link rel="shortcut icon" type="image/x-icon" href="/icons/favicon.ico" />
+    <link rel="icon" type="image/png" href="/icons/Debian.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/icons/Debian.png" />
 
     <!-- Defer non-critical CSS -->
     <link rel="stylesheet" href="/css/core.css" media="print" onload="this.media='all'" />
