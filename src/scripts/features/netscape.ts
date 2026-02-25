@@ -5,10 +5,10 @@ import { logger } from '../utilities/logger';
 // ─── Page content definitions ────────────────────────────────────────────────
 
 const NS_PAGES: Record<string, { title: string; url: string; content: () => string }> = {
-    'whats-new': {
-        title: "What's New! - Netscape",
-        url: 'http://home.netscape.com/home/whats-new.html',
-        content: () => `
+  'whats-new': {
+    title: "What's New! - Netscape",
+    url: 'http://home.netscape.com/home/whats-new.html',
+    content: () => `
       <div class="ns-page">
         <img src="/icons/NetScape.png" alt="What's New!" class="ns-banner" onerror="this.style.display='none'"/>
         <h1>What's New!</h1>
@@ -31,11 +31,11 @@ const NS_PAGES: Record<string, { title: string; url: string; content: () => stri
         </ul>
       </div>
     `,
-    },
-    welcome: {
-        title: "Welcome to Netscape - Netscape",
-        url: 'http://home.netscape.com/',
-        content: () => `
+  },
+  welcome: {
+    title: 'Welcome to Netscape - Netscape',
+    url: 'http://home.netscape.com/',
+    content: () => `
       <div class="ns-page">
         <div class="ns-welcome-header">
           <span class="ns-welcome-logo">NETSCAPE NAVIGATOR</span>
@@ -52,11 +52,11 @@ const NS_PAGES: Record<string, { title: string; url: string; content: () => stri
         </ul>
       </div>
     `,
-    },
-    'whats-cool': {
-        title: "What's Cool! - Netscape",
-        url: 'http://home.netscape.com/home/whats-cool.html',
-        content: () => `
+  },
+  'whats-cool': {
+    title: "What's Cool! - Netscape",
+    url: 'http://home.netscape.com/home/whats-cool.html',
+    content: () => `
       <div class="ns-page">
         <h1>What's Cool!</h1>
         <p>Someday, we'll all agree on what makes something cool. In the meantime, Netscape's staff is out there on the Internet and keeping an eye out for cool things. This list gets changed from time to time, so check back!</p>
@@ -80,11 +80,11 @@ const NS_PAGES: Record<string, { title: string; url: string; content: () => stri
         </ul>
       </div>
     `,
-    },
-    questions: {
-        title: "Frequently Asked Questions - Netscape",
-        url: 'http://home.netscape.com/home/faq.html',
-        content: () => `
+  },
+  questions: {
+    title: 'Frequently Asked Questions - Netscape',
+    url: 'http://home.netscape.com/home/faq.html',
+    content: () => `
       <div class="ns-page">
         <h1>Frequently Asked Questions</h1>
         <h2>About Netscape Navigator</h2>
@@ -101,11 +101,11 @@ const NS_PAGES: Record<string, { title: string; url: string; content: () => stri
         <p>A: Navigator supports HTML 2.0 plus several Netscape extensions including CENTER, tables, frames, background colors, and more.</p>
       </div>
     `,
-    },
-    'net-search': {
-        title: "Net Search - Netscape",
-        url: 'http://home.netscape.com/home/internet-search.html',
-        content: () => `
+  },
+  'net-search': {
+    title: 'Net Search - Netscape',
+    url: 'http://home.netscape.com/home/internet-search.html',
+    content: () => `
       <div class="ns-page">
         <h1>Net Search</h1>
         <p>Searching the Internet is easy with these powerful services. Just click on one of the search engines below and follow their instructions.</p>
@@ -124,11 +124,11 @@ const NS_PAGES: Record<string, { title: string; url: string; content: () => stri
         </ul>
       </div>
     `,
-    },
-    'net-directory': {
-        title: "Net Directory - Netscape",
-        url: 'http://home.netscape.com/home/internet-directory.html',
-        content: () => `
+  },
+  'net-directory': {
+    title: 'Net Directory - Netscape',
+    url: 'http://home.netscape.com/home/internet-directory.html',
+    content: () => `
       <div class="ns-page">
         <h1>Internet Directory</h1>
         <p>The World Wide Web Virtual Library is distributed across the world. It is maintained by a dispersed collective of volunteers, who compile pages of key links for particular areas in which they are experts.</p>
@@ -155,11 +155,11 @@ const NS_PAGES: Record<string, { title: string; url: string; content: () => stri
         </ul>
       </div>
     `,
-    },
-    about: {
-        title: "About Netscape - Netscape",
-        url: 'about:',
-        content: () => `
+  },
+  about: {
+    title: 'About Netscape - Netscape',
+    url: 'about:',
+    content: () => `
       <div class="ns-page ns-about-page">
         <div class="ns-about-logo">
           <img src="/icons/netscape_classic.png" style="width: 128px; height: 128px; margin-bottom: 10px;" />
@@ -173,11 +173,11 @@ const NS_PAGES: Record<string, { title: string; url: string; content: () => stri
         <p><em>"The ship of the desert is the camel; the ship of the ocean is the browser."</em></p>
       </div>
     `,
-    },
-    'net-news': {
-        title: "Newsgroups - Netscape",
-        url: 'news:',
-        content: () => `
+  },
+  'net-news': {
+    title: 'Newsgroups - Netscape',
+    url: 'news:',
+    content: () => `
       <div class="ns-page">
         <h1>Newsgroups</h1>
         <p>USENET newsgroups are a collection of discussion forums. Netscape Navigator includes a built-in newsgroup reader. To use it, you need access to a news server.</p>
@@ -193,395 +193,405 @@ const NS_PAGES: Record<string, { title: string; url: string; content: () => stri
         </ul>
       </div>
     `,
-    },
+  },
 };
 
 // ─── Netscape Navigator class ────────────────────────────────────────────────
 
 class NetscapeNavigator {
-    private id = 'netscape';
-    private history: string[] = ['whats-new'];
-    private historyIndex = 0;
-    private currentPage = 'whats-new';
-    private isLoading = false;
-    private animationFrame: number | null = null;
-    private starInterval: ReturnType<typeof setInterval> | null = null;
+  private id = 'netscape';
+  private history: string[] = ['whats-new'];
+  private historyIndex = 0;
+  private currentPage = 'whats-new';
+  private isLoading = false;
+  private animationFrame: number | null = null;
+  private starInterval: ReturnType<typeof setInterval> | null = null;
 
-    constructor() {
-        this.init();
+  constructor() {
+    this.init();
+  }
+
+  private init(): void {
+    logger.log('[Netscape] Initializing...');
+    this.renderPage('whats-new', false);
+    this.setupScrollThumb();
+  }
+
+  // ── Window controls ─────────────────────────────────────────────────────
+
+  public open(): void {
+    const win = document.getElementById(this.id);
+    if (!win) return;
+
+    win.style.display = 'flex';
+    win.style.flexDirection = 'column';
+    win.style.zIndex = '10000';
+
+    requestAnimationFrame(() => {
+      WindowManager.centerWindow(win);
+      if (window.focusWindow) window.focusWindow(this.id);
+    });
+
+    if (window.AudioManager) window.AudioManager.windowOpen();
+    logger.log('[Netscape] Window opened');
+  }
+
+  public close(): void {
+    const win = document.getElementById(this.id);
+    if (!win) return;
+    win.style.display = 'none';
+    if (window.AudioManager) window.AudioManager.windowClose();
+    logger.log('[Netscape] Window closed');
+  }
+
+  // ── Navigation ──────────────────────────────────────────────────────────
+
+  public navigate(pageKey: string): void {
+    if (pageKey === this.currentPage) return;
+
+    // Truncate forward history if we branched
+    if (this.historyIndex < this.history.length - 1) {
+      this.history = this.history.slice(0, this.historyIndex + 1);
     }
 
-    private init(): void {
-        logger.log('[Netscape] Initializing...');
-        this.renderPage('whats-new', false);
-        this.setupScrollThumb();
+    this.history.push(pageKey);
+    this.historyIndex = this.history.length - 1;
+    this.renderPage(pageKey, true);
+    this.updateHistoryMenu();
+  }
+
+  public goBack(): void {
+    if (this.historyIndex <= 0) return;
+    this.historyIndex--;
+    this.renderPage(this.history[this.historyIndex], true);
+  }
+
+  public goForward(): void {
+    if ((window as any).AudioManager) (window as any).AudioManager.click();
+    if (this.historyIndex >= this.history.length - 1) return;
+    this.historyIndex++;
+    this.renderPage(this.history[this.historyIndex], true);
+  }
+
+  public goHome(): void {
+    if ((window as any).AudioManager) (window as any).AudioManager.click();
+    this.navigate('welcome');
+  }
+
+  public reload(): void {
+    if ((window as any).AudioManager) (window as any).AudioManager.click();
+    this.renderPage(this.currentPage, true);
+  }
+
+  private renderPage(pageKey: string, animate: boolean): void {
+    const page = NS_PAGES[pageKey];
+    if (!page) {
+      this.setStatus(`Error: Page not found — ${pageKey}`);
+      return;
     }
 
-    // ── Window controls ─────────────────────────────────────────────────────
+    this.currentPage = pageKey;
 
-    public open(): void {
-        const win = document.getElementById(this.id);
-        if (!win) return;
+    // Update URL bar
+    const urlInput = document.getElementById('nsUrlInput') as HTMLInputElement;
+    if (urlInput) urlInput.value = page.url;
 
-        win.style.display = 'flex';
-        win.style.flexDirection = 'column';
-        win.style.zIndex = '10000';
+    // Update title
+    const title = document.getElementById('netscape-title');
+    if (title) title.textContent = page.title;
 
-        requestAnimationFrame(() => {
-            WindowManager.centerWindow(win);
-            if (window.focusWindow) window.focusWindow(this.id);
-        });
+    // Active dir button
+    const dirBtns = document.querySelectorAll('.ns-dir-btn');
+    dirBtns.forEach((btn) => btn.classList.remove('active'));
+    const activeBtn = document.querySelector(`.ns-dir-btn[onclick*="${pageKey}"]`);
+    if (activeBtn) activeBtn.classList.add('active');
 
-        if (window.AudioManager) window.AudioManager.windowOpen();
-        logger.log('[Netscape] Window opened');
+    // Update nav buttons state
+    const backBtn = document.getElementById('ns-btn-back');
+    const fwdBtn = document.getElementById('ns-btn-forward');
+    if (backBtn) backBtn.disabled = this.historyIndex <= 0;
+    if (fwdBtn) fwdBtn.disabled = this.historyIndex >= this.history.length - 1;
+
+    if (animate) {
+      this.startLoading(page.content);
+    } else {
+      const content = document.getElementById('nsContent');
+      if (content) content.innerHTML = page.content();
+      this.setStatus('Document: Done');
     }
+  }
 
-    public close(): void {
-        const win = document.getElementById(this.id);
-        if (!win) return;
-        win.style.display = 'none';
-        if (window.AudioManager) window.AudioManager.windowClose();
-        logger.log('[Netscape] Window closed');
-    }
+  private startLoading(contentFn: () => string): void {
+    if (this.isLoading) this.stopLoading();
+    this.isLoading = true;
 
-    // ── Navigation ──────────────────────────────────────────────────────────
+    const stopBtn = document.getElementById('ns-btn-stop');
+    if (stopBtn) stopBtn.disabled = false;
 
-    public navigate(pageKey: string): void {
-        if (pageKey === this.currentPage) return;
+    const nsLogo = document.getElementById('nsNLogo');
+    if (nsLogo) nsLogo.classList.add('ns-loading');
 
-        // Truncate forward history if we branched
-        if (this.historyIndex < this.history.length - 1) {
-            this.history = this.history.slice(0, this.historyIndex + 1);
+    // Spawn stars on the N logo
+    this.starInterval = setInterval(() => {
+      const starsContainer = document.getElementById('nsNStars');
+      if (!starsContainer || !this.isLoading) return;
+      const star = document.createElement('div');
+      star.className = 'ns-n-star';
+      star.style.left = `${Math.random() * 50}px`;
+      star.style.top = `${Math.random() * 10}px`;
+      star.style.width = `${Math.random() > 0.5 ? 3 : 2}px`;
+      star.style.height = star.style.width;
+      starsContainer.appendChild(star);
+      setTimeout(() => star.remove(), 800);
+    }, 100);
+
+    this.setStatus('Connecting...');
+    this.animateProgress(0);
+
+    let progress = 0;
+    const steps = [
+      { delay: 100, status: 'Connecting to host...', prog: 10 },
+      { delay: 250, status: 'Host contacted. Waiting for reply...', prog: 30 },
+      { delay: 450, status: 'Receiving data...', prog: 60 },
+      { delay: 650, status: 'Loading page...', prog: 80 },
+      { delay: 850, status: 'Transferring data...', prog: 95 },
+      { delay: 1000, status: 'Document: Done', prog: 100 },
+    ];
+
+    steps.forEach(({ delay, status, prog }) => {
+      setTimeout(() => {
+        if (!this.isLoading) return;
+        this.setStatus(status);
+        this.animateProgress(prog);
+        if (prog === 100) {
+          const content = document.getElementById('nsContent');
+          if (content) {
+            content.innerHTML = contentFn();
+            content.scrollTop = 0;
+          }
+          this.stopLoading();
         }
+      }, delay);
+    });
+  }
 
-        this.history.push(pageKey);
-        this.historyIndex = this.history.length - 1;
-        this.renderPage(pageKey, true);
-        this.updateHistoryMenu();
+  private stopLoading(): void {
+    this.isLoading = false;
+    const stopBtn = document.getElementById('ns-btn-stop');
+    if (stopBtn) stopBtn.disabled = true;
+
+    const nsLogo = document.getElementById('nsNLogo');
+    if (nsLogo) nsLogo.classList.remove('ns-loading');
+
+    if (this.starInterval) {
+      clearInterval(this.starInterval);
+      this.starInterval = null;
     }
 
-    public goBack(): void {
-        if (this.historyIndex <= 0) return;
-        this.historyIndex--;
-        this.renderPage(this.history[this.historyIndex], true);
-    }
+    setTimeout(() => this.animateProgress(0), 500);
+  }
 
-    public goForward(): void {
-        if ((window as any).AudioManager) (window as any).AudioManager.click();
-        if (this.historyIndex >= this.history.length - 1) return;
-        this.historyIndex++;
-        this.renderPage(this.history[this.historyIndex], true);
-    }
+  public stop(): void {
+    if ((window as any).AudioManager) (window as any).AudioManager.click();
+    this.stopLoading();
+    this.setStatus('Transfer interrupted.');
+  }
 
-    public goHome(): void {
-        if ((window as any).AudioManager) (window as any).AudioManager.click();
-        this.navigate('welcome');
-    }
+  private animateProgress(value: number): void {
+    const bar = document.getElementById('nsProgressBar');
+    if (bar) bar.style.width = `${value}%`;
+  }
 
-    public reload(): void {
-        if ((window as any).AudioManager) (window as any).AudioManager.click();
-        this.renderPage(this.currentPage, true);
-    }
+  private setStatus(text: string): void {
+    const el = document.getElementById('nsStatusText');
+    if (el) el.textContent = text;
+  }
 
-    private renderPage(pageKey: string, animate: boolean): void {
-        const page = NS_PAGES[pageKey];
-        if (!page) {
-            this.setStatus(`Error: Page not found — ${pageKey}`);
-            return;
-        }
+  // ── URL bar ─────────────────────────────────────────────────────────────
 
-        this.currentPage = pageKey;
-
-        // Update URL bar
-        const urlInput = document.getElementById('nsUrlInput') as HTMLInputElement;
-        if (urlInput) urlInput.value = page.url;
-
-        // Update title
-        const title = document.getElementById('netscape-title');
-        if (title) title.textContent = page.title;
-
-        // Active dir button
-        const dirBtns = document.querySelectorAll('.ns-dir-btn');
-        dirBtns.forEach((btn) => btn.classList.remove('active'));
-        const activeBtn = document.querySelector(`.ns-dir-btn[onclick*="${pageKey}"]`);
-        if (activeBtn) activeBtn.classList.add('active');
-
-        // Update nav buttons state
-        const backBtn = document.getElementById('ns-btn-back');
-        const fwdBtn = document.getElementById('ns-btn-forward');
-        if (backBtn) backBtn.disabled = this.historyIndex <= 0;
-        if (fwdBtn) fwdBtn.disabled = this.historyIndex >= this.history.length - 1;
-
-        if (animate) {
-            this.startLoading(page.content);
+  public handleUrlKey(e: KeyboardEvent): void {
+    if (e.key === 'Enter') {
+      const input = e.target as HTMLInputElement;
+      const url = input.value.trim();
+      // Internal pages
+      const internalMatch = Object.entries(NS_PAGES).find(([, p]) => p.url === url);
+      if (internalMatch) {
+        this.navigate(internalMatch[0]);
+      } else {
+        // Open external links in new tab if valid HTTP
+        if (url.startsWith('http')) {
+          window.open(url, '_blank');
+          this.setStatus(`Opening: ${url}`);
         } else {
-            const content = document.getElementById('nsContent');
-            if (content) content.innerHTML = page.content();
-            this.setStatus('Document: Done');
+          this.setStatus(`Cannot open: ${url}`);
         }
+      }
     }
+  }
 
-    private startLoading(contentFn: () => string): void {
-        if (this.isLoading) this.stopLoading();
-        this.isLoading = true;
+  // ── Location dialog ─────────────────────────────────────────────────────
 
-        const stopBtn = document.getElementById('ns-btn-stop');
-        if (stopBtn) stopBtn.disabled = false;
-
-        const nsLogo = document.getElementById('nsNLogo');
-        if (nsLogo) nsLogo.classList.add('ns-loading');
-
-        // Spawn stars on the N logo
-        this.starInterval = setInterval(() => {
-            const starsContainer = document.getElementById('nsNStars');
-            if (!starsContainer || !this.isLoading) return;
-            const star = document.createElement('div');
-            star.className = 'ns-n-star';
-            star.style.left = `${Math.random() * 50}px`;
-            star.style.top = `${Math.random() * 10}px`;
-            star.style.width = `${Math.random() > 0.5 ? 3 : 2}px`;
-            star.style.height = star.style.width;
-            starsContainer.appendChild(star);
-            setTimeout(() => star.remove(), 800);
-        }, 100);
-
-        this.setStatus('Connecting...');
-        this.animateProgress(0);
-
-        let progress = 0;
-        const steps = [
-            { delay: 100, status: 'Connecting to host...', prog: 10 },
-            { delay: 250, status: 'Host contacted. Waiting for reply...', prog: 30 },
-            { delay: 450, status: 'Receiving data...', prog: 60 },
-            { delay: 650, status: 'Loading page...', prog: 80 },
-            { delay: 850, status: 'Transferring data...', prog: 95 },
-            { delay: 1000, status: 'Document: Done', prog: 100 },
-        ];
-
-        steps.forEach(({ delay, status, prog }) => {
-            setTimeout(() => {
-                if (!this.isLoading) return;
-                this.setStatus(status);
-                this.animateProgress(prog);
-                if (prog === 100) {
-                    const content = document.getElementById('nsContent');
-                    if (content) {
-                        content.innerHTML = contentFn();
-                        content.scrollTop = 0;
-                    }
-                    this.stopLoading();
-                }
-            }, delay);
-        });
+  public openLocation(): void {
+    const urlInput = document.getElementById('nsUrlInput') as HTMLInputElement;
+    if (urlInput) {
+      urlInput.focus();
+      urlInput.select();
     }
+  }
 
-    private stopLoading(): void {
-        this.isLoading = false;
-        const stopBtn = document.getElementById('ns-btn-stop');
-        if (stopBtn) stopBtn.disabled = true;
+  public openFile(): void {
+    this.setStatus('Open File: not supported in this environment.');
+  }
 
-        const nsLogo = document.getElementById('nsNLogo');
-        if (nsLogo) nsLogo.classList.remove('ns-loading');
+  public savePage(): void {
+    const content = document.getElementById('nsContent');
+    if (!content) return;
+    const blob = new Blob([`<html><body>${content.innerHTML}</body></html>`], {
+      type: 'text/html',
+    });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `${this.currentPage}.html`;
+    a.click();
+    this.setStatus('Page saved.');
+  }
 
-        if (this.starInterval) {
-            clearInterval(this.starInterval);
-            this.starInterval = null;
-        }
+  public printPage(): void {
+    window.print();
+  }
 
-        setTimeout(() => this.animateProgress(0), 500);
+  public findInPage(): void {
+    const term = window.prompt('Find in page:');
+    if (!term) return;
+    const content = document.getElementById('nsContent');
+    if (!content) return;
+    const html = content.innerHTML;
+    const regex = new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    content.innerHTML = html.replace(
+      regex,
+      '<mark style="background:#ffff00;color:#000">$1</mark>'
+    );
+    this.setStatus(`Found: "${term}"`);
+  }
+
+  public viewSource(): void {
+    const content = document.getElementById('nsContent');
+    if (!content) return;
+    const src = content.innerHTML;
+    const w = window.open('', '_blank', 'width=600,height=400');
+    if (w) {
+      w.document.write(
+        `<pre style="font:12px monospace;white-space:pre-wrap">${src.replace(/</g, '&lt;')}</pre>`
+      );
     }
+  }
 
-    public stop(): void {
-        if ((window as any).AudioManager) (window as any).AudioManager.click();
-        this.stopLoading();
-        this.setStatus('Transfer interrupted.');
+  public newWindow(): void {
+    // Spawn a clone — just re-open this one for simulation
+    this.open();
+    this.setStatus('New window opened.');
+  }
+
+  public loadImages(): void {
+    this.setStatus('Images loaded.');
+  }
+
+  // ── Bookmarks ───────────────────────────────────────────────────────────
+
+  public addBookmark(): void {
+    const page = NS_PAGES[this.currentPage];
+    if (!page) return;
+    const placeholder = document.getElementById('ns-bookmarks-placeholder');
+    if (placeholder) {
+      placeholder.style.display = 'none';
+      const menu = placeholder.parentElement;
+      if (menu) {
+        const item = document.createElement('div');
+        item.className = 'ns-item';
+        item.textContent = page.title;
+        const p = this.currentPage;
+        item.onclick = () => this.navigate(p);
+        menu.appendChild(item);
+      }
     }
+    this.setStatus(`Bookmark added: ${page.title}`);
+  }
 
-    private animateProgress(value: number): void {
-        const bar = document.getElementById('nsProgressBar');
-        if (bar) bar.style.width = `${value}%`;
-    }
+  // ── Toolbar visibility ──────────────────────────────────────────────────
 
-    private setStatus(text: string): void {
-        const el = document.getElementById('nsStatusText');
-        if (el) el.textContent = text;
-    }
+  public toggleToolbar(): void {
+    const bar = document.getElementById('nsToolbar');
+    if (bar) bar.style.display = bar.style.display === 'none' ? 'flex' : 'none';
+  }
 
-    // ── URL bar ─────────────────────────────────────────────────────────────
+  public toggleLocation(): void {
+    const bar = document.getElementById('nsLocationBar');
+    if (bar) bar.style.display = bar.style.display === 'none' ? 'flex' : 'none';
+  }
 
-    public handleUrlKey(e: KeyboardEvent): void {
-        if (e.key === 'Enter') {
-            const input = e.target as HTMLInputElement;
-            const url = input.value.trim();
-            // Internal pages
-            const internalMatch = Object.entries(NS_PAGES).find(([, p]) => p.url === url);
-            if (internalMatch) {
-                this.navigate(internalMatch[0]);
-            } else {
-                // Open external links in new tab if valid HTTP
-                if (url.startsWith('http')) {
-                    window.open(url, '_blank');
-                    this.setStatus(`Opening: ${url}`);
-                } else {
-                    this.setStatus(`Cannot open: ${url}`);
-                }
-            }
-        }
-    }
+  public toggleDirectory(): void {
+    const bar = document.getElementById('nsDirBar');
+    if (bar) bar.style.display = bar.style.display === 'none' ? 'flex' : 'none';
+  }
 
-    // ── Location dialog ─────────────────────────────────────────────────────
+  // ── Scroll thumb ────────────────────────────────────────────────────────
 
-    public openLocation(): void {
-        const urlInput = document.getElementById('nsUrlInput') as HTMLInputElement;
-        if (urlInput) {
-            urlInput.focus();
-            urlInput.select();
-        }
-    }
+  private setupScrollThumb(): void {
+    const content = document.getElementById('nsContent');
+    const thumb = document.getElementById('nsScrollThumb');
+    if (!content || !thumb) return;
+    content.addEventListener('scroll', () => {
+      const ratio = content.scrollTop / (content.scrollHeight - content.clientHeight || 1);
+      const trackHeight = 200;
+      thumb.style.top = `${ratio * (trackHeight - 30)}px`;
+    });
+  }
 
-    public openFile(): void {
-        this.setStatus('Open File: not supported in this environment.');
-    }
+  // ── History menu ────────────────────────────────────────────────────────
 
-    public savePage(): void {
-        const content = document.getElementById('nsContent');
-        if (!content) return;
-        const blob = new Blob([`<html><body>${content.innerHTML}</body></html>`], { type: 'text/html' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `${this.currentPage}.html`;
-        a.click();
-        this.setStatus('Page saved.');
-    }
+  private updateHistoryMenu(): void {
+    const placeholder = document.getElementById('ns-history-placeholder');
+    if (!placeholder) return;
+    placeholder.style.display = 'none';
+    const menu = placeholder.parentElement;
+    if (!menu) return;
 
-    public printPage(): void {
-        window.print();
-    }
+    // Remove old dynamic history items
+    menu.querySelectorAll('.ns-history-item').forEach((el) => el.remove());
 
-    public findInPage(): void {
-        const term = window.prompt('Find in page:');
-        if (!term) return;
-        const content = document.getElementById('nsContent');
-        if (!content) return;
-        const html = content.innerHTML;
-        const regex = new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-        content.innerHTML = html.replace(regex, '<mark style="background:#ffff00;color:#000">$1</mark>');
-        this.setStatus(`Found: "${term}"`);
-    }
+    const sep = document.createElement('div');
+    sep.className = 'ns-separator';
+    menu.appendChild(sep);
 
-    public viewSource(): void {
-        const content = document.getElementById('nsContent');
-        if (!content) return;
-        const src = content.innerHTML;
-        const w = window.open('', '_blank', 'width=600,height=400');
-        if (w) {
-            w.document.write(`<pre style="font:12px monospace;white-space:pre-wrap">${src.replace(/</g, '&lt;')}</pre>`);
-        }
-    }
-
-    public newWindow(): void {
-        // Spawn a clone — just re-open this one for simulation
-        this.open();
-        this.setStatus('New window opened.');
-    }
-
-    public loadImages(): void {
-        this.setStatus('Images loaded.');
-    }
-
-    // ── Bookmarks ───────────────────────────────────────────────────────────
-
-    public addBookmark(): void {
-        const page = NS_PAGES[this.currentPage];
+    [...this.history]
+      .reverse()
+      .slice(0, 10)
+      .forEach((key, idx) => {
+        const page = NS_PAGES[key];
         if (!page) return;
-        const placeholder = document.getElementById('ns-bookmarks-placeholder');
-        if (placeholder) {
-            placeholder.style.display = 'none';
-            const menu = placeholder.parentElement;
-            if (menu) {
-                const item = document.createElement('div');
-                item.className = 'ns-item';
-                item.textContent = page.title;
-                const p = this.currentPage;
-                item.onclick = () => this.navigate(p);
-                menu.appendChild(item);
-            }
+        const item = document.createElement('div');
+        item.className = 'ns-item ns-history-item';
+        if (this.history.length - 1 - idx === this.historyIndex) {
+          item.style.fontWeight = 'bold';
         }
-        this.setStatus(`Bookmark added: ${page.title}`);
-    }
-
-    // ── Toolbar visibility ──────────────────────────────────────────────────
-
-    public toggleToolbar(): void {
-        const bar = document.getElementById('nsToolbar');
-        if (bar) bar.style.display = bar.style.display === 'none' ? 'flex' : 'none';
-    }
-
-    public toggleLocation(): void {
-        const bar = document.getElementById('nsLocationBar');
-        if (bar) bar.style.display = bar.style.display === 'none' ? 'flex' : 'none';
-    }
-
-    public toggleDirectory(): void {
-        const bar = document.getElementById('nsDirBar');
-        if (bar) bar.style.display = bar.style.display === 'none' ? 'flex' : 'none';
-    }
-
-    // ── Scroll thumb ────────────────────────────────────────────────────────
-
-    private setupScrollThumb(): void {
-        const content = document.getElementById('nsContent');
-        const thumb = document.getElementById('nsScrollThumb');
-        if (!content || !thumb) return;
-        content.addEventListener('scroll', () => {
-            const ratio = content.scrollTop / (content.scrollHeight - content.clientHeight || 1);
-            const trackHeight = 200;
-            thumb.style.top = `${ratio * (trackHeight - 30)}px`;
-        });
-    }
-
-    // ── History menu ────────────────────────────────────────────────────────
-
-    private updateHistoryMenu(): void {
-        const placeholder = document.getElementById('ns-history-placeholder');
-        if (!placeholder) return;
-        placeholder.style.display = 'none';
-        const menu = placeholder.parentElement;
-        if (!menu) return;
-
-        // Remove old dynamic history items
-        menu.querySelectorAll('.ns-history-item').forEach((el) => el.remove());
-
-        const sep = document.createElement('div');
-        sep.className = 'ns-separator';
-        menu.appendChild(sep);
-
-        [...this.history].reverse().slice(0, 10).forEach((key, idx) => {
-            const page = NS_PAGES[key];
-            if (!page) return;
-            const item = document.createElement('div');
-            item.className = 'ns-item ns-history-item';
-            if (this.history.length - 1 - idx === this.historyIndex) {
-                item.style.fontWeight = 'bold';
-            }
-            item.textContent = page.title.replace(' - Netscape', '');
-            item.onclick = () => {
-                this.historyIndex = this.history.length - 1 - idx;
-                this.renderPage(this.history[this.historyIndex], true);
-            };
-            menu.appendChild(item);
-        });
-    }
+        item.textContent = page.title.replace(' - Netscape', '');
+        item.onclick = () => {
+          this.historyIndex = this.history.length - 1 - idx;
+          this.renderPage(this.history[this.historyIndex], true);
+        };
+        menu.appendChild(item);
+      });
+  }
 }
 
 // ─── Global exposure ─────────────────────────────────────────────────────────
 
 if (typeof window !== 'undefined') {
-    const netscape = new NetscapeNavigator();
-    (window as any).Netscape = netscape;
+  const netscape = new NetscapeNavigator();
+  (window as any).Netscape = netscape;
 
-    // Global open function
-    (window as any).openNetscape = () => netscape.open();
+  // Global open function
+  (window as any).openNetscape = () => netscape.open();
 }
 
-export { };
+export {};

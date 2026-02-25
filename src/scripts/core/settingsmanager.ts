@@ -29,10 +29,28 @@ const STORAGE_KEY = 'cde-system-settings';
 class SettingsManager {
   private static instance: SettingsManager;
   private settings: SystemSettings;
+  private readonly CURRENT_VERSION = '1.1.1';
 
   private constructor() {
     this.settings = this.getDefaultSettings();
     this.load();
+    this.checkVersion();
+  }
+
+  private checkVersion(): void {
+    const lastVersion = localStorage.getItem(`${STORAGE_KEY}-version`);
+    if (lastVersion !== this.CURRENT_VERSION) {
+      logger.log(
+        `[SettingsManager] Version mismatch (${lastVersion} vs ${this.CURRENT_VERSION}). Resetting cache...`
+      );
+      this.resetToDefaults();
+      localStorage.setItem(`${STORAGE_KEY}-version`, this.CURRENT_VERSION);
+    }
+  }
+
+  private resetToDefaults(): void {
+    this.settings = this.getDefaultSettings();
+    this.save();
   }
 
   public static getInstance(): SettingsManager {
