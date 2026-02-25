@@ -1,8 +1,6 @@
 # 📟 CDE Time Capsule: The Nostalgic Portal
 
 ![Architecture](https://img.shields.io/badge/Architecture-Modular_System-2a4a6a?style=for-the-badge)
-![VFS](<https://img.shields.io/badge/Filesystem-O(1)_Search-ff5a03?style=for-the-badge>)
-![Fidelity](https://img.shields.io/badge/Fidelity-High_Retrô-blue?style=for-the-badge)
 ![Mobile](https://img.shields.io/badge/Mobile-Responsive_Engine-success?style=for-the-badge)
 
 Ever wonder what it felt like to sit in front of a $20,000 Unix workstation in 1996? Welcome to a pixel-perfect recreation of the **Common Desktop Environment (CDE)**—living right inside your modern browser.
@@ -36,15 +34,14 @@ Everything reacts to you. Drag windows by their title bars, hover over icons to 
 We've spent months ensuring the retro experience doesn't break on modern hardware. Our **Responsive Engine** ensures that whether you're on a 4K monitor or a smartphone, the CDE layout remains proportional and usable.
 
 - **Interaction Parity**: Double-tap to open, long-press for context menus, and tap-to-focus for the terminal virtual keyboard.
-- **Zero-Overflow**: Strict window clamping ensures no horizontal scroll, ever.
 
-### GNU Emacs
+### XEmacs
 
 A core pillar of the Debian-CDE experience. Much more than a text editor, it's a faithful recreation of the classic environment:
 
 - **Interactive Minibuffer**: No pop-ups for system operations. All commands (`M-x`), file visits (`C-x C-f`), and saves (`C-x C-w`) happen natively in the interactive lower minibuffer.
 - **Classic Keybindings**: Support for `C-x`, `C-g` (abort), `C-k` (kill line), `M-w`/`C-y` (copy/paste), and many more.
-- **Visual Fidelity**: Accurate mode-line with line/column counters, file status indicators, and the iconic GNU Emacs splash screen.
+- **Visual Fidelity**: Accurate mode-line with line/column counters, file status indicators, and the iconic XEmacs splash screen.
 - **Scratch Buffer**: Starts with a fully functional `*scratch*` buffer for Lisp-style (or plain text) note-taking.
 
 ---
@@ -53,7 +50,7 @@ A core pillar of the Debian-CDE experience. Much more than a text editor, it's a
 
 | 🖥️ The Component    | 🌟 The Feeling                                                               |
 | :------------------ | :--------------------------------------------------------------------------- |
-| **Emacs Editor**    | A pixelated splash screen and professional coding buffer that feels "real".  |
+| **XEmacs Editor**    | A pixelated splash screen and professional coding buffer that feels "real".  |
 | **Terminal Lab**    | Watch commands type themselves out in a mesmerizing 41-lesson tutorial loop. |
 | **File Manager**    | Real context menus, renaming, and folder navigation via the RAM-disk VFS.    |
 | **Style Manager**   | 76+ authentic Motif palettes and dithered XPM-style backgrounds.             |
@@ -82,14 +79,6 @@ A core pillar of the Debian-CDE experience. Much more than a text editor, it's a
 
 ---
 
-## 🚀 Step Inside
-
-You don't need to install anything. No clones, no builds, just a window to the past.
-
-Just Visit **[debian.com.mx](https://debian.com.mx)**
-
----
-
 ## 📲 PWA: Install it like a real desktop
 
 This CDE recreation is also a **Progressive Web App**:
@@ -103,6 +92,14 @@ Under the hood:
 - A Service Worker at `/sw.js` precaches the main shell (`/`, core CSS and icons) and uses:
   - **Network-first** strategy for navigation requests, falling back to cache if you're offline.
   - **Cache-first** strategy for static assets under `/css`, `/icons`, `/backdrops` and `/palettes`.
+
+---
+
+## 🚀 Step Inside
+
+You don't need to install anything. No clones, no builds, just a window to the past.
+
+Just Visit **[debian.com.mx](https://debian.com.mx)**
 
 ---
 
