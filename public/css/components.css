@@ -314,15 +314,19 @@
 #terminalBtn {
   grid-column: 1;
 }
+
 #fileManagerBtn {
   grid-column: 2;
 }
+
 #browserBtn {
   grid-column: 3;
 }
+
 #styleManagerBtn {
   grid-column: 4;
 }
+
 #utilitiesBtn {
   grid-column: 5;
 }
@@ -417,7 +421,7 @@
 }
 
 /* Remove specific toggle rule as JS handles it, but keep for fallback */
-.open + .dropdown-menu {
+.open+.dropdown-menu {
   display: block;
 }
 
@@ -1124,6 +1128,7 @@
 
 /* Ajustes responsivos */
 @media (max-width: 480px) {
+
   #cde-modal-global,
   .cde-retro-modal.cde-modal-global {
     width: 95vw;
@@ -1509,15 +1514,18 @@
   flex: 0 0 auto;
   color: var(--text-color);
 }
+
 .cde-category-icon-btn:hover {
   background: var(--button-active);
 }
+
 .cde-category-icon-btn:active {
   border-top-color: var(--border-dark);
   border-left-color: var(--border-dark);
   border-right-color: var(--border-light);
   border-bottom-color: var(--border-light);
 }
+
 .cde-category-icon-btn img {
   width: 32px;
   height: 32px;
@@ -1529,6 +1537,7 @@
   height: 60px;
   margin-bottom: 4px;
 }
+
 .cde-menubar .cde-menu-item:hover {
   background: var(--titlebar-color);
   color: var(--titlebar-text-color);
@@ -1970,7 +1979,7 @@
   flex: 1;
 }
 
-#styleManagerMouse .mouse-control-column > span {
+#styleManagerMouse .mouse-control-column>span {
   font-weight: bold;
   font-size: 11px;
   display: block;
@@ -2083,7 +2092,7 @@
 }
 
 /* Mostrar cuando el botón está abierto */
-#utilitiesBtn.open + #utilitiesDropdown {
+#utilitiesBtn.open+#utilitiesDropdown {
   display: block;
 }
 
@@ -2150,12 +2159,14 @@
 /* ----- Desktop Icons System ----- */
 #desktop-icons-container {
   position: absolute;
-  top: 60px; /* Below TopBar (31px) */
+  top: 60px;
+  /* Below TopBar (31px) */
   left: 0;
   width: 100%;
   height: calc(100% - 130px);
   pointer-events: auto;
-  z-index: 50; /* Above backdrop, but below windows (10000) */
+  z-index: 50;
+  /* Above backdrop, but below windows (10000) */
   padding: 20px 10px 10px 10px;
 }
 
@@ -2230,9 +2241,11 @@
 .markdown-body h1 {
   font-size: 2em;
 }
+
 .markdown-body h2 {
   font-size: 1.5em;
 }
+
 .markdown-body h3 {
   font-size: 1.25em;
 }
@@ -2373,9 +2386,11 @@
 .u-margin-bottom-sm {
   margin-bottom: 8px;
 }
+
 .u-margin-bottom-md {
   margin-bottom: 16px;
 }
+
 .u-text-center {
   text-align: center;
 }
@@ -3314,7 +3329,8 @@
   line-height: 1.5;
   white-space: pre;
   tab-size: 4;
-  caret-shape: block; /* For browsers that support it */
+  caret-shape: block;
+  /* For browsers that support it */
 }
 
 #emacs-textarea:focus {
@@ -3366,7 +3382,8 @@
 }
 
 #emacs-minibuffer-content {
-  display: none; /* Hidden by default, shown during prompt */
+  display: none;
+  /* Hidden by default, shown during prompt */
   flex: 1;
   align-items: center;
 }
@@ -3527,4 +3544,738 @@
   image-rendering: pixelated;
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
+}
+
+/* ===========================================================================
+   NETSCAPE NAVIGATOR 1.x — Replica fiel de la interfaz clásica de 1994
+   =========================================================================== */
+
+/* ── Window shell ──────────────────────────────────────────────────────────── */
+#netscape {
+  flex-direction: column;
+  background: #c0c0c0;
+  min-width: 600px;
+  min-height: 400px;
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  font-size: 12px;
+  -webkit-font-smoothing: none;
+  font-smooth: never;
+}
+
+/* ── Menu Bar ──────────────────────────────────────────────────────────────── */
+.ns-menubar {
+  display: flex;
+  flex-shrink: 0;
+  background: #c0c0c0;
+  border-bottom: 1px solid #808080;
+  padding: 1px 2px;
+  font-size: 12px;
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  position: relative;
+  z-index: 100;
+}
+
+.ns-menu {
+  position: relative;
+}
+
+.ns-menu-label {
+  padding: 2px 8px;
+  cursor: default;
+  display: block;
+  color: #000;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.ns-menu-label:hover,
+.ns-menu:focus-within .ns-menu-label {
+  background: #000080;
+  color: #fff;
+}
+
+.ns-menu:hover .ns-dropdown {
+  display: block;
+}
+
+.ns-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 180px;
+  background: #c0c0c0;
+  border: 2px solid;
+  border-top-color: #ffffff;
+  border-left-color: #ffffff;
+  border-right-color: #404040;
+  border-bottom-color: #404040;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  z-index: 20000;
+  padding: 2px 0;
+}
+
+.ns-item {
+  padding: 3px 20px 3px 16px;
+  cursor: default;
+  white-space: nowrap;
+  color: #000;
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.ns-item:hover {
+  background: #000080;
+  color: #fff;
+}
+
+.ns-item.ns-disabled {
+  color: #808080;
+  pointer-events: none;
+}
+
+.ns-accel {
+  color: #606060;
+  font-size: 11px;
+  margin-left: auto;
+}
+
+.ns-item:hover .ns-accel {
+  color: #b0b0ff;
+}
+
+.ns-separator {
+  height: 1px;
+  background: #808080;
+  margin: 3px 4px;
+  box-shadow: 0 1px 0 #fff;
+}
+
+/* ── Toolbar ───────────────────────────────────────────────────────────────── */
+.ns-toolbar {
+  display: flex;
+  flex-shrink: 0;
+  align-items: stretch;
+  background: #c0c0c0;
+  border-bottom: 2px solid;
+  border-bottom-color: #808080;
+  border-top: 1px solid #fff;
+  padding: 3px 3px 3px 3px;
+  gap: 0;
+  user-select: none;
+}
+
+.ns-toolbar-inner {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 2px;
+}
+
+.ns-tool-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: 52px;
+  height: 52px;
+  background: #c0c0c0;
+  border: 2px solid;
+  border-top-color: #ffffff;
+  border-left-color: #ffffff;
+  border-right-color: #404040;
+  border-bottom-color: #404040;
+  cursor: pointer;
+  font-size: 10px;
+  font-family: 'Helvetica', Arial, sans-serif;
+  color: #000;
+  padding: 3px;
+  flex-shrink: 0;
+}
+
+.ns-tool-btn:active {
+  border-top-color: #404040;
+  border-left-color: #404040;
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+}
+
+.ns-tool-btn:disabled {
+  color: #808080;
+  opacity: 0.5;
+}
+
+.ns-tool-btn span {
+  font-size: 10px;
+  text-align: center;
+  line-height: 1;
+}
+
+/* ── Toolbar icon drawings (pure CSS icons) ────────────────────────────────── */
+.ns-btn-icon {
+  width: 28px;
+  height: 28px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Real image icons (replace CSS-drawn icons) */
+.ns-btn-img,
+.ns-tool-btn img {
+  width: 30px;
+  height: 30px;
+  max-width: 30px;
+  max-height: 30px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  /* Retro look */
+  image-rendering: crisp-edges;
+  flex-shrink: 0;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Back arrow */
+.ns-icon-back::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  border-right: 18px solid #1a1a7a;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+}
+
+.ns-icon-back::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 40%;
+  width: 14px;
+  height: 5px;
+  background: #1a1a7a;
+}
+
+/* Forward arrow */
+.ns-icon-forward::before {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  border-left: 18px solid #1a1a7a;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+}
+
+.ns-icon-forward::after {
+  content: '';
+  position: absolute;
+  right: 12px;
+  top: 40%;
+  width: 14px;
+  height: 5px;
+  background: #1a1a7a;
+}
+
+/* Home — now uses /icons/gohome.png via .ns-btn-img */
+
+/* Reload */
+.ns-icon-reload {
+  overflow: visible;
+}
+
+.ns-icon-reload::before {
+  content: '↻';
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  /* Adjust for baseline */
+  transform: translate(-50%, -50%);
+  font-size: 28px;
+  color: #1a1a7a;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* Images */
+.ns-icon-images::before {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 22px;
+  height: 16px;
+  background: linear-gradient(135deg, #87ceeb 0%, #4169e1 50%, #228b22 100%);
+  border: 1px solid #404040;
+}
+
+.ns-icon-images::after {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 6px;
+  width: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 7px solid #ffd700;
+}
+
+/* Open — now uses /icons/filemanager.png via .ns-btn-img */
+
+/* Print — now uses /icons/printer.png via .ns-btn-img */
+
+/* Find — now uses /icons/org.xfce.catfish.png via .ns-btn-img */
+
+/* Stop */
+.ns-icon-stop::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  background: #cc0000;
+  border-radius: 50%;
+  border: 2px solid #990000;
+}
+
+/* ── Animated N logo ───────────────────────────────────────────────────────── */
+.ns-n-logo {
+  width: 54px;
+  height: 54px;
+  background: #00008b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 2px solid;
+  border-top-color: #404040;
+  border-left-color: #404040;
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.ns-logo-img {
+  width: 100%;
+  height: 100%;
+  max-width: 50px;
+  max-height: 50px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  z-index: 1;
+  display: block;
+}
+
+.ns-n-logo.ns-loading .ns-logo-img {
+  filter: brightness(1.2) contrast(1.1);
+}
+
+.ns-n-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Stars that animate when loading */
+.ns-n-star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #fff;
+  border-radius: 50%;
+  animation: ns-star-fall 0.8s linear forwards;
+}
+
+@keyframes ns-star-fall {
+  0% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1.5);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(60px) scale(0.5);
+  }
+}
+
+.ns-n-logo.ns-loading .ns-logo-img {
+  animation: ns-logo-pulse 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes ns-logo-pulse {
+  from {
+    filter: brightness(1);
+  }
+
+  to {
+    filter: brightness(1.3) drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+  }
+}
+
+/* Pulse animation for the real logo image handled above */
+
+/* ── Location Bar ──────────────────────────────────────────────────────────── */
+.ns-location-bar {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  background: #c0c0c0;
+  border-bottom: 1px solid #808080;
+  padding: 3px 6px;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.ns-location-label {
+  font-weight: bold;
+  white-space: nowrap;
+  color: #000;
+  font-size: 12px;
+}
+
+.ns-url-input {
+  flex: 1;
+  height: 20px;
+  background: #fff;
+  border: 2px solid;
+  border-top-color: #808080;
+  border-left-color: #808080;
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+  font-family: 'Helvetica', Arial, sans-serif;
+  font-size: 12px;
+  padding: 0 4px;
+  color: #000;
+  outline: none;
+}
+
+.ns-url-input:focus {
+  border-top-color: #404040;
+  border-left-color: #404040;
+}
+
+/* ── Directory Button Bar ──────────────────────────────────────────────────── */
+.ns-dir-bar {
+  display: flex;
+  flex-shrink: 0;
+  background: #c0c0c0;
+  border-bottom: 2px solid #808080;
+  padding: 3px 4px;
+  gap: 3px;
+  flex-wrap: wrap;
+}
+
+.ns-dir-btn {
+  padding: 2px 10px;
+  background: #c0c0c0;
+  border: 2px solid;
+  border-top-color: #ffffff;
+  border-left-color: #ffffff;
+  border-right-color: #404040;
+  border-bottom-color: #404040;
+  font-family: 'Helvetica', Arial, sans-serif;
+  font-size: 11px;
+  cursor: pointer;
+  color: #000;
+  white-space: nowrap;
+}
+
+.ns-dir-btn:hover {
+  background: #d4d4d4;
+}
+
+.ns-dir-btn:active,
+.ns-dir-btn.active {
+  border-top-color: #404040;
+  border-left-color: #404040;
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+  background: #b0b0b0;
+}
+
+/* ── Content Wrapper ───────────────────────────────────────────────────────── */
+.ns-content-wrapper {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  background: #c0c0c0;
+  min-height: 0;
+}
+
+.ns-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #ffffff;
+  padding: 12px 16px;
+  font-family: 'Times New Roman', Times, Georgia, serif;
+  font-size: 14px;
+  color: #000;
+  line-height: 1.5;
+  min-height: 0;
+}
+
+/* Scrollbar retro in content */
+.ns-content::-webkit-scrollbar {
+  width: 16px;
+}
+
+.ns-content::-webkit-scrollbar-track {
+  background: #c0c0c0;
+  border: 1px solid #808080;
+}
+
+.ns-content::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border: 2px solid;
+  border-top-color: #ffffff;
+  border-left-color: #ffffff;
+  border-right-color: #404040;
+  border-bottom-color: #404040;
+}
+
+/* ── Page content styles ───────────────────────────────────────────────────── */
+.ns-page {
+  max-width: 100%;
+}
+
+.ns-page h1 {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 22px;
+  font-weight: bold;
+  color: #000;
+  margin: 0 0 12px 0;
+  border-bottom: 1px solid #000;
+  padding-bottom: 4px;
+}
+
+.ns-page h2 {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 16px;
+  font-weight: bold;
+  color: #000;
+  margin: 16px 0 6px 0;
+}
+
+.ns-page p {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+}
+
+.ns-page hr {
+  border: none;
+  border-top: 1px solid #000;
+  margin: 12px 0;
+}
+
+.ns-banner {
+  width: 100%;
+  max-width: 650px;
+  height: auto;
+  display: block;
+  margin: 0 0 12px 0;
+  image-rendering: auto;
+}
+
+.ns-link {
+  color: #0000ee;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.ns-link:visited {
+  color: #551a8b;
+}
+
+.ns-link:hover {
+  color: #0000cc;
+}
+
+.ns-links {
+  margin: 4px 0 10px 0;
+  padding-left: 24px;
+}
+
+.ns-links li {
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+/* About page */
+.ns-about-page {
+  text-align: center;
+  padding: 20px;
+}
+
+.ns-about-logo {
+  margin-bottom: 16px;
+}
+
+.ns-about-n {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 72px;
+  font-weight: bold;
+  color: #00008b;
+  line-height: 1;
+  display: inline-block;
+  background: linear-gradient(to bottom, #0000cd, #00008b);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.ns-about-name {
+  font-family: 'Helvetica', Arial, sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  color: #00008b;
+  letter-spacing: 2px;
+  margin-top: 4px;
+}
+
+.ns-about-version {
+  font-size: 13px;
+  color: #555;
+  margin-top: 4px;
+}
+
+/* Welcome header */
+.ns-welcome-header {
+  background: #00008b;
+  color: #fff;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+}
+
+.ns-welcome-logo {
+  font-family: 'Helvetica', Arial, sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 4px;
+  color: #fff;
+}
+
+/* ── Custom scrollbar (decorative) ────────────────────────────────────────── */
+.ns-scrollbar {
+  width: 16px;
+  flex-shrink: 0;
+  background: #c0c0c0;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #808080;
+}
+
+.ns-scroll-up,
+.ns-scroll-down {
+  width: 16px;
+  height: 16px;
+  background: #c0c0c0;
+  border: 2px solid;
+  border-top-color: #ffffff;
+  border-left-color: #ffffff;
+  border-right-color: #404040;
+  border-bottom-color: #404040;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 9px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.ns-scroll-up:active,
+.ns-scroll-down:active {
+  border-top-color: #404040;
+  border-left-color: #404040;
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+}
+
+.ns-scroll-track {
+  flex: 1;
+  background: #a0a0a0;
+  position: relative;
+  overflow: hidden;
+}
+
+.ns-scroll-thumb {
+  position: absolute;
+  left: 1px;
+  top: 0;
+  width: 14px;
+  height: 30px;
+  background: #c0c0c0;
+  border: 2px solid;
+  border-top-color: #ffffff;
+  border-left-color: #ffffff;
+  border-right-color: #404040;
+  border-bottom-color: #404040;
+  transition: top 0.1s linear;
+}
+
+/* ── Status Bar ────────────────────────────────────────────────────────────── */
+.ns-statusbar {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  background: #c0c0c0;
+  border-top: 1px solid #808080;
+  height: 22px;
+  padding: 0 4px;
+  gap: 4px;
+  font-size: 11px;
+  font-family: 'Helvetica', Arial, sans-serif;
+}
+
+.ns-status-security {
+  display: flex;
+  align-items: center;
+  border-right: 1px solid #808080;
+  padding-right: 4px;
+  height: 100%;
+}
+
+.ns-lock {
+  font-size: 14px;
+  line-height: 1;
+  cursor: help;
+  user-select: none;
+}
+
+.ns-status-text {
+  flex: 1;
+  color: #000;
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 4px;
+}
+
+.ns-status-progress {
+  width: 80px;
+  height: 12px;
+  background: #fff;
+  border: 1px solid #808080;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.ns-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: #000080;
+  transition: width 0.2s ease;
 }

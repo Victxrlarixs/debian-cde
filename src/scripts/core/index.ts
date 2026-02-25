@@ -9,6 +9,7 @@ import '../features/emacs';
 import '../features/lab';
 import '../features/appmanager';
 import '../features/timemanager';
+import '../features/netscape';
 
 if (typeof window !== 'undefined') {
   if ('serviceWorker' in navigator) {

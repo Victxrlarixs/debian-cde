@@ -1,0 +1,261 @@
+---
+// src/components/features/NetscapeNavigator.astro
+import WindowControls from '../common/WindowControls.astro';
+---
+
+<div class="window" id="netscape" style="display:none; width:780px; height:580px;">
+  <div class="titlebar" id="netscapeTitlebar" onmousedown="window.drag(event, 'netscape')">
+    <span class="titlebar-text" id="netscape-title">What's New! - Netscape</span>
+    <WindowControls windowId="netscape" closeFunction="window.Netscape.close" />
+  </div>
+
+  <!-- ── Netscape Menu Bar ─────────────────────────────────────────────── -->
+  <div class="ns-menubar">
+    <div class="ns-menu">
+      <span class="ns-menu-label">File</span>
+      <div class="ns-dropdown">
+        <div class="ns-item" onclick="window.Netscape.newWindow()">
+          New Window <span class="ns-accel">Ctrl+N</span>
+        </div>
+        <div class="ns-item" onclick="window.Netscape.openLocation()">
+          Open Location… <span class="ns-accel">Ctrl+L</span>
+        </div>
+        <div class="ns-item" onclick="window.Netscape.openFile()">
+          Open File… <span class="ns-accel">Ctrl+O</span>
+        </div>
+        <div class="ns-separator"></div>
+        <div class="ns-item" onclick="window.Netscape.close()">
+          Close <span class="ns-accel">Ctrl+W</span>
+        </div>
+        <div class="ns-separator"></div>
+        <div class="ns-item" onclick="window.Netscape.savePage()">
+          Save as… <span class="ns-accel">Ctrl+S</span>
+        </div>
+        <div class="ns-separator"></div>
+        <div class="ns-item" onclick="window.Netscape.printPage()">
+          Print… <span class="ns-accel">Ctrl+P</span>
+        </div>
+        <div class="ns-separator"></div>
+        <div class="ns-item" onclick="window.Netscape.close()">
+          Quit <span class="ns-accel">Ctrl+Q</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ns-menu">
+      <span class="ns-menu-label">Edit</span>
+      <div class="ns-dropdown">
+        <div class="ns-item ns-disabled">Undo <span class="ns-accel">Ctrl+Z</span></div>
+        <div class="ns-separator"></div>
+        <div class="ns-item ns-disabled">Cut <span class="ns-accel">Ctrl+X</span></div>
+        <div class="ns-item ns-disabled">Copy <span class="ns-accel">Ctrl+C</span></div>
+        <div class="ns-item ns-disabled">Paste <span class="ns-accel">Ctrl+V</span></div>
+        <div class="ns-separator"></div>
+        <div class="ns-item" onclick="window.Netscape.findInPage()">
+          Find… <span class="ns-accel">Ctrl+F</span>
+        </div>
+        <div class="ns-item" onclick="window.Netscape.findInPage()">
+          Find Again <span class="ns-accel">Ctrl+G</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ns-menu">
+      <span class="ns-menu-label">View</span>
+      <div class="ns-dropdown">
+        <div class="ns-item" onclick="window.Netscape.reload()">
+          Reload <span class="ns-accel">Ctrl+R</span>
+        </div>
+        <div class="ns-item" onclick="window.Netscape.loadImages()">
+          Load Images <span class="ns-accel">Ctrl+I</span>
+        </div>
+        <div class="ns-separator"></div>
+        <div class="ns-item" onclick="window.Netscape.viewSource()">Document Source</div>
+        <div class="ns-item">Document Info</div>
+      </div>
+    </div>
+
+    <div class="ns-menu">
+      <span class="ns-menu-label">Go</span>
+      <div class="ns-dropdown">
+        <div class="ns-item" onclick="window.Netscape.goBack()">
+          Back <span class="ns-accel">Alt+←</span>
+        </div>
+        <div class="ns-item" onclick="window.Netscape.goForward()">
+          Forward <span class="ns-accel">Alt+→</span>
+        </div>
+        <div class="ns-item" onclick="window.Netscape.goHome()">Home</div>
+        <div class="ns-separator"></div>
+        <div class="ns-item ns-disabled" id="ns-history-placeholder">History list is empty</div>
+      </div>
+    </div>
+
+    <div class="ns-menu">
+      <span class="ns-menu-label">Bookmarks</span>
+      <div class="ns-dropdown">
+        <div class="ns-item" onclick="window.Netscape.addBookmark()">
+          Add Bookmark <span class="ns-accel">Ctrl+D</span>
+        </div>
+        <div class="ns-separator"></div>
+        <div class="ns-item ns-disabled" id="ns-bookmarks-placeholder">No bookmarks yet</div>
+      </div>
+    </div>
+
+    <div class="ns-menu">
+      <span class="ns-menu-label">Options</span>
+      <div class="ns-dropdown">
+        <div class="ns-item" onclick="window.Netscape.toggleToolbar()">Show Toolbar</div>
+        <div class="ns-item" onclick="window.Netscape.toggleLocation()">Show Location</div>
+        <div class="ns-item" onclick="window.Netscape.toggleDirectory()">
+          Show Directory Buttons
+        </div>
+        <div class="ns-separator"></div>
+        <div class="ns-item">Save Options</div>
+      </div>
+    </div>
+
+    <div class="ns-menu">
+      <span class="ns-menu-label">Directory</span>
+      <div class="ns-dropdown">
+        <div class="ns-item" onclick="window.Netscape.navigate('welcome')">Netscape's Home</div>
+        <div class="ns-item" onclick="window.Netscape.navigate('whats-new')">What's New!</div>
+        <div class="ns-item" onclick="window.Netscape.navigate('whats-cool')">What's Cool!</div>
+        <div class="ns-separator"></div>
+        <div class="ns-item" onclick="window.Netscape.navigate('net-search')">Net Search</div>
+        <div class="ns-item" onclick="window.Netscape.navigate('net-directory')">Net Directory</div>
+        <div class="ns-item" onclick="window.Netscape.navigate('net-news')">Newsgroups</div>
+      </div>
+    </div>
+
+    <div class="ns-menu">
+      <span class="ns-menu-label">Help</span>
+      <div class="ns-dropdown">
+        <div class="ns-item" onclick="window.Netscape.navigate('about')">About Netscape…</div>
+        <div class="ns-separator"></div>
+        <div class="ns-item">Handbook</div>
+        <div class="ns-item">Release Notes</div>
+        <div class="ns-item">Frequently Asked Questions</div>
+        <div class="ns-separator"></div>
+        <div class="ns-item">How to Give Feedback</div>
+        <div class="ns-item">How to Get Support</div>
+        <div class="ns-item">How to Create Web Services</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Toolbar (Back, Forward, Home, Reload, Images, Open, Print, Find, Stop, N logo) ── -->
+  <div class="ns-toolbar" id="nsToolbar">
+    <div class="ns-toolbar-inner">
+      <button class="ns-tool-btn" id="ns-btn-back" onclick="window.Netscape.goBack()" title="Back">
+        <img src="/icons/previous.png" class="ns-btn-img" alt="Back" />
+        <span>Back</span>
+      </button>
+      <button
+        class="ns-tool-btn"
+        id="ns-btn-forward"
+        onclick="window.Netscape.goForward()"
+        title="Forward"
+      >
+        <img src="/icons/right.png" class="ns-btn-img" alt="Forward" />
+        <span>Forward</span>
+      </button>
+      <button class="ns-tool-btn" onclick="window.Netscape.goHome()" title="Home">
+        <img src="/icons/gohome.png" class="ns-btn-img" alt="Home" />
+        <span>Home</span>
+      </button>
+      <button class="ns-tool-btn" onclick="window.Netscape.reload()" title="Reload">
+        <div class="ns-btn-icon ns-icon-reload"></div>
+        <span>Reload</span>
+      </button>
+      <button class="ns-tool-btn" onclick="window.Netscape.loadImages()" title="Images">
+        <img src="/icons/img.png" class="ns-btn-img" alt="Images" />
+        <span>Images</span>
+      </button>
+      <button class="ns-tool-btn" onclick="window.Netscape.openLocation()" title="Open">
+        <img src="/icons/filemanager.png" class="ns-btn-img" alt="Open" />
+        <span>Open</span>
+      </button>
+      <button class="ns-tool-btn" onclick="window.Netscape.printPage()" title="Print">
+        <img src="/icons/printer.png" class="ns-btn-img" alt="Print" />
+        <span>Print</span>
+      </button>
+      <button class="ns-tool-btn" onclick="window.Netscape.findInPage()" title="Find">
+        <img src="/icons/org.xfce.catfish.png" class="ns-btn-img" alt="Find" />
+        <span>Find</span>
+      </button>
+      <button class="ns-tool-btn" id="ns-btn-stop" onclick="window.Netscape.stop()" title="Stop">
+        <div class="ns-btn-icon ns-icon-stop"></div>
+        <span>Stop</span>
+      </button>
+    </div>
+    <!-- Netscape N animated logo -->
+    <div
+      class="ns-n-logo"
+      id="nsNLogo"
+      onclick="window.Netscape.goHome()"
+      title="Netscape Navigator"
+    >
+      <img src="/icons/netscape_classic.png" alt="Netscape" class="ns-logo-img" />
+      <div class="ns-n-stars" id="nsNStars"></div>
+    </div>
+  </div>
+
+  <!-- ── Location Bar ───────────────────────────────────────────────────── -->
+  <div class="ns-location-bar" id="nsLocationBar">
+    <span class="ns-location-label">Location:</span>
+    <input
+      class="ns-url-input"
+      id="nsUrlInput"
+      type="text"
+      value="netscape:whats-new"
+      spellcheck="false"
+      onkeydown="window.Netscape.handleUrlKey(event)"
+    />
+  </div>
+
+  <!-- ── Directory Button Bar ───────────────────────────────────────────── -->
+  <div class="ns-dir-bar" id="nsDirBar">
+    <button class="ns-dir-btn" onclick="window.Netscape.navigate('welcome')">Welcome</button>
+    <button class="ns-dir-btn active" onclick="window.Netscape.navigate('whats-new')"
+      >What's New?</button
+    >
+    <button class="ns-dir-btn" onclick="window.Netscape.navigate('whats-cool')">What's Cool?</button
+    >
+    <button class="ns-dir-btn" onclick="window.Netscape.navigate('questions')">Questions</button>
+    <button class="ns-dir-btn" onclick="window.Netscape.navigate('net-search')">Net Search</button>
+    <button class="ns-dir-btn" onclick="window.Netscape.navigate('net-directory')"
+      >Net Directory</button
+    >
+  </div>
+
+  <!-- ── Content Area ───────────────────────────────────────────────────── -->
+  <div class="ns-content-wrapper">
+    <div class="ns-content" id="nsContent">
+      <!-- Pages are injected by JS -->
+    </div>
+
+    <!-- Scrollbar (decorative, native scroll on ns-content) -->
+    <div class="ns-scrollbar">
+      <div class="ns-scroll-up" onclick="document.getElementById('nsContent').scrollBy(0,-40)">
+        ▲
+      </div>
+      <div class="ns-scroll-track">
+        <div class="ns-scroll-thumb" id="nsScrollThumb"></div>
+      </div>
+      <div class="ns-scroll-down" onclick="document.getElementById('nsContent').scrollBy(0,40)">
+        ▼
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Status Bar ─────────────────────────────────────────────────────── -->
+  <div class="ns-statusbar">
+    <div class="ns-status-security">
+      <div class="ns-lock" id="nsLock" title="Unsecure connection">🔓</div>
+    </div>
+    <div class="ns-status-text" id="nsStatusText">Document: Done</div>
+    <div class="ns-status-progress">
+      <div class="ns-progress-bar" id="nsProgressBar"></div>
+    </div>
+  </div>
+</div>
