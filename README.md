@@ -82,6 +82,22 @@ You don't need to install anything. No clones, no builds, just a window to the p
 
 ---
 
+## 📲 PWA: Install it like a real desktop
+
+This CDE recreation is also a **Progressive Web App**:
+
+- **Installable**: modern browsers will offer an “Install app” / “Add to Home screen” prompt when you visit `https://debian.com.mx`.
+- **Offline-friendly**: the shell of the desktop (HTML, CSS, icons and backdrops) is cached via a Service Worker so the experience can load even with a flaky or missing connection.
+
+Under the hood:
+
+- A web manifest at `/manifest.webmanifest` defines the app name, theme color and icons.
+- A Service Worker at `/sw.js` precaches the main shell (`/`, core CSS and icons) and uses:
+  - **Network-first** strategy for navigation requests, falling back to cache if you're offline.
+  - **Cache-first** strategy for static assets under `/css`, `/icons`, `/backdrops` and `/palettes`.
+
+---
+
 ## 🤝 Contributing
 
 We love nostalgia and we love contributors! If you'd like to help improve this portal, check out our **[CONTRIBUTING.md](CONTRIBUTING.md)**
