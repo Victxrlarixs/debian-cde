@@ -532,6 +532,18 @@ const WindowManager = (() => {
       titlebar.setAttribute('data-draggable', 'true');
       win.setAttribute('data-cde-registered', 'true');
 
+      // Pop-in animation on registration if visible
+      if (window.getComputedStyle(win).display !== 'none') {
+        win.classList.add('window-opening');
+        win.addEventListener(
+          'animationend',
+          () => {
+            win.classList.remove('window-opening');
+          },
+          { once: true }
+        );
+      }
+
       // Assign to current workspace if not specified
       if (!win.getAttribute('data-workspace')) {
         win.setAttribute('data-workspace', currentWorkspace);
@@ -633,6 +645,24 @@ const WindowManager = (() => {
     logger.log('[WindowManager] MutationObserver active for dynamic windows.');
   }
 
+  function showWindow(id: string): void {
+    const win = document.getElementById(id);
+    if (!win) return;
+
+    win.style.display = 'flex';
+    win.classList.add('window-opening');
+    focusWindow(id);
+    AudioManager.windowOpen();
+
+    win.addEventListener(
+      'animationend',
+      () => {
+        win.classList.remove('window-opening');
+      },
+      { once: true }
+    );
+  }
+
   function init(): void {
     initDynamicScanning();
     initGlobalInteraction();
@@ -641,7 +671,7 @@ const WindowManager = (() => {
     logger.log('[WindowManager] Initialized');
   }
 
-  return { init, drag, focusWindow, registerWindow, centerWindow, switchWorkspace };
+  return { init, drag, focusWindow, registerWindow, centerWindow, switchWorkspace, showWindow };
 })();
 
 function minimizeWindow(id: string): void {
@@ -657,10 +687,21 @@ function minimizeWindow(id: string): void {
       height: win.style.height,
       maximized: win.classList.contains('maximized'),
     };
-  }
 
-  win.style.display = 'none';
-  AudioManager.windowClose();
+    // Add closing animation
+    win.classList.add('window-closing');
+    AudioManager.windowClose();
+
+    // Wait for animation to finish before hiding
+    win.addEventListener(
+      'animationend',
+      () => {
+        win.style.display = 'none';
+        win.classList.remove('window-closing');
+      },
+      { once: true }
+    );
+  }
 }
 
 function maximizeWindow(id: string): void {

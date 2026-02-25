@@ -80,9 +80,9 @@ class DebianRealBoot {
         const timestamp = totalTime.toFixed(6).padStart(12, ' ');
         const text =
           phase.name === 'kernel' ||
-          phase.name === 'cpu' ||
-          phase.name === 'fs' ||
-          phase.name === 'memory'
+            phase.name === 'cpu' ||
+            phase.name === 'fs' ||
+            phase.name === 'memory'
             ? `[ ${timestamp} ] ${msg.text}`
             : msg.text;
 
@@ -265,7 +265,7 @@ function initDesktop(): void {
 
     // Play startup sound
     if (window.AudioManager) {
-      window.AudioManager.success();
+      window.AudioManager.playStartupChime();
     }
 
     // WindowManager owns drag for ALL windows (StyleManager, Terminal, FileManager, Emacs).

@@ -741,21 +741,19 @@ function initFileManager(): void {
 window.openFileManager = () => {
   const win = document.getElementById('fm');
   if (win) {
-    win.style.display = 'flex';
+    WindowManager.showWindow('fm');
     win.style.zIndex = String(++zIndex);
     WindowManager.centerWindow(win);
-    if (window.AudioManager) window.AudioManager.windowOpen();
     initFileManager();
     openPath(currentPath);
-    if (window.focusWindow) window.focusWindow('fm');
   }
 };
 
 window.closeFileManager = () => {
   const win = document.getElementById('fm');
   if (win) {
-    win.style.display = 'none';
-    if (window.AudioManager) window.AudioManager.windowClose();
+    if (window.minimizeWindow) window.minimizeWindow('fm');
+    else win.style.display = 'none';
   }
 };
 

@@ -220,27 +220,24 @@ class NetscapeNavigator {
   // ── Window controls ─────────────────────────────────────────────────────
 
   public open(): void {
+    WindowManager.showWindow(this.id);
+
     const win = document.getElementById(this.id);
-    if (!win) return;
-
-    win.style.display = 'flex';
-    win.style.flexDirection = 'column';
-    win.style.zIndex = '10000';
-
-    requestAnimationFrame(() => {
+    if (win) {
+      win.style.flexDirection = 'column';
+      win.style.zIndex = '10000';
       WindowManager.centerWindow(win);
-      if (window.focusWindow) window.focusWindow(this.id);
-    });
-
-    if (window.AudioManager) window.AudioManager.windowOpen();
+    }
     logger.log('[Netscape] Window opened');
   }
 
   public close(): void {
-    const win = document.getElementById(this.id);
-    if (!win) return;
-    win.style.display = 'none';
-    if (window.AudioManager) window.AudioManager.windowClose();
+    if (window.minimizeWindow) window.minimizeWindow(this.id);
+    else {
+      const win = document.getElementById(this.id);
+      if (win) win.style.display = 'none';
+      if (window.AudioManager) window.AudioManager.windowClose();
+    }
     logger.log('[Netscape] Window closed');
   }
 
@@ -307,8 +304,8 @@ class NetscapeNavigator {
     if (activeBtn) activeBtn.classList.add('active');
 
     // Update nav buttons state
-    const backBtn = document.getElementById('ns-btn-back');
-    const fwdBtn = document.getElementById('ns-btn-forward');
+    const backBtn = document.getElementById('ns-btn-back') as HTMLButtonElement | null;
+    const fwdBtn = document.getElementById('ns-btn-forward') as HTMLButtonElement | null;
     if (backBtn) backBtn.disabled = this.historyIndex <= 0;
     if (fwdBtn) fwdBtn.disabled = this.historyIndex >= this.history.length - 1;
 
@@ -325,7 +322,7 @@ class NetscapeNavigator {
     if (this.isLoading) this.stopLoading();
     this.isLoading = true;
 
-    const stopBtn = document.getElementById('ns-btn-stop');
+    const stopBtn = document.getElementById('ns-btn-stop') as HTMLButtonElement | null;
     if (stopBtn) stopBtn.disabled = false;
 
     const nsLogo = document.getElementById('nsNLogo');
@@ -377,7 +374,7 @@ class NetscapeNavigator {
 
   private stopLoading(): void {
     this.isLoading = false;
-    const stopBtn = document.getElementById('ns-btn-stop');
+    const stopBtn = document.getElementById('ns-btn-stop') as HTMLButtonElement | null;
     if (stopBtn) stopBtn.disabled = true;
 
     const nsLogo = document.getElementById('nsNLogo');
@@ -594,4 +591,4 @@ if (typeof window !== 'undefined') {
   (window as any).openNetscape = () => netscape.open();
 }
 
-export {};
+export { };

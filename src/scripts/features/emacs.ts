@@ -175,7 +175,7 @@ class EmacsManager {
 
     this.message('Welcome to XEmacs');
 
-    this.win.style.display = 'flex';
+    WindowManager.showWindow('emacs');
     this.win.style.zIndex = String(++this.zIndex);
 
     // Reset size to defaults if they were messed up, but respecting viewport
@@ -201,7 +201,7 @@ class EmacsManager {
     this.updateModeLine();
     this.message(`Loaded: ${filename}`);
 
-    this.win.style.display = 'flex';
+    WindowManager.showWindow('emacs');
     this.win.style.zIndex = String(++this.zIndex);
 
     // Reset size to defaults

@@ -421,7 +421,7 @@
 }
 
 /* Remove specific toggle rule as JS handles it, but keep for fallback */
-.open + .dropdown-menu {
+.open+.dropdown-menu {
   display: block;
 }
 
@@ -529,6 +529,41 @@
   user-select: none;
   display: flex;
   flex-direction: column;
+  /* Animation preparation */
+  transition: opacity 0.2s ease-out, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.window-opening {
+  animation: window-pop-in 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.window-closing {
+  animation: window-shrink-out 0.2s ease-in forwards;
+  pointer-events: none;
+}
+
+@keyframes window-pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes window-shrink-out {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.9) translateY(10px);
+  }
 }
 
 .cde-retro-modal {
@@ -1157,6 +1192,7 @@
 
 /* Ajustes responsivos */
 @media (max-width: 480px) {
+
   #cde-modal-global,
   .cde-retro-modal.cde-modal-global {
     width: 95vw;
@@ -2007,7 +2043,7 @@
   flex: 1;
 }
 
-#styleManagerMouse .mouse-control-column > span {
+#styleManagerMouse .mouse-control-column>span {
   font-weight: bold;
   font-size: 11px;
   display: block;
@@ -2120,7 +2156,7 @@
 }
 
 /* Mostrar cuando el botón está abierto */
-#utilitiesBtn.open + #utilitiesDropdown {
+#utilitiesBtn.open+#utilitiesDropdown {
   display: block;
 }
 
