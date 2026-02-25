@@ -1,9 +1,8 @@
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v2';
 const STATIC_CACHE = `static-cache-${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [
   '/',
-  '/index.html',
   '/css/core.css',
   '/css/components.css',
   '/css/app.css',
@@ -12,7 +11,8 @@ const PRECACHE_URLS = [
   '/icons/cursor-wait.svg',
   '/icons/cursor-move.svg',
   '/icons/cursor-resize-nw.svg',
-  '/icons/fsf.svg',
+  '/icons/view-refresh.png',
+  '/icons/folder_open.png',
 ];
 
 self.addEventListener('install', (event) => {
