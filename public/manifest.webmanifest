@@ -1,0 +1,23 @@
+{
+  "name": "Debian CDE Desktop",
+  "short_name": "Debian CDE",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "description": "Retro Debian CDE Desktop UI inspirado en Unix y Linux.",
+  "lang": "es-MX",
+  "icons": [
+    {
+      "src": "/icons/Debian.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/Debian.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
