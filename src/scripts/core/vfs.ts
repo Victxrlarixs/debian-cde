@@ -165,49 +165,88 @@ export const VFS: IVFS = {
   init(): void {
     const rootPath = '/';
     const homePath = CONFIG.FS.HOME;
-    
+
     // Build a proper root structure
     const root: VFSFolder = {
       type: 'folder',
       children: {
-        'bin': { type: 'folder', children: {} },
-        'etc': { type: 'folder', children: {
-          'hostname': { type: 'file', content: 'Debian-CDE' },
-          'motd': { type: 'file', content: 'Welcome to Debian CDE Workstation' },
-          'os-release': { type: 'file', content: 'PRETTY_NAME="Debian GNU/Linux CDE Edition"\nNAME="Debian GNU/Linux"\nID=debian' },
-          'passwd': { type: 'file', content: 'root:x:0:0:root:/root:/bin/bash\nvictx:x:1000:1000:victx:/home/victxrlarixs:/bin/bash' }
-        } },
-        'usr': { type: 'folder', children: {
-          'bin': { type: 'folder', children: {} },
-          'lib': { type: 'folder', children: {} },
-          'src': { type: 'folder', children: {
-            'debian-cde': { type: 'folder', children: {
-              'src': { type: 'folder', children: {
-                'components': { type: 'folder', children: {} },
-                'scripts': { type: 'folder', children: {} },
-                'layouts': { type: 'folder', children: {} }
-              }},
-              'public': { type: 'folder', children: {
-                'icons': { type: 'folder', children: {} },
-                'css': { type: 'folder', children: {} }
-              }},
-              'package.json': { type: 'file', content: '{\n  "name": "debian-cde",\n  "version": "1.0.0",\n  "dependencies": {\n    "astro": "latest",\n    "typescript": "latest"\n  }\n}' },
-              'README.md': { type: 'file', content: '# Debian CDE\nClassic Desktop Environment for the web.' },
-              'tsconfig.json': { type: 'file', content: '{\n  "compilerOptions": { ... }\n}' }
-            }}
-          }}
-        }},
-        'var': { type: 'folder', children: {} },
-        'tmp': { type: 'folder', children: {} },
-        'home': { type: 'folder', children: {
-          'victxrlarixs': (filesystemData as any)[homePath]
-        }}
-      }
+        bin: { type: 'folder', children: {} },
+        etc: {
+          type: 'folder',
+          children: {
+            hostname: { type: 'file', content: 'Debian-CDE' },
+            motd: { type: 'file', content: 'Welcome to Debian CDE Workstation' },
+            'os-release': {
+              type: 'file',
+              content:
+                'PRETTY_NAME="Debian GNU/Linux CDE Edition"\nNAME="Debian GNU/Linux"\nID=debian',
+            },
+            passwd: {
+              type: 'file',
+              content:
+                'root:x:0:0:root:/root:/bin/bash\nvictx:x:1000:1000:victx:/home/victxrlarixs:/bin/bash',
+            },
+          },
+        },
+        usr: {
+          type: 'folder',
+          children: {
+            bin: { type: 'folder', children: {} },
+            lib: { type: 'folder', children: {} },
+            src: {
+              type: 'folder',
+              children: {
+                'debian-cde': {
+                  type: 'folder',
+                  children: {
+                    src: {
+                      type: 'folder',
+                      children: {
+                        components: { type: 'folder', children: {} },
+                        scripts: { type: 'folder', children: {} },
+                        layouts: { type: 'folder', children: {} },
+                      },
+                    },
+                    public: {
+                      type: 'folder',
+                      children: {
+                        icons: { type: 'folder', children: {} },
+                        css: { type: 'folder', children: {} },
+                      },
+                    },
+                    'package.json': {
+                      type: 'file',
+                      content:
+                        '{\n  "name": "debian-cde",\n  "version": "1.0.0",\n  "dependencies": {\n    "astro": "latest",\n    "typescript": "latest"\n  }\n}',
+                    },
+                    'README.md': {
+                      type: 'file',
+                      content: '# Debian CDE\nClassic Desktop Environment for the web.',
+                    },
+                    'tsconfig.json': {
+                      type: 'file',
+                      content: '{\n  "compilerOptions": { ... }\n}',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        var: { type: 'folder', children: {} },
+        tmp: { type: 'folder', children: {} },
+        home: {
+          type: 'folder',
+          children: {
+            victxrlarixs: (filesystemData as any)[homePath],
+          },
+        },
+      },
     };
 
     rootNode = root;
     flatten(rootPath, rootNode);
-    
+
     // Ensure Trash exists on init
     if (!fsMap[CONFIG.FS.TRASH]) {
       const parts = CONFIG.FS.TRASH.split('/').filter(Boolean);
@@ -252,22 +291,22 @@ export const VFS: IVFS = {
     const dirPath = path.endsWith('/') ? path : path + '/';
     const node = this.getNode(dirPath);
     if (node?.type === 'folder') {
-      const newFile: VFSFile = { 
-        type: 'file', 
+      const newFile: VFSFile = {
+        type: 'file',
         content: '',
         metadata: {
           size: 0,
           mtime: new Date().toISOString(),
           owner: 'victx',
-          permissions: 'rw-r--r--'
-        }
+          permissions: 'rw-r--r--',
+        },
       };
       node.children[name] = newFile;
       fsMap[dirPath + name] = newFile;
-      
+
       // Update folder mtime
       if (node.metadata) node.metadata.mtime = new Date().toISOString();
-      
+
       logger.log(`[VFS] touch: ${dirPath}${name}`);
       dispatchChange(dirPath);
     }
@@ -277,19 +316,19 @@ export const VFS: IVFS = {
     const dirPath = path.endsWith('/') ? path : path + '/';
     const node = this.getNode(dirPath);
     if (node?.type === 'folder') {
-      const newFolder: VFSFolder = { 
-        type: 'folder', 
+      const newFolder: VFSFolder = {
+        type: 'folder',
         children: {},
         metadata: {
           size: 0,
           mtime: new Date().toISOString(),
           owner: 'victx',
-          permissions: 'rwxr-xr-x'
-        }
+          permissions: 'rwxr-xr-x',
+        },
       };
       node.children[name] = newFolder;
       fsMap[dirPath + name + '/'] = newFolder;
-      
+
       // Update parent mtime
       if (node.metadata) node.metadata.mtime = new Date().toISOString();
 
@@ -347,7 +386,7 @@ export const VFS: IVFS = {
       const parentPath = '/' + parts.join('/') + (parts.length > 0 ? '/' : '');
       const parent = this.getNode(parentPath);
       if (parent?.metadata) parent.metadata.mtime = new Date().toISOString();
-      
+
       dispatchChange(parentPath);
     } else {
       logger.error(`[VFS] writeFile failed: ${path} is not a file or not found`);

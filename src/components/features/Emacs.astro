@@ -4,41 +4,66 @@ import WindowControls from '../common/WindowControls.astro';
 ---
 
 <div class="window" id="emacs" tabindex="-1">
-  <div class="titlebar emacs-titlebar" id="emacs-titlebar" onmousedown="window.drag(event, 'emacs')">
+  <div
+    class="titlebar emacs-titlebar"
+    id="emacs-titlebar"
+    onmousedown="window.drag(event, 'emacs')"
+  >
     <span class="titlebar-text" id="emacs-title">*GNU Emacs*</span>
     <WindowControls windowId="emacs" closeFunction="window.closeEmacs" />
   </div>
 
   <!-- ── Emacs Menubar ─────────────────────────────────────────────────── -->
   <div class="te-menubar emacs-menubar">
-
     <div class="te-menu">
       <span class="te-menu-label">File</span>
       <div class="te-dropdown">
-        <div class="te-item" onclick="window.Emacs.openFile()">Open File…<span class="te-accel">C-x C-f</span></div>
-        <div class="te-item" onclick="window.openFileManager && window.openFileManager()">Open Home Directory</div>
+        <div class="te-item" onclick="window.Emacs.openFile()">
+          Open File…<span class="te-accel">C-x C-f</span>
+        </div>
+        <div class="te-item" onclick="window.openFileManager && window.openFileManager()">
+          Open Home Directory
+        </div>
         <div class="te-separator"></div>
-        <div class="te-item" onclick="window.Emacs.save()">Save<span class="te-accel">C-x C-s</span></div>
-        <div class="te-item" onclick="window.Emacs.saveAs()">Save As…<span class="te-accel">C-x C-w</span></div>
+        <div class="te-item" onclick="window.Emacs.save()">
+          Save<span class="te-accel">C-x C-s</span>
+        </div>
+        <div class="te-item" onclick="window.Emacs.saveAs()">
+          Save As…<span class="te-accel">C-x C-w</span>
+        </div>
         <div class="te-separator"></div>
         <div class="te-item" onclick="window.Emacs.newFile()">New File</div>
         <div class="te-separator"></div>
-        <div class="te-item" onclick="window.closeEmacs()">Quit<span class="te-accel">C-x C-c</span></div>
+        <div class="te-item" onclick="window.closeEmacs()">
+          Quit<span class="te-accel">C-x C-c</span>
+        </div>
       </div>
     </div>
 
     <div class="te-menu">
       <span class="te-menu-label">Edit</span>
       <div class="te-dropdown">
-        <div class="te-item" onclick="window.Emacs.undo()">Undo<span class="te-accel">C-_</span></div>
+        <div class="te-item" onclick="window.Emacs.undo()">
+          Undo<span class="te-accel">C-_</span>
+        </div>
         <div class="te-separator"></div>
-        <div class="te-item" onclick="window.Emacs.cut()">Cut Region<span class="te-accel">C-w</span></div>
-        <div class="te-item" onclick="window.Emacs.copy()">Copy Region<span class="te-accel">M-w</span></div>
-        <div class="te-item" onclick="window.Emacs.paste()">Paste (Yank)<span class="te-accel">C-y</span></div>
+        <div class="te-item" onclick="window.Emacs.cut()">
+          Cut Region<span class="te-accel">C-w</span>
+        </div>
+        <div class="te-item" onclick="window.Emacs.copy()">
+          Copy Region<span class="te-accel">M-w</span>
+        </div>
+        <div class="te-item" onclick="window.Emacs.paste()">
+          Paste (Yank)<span class="te-accel">C-y</span>
+        </div>
         <div class="te-separator"></div>
-        <div class="te-item" onclick="window.Emacs.selectAll()">Select All<span class="te-accel">C-x h</span></div>
+        <div class="te-item" onclick="window.Emacs.selectAll()">
+          Select All<span class="te-accel">C-x h</span>
+        </div>
         <div class="te-separator"></div>
-        <div class="te-item" onclick="window.Emacs.findDialog()">Search…<span class="te-accel">C-s</span></div>
+        <div class="te-item" onclick="window.Emacs.findDialog()">
+          Search…<span class="te-accel">C-s</span>
+        </div>
       </div>
     </div>
 
@@ -65,7 +90,9 @@ import WindowControls from '../common/WindowControls.astro';
     <div class="te-menu">
       <span class="te-menu-label">Tools</span>
       <div class="te-dropdown">
-        <div class="te-item" onclick="window.Emacs.findDialog()">Search Files<span class="te-accel">C-f</span></div>
+        <div class="te-item" onclick="window.Emacs.findDialog()">
+          Search Files<span class="te-accel">C-f</span>
+        </div>
       </div>
     </div>
 
@@ -77,7 +104,6 @@ import WindowControls from '../common/WindowControls.astro';
         <div class="te-item te-disabled">About Emacs</div>
       </div>
     </div>
-
   </div><!-- /menubar -->
 
   <!-- ── Find Bar ──────────────────────────────────────────────────────── -->
@@ -91,14 +117,17 @@ import WindowControls from '../common/WindowControls.astro';
 
   <!-- ── Emacs Splash Screen ───────────────────────────────────────────── -->
   <div id="emacs-splash" class="emacs-splash">
-
     <div class="emacs-splash-logo">
       <img src="/icons/Emacs-logo.png" alt="GNU Emacs" />
     </div>
 
     <div class="emacs-splash-welcome">
-      Welcome to <a class="emacs-link" onclick="window.Emacs.showHelp()">GNU Emacs</a>,
-      one component of the <a class="emacs-link" href="https://www.gnu.org/gnu/linux-and-gnu.html" target="_blank">GNU/Linux</a> operating system.
+      Welcome to <a class="emacs-link" onclick="window.Emacs.showHelp()">GNU Emacs</a>, one
+      component of the <a
+        class="emacs-link"
+        href="https://www.gnu.org/gnu/linux-and-gnu.html"
+        target="_blank">GNU/Linux</a
+      > operating system.
     </div>
 
     <div class="emacs-splash-links">
@@ -108,24 +137,50 @@ import WindowControls from '../common/WindowControls.astro';
           <td>Open a file to edit in this buffer</td>
         </tr>
         <tr>
-          <td><a class="emacs-link" onclick="window.openFileManager && window.openFileManager()">Open Home Directory</a></td>
+          <td
+            ><a class="emacs-link" onclick="window.openFileManager && window.openFileManager()"
+              >Open Home Directory</a
+            ></td
+          >
           <td>Open the file manager for your home folder</td>
         </tr>
         <tr><td colspan="2">&nbsp;</td></tr>
         <tr>
-          <td><a class="emacs-link" href="https://www.gnu.org/software/emacs/tour/index.html" target="_blank">Emacs Tutorial</a></td>
+          <td
+            ><a
+              class="emacs-link"
+              href="https://www.gnu.org/software/emacs/tour/index.html"
+              target="_blank">Emacs Tutorial</a
+            ></td
+          >
           <td>Learn basic keystroke commands</td>
         </tr>
         <tr>
-          <td><a class="emacs-link" href="https://www.gnu.org/software/emacs/tour" target="_blank">Emacs Guided Tour</a></td>
+          <td
+            ><a class="emacs-link" href="https://www.gnu.org/software/emacs/tour" target="_blank"
+              >Emacs Guided Tour</a
+            ></td
+          >
           <td>Overview of Emacs features at gnu.org</td>
         </tr>
         <tr>
-          <td><a class="emacs-link" href="https://www.gnu.org/software/emacs/manual/emacs.html" target="_blank">View Emacs Manual</a></td>
+          <td
+            ><a
+              class="emacs-link"
+              href="https://www.gnu.org/software/emacs/manual/emacs.html"
+              target="_blank">View Emacs Manual</a
+            ></td
+          >
           <td>View the Emacs manual online</td>
         </tr>
         <tr>
-          <td><a class="emacs-link" href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Copying.html" target="_blank">Copying Conditions</a></td>
+          <td
+            ><a
+              class="emacs-link"
+              href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Copying.html"
+              target="_blank">Copying Conditions</a
+            ></td
+          >
           <td>Conditions for redistributing and changing Emacs</td>
         </tr>
       </table>
@@ -139,7 +194,6 @@ import WindowControls from '../common/WindowControls.astro';
       This is GNU Emacs (CDE Edition), running on your Debian CDE Desktop.<br />
       Copyright (C) 2025 Free Software Foundation, Inc.
     </div>
-
   </div><!-- /splash -->
 
   <!-- ── Editing Area (hidden until file is opened) ────────────────────── -->
@@ -149,12 +203,16 @@ import WindowControls from '../common/WindowControls.astro';
 
   <!-- ── Mode Line ─────────────────────────────────────────────────────── -->
   <div id="emacs-mode-line" class="emacs-modeline">
-    U:%%─&nbsp;&nbsp;<span id="emacs-file-status">──</span>&nbsp;&nbsp;<span id="emacs-file-name">*GNU Emacs*</span>&nbsp;&nbsp;All&nbsp;&nbsp;(L<span id="emacs-line">1</span>,C<span id="emacs-col">0</span>)&nbsp;&nbsp;(<span id="emacs-mode">Fundamental</span>)
+    U:%%─&nbsp;&nbsp;<span id="emacs-file-status">──</span>&nbsp;&nbsp;<span id="emacs-file-name"
+      >*GNU Emacs*</span
+    >&nbsp;&nbsp;All&nbsp;&nbsp;(L<span id="emacs-line">1</span>,C<span id="emacs-col">0</span
+    >)&nbsp;&nbsp;(<span id="emacs-mode">Fundamental</span>)
   </div>
 
   <!-- ── Shortcuts Hint ────────────────────────────────────────────────── -->
   <div id="emacs-shortcuts" class="emacs-shortcuts">
-    [C-x C-s] Save &nbsp;[C-x C-c] Quit &nbsp;[C-s] Search &nbsp;[C-k] Kill Line &nbsp;[C-_] Undo &nbsp;[C-g] Abort
+    [C-x C-s] Save &nbsp;[C-x C-c] Quit &nbsp;[C-s] Search &nbsp;[C-k] Kill Line &nbsp;[C-_] Undo
+    &nbsp;[C-g] Abort
   </div>
 
   <!-- ── Minibuffer ────────────────────────────────────────────────────── -->
@@ -165,5 +223,4 @@ import WindowControls from '../common/WindowControls.astro';
     </div>
     <span id="emacs-minibuffer-msg"></span>
   </div>
-
 </div>

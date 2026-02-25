@@ -129,7 +129,7 @@ const WindowManager = (() => {
 
     let newTop = Math.max(rect.top, minY);
     newTop = Math.min(newTop, maxY);
-    
+
     let newLeft = Math.max(rect.left, minX);
     newLeft = Math.min(newLeft, maxX);
 
@@ -143,7 +143,9 @@ const WindowManager = (() => {
     win.style.left = Math.max(0, Math.min(maxX, newLeft)) + 'px';
     win.style.transform = 'none';
 
-    logger.log(`[WindowManager] Normalized "${win.id}" to top: ${win.style.top}, left: ${win.style.left}`);
+    logger.log(
+      `[WindowManager] Normalized "${win.id}" to top: ${win.style.top}, left: ${win.style.left}`
+    );
   }
 
   function centerWindow(win: HTMLElement): void {
@@ -263,7 +265,7 @@ const WindowManager = (() => {
     // Prevent horizontal overflow (no right/left desborde)
     const minX = 0;
     const maxX = Math.max(0, viewportWidth - winWidth);
-    
+
     // Prevent vertical overflow (no top/bottom desborde)
     const minY = TOP_BAR_HEIGHT;
     const maxY = Math.max(minY, viewportHeight - winHeight);

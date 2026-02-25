@@ -12,24 +12,20 @@ const PRECACHE_URLS = [
   '/icons/cursor-wait.svg',
   '/icons/cursor-move.svg',
   '/icons/cursor-resize-nw.svg',
-  '/icons/fsf.svg'
+  '/icons/fsf.svg',
 ];
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(STATIC_CACHE).then((cache) => cache.addAll(PRECACHE_URLS))
-  );
+  event.waitUntil(caches.open(STATIC_CACHE).then((cache) => cache.addAll(PRECACHE_URLS)));
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(
-        keys
-          .filter((key) => key !== STATIC_CACHE)
-          .map((key) => caches.delete(key))
+    caches
+      .keys()
+      .then((keys) =>
+        Promise.all(keys.filter((key) => key !== STATIC_CACHE).map((key) => caches.delete(key)))
       )
-    )
   );
 });
 
@@ -51,9 +47,7 @@ self.addEventListener('fetch', (event) => {
           caches.open(STATIC_CACHE).then((cache) => cache.put(request, responseClone));
           return response;
         })
-        .catch(() =>
-          caches.match(request).then((cached) => cached || caches.match('/'))
-        )
+        .catch(() => caches.match(request).then((cached) => cached || caches.match('/')))
     );
     return;
   }
@@ -84,8 +78,5 @@ self.addEventListener('fetch', (event) => {
   }
 
   // Resto: network-first con fallback opcional a caché
-  event.respondWith(
-    fetch(request).catch(() => caches.match(request))
-  );
+  event.respondWith(fetch(request).catch(() => caches.match(request)));
 });
-

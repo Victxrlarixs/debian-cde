@@ -128,7 +128,15 @@ export const DesktopManager = (() => {
     const savedPositions = (settingsManager.getSection('desktop') as IconPositions) || {};
     const pos = savedPositions['install-pwa-icon'] || findNextAvailableSlot();
 
-    createIcon('Install CDE', 'file', pos.left, pos.top, true, 'install-pwa-icon', '/icons/Debian.png');
+    createIcon(
+      'Install CDE',
+      'file',
+      pos.left,
+      pos.top,
+      true,
+      'install-pwa-icon',
+      '/icons/Debian.png'
+    );
   }
 
   /**
@@ -157,7 +165,8 @@ export const DesktopManager = (() => {
     icon.style.top = top + 'px';
 
     const img = document.createElement('img');
-    img.src = customIcon || (type === 'folder' ? '/icons/filemanager.png' : '/icons/text-x-generic.png');
+    img.src =
+      customIcon || (type === 'folder' ? '/icons/filemanager.png' : '/icons/text-x-generic.png');
     img.alt = name;
     if (name === 'Emacs') {
       img.classList.add('emacs-pixelated');
@@ -373,7 +382,7 @@ export const DesktopManager = (() => {
       if (!target || typeof target.closest !== 'function') return;
 
       const icon = target.closest('.cde-desktop-icon') as HTMLElement | null;
-      
+
       // --- MOBILE: Long-press support ---
       if (longPressTimer) clearTimeout(longPressTimer);
       tapStartX = e.clientX;
@@ -415,7 +424,10 @@ export const DesktopManager = (() => {
 
     container.addEventListener('pointermove', (e) => {
       // Cancel long-press if user moves too much
-      if (longPressTimer && (Math.abs(e.clientX - tapStartX) > 10 || Math.abs(e.clientY - tapStartY) > 10)) {
+      if (
+        longPressTimer &&
+        (Math.abs(e.clientX - tapStartX) > 10 || Math.abs(e.clientY - tapStartY) > 10)
+      ) {
         clearTimeout(longPressTimer);
         longPressTimer = null;
       }
@@ -599,7 +611,7 @@ export const DesktopManager = (() => {
             label: 'Theme: Gold',
             action: async () => {
               if (window.styleManager) {
-                window.styleManager.theme.applyPreset('gold');
+                window.styleManager.theme.applyPreset('golden');
                 window.styleManager.theme.updateUI();
                 window.styleManager.saveColor();
               }
@@ -609,7 +621,7 @@ export const DesktopManager = (() => {
             label: 'Theme: Emerald',
             action: async () => {
               if (window.styleManager) {
-                window.styleManager.theme.applyPreset('emerald');
+                window.styleManager.theme.applyPreset('greenshades');
                 window.styleManager.theme.updateUI();
                 window.styleManager.saveColor();
               }
