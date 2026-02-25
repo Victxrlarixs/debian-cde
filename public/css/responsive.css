@@ -6,22 +6,103 @@
 
 /* Pantallas extra pequeñas (móviles, menos de 480px) */
 @media (max-width: 479px) {
+
+  /* Netscape Navigator Responsive */
+  #netscape {
+    width: 95vw !important;
+    height: 80vh !important;
+    min-width: 0 !important;
+  }
+
+  .ns-menubar {
+    flex-wrap: wrap;
+    font-size: 10px;
+  }
+
+  .ns-menu-label {
+    padding: 2px 4px;
+  }
+
+  .ns-toolbar {
+    padding: 2px;
+    overflow-x: auto;
+    /* Allow horizontal scroll if buttons still overflow */
+    justify-content: flex-start;
+  }
+
+  .ns-tool-btn {
+    width: 44px;
+    height: 44px;
+    padding: 2px;
+  }
+
+  .ns-tool-btn img,
+  .ns-btn-img {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  .ns-tool-btn span {
+    display: none;
+    /* Hide labels on mobile to save space */
+  }
+
+  .ns-n-logo {
+    width: 44px;
+    height: 44px;
+  }
+
+  .ns-logo-img {
+    max-width: 38px;
+    max-height: 38px;
+  }
+
+  .ns-location-bar {
+    padding: 2px;
+    gap: 2px;
+  }
+
+  .ns-location-label {
+    display: none;
+    /* Hide 'Location:' label on tiny screens */
+  }
+
+  .ns-dir-bar {
+    padding: 2px;
+    gap: 2px;
+  }
+
+  .ns-dir-btn {
+    padding: 1px 4px;
+    font-size: 9px;
+  }
+
+  .ns-statusbar {
+    font-size: 9px;
+    height: auto;
+    padding: 2px;
+  }
+
   /* Topbar */
   #topbar {
     padding: 0 4px;
     font-size: 10px;
   }
+
   .top-left,
   .top-right {
     gap: 4px;
   }
+
   .top-center {
     font-size: 10px;
   }
+
   .sys-item {
     padding: 1px 2px;
     font-size: 9px;
   }
+
   .sys-icon {
     width: 16px;
     height: 16px;
@@ -34,67 +115,83 @@
     font-size: 9px;
     gap: 1px;
   }
+
   .cde-sep {
     height: 48px;
   }
+
   .cde-menu-btn {
     width: 32px;
     height: 40px;
   }
+
   .cde-menu-btn img {
     width: 22px;
     height: 22px;
   }
+
   .cde-pager {
     width: 70px;
     grid-template-columns: 32px 32px;
     grid-template-rows: 18px 18px;
   }
+
   .pager-workspace {
     width: 32px;
     height: 18px;
     font-size: 9px;
     line-height: 18px;
   }
+
   .cde-scroll {
     height: 38px;
   }
+
   .scroll-btn {
     width: 16px;
     height: 18px;
     font-size: 7px;
   }
+
   .cde-icon-block {
     height: 50px;
   }
+
   .cde-icon-buttons {
     display: grid;
     height: 16px;
     grid-template-columns: repeat(5, 28px);
   }
+
   .cde-icon-btn {
     width: 28px;
     height: 16px;
     font-size: 8px;
   }
+
   .cde-icons {
     grid-template-columns: repeat(5, 28px);
     height: 30px;
   }
+
   .cde-icon {
     width: 28px;
     height: 30px;
   }
+
   .cde-icon img {
     width: 18px;
     height: 18px;
   }
+
   .tray-icon {
     display: none;
   }
+
   #cde-panel .cde-sep:last-of-type {
     display: none;
   }
+
   .cde-exit-btn {
     padding: 0 4px;
     height: 40px;
@@ -115,11 +212,13 @@
   #terminal {
     width: 300px !important;
   }
+
   .terminal-body {
     height: 180px;
     padding: 6px;
     font-size: 11px;
   }
+
   .terminal-line {
     padding: 0 6px 6px 6px;
   }
@@ -129,39 +228,48 @@
     width: 300px !important;
     height: 280px !important;
   }
+
   .fm-menubar {
     font-size: 10px;
     gap: 6px;
   }
+
   .fm-toolbar {
     padding: 2px;
   }
+
   .fm-btn {
     width: 20px;
     height: 18px;
   }
+
   .fm-btn img {
     width: 14px;
     height: 14px;
   }
+
   .fm-path {
     height: 18px;
     font-size: 10px;
   }
+
   .fm-sidebar {
     width: 100px;
     padding: 4px;
     font-size: 10px;
   }
+
   .fm-files {
     grid-template-columns: repeat(auto-fill, 70px);
     gap: 8px;
     padding: 8px;
   }
+
   .fm-file img {
     width: 32px;
     height: 32px;
   }
+
   .fm-file {
     font-size: 10px;
   }
@@ -170,22 +278,28 @@
   .style-manager-main {
     min-width: 90vw !important;
   }
+
   .cde-menubar {
     font-size: 10px;
   }
+
   .cde-menu-item {
     padding: 2px 4px;
   }
+
   .style-manager-body {
     padding: 10px;
   }
+
   .style-manager-categories {
     gap: 6px;
   }
+
   .cde-category-icon-btn {
     min-width: 60px;
     padding: 4px 6px;
   }
+
   .cde-category-icon-btn img {
     width: 28px;
     height: 28px;
@@ -196,17 +310,21 @@
     width: 300px !important;
     height: 480px !important;
   }
+
   #styleManagerFont .cde-label {
     width: 80px;
     font-size: 10px;
   }
+
   #styleManagerFont .cde-select {
     width: 140px;
     font-size: 10px;
   }
+
   #styleManagerFont .cde-slider {
     width: 100px;
   }
+
   #styleManagerFont .cde-font-preview {
     max-width: 100%;
   }
@@ -214,10 +332,12 @@
   #styleManagerColor.style-manager-color {
     width: 300px !important;
   }
+
   #styleManagerColor .color-palette-item {
     font-size: 9px;
     padding: 3px 6px;
   }
+
   #styleManagerColor .color-swatch-btn {
     width: 24px;
     height: 24px;
@@ -226,14 +346,17 @@
   #styleManagerKeyboard.style-manager-keyboard {
     width: 280px !important;
   }
+
   #styleManagerKeyboard .keyboard-icon img {
     width: 40px;
     height: 40px;
   }
+
   #styleManagerKeyboard .keyboard-row label {
     min-width: 60px;
     font-size: 10px;
   }
+
   #styleManagerKeyboard .keyboard-row input[type='range'] {
     width: 80px;
   }
@@ -241,10 +364,12 @@
   #styleManagerWindow.style-manager-window {
     width: 280px !important;
   }
+
   #styleManagerWindow .window-icon img {
     width: 40px;
     height: 40px;
   }
+
   #styleManagerWindow .window-row {
     font-size: 10px;
   }
@@ -252,21 +377,26 @@
   #styleManagerMouse.style-manager-mouse {
     width: 320px !important;
   }
+
   #styleManagerMouse .mouse-icon-btn {
     width: 90px;
     height: 120px;
   }
+
   #styleManagerMouse .mouse-icon-btn img {
     width: 70px;
     height: 90px;
   }
+
   #styleManagerMouse .mouse-controls-group {
     gap: 12px;
   }
+
   #styleManagerMouse .mouse-slider-row span:first-child {
     width: 65px;
     font-size: 10px;
   }
+
   #styleManagerMouse .mouse-slider-row input[type='range'] {
     width: 120px;
   }
@@ -275,12 +405,15 @@
   #process-monitor {
     width: 95vw !important;
   }
+
   #process-monitor .terminal-body {
     font-size: 11px;
   }
+
   #process-monitor-content {
     font-size: 11px;
   }
+
   #process-monitor .cpu-bar-container,
   #process-monitor .mem-bar-container,
   #process-monitor .swap-bar-container {
@@ -294,6 +427,7 @@
     min-width: 140px;
     font-size: 10px;
   }
+
   .fm-dropdown-item,
   .fm-context-item,
   #utilitiesDropdown .menu-item {
@@ -306,16 +440,20 @@
   .cde-retro-modal.cde-modal-global {
     width: 90vw !important;
   }
+
   #cde-modal-global .modal-body {
     padding: 12px;
   }
+
   #cde-prompt-input {
     font-size: 11px;
   }
+
   .cde-actionbar {
     padding: 6px;
     gap: 4px;
   }
+
   .cde-btn {
     padding: 2px 10px;
     min-width: 60px;
@@ -325,10 +463,12 @@
 
 /* Pantallas pequeñas (móviles grandes, 480px - 767px) */
 @media (min-width: 480px) and (max-width: 767px) {
+
   /* Topbar */
   #topbar {
     padding: 0 6px;
   }
+
   .top-left,
   .top-right {
     gap: 6px;
@@ -339,36 +479,45 @@
     height: 70px;
     padding: 2px 3px;
   }
+
   .cde-sep {
     height: 54px;
   }
+
   .cde-menu-btn {
     width: 36px;
     height: 45px;
   }
+
   .cde-pager {
     width: 80px;
     grid-template-columns: 38px 38px;
   }
+
   .pager-workspace {
     width: 38px;
     height: 20px;
     line-height: 20px;
   }
+
   .cde-icon-block {
     height: 56px;
   }
+
   .cde-icon {
     width: 32px;
     height: 34px;
   }
+
   .cde-icon img {
     width: 22px;
     height: 22px;
   }
+
   .tray-icon {
     display: none;
   }
+
   #cde-panel .cde-sep:last-of-type {
     display: none;
   }
@@ -393,18 +542,23 @@
   .style-manager-main {
     min-width: 80vw !important;
   }
+
   #styleManagerFont.style-manager-font {
     width: 320px !important;
   }
+
   #styleManagerColor.style-manager-color {
     width: 320px !important;
   }
+
   #styleManagerKeyboard.style-manager-keyboard {
     width: 300px !important;
   }
+
   #styleManagerWindow.style-manager-window {
     width: 300px !important;
   }
+
   #styleManagerMouse.style-manager-mouse {
     width: 360px !important;
   }
@@ -417,10 +571,12 @@
 
 /* Pantallas medianas (tablets, 768px - 1023px) */
 @media (min-width: 768px) and (max-width: 1023px) {
+
   /* Ajustes menores para tablets */
   .style-manager-main {
     min-width: 60vw !important;
   }
+
   #process-monitor {
     width: 80vw !important;
   }
@@ -430,22 +586,28 @@
 
 /* Orientación horizontal en móviles */
 @media (max-height: 480px) and (orientation: landscape) {
+
   .window,
   .cde-retro-modal {
     max-height: 85vh !important;
   }
+
   #terminal {
     height: 200px !important;
   }
+
   #fm {
     height: 200px !important;
   }
+
   #process-monitor {
     height: 300px !important;
   }
+
   .style-manager-main {
     max-height: 85vh !important;
   }
+
   #styleManagerFont.style-manager-font {
     height: 400px !important;
   }
@@ -469,19 +631,23 @@
   }
 
   #boot-log-container {
-    height: calc(100% - 40px); /* More space for header */
+    height: calc(100% - 40px);
+    /* More space for header */
   }
 
   .boot-logo {
-    font-size: 8px; /* Scale down ASCII art */
+    font-size: 8px;
+    /* Scale down ASCII art */
     line-height: 1.1;
     margin-bottom: 10px;
-    white-space: pre-wrap; /* Allow wrapping if too wide */
-    word-break: break-all; /* Prevent horizontal overflow */
+    white-space: pre-wrap;
+    /* Allow wrapping if too wide */
+    word-break: break-all;
+    /* Prevent horizontal overflow */
   }
 
   /* Boot message lines */
-  #boot-log-container > div {
+  #boot-log-container>div {
     font-size: 9px;
     line-height: 1.2;
   }
@@ -504,7 +670,7 @@
     margin-bottom: 15px;
   }
 
-  #boot-log-container > div {
+  #boot-log-container>div {
     font-size: 10px;
   }
 }
@@ -512,7 +678,8 @@
 /* Medium screens (tablets) – minimal adjustments */
 @media (min-width: 768px) and (max-width: 1023px) {
   .boot-logo {
-    font-size: 11px; /* Slightly smaller than desktop 12px */
+    font-size: 11px;
+    /* Slightly smaller than desktop 12px */
   }
 }
 

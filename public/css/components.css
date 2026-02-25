@@ -3552,10 +3552,15 @@
 
 /* ── Window shell ──────────────────────────────────────────────────────────── */
 #netscape {
+  display: flex;
   flex-direction: column;
   background: #c0c0c0;
-  min-width: 600px;
-  min-height: 400px;
+  width: 780px;
+  height: 580px;
+  max-width: 100vw;
+  max-height: calc(100vh - 100px);
+  min-width: 320px;
+  min-height: 200px;
   font-family: 'Helvetica', 'Arial', sans-serif;
   font-size: 12px;
   -webkit-font-smoothing: none;
@@ -3666,6 +3671,17 @@
   padding: 3px 3px 3px 3px;
   gap: 0;
   user-select: none;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Hide horizontal scrollbar but allow sliding on mobile */
+.ns-toolbar::-webkit-scrollbar {
+  height: 4px;
+}
+
+.ns-toolbar::-webkit-scrollbar-thumb {
+  background: #808080;
 }
 
 .ns-toolbar-inner {
