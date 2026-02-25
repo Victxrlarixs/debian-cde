@@ -10,7 +10,7 @@ const NS_PAGES: Record<string, { title: string; url: string; content: () => stri
     url: 'http://home.netscape.com/home/whats-new.html',
     content: () => `
       <div class="ns-page">
-        <img src="/icons/NetScape.png" alt="What's New!" class="ns-banner" onerror="this.style.display='none'"/>
+        <img src="/images/NetScape.png" alt="What's New!" class="ns-banner" onerror="this.style.display='none'"/>
         <h1>What's New!</h1>
         <p>New information is available every day on the Internet -- how do you find out about it? One way is to start here. This is a monthly What's New listing that lists interesting Internet resources that first appeared today, last month.</p>
         <ul class="ns-links">
@@ -42,7 +42,7 @@ const NS_PAGES: Record<string, { title: string; url: string; content: () => stri
         </div>
         <h1>Welcome to Netscape Navigator™</h1>
         <p>You have embarked on a journey across the Internet, and Netscape Navigator is your vehicle. This welcome page has been set as your home page. As you explore, you'll soon discover that you can pick any page on the Internet as your home.</p>
-        <img src="/icons/NetScape.png" class="ns-banner" style="height: 60px; object-fit: cover; opacity: 0.3; filter: grayscale(1);" />
+        <img src="/images/NetScape-Welcome.png" alt="What's New!" class="ns-banner" onerror="this.style.display='none'"/>
         <h2>Explore the Internet</h2>
         <ul class="ns-links">
           <li><a class="ns-link" onclick="window.Netscape.navigate('whats-new')">What's New!</a> - New sites and resources</li>
@@ -59,6 +59,7 @@ const NS_PAGES: Record<string, { title: string; url: string; content: () => stri
     content: () => `
       <div class="ns-page">
         <h1>What's Cool!</h1>
+        <img src="/images/NetScape-Feedback.png" alt="Feedback" class="ns-banner" onerror="this.style.display='none'"/>
         <p>Someday, we'll all agree on what makes something cool. In the meantime, Netscape's staff is out there on the Internet and keeping an eye out for cool things. This list gets changed from time to time, so check back!</p>
         <ul class="ns-links">
           <li><a class="ns-link" href="#" onclick="return false;">The 1994 World Cup</a></li>
@@ -87,6 +88,7 @@ const NS_PAGES: Record<string, { title: string; url: string; content: () => stri
     content: () => `
       <div class="ns-page">
         <h1>Frequently Asked Questions</h1>
+        <img src="/images/NetScape-FAQs.png" alt="FAQs" class="ns-banner" onerror="this.style.display='none'"/>
         <h2>About Netscape Navigator</h2>
         <p><strong>Q: What is Netscape Navigator?</strong></p>
         <p>A: Netscape Navigator is a web browser application used to access and navigate the World Wide Web. It was developed by Netscape Communications Corporation.</p>
@@ -109,6 +111,7 @@ const NS_PAGES: Record<string, { title: string; url: string; content: () => stri
       <div class="ns-page">
         <h1>Net Search</h1>
         <p>Searching the Internet is easy with these powerful services. Just click on one of the search engines below and follow their instructions.</p>
+        <img src="/images/NetScape-About.png" alt="About" class="ns-banner" onerror="this.style.display='none'"/>
         <h2>Search Engines</h2>
         <ul class="ns-links">
           <li><a class="ns-link" href="https://www.google.com" target="_blank">Google</a> - The most popular search engine</li>
@@ -162,7 +165,7 @@ const NS_PAGES: Record<string, { title: string; url: string; content: () => stri
     content: () => `
       <div class="ns-page ns-about-page">
         <div class="ns-about-logo">
-          <img src="/icons/netscape_classic.png" style="width: 128px; height: 128px; margin-bottom: 10px;" />
+          <img src="/images/NetScape_classic.png" style="width: 128px; height: 128px; margin-bottom: 10px;" />
           <div class="ns-about-name">NETSCAPE NAVIGATOR™</div>
           <div class="ns-about-version">Version 1.0 (X11; I; Linux 2.0.0 i686)</div>
         </div>
