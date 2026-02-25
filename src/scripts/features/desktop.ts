@@ -18,8 +18,8 @@ interface IconPositions {
 const SYSTEM_ICONS: any[] = [
   {
     id: 'emacs-icon',
-    name: 'Emacs',
-    icon: '/icons/emacs22.png',
+    name: 'XEmacs',
+    icon: '/icons/xemacs.png',
     action: () => {
       if ((window as any).Emacs?.openSplash) (window as any).Emacs.openSplash();
     },
@@ -174,7 +174,7 @@ export const DesktopManager = (() => {
 
     const img = document.createElement('img');
     img.src =
-      customIcon || (type === 'folder' ? '/icons/filemanager.png' : '/icons/text-x-generic.png');
+      customIcon || (type === 'folder' ? '/icons/filemanager.png' : '/icons/gtk-file.png');
     img.alt = name;
     if (name === 'Emacs') {
       img.classList.add('emacs-pixelated');
@@ -575,8 +575,8 @@ export const DesktopManager = (() => {
           },
         },
         {
-          label: 'Emacs',
-          icon: '/icons/text-x-generic.png',
+          label: 'XEmacs',
+          icon: '/icons/xemacs.png',
           action: async () => {
             if (window.Emacs?.open) window.Emacs.open();
           },
@@ -659,7 +659,7 @@ export const DesktopManager = (() => {
         },
         {
           label: 'New File',
-          icon: '/icons/text-x-generic.png',
+          icon: '/icons/gtk-file.png',
           action: async () => {
             const name = await (window as any).CDEModal.prompt('File name:');
             if (name) await VFS.touch(CONFIG.FS.DESKTOP, name);
@@ -682,7 +682,7 @@ export const DesktopManager = (() => {
         },
         {
           label: 'Refresh Desktop',
-          icon: '/icons/org.xfce.session.png',
+          icon: '/icons/view-refresh.png',
           action: async () => {
             window.location.reload();
           },

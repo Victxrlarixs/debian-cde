@@ -1,5 +1,6 @@
 ---
 import WindowControls from '../../common/WindowControls.astro';
+import WindowMinimize from '../../common/WindowMinimize.astro';
 ---
 
 <div class="cde-retro-modal style-manager-font" id="styleManagerFont">
@@ -8,6 +9,7 @@ import WindowControls from '../../common/WindowControls.astro';
     id="styleManagerFontTitlebar"
     onmousedown="window.drag(event, 'styleManagerFont')"
   >
+    <WindowMinimize windowId="styleManagerFont" />
     <span class="titlebar-text">Style Manager - Font</span>
     <WindowControls
       windowId="styleManagerFont"

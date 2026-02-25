@@ -1,9 +1,11 @@
 ---
 import WindowControls from '../common/WindowControls.astro';
+import WindowMinimize from '../common/WindowMinimize.astro';
 ---
 
 <div class="cde-retro-modal app-manager-window" id="appManager" data-no-maximize="true">
   <div class="titlebar" id="appManagerTitlebar" onmousedown="window.drag(event, 'appManager')">
+    <WindowMinimize windowId="appManager" />
     <span class="titlebar-text">Application Manager - /usr/dt/appconfig/appmanager</span>
     <WindowControls windowId="appManager" closeFunction="appManager.close" disableMaximize={true} />
   </div>
@@ -58,10 +60,10 @@ import WindowControls from '../common/WindowControls.astro';
         <span>Clock</span>
       </div>
 
-      <!-- Emacs -->
+      <!-- XEmacs -->
       <div class="app-item" onclick="window.Emacs?.openSplash(); appManager.close()">
-        <img src="/icons/emacs22.png" alt="Emacs" class="emacs-pixelated" />
-        <span>Emacs</span>
+        <img src="/icons/xemacs.png" alt="XEmacs" class="emacs-pixelated" />
+        <span>XEmacs</span>
       </div>
 
       <!-- Screenshot -->

@@ -1,10 +1,12 @@
 ---
 // src/components/features/Calendar.astro
 import WindowControls from '../common/WindowControls.astro';
+import WindowMinimize from '../common/WindowMinimize.astro';
 ---
 
 <div class="window" id="calendar-window">
   <div class="titlebar" onmousedown="drag(event, 'calendar-window')">
+    <WindowMinimize windowId="calendar-window" />
     <span class="titlebar-text">Calendar</span>
     <WindowControls
       windowId="calendar-window"
@@ -14,9 +16,13 @@ import WindowControls from '../common/WindowControls.astro';
   </div>
   <div class="calendar-container">
     <div class="calendar-header">
-      <button class="cde-btn sm" id="cal-prev">&lt;</button>
+      <button class="cde-btn sm" id="cal-prev">
+        <img src="/icons/previous.png" alt="Prev" style="width: 12px; height: 12px;" />
+      </button>
       <span id="cal-month-year">Month Year</span>
-      <button class="cde-btn sm" id="cal-next">&gt;</button>
+      <button class="cde-btn sm" id="cal-next">
+        <img src="/icons/right.png" alt="Next" style="width: 12px; height: 12px;" />
+      </button>
     </div>
     <div class="calendar-weekdays">
       <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>

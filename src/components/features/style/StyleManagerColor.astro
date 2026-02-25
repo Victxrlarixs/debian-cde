@@ -1,5 +1,6 @@
 ---
 import WindowControls from '../../common/WindowControls.astro';
+import WindowMinimize from '../../common/WindowMinimize.astro';
 import cdePalettes from '../../../data/cde_palettes.json';
 ---
 
@@ -9,6 +10,7 @@ import cdePalettes from '../../../data/cde_palettes.json';
     id="styleManagerColorTitlebar"
     onmousedown="window.drag(event, 'styleManagerColor')"
   >
+    <WindowMinimize windowId="styleManagerColor" />
     <span class="titlebar-text">Style Manager - Color</span>
     <WindowControls
       windowId="styleManagerColor"

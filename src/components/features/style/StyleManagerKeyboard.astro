@@ -1,9 +1,15 @@
 ---
 import WindowControls from '../../common/WindowControls.astro';
+import WindowMinimize from '../../common/WindowMinimize.astro';
 ---
 
 <div class="cde-retro-modal style-manager-keyboard" id="styleManagerKeyboard">
-  <div class="titlebar" id="styleManagerKeyboardTitlebar">
+  <div
+    class="titlebar"
+    id="styleManagerKeyboardTitlebar"
+    onmousedown="window.drag(event, 'styleManagerKeyboard')"
+  >
+    <WindowMinimize windowId="styleManagerKeyboard" />
     <span class="titlebar-text">Style Manager - Keyboard</span>
     <WindowControls
       windowId="styleManagerKeyboard"

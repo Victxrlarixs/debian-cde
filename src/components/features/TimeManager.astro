@@ -1,9 +1,11 @@
 ---
 import WindowControls from '../common/WindowControls.astro';
+import WindowMinimize from '../common/WindowMinimize.astro';
 ---
 
 <div class="cde-retro-modal time-manager-window" id="timeManager">
   <div class="titlebar" id="timeManagerTitlebar" onmousedown="window.drag(event, 'timeManager')">
+    <WindowMinimize windowId="timeManager" />
     <span class="titlebar-text">Time Configuration</span>
     <WindowControls
       windowId="timeManager"

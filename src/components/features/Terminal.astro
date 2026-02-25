@@ -1,10 +1,12 @@
 ---
 import WindowControls from '../common/WindowControls.astro';
+import WindowMinimize from '../common/WindowMinimize.astro';
 ---
 
 <div class="window" id="terminal">
-  <div class="titlebar" onmousedown="drag(event, 'terminal')">
-    <span class="titlebar-text">Terminal - victxrlarixs@Debian</span>
+  <div class="titlebar" id="terminalTitlebar" onmousedown="drag(event, 'terminal')">
+    <WindowMinimize windowId="terminal" />
+    <span class="titlebar-text">Terminal @ victxrlarixs</span>
     <WindowControls windowId="terminal" closeFunction="closeTerminal" />
   </div>
   <div class="terminal-body" id="terminalBody"></div>

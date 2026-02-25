@@ -163,7 +163,7 @@ class EmacsManager {
     this.currentFilePath = '';
     this.isModified = false;
     this.showSplash();
-    this.updateTitle('*GNU Emacs*');
+    this.updateTitle('XEmacs');
     this.updateModeLineName('*scratch*');
 
     // Set scratch buffer content
@@ -173,12 +173,17 @@ class EmacsManager {
       this.textarea.setSelectionRange(this.textarea.value.length, this.textarea.value.length);
     }
 
-    this.message('Welcome to GNU Emacs');
+    this.message('Welcome to XEmacs');
 
     this.win.style.display = 'flex';
     this.win.style.zIndex = String(++this.zIndex);
+
+    // Reset size to defaults if they were messed up, but respecting viewport
+    this.win.style.width = 'min(800px, 90vw)';
+    this.win.style.height = 'min(600px, 80vh)';
+
     WindowManager.centerWindow(this.win);
-    this.win.focus(); // Focus the window container for splash shortcuts
+    this.win.focus();
     if (window.focusWindow) window.focusWindow('emacs');
   }
 
@@ -191,13 +196,18 @@ class EmacsManager {
     this.isModified = false;
 
     this.showEditor();
-    this.updateTitle(`Emacs: ${filename}`);
+    this.updateTitle(`XEmacs: ${filename}`);
     this.updateModeLineName(filename);
     this.updateModeLine();
     this.message(`Loaded: ${filename}`);
 
     this.win.style.display = 'flex';
     this.win.style.zIndex = String(++this.zIndex);
+
+    // Reset size to defaults
+    this.win.style.width = 'min(900px, 95vw)';
+    this.win.style.height = 'min(700px, 85vh)';
+
     WindowManager.centerWindow(this.win);
     if (window.focusWindow) window.focusWindow('emacs');
     this.textarea.focus();
@@ -359,7 +369,7 @@ class EmacsManager {
     if (!existing) await VFS.touch(parentDir, filename);
 
     this.currentFilePath = fullPath;
-    this.updateTitle(`Emacs: ${filename}`);
+    this.updateTitle(`XEmacs: ${filename}`);
     this.updateModeLineName(filename);
     await this.save();
   }
@@ -373,7 +383,7 @@ class EmacsManager {
     this.textarea!.value = '';
     this.isModified = false;
     this.showEditor();
-    this.updateTitle('Emacs: untitled.txt');
+    this.updateTitle('XEmacs: untitled.txt');
     this.updateModeLineName('untitled.txt');
     this.updateModeLine();
     this.message('New file.');

@@ -1,5 +1,6 @@
 ---
 import WindowControls from '../../common/WindowControls.astro';
+import WindowMinimize from '../../common/WindowMinimize.astro';
 ---
 
 <div class="cde-retro-modal style-manager-beep" id="styleManagerBeep">
@@ -8,6 +9,7 @@ import WindowControls from '../../common/WindowControls.astro';
     id="styleManagerBeepTitlebar"
     onmousedown="window.drag(event, 'styleManagerBeep')"
   >
+    <WindowMinimize windowId="styleManagerBeep" />
     <span class="titlebar-text">Style Manager - Audio & Beep</span>
     <WindowControls
       windowId="styleManagerBeep"
