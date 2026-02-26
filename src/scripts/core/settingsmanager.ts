@@ -1,6 +1,7 @@
 // src/scripts/core/settingsmanager.ts
 
 import { logger } from '../utilities/logger';
+import { storageAdapter } from '../utilities/storage-adapter';
 
 export interface SystemSettings {
   theme: {
@@ -38,13 +39,13 @@ class SettingsManager {
   }
 
   private checkVersion(): void {
-    const lastVersion = localStorage.getItem(`${STORAGE_KEY}-version`);
+    const lastVersion = storageAdapter.getItemSync(`${STORAGE_KEY}-version`);
     if (lastVersion !== this.CURRENT_VERSION) {
       logger.log(
         `[SettingsManager] Version mismatch (${lastVersion} vs ${this.CURRENT_VERSION}). Resetting cache...`
       );
       this.resetToDefaults();
-      localStorage.setItem(`${STORAGE_KEY}-version`, this.CURRENT_VERSION);
+      storageAdapter.setItemSync(`${STORAGE_KEY}-version`, this.CURRENT_VERSION);
     }
   }
 
@@ -72,11 +73,11 @@ class SettingsManager {
   }
 
   /**
-   * Loads settings from localStorage. If none exist, migration from old keys is attempted.
+   * Loads settings from storage (IndexedDB with localStorage fallback).
    */
   private load(): void {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
+      const saved = storageAdapter.getItemSync(STORAGE_KEY);
       if (saved) {
         this.settings = JSON.parse(saved);
         logger.log('[SettingsManager] Unified settings loaded.');
@@ -95,7 +96,7 @@ class SettingsManager {
     logger.log('[SettingsManager] Attempting migration from legacy settings...');
 
     // Migration for Style/Theme (cde-styles)
-    const oldStyles = localStorage.getItem('cde-styles');
+    const oldStyles = storageAdapter.getItemSync('cde-styles');
     if (oldStyles) {
       const parsed = JSON.parse(oldStyles);
       this.settings.theme.colors = parsed.colors || {};
@@ -103,15 +104,15 @@ class SettingsManager {
     }
 
     // Migration for Mouse
-    const oldMouse = localStorage.getItem('cde-mouse-settings');
+    const oldMouse = storageAdapter.getItemSync('cde-mouse-settings');
     if (oldMouse) this.settings.mouse = JSON.parse(oldMouse);
 
     // Migration for Keyboard
-    const oldKeyboard = localStorage.getItem('cde-keyboard-settings');
+    const oldKeyboard = storageAdapter.getItemSync('cde-keyboard-settings');
     if (oldKeyboard) this.settings.keyboard = JSON.parse(oldKeyboard);
 
     // Migration for Beep
-    const oldBeep = localStorage.getItem('cde-beep-settings');
+    const oldBeep = storageAdapter.getItemSync('cde-beep-settings');
     if (oldBeep) this.settings.beep = JSON.parse(oldBeep);
 
     this.save();
@@ -120,7 +121,7 @@ class SettingsManager {
 
   public save(): void {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(this.settings));
+      storageAdapter.setItemSync(STORAGE_KEY, JSON.stringify(this.settings));
     } catch (e) {
       console.error('[SettingsManager] Failed to save settings:', e);
     }

@@ -9,7 +9,6 @@ import { logger } from '../utilities/logger';
  */
 
 const VERSION_KEY = 'cde-app-version';
-const LAST_CHECK_KEY = 'cde-version-check';
 
 export class VersionManager {
   private static instance: VersionManager;
@@ -81,10 +80,10 @@ export class VersionManager {
   }
 
   /**
-   * Clears localStorage cache while preserving critical data
+   * Clears storage cache while preserving critical data
    */
   private async clearCache(): Promise<void> {
-    logger.log('[VersionManager] Clearing localStorage cache...');
+    logger.log('[VersionManager] Clearing storage cache...');
 
     // List of keys to preserve (if you want to keep user preferences)
     const preserveKeys: string[] = [
@@ -92,7 +91,7 @@ export class VersionManager {
       // 'cde_high_contrast',   // Uncomment to preserve accessibility settings
     ];
 
-    // Get all keys
+    // Get all keys from localStorage
     const allKeys = Object.keys(localStorage);
 
     // Remove all except preserved
@@ -102,6 +101,15 @@ export class VersionManager {
         logger.log(`[VersionManager] Removed: ${key}`);
       }
     });
+
+    // Also clear IndexedDB settings store
+    try {
+      const { indexedDBManager, STORES } = await import('../utilities/indexeddb-manager');
+      await indexedDBManager.clear(STORES.SETTINGS);
+      logger.log('[VersionManager] Cleared IndexedDB settings');
+    } catch (error) {
+      logger.warn('[VersionManager] Could not clear IndexedDB:', error);
+    }
   }
 
   /**

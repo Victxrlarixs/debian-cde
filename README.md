@@ -60,6 +60,9 @@ npm run dev
 
 # Build for production
 npm run build
+
+# Run performance analysis
+npm run perf:analyze
 ```
 
 Visit `http://localhost:4321` to see the desktop in action.
