@@ -5,6 +5,7 @@ import tutorialData from '../../data/tutorial.json';
 import fontsData from '../../data/fonts.json';
 import cdePalettesData from '../../data/cde_palettes.json';
 import bootMessagesData from '../../data/boot-messages.json';
+import updateMessagesData from '../../data/update-messages.json';
 import backdropsData from '../../data/backdrops.json';
 import filesystemData from '../../data/filesystem.json';
 
@@ -100,10 +101,32 @@ function dispatchChange(path: string): void {
 
 async function syncDynamicContent(): Promise<void> {
   // Load heavy assets dynamically to keep initial bundle small
-  const [readme, bashBible, shBible] = await Promise.all([
+  const [
+    readme,
+    // User guide documentation
+    gettingStarted,
+    xemacsGuide,
+    terminalLabGuide,
+    fileManagerGuide,
+    netscapeGuide,
+    styleManagerGuide,
+    workspacesGuide,
+    keyboardShortcuts,
+    tipsAndTricks,
+    docsReadme
+  ] = await Promise.all([
     import('../../../README.md?raw'),
-    import('../../data/pure-bash-bible.md?raw'),
-    import('../../data/pure-sh-bible.md?raw'),
+    // Documentation imports
+    import('../../../docs/user-guide/getting-started.md?raw'),
+    import('../../../docs/user-guide/xemacs.md?raw'),
+    import('../../../docs/user-guide/terminal-lab.md?raw'),
+    import('../../../docs/user-guide/file-manager.md?raw'),
+    import('../../../docs/user-guide/netscape.md?raw'),
+    import('../../../docs/user-guide/style-manager.md?raw'),
+    import('../../../docs/user-guide/workspaces.md?raw'),
+    import('../../../docs/user-guide/keyboard-shortcuts.md?raw'),
+    import('../../../docs/user-guide/tips-and-tricks.md?raw'),
+    import('../../../docs/user-guide/README.md?raw'),
   ]);
 
   // README.md
@@ -113,29 +136,27 @@ async function syncDynamicContent(): Promise<void> {
     readmeFile.content = readme.default;
   }
 
-  // Tutorial / Linux Bible
-  const manPath = CONFIG.FS.HOME + 'man-pages/linux-bible.md';
-  const manFile = fsMap[manPath] as VFSFile;
-  if (manFile?.type === 'file') {
-    let content = '# Linux Commands Reference\n\n';
-    tutorialData.forEach((sequence: any, seqIndex: number) => {
-      content += `\n${'='.repeat(60)}\n`;
-      content += `SEQUENCE ${seqIndex + 1}\n`;
-      content += `${'='.repeat(60)}\n\n`;
-      sequence.forEach((step: any) => {
-        content += `${step.user}@Debian:~$ ${step.command}\n`;
-        content += `${step.output}\n\n`;
-      });
-    });
-    manFile.content = content;
-  }
+  // Documentation files
+  const docsBasePath = CONFIG.FS.HOME + 'Documentation/';
+  const docFiles = {
+    'Getting-Started.md': gettingStarted.default,
+    'XEmacs-Guide.md': xemacsGuide.default,
+    'Terminal-Lab.md': terminalLabGuide.default,
+    'File-Manager.md': fileManagerGuide.default,
+    'Netscape.md': netscapeGuide.default,
+    'Style-Manager.md': styleManagerGuide.default,
+    'Workspaces.md': workspacesGuide.default,
+    'Keyboard-Shortcuts.md': keyboardShortcuts.default,
+    'Tips-and-Tricks.md': tipsAndTricks.default,
+    'README.md': docsReadme.default,
+  };
 
-  // Bibles
-  const bashPath = CONFIG.FS.HOME + 'man-pages/pure-bash-bible.md';
-  if (fsMap[bashPath]) (fsMap[bashPath] as VFSFile).content = bashBible.default;
-
-  const shPath = CONFIG.FS.HOME + 'man-pages/pure-sh-bible.md';
-  if (fsMap[shPath]) (fsMap[shPath] as VFSFile).content = shBible.default;
+  Object.entries(docFiles).forEach(([filename, content]) => {
+    const path = docsBasePath + filename;
+    if (fsMap[path]) {
+      (fsMap[path] as VFSFile).content = content;
+    }
+  });
 
   const fontsPath = CONFIG.FS.HOME + 'settings/fonts.json';
   if (fsMap[fontsPath]) (fsMap[fontsPath] as VFSFile).content = JSON.stringify(fontsData, null, 2);
@@ -147,6 +168,10 @@ async function syncDynamicContent(): Promise<void> {
   const bootPath = CONFIG.FS.HOME + 'settings/boot-messages.json';
   if (fsMap[bootPath])
     (fsMap[bootPath] as VFSFile).content = JSON.stringify(bootMessagesData, null, 2);
+
+  const updatePath = CONFIG.FS.HOME + 'settings/update-messages.json';
+  if (fsMap[updatePath])
+    (fsMap[updatePath] as VFSFile).content = JSON.stringify(updateMessagesData, null, 2);
 
   const backdropPath = CONFIG.FS.HOME + 'settings/backdrops.json';
   if (fsMap[backdropPath])

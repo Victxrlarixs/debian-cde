@@ -29,9 +29,11 @@
 
 /* Container where kernel lines are written */
 #boot-log-container {
-  height: calc(100% - 30px);
+  height: calc(100% - 80px); /* Reserve space for progress bar at bottom */
   overflow-y: auto;
   font-family: monospace;
+  padding-bottom: 60px; /* Extra padding to ensure messages don't overlap progress bar */
+  box-sizing: border-box;
 }
 
 /* Line appearance animation */
@@ -73,6 +75,19 @@
 .boot-desktop {
   color: #00ffaa;
   font-weight: bold;
+}
+
+/* Update mode message types */
+.boot-package {
+  color: #88aaff;
+}
+
+.boot-download {
+  color: #ffaa88;
+}
+
+.boot-install {
+  color: #00ff00;
 }
 
 .boot-default {

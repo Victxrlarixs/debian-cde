@@ -1,4 +1,6 @@
-const CACHE_VERSION = 'v4';
+// Cache version is automatically updated from package.json version
+// This ensures cache is cleared when app version changes
+const CACHE_VERSION = 'v1.0.9';
 const STATIC_CACHE = `static-cache-${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [
@@ -14,7 +16,7 @@ const PRECACHE_URLS = [
 ];
 
 self.addEventListener('install', (event) => {
-  // Skip waiting to activate immediately
+  // Skip waiting to activate immediately and force update
   self.skipWaiting();
   event.waitUntil(caches.open(STATIC_CACHE).then((cache) => cache.addAll(PRECACHE_URLS)));
 });
