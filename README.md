@@ -1,127 +1,89 @@
-# CDE Time Capsule: The Nostalgic Portal
+# CDE Time Capsule
+
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
 ![Astro](https://img.shields.io/badge/Astro-BC52EE?style=flat&logo=astro&logoColor=white)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat)](CONTRIBUTING.md)
 ![GitHub stars](https://img.shields.io/github/stars/Victxrlarixs/debian-cde?style=flat&logo=github)
 ![GitHub last commit](https://img.shields.io/github/last-commit/Victxrlarixs/debian-cde?style=flat&logo=github)
 
-Ever wonder what it felt like to sit in front of a $20,000 Unix workstation in 1996? Welcome to a pixel-perfect recreation of the **Common Desktop Environment (CDE)**—living right inside your modern browser.
+A pixel inspired of the Common Desktop Environment (CDE) running entirely in your browser. Experience the Unix workstation era with authentic visuals, behavior, and functionality.
 
-> [!NOTE]
-> This project is a stateful browser-based recreation of the Common Desktop Environment (CDE), featuring a custom Virtual Filesystem and reactive system logic. Built with passion for the pixel.
+## Highlights
 
----
+- **76+ Authentic Color Palettes** - Original CDE Motif themes (Platinum, Alpine, Midnight)
+- **168 Original Backdrops** - Dithered XPM textures from the 90s
+- **XEmacs Text Editor** - Classic Emacs keybindings with minibuffer interaction
+- **Netscape Navigator 1.0** - Fully functional 1994 browser replica
+- **Virtual Filesystem** - O(1) path resolution with complete CRUD operations
+- **4 Virtual Workspaces** - Classic Unix desktop switching
+- **Progressive Web App** - Install and use offline
+- **Full Accessibility** - 20+ keyboard shortcuts, screen reader support, high contrast mode
 
-## A Journey Through Time
+## Try It Now
 
-This isn't just a website; it's a living desktop. From the moment the terminal scrolls past your eyes, you're not just a "visitor"—you're a "user" of a classic Unix system.
+**[debian.com.mx](https://debian.com.mx)** - No installation required
 
-### 🎨 Master of Style
+## Documentation
 
-The **Style Manager** is your control center for total immersion. It's not just about colors; it's about fine-tuning the virtual hardware:
+- [Architecture Overview](docs/ARCHITECTURE.md) - System design, VFS, WindowManager, core components
+- [Accessibility Guide](docs/ACCESSIBILITY.md) - Keyboard shortcuts, screen reader support, ARIA implementation
+- [PWA Implementation](docs/PWA.md) - Service Worker, offline capabilities, caching strategies
+- [Style Manager](docs/STYLE-MANAGER.md) - Color palettes, backdrops, fonts, customization
+- [Features Documentation](docs/FEATURES.md) - XEmacs, Netscape, Terminal Lab, File Manager
+- [Mobile Support](docs/MOBILE.md) - Touch gestures, responsive design, viewport handling
+- [Development Guide](docs/DEVELOPMENT.md) - Setup, architecture patterns, testing, deployment
 
-- **Color Palettes**: 76+ authentic Motif-style themes (Platinum, Alpine, Midnight) that propagate globally via CSS variables.
-- **Original Backdrops**: A massive library of authentic dithered XPM textures and solid patterns from the 90s.
-- **Mouse & Keyboard**: Tune acceleration curves, handedness, and mechanical audio feedback to match your preference.
-- **Window Behavior**: Centralized control over window placement, focus policies, and decorative borders.
-- **Audio Synth**: An integrated Web Audio oscillator that mimics the characteristic system "beep" of vintage Unix terminals.
-- **Fonts & Data**: Switch between authentic aliased fontsets and use the **Startup** controls to manage or reset your persistent session data.
+## Key Features
 
-### 📁 A Responsive World
+| Component | Description |
+|-----------|-------------|
+| XEmacs | Text editor with authentic Emacs keybindings (C-x, C-s, M-x) and minibuffer |
+| Terminal Lab | 41-lesson interactive tutorial with typing animation |
+| File Manager | Context menus, renaming, VFS navigation with tree and icon views |
+| Style Manager | Complete theme customization with 76 palettes and 168 backdrops |
+| Netscape Navigator | Functional 1994 browser with internal pages and loading animation |
+| Process Monitor | Virtual process list with CPU/memory usage and kill functionality |
+| Workspace Pager | 4 virtual desktops with keyboard shortcuts (Ctrl+Alt+1-4) |
 
-Everything reacts to you. Drag windows by their title bars, hover over icons to see them glow, and explore a **Virtual Filesystem** where you can create your own digital corner. It's the tactile feel of the 90s with the speed of today.
+## Quick Start
 
-### XEmacs
+```bash
+# Clone repository
+git clone https://github.com/Victxrlarixs/debian-cde.git
+cd debian-cde
 
-A core pillar of the Debian-CDE experience. Much more than a text editor, it's a faithful recreation of the classic environment:
+# Install dependencies
+npm install
 
-- **Interactive Minibuffer**: No pop-ups for system operations. All commands (`M-x`), file visits (`C-x C-f`), and saves (`C-x C-w`) happen natively in the interactive lower minibuffer.
-- **Classic Keybindings**: Support for `C-x`, `C-g` (abort), `C-k` (kill line), `M-w`/`C-y` (copy/paste), and many more.
-- **Visual Fidelity**: Accurate mode-line with line/column counters, file status indicators, and the iconic XEmacs splash screen.
-- **Scratch Buffer**: Starts with a fully functional `*scratch*` buffer for Lisp-style (or plain text) note-taking.
+# Start development server
+npm run dev
 
----
+# Build for production
+npm run build
+```
 
-### Netscape Navigator — The Web, Circa 1994
+Visit `http://localhost:4321` to see the desktop in action.
 
-Relive the experience of browsing the World Wide Web at its dawn with a fully functional replica of the legendary **Netscape Navigator™ 1.0**. This isn't a simple iframe—it's a browser within your browser, complete with its own interface, menus, location bar, and internal pages that capture the spirit of the era.
+## Technology Stack
 
-- **Authentic Navigation**: Back/Forward/Home/Reload buttons, location bar, directory buttons, and a fully featured menu bar (File, Edit, View, Go, Bookmarks, Options, Directory, Help).
-- **Classic Pages**: Explore "What's New!", "What's Cool!", "Net Search", "Net Directory", frequently asked questions, and an "About" screen with original typography and logo.
-- **Realistic Loading Simulation**: As a page "loads," the progress bar advances, the N logo displays animated shooting stars, and the status text changes just like the old modem days.
-- **History & Bookmarks**: Add bookmarks, navigate through your recent history, and see the current page highlighted in the menus.
+- **Astro** - Static site generation and component framework
+- **TypeScript** - Type-safe JavaScript
+- **Vanilla CSS** - No frameworks, pure CSS with custom properties
+- **Web Audio API** - System sound synthesis
+- **Service Workers** - Offline functionality and caching
+- **Pointer Events** - Unified mouse and touch handling
 
----
-## Iconic Experiences
+## Contributing
 
-| 🖥️ The Component        | 🌟 The Feeling                                                                         |
-| :---------------------- | :------------------------------------------------------------------------------------- |
-| **XEmacs Editor**       | A pixelated splash screen and professional coding buffer that feels "real".            |
-| **Terminal Lab**        | Watch commands type themselves out in a mesmerizing 41-lesson tutorial loop.           |
-| **File Manager**        | Real context menus, renaming, and folder navigation via the RAM-disk VFS.              |
-| **Style Manager**       | 76+ authentic Motif palettes and dithered XPM-style backgrounds.                       |
-| **Process Monitor**     | Live telemetry with virtual PIDs and a "kill" interface.                               |
-| **Screenshot Tool**     | Capture your personalized setup with a single click in the system tray.                |
-| **Netscape Navigator**  | Step back to 1994 with a fully interactive Netscape 1.0.                               |
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
----
+## License
 
-## Core System Architecture
-
-### 1. Virtual Filesystem (VFS) & Reactive Disk
-
-- **O(1) Path Resolution**: Instantaneous node retrieval ($O(1)$ complexity) using a flattened pointer map.
-- **Event-Driven Hub**: Broadcasts `cde-fs-change` signals to keep the Desktop and FileManager in perfect sync.
-
-### 2. WindowManager & Workspace Orchestration
-
-- **Strict Viewport Clamping**: Windows are locked within `0` and `viewportSize`, preventing them from being lost off-screen.
-- **Centering Engine**: Intelligent mobile detection triggers automatic window centering for optimal visibility on small screens.
-- **Workspace Pager**: A 4-pane virtual desktop switcher with full state preservation.
-
-### 3. Motif Design Engine
-
-- **XPM Parser**: Reverse-engineered logic to handle legacy color tokens and perceive contrast.
-- **Scanline Fidelity**: Accurate CRT-style overlays and pixelated branding for an authentic workstation look.
-
----
-
-## 📲 PWA: Install it like a real desktop
-
-This CDE recreation is also a **Progressive Web App**:
-
-- **Installable**: modern browsers will offer an “Install app” / “Add to Home screen” prompt when you visit `https://debian.com.mx`.
-- **Offline-friendly**: the shell of the desktop (HTML, CSS, icons and backdrops) is cached via a Service Worker so the experience can load even with a flaky or missing connection.
-
-Under the hood:
-
-- A web manifest at `/manifest.webmanifest` defines the app name, theme color and icons.
-- A Service Worker at `/sw.js` precaches the main shell (`/`, core CSS and icons) and uses:
-  - **Network-first** strategy for navigation requests, falling back to cache if you're offline.
-  - **Cache-first** strategy for static assets under `/css`, `/icons`, `/backdrops` and `/palettes`.
-
-### Mobile-First Nostalgia
-
-We've spent months ensuring the retro experience doesn't break on modern hardware. Our **Responsive Engine** ensures that whether you're on a 4K monitor or a smartphone, the CDE layout remains proportional and usable.
-
-- **Interaction Parity**: Double-tap to open, long-press for context menus, and tap-to-focus for the terminal virtual keyboard.
-
----
-## 🚀 Step Inside
-
-You don't need to install anything. No clones, no builds, just a window to the past.
-
-Just Visit **[debian.com.mx](https://debian.com.mx)**
-
----
-
-## 🤝 Contributing
-
-We love nostalgia and we love contributors! If you'd like to help improve this portal, check out our **[CONTRIBUTING.md](CONTRIBUTING.md)**
+GPL License - see [LICENSE](LICENSE) for details.
 
 ---
 
 <p align="center">
   <b>Built for performance. Crafted for nostalgia. Engineered for the pixel.</b><br />
-  <a href="https://debian.com.mx">Experience the legend at debian.com.mx</a>
+  <a href="https://debian.com.mx">Experience the legend</a>
 </p>
