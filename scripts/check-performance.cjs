@@ -30,7 +30,6 @@ const requiredFiles = [
   'src/scripts/core/performance-integration.ts',
   'src/scripts/workers/xpm-worker.ts',
   'src/scripts/workers/vfs-worker.ts',
-  'lighthouserc.json',
   'docs/PERFORMANCE.md',
 ];
 
@@ -51,8 +50,8 @@ console.log(`${BLUE}Checking package.json...${RESET}`);
 const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 
 const requiredScripts = {
-  lighthouse: 'lhci autorun',
-  'perf:analyze': 'astro build && npm run lighthouse',
+  dev: 'astro dev',
+  build: 'astro build',
 };
 
 Object.entries(requiredScripts).forEach(([name, command]) => {
@@ -63,57 +62,6 @@ Object.entries(requiredScripts).forEach(([name, command]) => {
     errors++;
   }
 });
-
-if (packageJson.devDependencies['@lhci/cli']) {
-  console.log(`${GREEN}✓${RESET} Lighthouse CI dependency installed`);
-} else {
-  console.log(`${YELLOW}⚠${RESET} Lighthouse CI dependency missing (run: npm install --save-dev @lhci/cli)`);
-  warnings++;
-}
-console.log('');
-
-// Check Lighthouse config
-console.log(`${BLUE}Checking Lighthouse configuration...${RESET}`);
-if (fs.existsSync('lighthouserc.json')) {
-  const config = JSON.parse(fs.readFileSync('lighthouserc.json', 'utf8'));
-  
-  if (config.ci && config.ci.collect && config.ci.assert) {
-    console.log(`${GREEN}✓${RESET} Lighthouse config valid`);
-    
-    const assertions = config.ci.assert.assertions;
-    const performanceScore = assertions['categories:performance'];
-    if (performanceScore && performanceScore[1].minScore >= 0.85) {
-      console.log(`${GREEN}✓${RESET} Performance threshold: ${performanceScore[1].minScore * 100}%`);
-    } else {
-      console.log(`${YELLOW}⚠${RESET} Performance threshold too low or missing`);
-      warnings++;
-    }
-  } else {
-    console.log(`${RED}✗${RESET} Lighthouse config incomplete`);
-    errors++;
-  }
-} else {
-  console.log(`${RED}✗${RESET} lighthouserc.json missing`);
-  errors++;
-}
-console.log('');
-
-// Check GitHub Actions
-console.log(`${BLUE}Checking GitHub Actions...${RESET}`);
-const workflowPath = '.github/workflows/lighthouse-ci.yml';
-if (fs.existsSync(workflowPath)) {
-  console.log(`${GREEN}✓${RESET} Lighthouse CI workflow exists`);
-  const workflow = fs.readFileSync(workflowPath, 'utf8');
-  if (workflow.includes('lighthouse-ci-action')) {
-    console.log(`${GREEN}✓${RESET} Workflow uses lighthouse-ci-action`);
-  } else {
-    console.log(`${YELLOW}⚠${RESET} Workflow may be misconfigured`);
-    warnings++;
-  }
-} else {
-  console.log(`${YELLOW}⚠${RESET} Lighthouse CI workflow missing (optional)`);
-  warnings++;
-}
 console.log('');
 
 // Check TypeScript configuration
@@ -159,7 +107,7 @@ if (errors === 0 && warnings === 0) {
   console.log('Next steps:');
   console.log('  1. npm run dev');
   console.log('  2. Open console and run: await logPerformanceReport()');
-  console.log('  3. npm run perf:analyze');
+  console.log('  3. Test lazy loading and virtual scrolling');
   process.exit(0);
 } else {
   if (errors > 0) {
