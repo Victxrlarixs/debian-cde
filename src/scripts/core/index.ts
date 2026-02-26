@@ -4,7 +4,6 @@ import './config';
 import './accessibility';
 import '../boot/init';
 import '../features/filemanager';
-import '../features/terminal';
 import '../features/stylemanager';
 import '../features/emacs';
 import '../features/lab';

@@ -50,6 +50,7 @@ function isDesktop(): boolean {
 The system uses the Pointer Events API for unified mouse/touch handling.
 
 **Advantages:**
+
 - Single event handler for mouse and touch
 - Automatic pointer capture
 - Pressure sensitivity support
@@ -60,10 +61,10 @@ The system uses the Pointer Events API for unified mouse/touch handling.
 ```typescript
 element.addEventListener('pointerdown', (e: PointerEvent) => {
   if (!e.isPrimary) return; // Only handle primary pointer
-  
+
   e.preventDefault(); // Prevent default touch behavior
   element.setPointerCapture(e.pointerId);
-  
+
   // Handle interaction
 });
 
@@ -109,12 +110,12 @@ let lastTapTime = 0;
 
 element.addEventListener('pointerdown', (e) => {
   const now = Date.now();
-  
+
   tapTimeout = setTimeout(() => {
     // Single tap confirmed
     handleSingleTap(e);
   }, 300);
-  
+
   lastTapTime = now;
 });
 ```
@@ -128,13 +129,13 @@ Equivalent to double-click.
 ```typescript
 element.addEventListener('pointerdown', (e) => {
   const now = Date.now();
-  
+
   if (now - lastTapTime < 300) {
     // Double tap detected
     clearTimeout(tapTimeout);
     handleDoubleTap(e);
   }
-  
+
   lastTapTime = now;
 });
 ```
@@ -151,7 +152,7 @@ let longPressTriggered = false;
 
 element.addEventListener('pointerdown', (e) => {
   longPressTriggered = false;
-  
+
   longPressTimeout = setTimeout(() => {
     longPressTriggered = true;
     handleLongPress(e);
@@ -162,7 +163,7 @@ element.addEventListener('pointermove', (e) => {
   // Cancel long press if finger moves
   const deltaX = Math.abs(e.clientX - startX);
   const deltaY = Math.abs(e.clientY - startY);
-  
+
   if (deltaX > 10 || deltaY > 10) {
     clearTimeout(longPressTimeout);
   }
@@ -170,7 +171,7 @@ element.addEventListener('pointermove', (e) => {
 
 element.addEventListener('pointerup', (e) => {
   clearTimeout(longPressTimeout);
-  
+
   if (!longPressTriggered) {
     // Handle normal tap
   }
@@ -186,31 +187,31 @@ Window and icon dragging with touch.
 ```typescript
 function drag(e: PointerEvent, id: string): void {
   if (!e.isPrimary) return;
-  
+
   const el = document.getElementById(id);
   e.preventDefault();
-  
+
   el.setPointerCapture(e.pointerId);
-  
+
   const startX = e.clientX;
   const startY = e.clientY;
   const startLeft = parseFloat(el.style.left || '0');
   const startTop = parseFloat(el.style.top || '0');
-  
+
   function move(e: PointerEvent): void {
     const deltaX = e.clientX - startX;
     const deltaY = e.clientY - startY;
-    
-    el.style.left = (startLeft + deltaX) + 'px';
-    el.style.top = (startTop + deltaY) + 'px';
+
+    el.style.left = startLeft + deltaX + 'px';
+    el.style.top = startTop + deltaY + 'px';
   }
-  
+
   function stopDrag(e: PointerEvent): void {
     el.releasePointerCapture(e.pointerId);
     el.removeEventListener('pointermove', move);
     el.removeEventListener('pointerup', stopDrag);
   }
-  
+
   el.addEventListener('pointermove', move);
   el.addEventListener('pointerup', stopDrag);
 }
@@ -231,18 +232,18 @@ function centerWindow(win: HTMLElement): void {
   const viewportWidth = window.innerWidth;
   const viewportHeight = window.innerHeight;
   const TOP_BAR_HEIGHT = 30;
-  
+
   let left = (viewportWidth - winWidth) / 2;
   let top = (viewportHeight - winHeight) / 2;
-  
+
   // Strict clamping for mobile
   const PANEL_OFFSET = isMobile() ? 65 : 85;
   const maxX = Math.max(0, viewportWidth - winWidth);
   const maxY = Math.max(TOP_BAR_HEIGHT, viewportHeight - winHeight - PANEL_OFFSET);
-  
+
   left = Math.max(0, Math.min(left, maxX));
   top = Math.max(TOP_BAR_HEIGHT, Math.min(top, maxY));
-  
+
   win.style.position = 'absolute';
   win.style.left = `${left}px`;
   win.style.top = `${top}px`;
@@ -262,18 +263,18 @@ function clampToViewport(win: HTMLElement): void {
   const TOP_BAR_HEIGHT = 30;
   const viewportWidth = window.innerWidth;
   const viewportHeight = window.innerHeight;
-  
+
   const minY = TOP_BAR_HEIGHT;
   const minX = 0;
   const maxX = Math.max(0, viewportWidth - rect.width);
   const maxY = Math.max(minY, viewportHeight - rect.height);
-  
+
   let newTop = Math.max(rect.top, minY);
   newTop = Math.min(newTop, maxY);
-  
+
   let newLeft = Math.max(rect.left, minX);
   newLeft = Math.min(newLeft, maxX);
-  
+
   win.style.top = newTop + 'px';
   win.style.left = newLeft + 'px';
 }
@@ -292,7 +293,7 @@ Windows automatically resize to fit mobile screens.
     max-height: 85vh !important;
     min-width: 280px;
   }
-  
+
   .window.maximized {
     width: 100vw !important;
     height: calc(100vh - 60px) !important;
@@ -376,13 +377,13 @@ Panel adapts to mobile screen width.
     height: 50px;
     padding: 0 4px;
   }
-  
+
   .panel-btn {
     min-width: 40px;
     padding: 4px 8px;
     font-size: 11px;
   }
-  
+
   .panel-btn img {
     width: 20px;
     height: 20px;
@@ -433,9 +434,9 @@ input.addEventListener('focus', () => {
   input.scrollIntoView({
     behavior: 'smooth',
     block: 'center',
-    inline: 'nearest'
+    inline: 'nearest',
   });
-  
+
   // Adjust viewport if needed
   if (isMobile()) {
     setTimeout(() => {
@@ -465,13 +466,10 @@ Adjust layout when virtual keyboard appears.
 ```typescript
 window.visualViewport?.addEventListener('resize', () => {
   const keyboardHeight = window.innerHeight - window.visualViewport.height;
-  
+
   if (keyboardHeight > 100) {
     // Keyboard is visible
-    document.documentElement.style.setProperty(
-      '--keyboard-height',
-      `${keyboardHeight}px`
-    );
+    document.documentElement.style.setProperty('--keyboard-height', `${keyboardHeight}px`);
   } else {
     // Keyboard is hidden
     document.documentElement.style.setProperty('--keyboard-height', '0px');
@@ -490,7 +488,7 @@ function getOrientation(): 'portrait' | 'landscape' {
 
 window.addEventListener('orientationchange', () => {
   const orientation = getOrientation();
-  
+
   if (orientation === 'landscape') {
     // Adjust layout for landscape
     document.body.classList.add('landscape');
@@ -500,7 +498,7 @@ window.addEventListener('orientationchange', () => {
     document.body.classList.add('portrait');
     document.body.classList.remove('landscape');
   }
-  
+
   // Recenter windows
   document.querySelectorAll('.window').forEach((win) => {
     if (win.style.display !== 'none') {
@@ -517,11 +515,11 @@ window.addEventListener('orientationchange', () => {
   .window {
     max-height: 70vh !important;
   }
-  
+
   .panel {
     height: 40px;
   }
-  
+
   .topbar {
     height: 25px;
   }
@@ -545,7 +543,7 @@ Remove 300ms tap delay on mobile.
 **Meta Tag:**
 
 ```html
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 ```
 
 ### Passive Event Listeners
@@ -581,7 +579,7 @@ let resizeTimeout: number;
 
 window.addEventListener('resize', () => {
   clearTimeout(resizeTimeout);
-  
+
   resizeTimeout = setTimeout(() => {
     // Recalculate layouts
     document.querySelectorAll('.window').forEach((win) => {
@@ -602,11 +600,13 @@ window.addEventListener('resize', () => {
 Mobile screen readers are fully supported.
 
 **VoiceOver (iOS):**
+
 - Swipe right/left to navigate
 - Double-tap to activate
 - Three-finger swipe to scroll
 
 **TalkBack (Android):**
+
 - Swipe right/left to navigate
 - Double-tap to activate
 - Two-finger swipe to scroll
@@ -629,7 +629,7 @@ Ensure focus is visible on mobile.
 Prevent accidental zoom while allowing accessibility zoom.
 
 ```html
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
 ```
 
 ## Testing
@@ -637,12 +637,14 @@ Prevent accidental zoom while allowing accessibility zoom.
 ### Device Testing
 
 **Physical Devices:**
+
 - iPhone 12/13/14 (iOS 15+)
 - Samsung Galaxy S21/S22 (Android 11+)
 - iPad Pro (iOS 15+)
 - Google Pixel 6/7 (Android 12+)
 
 **Emulators:**
+
 - Chrome DevTools Device Mode
 - Safari Responsive Design Mode
 - Firefox Responsive Design Mode
@@ -650,6 +652,7 @@ Prevent accidental zoom while allowing accessibility zoom.
 ### Test Scenarios
 
 **Window Management:**
+
 - [ ] Windows center on open
 - [ ] Windows stay within viewport
 - [ ] Drag works with touch
@@ -657,6 +660,7 @@ Prevent accidental zoom while allowing accessibility zoom.
 - [ ] Windows resize appropriately
 
 **Touch Gestures:**
+
 - [ ] Single tap selects
 - [ ] Double tap opens
 - [ ] Long press shows context menu
@@ -664,18 +668,21 @@ Prevent accidental zoom while allowing accessibility zoom.
 - [ ] Pinch zoom disabled on UI elements
 
 **Virtual Keyboard:**
+
 - [ ] Keyboard shows on input focus
 - [ ] Layout adjusts for keyboard
 - [ ] Inputs scroll into view
 - [ ] Keyboard dismisses on blur
 
 **Orientation:**
+
 - [ ] Layout adapts to portrait
 - [ ] Layout adapts to landscape
 - [ ] Windows reposition on rotation
 - [ ] No content overflow
 
 **Performance:**
+
 - [ ] Smooth scrolling
 - [ ] Responsive touch feedback
 - [ ] No lag during drag
@@ -695,10 +702,7 @@ Prevent accidental zoom while allowing accessibility zoom.
 
 ```typescript
 function setViewportHeight(): void {
-  document.documentElement.style.setProperty(
-    '--viewport-height',
-    `${window.innerHeight}px`
-  );
+  document.documentElement.style.setProperty('--viewport-height', `${window.innerHeight}px`);
 }
 
 window.addEventListener('resize', setViewportHeight);
@@ -740,4 +744,5 @@ setViewportHeight();
 ## Future Enhancements
 
 **Planned Features:**
+
 - Swipe gestures for workspace switching

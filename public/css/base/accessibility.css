@@ -180,16 +180,22 @@
     min-width: 44px;
     min-height: 44px;
   }
-  
+
   /* Exception for panel icons on mobile - they need to stay compact */
   #cde-panel .cde-icon {
     min-width: 28px;
     min-height: 30px;
   }
-  
+
   #cde-panel .cde-icon-btn {
     min-width: 28px;
     min-height: 16px;
+  }
+
+  /* Exception for File Manager toolbar buttons - keep them compact */
+  .fm-btn {
+    min-width: 24px;
+    min-height: 22px;
   }
 }
 

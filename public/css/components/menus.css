@@ -97,7 +97,7 @@
   height: 16px;
 }
 
-.open+.dropdown-menu {
+.open + .dropdown-menu {
   display: block;
 }
 
@@ -118,7 +118,7 @@
   margin-bottom: 4px;
 }
 
-#utilitiesBtn.open+#utilitiesDropdown {
+#utilitiesBtn.open + #utilitiesDropdown {
   display: block;
 }
 

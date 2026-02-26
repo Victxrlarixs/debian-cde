@@ -561,13 +561,6 @@ export const DesktopManager = (() => {
             action: async () => {},
           },
           {
-            label: 'Terminal',
-            icon: '/icons/konsole.png',
-            action: async () => {
-              if (window.openTerminal) window.openTerminal();
-            },
-          },
-          {
             label: 'FileManager',
             icon: '/icons/filemanager.png',
             action: async () => {

@@ -50,7 +50,7 @@
   flex: 1;
 }
 
-#styleManagerMouse .mouse-control-column>span {
+#styleManagerMouse .mouse-control-column > span {
   font-weight: bold;
   font-size: 11px;
   display: block;

@@ -10,40 +10,40 @@ The system provides comprehensive keyboard navigation without requiring a mouse.
 
 #### Applications
 
-| Shortcut | Action | Description |
-|----------|--------|-------------|
-| Ctrl+Alt+T | Open Terminal | Opens the Terminal Lab window |
-| Ctrl+Alt+F | Toggle File Manager | Opens or focuses the File Manager |
-| Ctrl+Alt+E | Open XEmacs | Opens the XEmacs text editor |
-| Ctrl+Alt+N | Open Netscape | Opens Netscape Navigator browser |
-| Ctrl+Alt+S | Open Style Manager | Opens the Style Manager for customization |
+| Shortcut   | Action              | Description                               |
+| ---------- | ------------------- | ----------------------------------------- |
+| Ctrl+Alt+T | Open Terminal       | Opens the Terminal Lab window             |
+| Ctrl+Alt+F | Toggle File Manager | Opens or focuses the File Manager         |
+| Ctrl+Alt+E | Open XEmacs         | Opens the XEmacs text editor              |
+| Ctrl+Alt+N | Open Netscape       | Opens Netscape Navigator browser          |
+| Ctrl+Alt+S | Open Style Manager  | Opens the Style Manager for customization |
 
 #### Window Management
 
-| Shortcut | Action | Description |
-|----------|--------|-------------|
-| Ctrl+W | Close Active Window | Closes the currently focused window |
-| Ctrl+M | Minimize Active Window | Minimizes the currently focused window |
-| Tab | Focus Next Element | Cycles through focusable elements |
-| Shift+Tab | Focus Previous Element | Cycles backward through focusable elements |
-| Enter | Activate Focused Element | Activates buttons, icons, or menu items |
-| Escape | Unfocus Input | Removes focus from input fields |
+| Shortcut  | Action                   | Description                                |
+| --------- | ------------------------ | ------------------------------------------ |
+| Ctrl+W    | Close Active Window      | Closes the currently focused window        |
+| Ctrl+M    | Minimize Active Window   | Minimizes the currently focused window     |
+| Tab       | Focus Next Element       | Cycles through focusable elements          |
+| Shift+Tab | Focus Previous Element   | Cycles backward through focusable elements |
+| Enter     | Activate Focused Element | Activates buttons, icons, or menu items    |
+| Escape    | Unfocus Input            | Removes focus from input fields            |
 
 #### Workspaces
 
-| Shortcut | Action | Description |
-|----------|--------|-------------|
-| Ctrl+Alt+1 | Switch to Workspace 1 | Activates the first virtual desktop |
+| Shortcut   | Action                | Description                          |
+| ---------- | --------------------- | ------------------------------------ |
+| Ctrl+Alt+1 | Switch to Workspace 1 | Activates the first virtual desktop  |
 | Ctrl+Alt+2 | Switch to Workspace 2 | Activates the second virtual desktop |
-| Ctrl+Alt+3 | Switch to Workspace 3 | Activates the third virtual desktop |
+| Ctrl+Alt+3 | Switch to Workspace 3 | Activates the third virtual desktop  |
 | Ctrl+Alt+4 | Switch to Workspace 4 | Activates the fourth virtual desktop |
 
 #### Accessibility
 
-| Shortcut | Action | Description |
-|----------|--------|-------------|
-| Ctrl+Alt+H | Toggle High Contrast | Enables or disables high contrast mode |
-| Ctrl+Shift+? | Show Shortcuts Help | Displays a modal with all keyboard shortcuts |
+| Shortcut     | Action               | Description                                  |
+| ------------ | -------------------- | -------------------------------------------- |
+| Ctrl+Alt+H   | Toggle High Contrast | Enables or disables high contrast mode       |
+| Ctrl+Shift+? | Show Shortcuts Help  | Displays a modal with all keyboard shortcuts |
 
 ### XEmacs Keybindings
 
@@ -51,41 +51,41 @@ XEmacs follows traditional Emacs keybinding conventions.
 
 #### File Operations
 
-| Shortcut | Action | Description |
-|----------|--------|-------------|
-| Ctrl+X Ctrl+F | Open File | Prompts for file path in minibuffer |
-| Ctrl+X Ctrl+S | Save File | Saves current buffer to disk |
-| Ctrl+X Ctrl+W | Save As | Prompts for new file path |
-| Ctrl+X Ctrl+C | Close Editor | Closes the XEmacs window |
-| Ctrl+X H | Select All | Selects all text in buffer |
+| Shortcut      | Action       | Description                         |
+| ------------- | ------------ | ----------------------------------- |
+| Ctrl+X Ctrl+F | Open File    | Prompts for file path in minibuffer |
+| Ctrl+X Ctrl+S | Save File    | Saves current buffer to disk        |
+| Ctrl+X Ctrl+W | Save As      | Prompts for new file path           |
+| Ctrl+X Ctrl+C | Close Editor | Closes the XEmacs window            |
+| Ctrl+X H      | Select All   | Selects all text in buffer          |
 
 #### Cursor Movement
 
-| Shortcut | Action | Description |
-|----------|--------|-------------|
-| Ctrl+A | Move to Line Start | Moves cursor to beginning of line |
-| Ctrl+E | Move to Line End | Moves cursor to end of line |
-| Ctrl+P | Previous Line | Moves cursor up one line |
-| Ctrl+N | Next Line | Moves cursor down one line |
-| Ctrl+F | Forward Character | Moves cursor right one character |
-| Ctrl+B | Backward Character | Moves cursor left one character |
+| Shortcut | Action             | Description                       |
+| -------- | ------------------ | --------------------------------- |
+| Ctrl+A   | Move to Line Start | Moves cursor to beginning of line |
+| Ctrl+E   | Move to Line End   | Moves cursor to end of line       |
+| Ctrl+P   | Previous Line      | Moves cursor up one line          |
+| Ctrl+N   | Next Line          | Moves cursor down one line        |
+| Ctrl+F   | Forward Character  | Moves cursor right one character  |
+| Ctrl+B   | Backward Character | Moves cursor left one character   |
 
 #### Editing
 
-| Shortcut | Action | Description |
-|----------|--------|-------------|
-| Ctrl+D | Delete Character | Deletes character at cursor |
-| Ctrl+K | Kill Line | Deletes from cursor to end of line |
-| Ctrl+_ | Undo | Undoes last edit operation |
-| Ctrl+G | Abort | Cancels current operation or command |
+| Shortcut | Action           | Description                          |
+| -------- | ---------------- | ------------------------------------ |
+| Ctrl+D   | Delete Character | Deletes character at cursor          |
+| Ctrl+K   | Kill Line        | Deletes from cursor to end of line   |
+| Ctrl+\_  | Undo             | Undoes last edit operation           |
+| Ctrl+G   | Abort            | Cancels current operation or command |
 
 #### Search and Navigation
 
-| Shortcut | Action | Description |
-|----------|--------|-------------|
-| Ctrl+S | Find | Opens find dialog |
-| Ctrl+L | Recenter | Recenters view on cursor |
-| Alt+X | Execute Command | Opens minibuffer for command execution |
+| Shortcut | Action          | Description                            |
+| -------- | --------------- | -------------------------------------- |
+| Ctrl+S   | Find            | Opens find dialog                      |
+| Ctrl+L   | Recenter        | Recenters view on cursor               |
+| Alt+X    | Execute Command | Opens minibuffer for command execution |
 
 #### Minibuffer Commands
 
@@ -99,15 +99,15 @@ When prompted with `M-x`, the following commands are available:
 
 ### Netscape Navigator Shortcuts
 
-| Shortcut | Action | Description |
-|----------|--------|-------------|
-| Ctrl+L | Open Location | Focuses the URL bar |
-| Ctrl+R | Reload | Reloads current page |
-| Ctrl+H | Go Home | Navigates to home page |
-| Ctrl+F | Find in Page | Opens find dialog |
-| Ctrl+P | Print | Opens print dialog |
-| Ctrl+S | Save Page | Saves current page to disk |
-| Ctrl+U | View Source | Opens page source in new window |
+| Shortcut | Action        | Description                     |
+| -------- | ------------- | ------------------------------- |
+| Ctrl+L   | Open Location | Focuses the URL bar             |
+| Ctrl+R   | Reload        | Reloads current page            |
+| Ctrl+H   | Go Home       | Navigates to home page          |
+| Ctrl+F   | Find in Page  | Opens find dialog               |
+| Ctrl+P   | Print         | Opens print dialog              |
+| Ctrl+S   | Save Page     | Saves current page to disk      |
+| Ctrl+U   | View Source   | Opens page source in new window |
 
 ## High Contrast Mode
 
@@ -182,7 +182,7 @@ dialog.addEventListener('keydown', (e: KeyboardEvent) => {
     const focusable = dialog.querySelectorAll('[tabindex]:not([tabindex="-1"])');
     const first = focusable[0];
     const last = focusable[focusable.length - 1];
-    
+
     if (e.shiftKey && document.activeElement === first) {
       e.preventDefault();
       last.focus();
@@ -277,6 +277,7 @@ The system respects the `prefers-reduced-motion` media query:
 ```
 
 This disables:
+
 - Window opening/closing animations
 - Typing animations in Terminal Lab
 - Loading animations in Netscape
@@ -318,20 +319,24 @@ The system has been tested with:
 The Style Manager provides accessibility-focused options:
 
 **Keyboard Section:**
+
 - Repeat rate adjustment
 - Click sound toggle
 - Key preview (planned)
 
 **Mouse Section:**
+
 - Acceleration adjustment
 - Double-click speed
 - Handedness (left/right)
 
 **Screen Section:**
+
 - Screen saver timeout
 - Disable animations (planned)
 
 **Audio Section:**
+
 - Beep volume
 - Beep frequency
 - Beep duration

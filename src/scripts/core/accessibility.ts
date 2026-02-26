@@ -68,20 +68,6 @@ export class AccessibilityManager {
    * Register global keyboard shortcuts
    */
   private registerGlobalShortcuts(): void {
-    // Terminal
-    this.registerShortcut({
-      key: 't',
-      ctrl: true,
-      alt: true,
-      action: () => {
-        if (window.openTerminal) {
-          window.openTerminal();
-        }
-      },
-      description: 'Open Terminal',
-      category: 'Applications',
-    });
-
     // File Manager
     this.registerShortcut({
       key: 'f',
@@ -208,11 +194,7 @@ export class AccessibilityManager {
   private handleKeyDown(e: KeyboardEvent): void {
     // Don't trigger shortcuts when typing in inputs
     const target = e.target as HTMLElement;
-    if (
-      target.tagName === 'INPUT' ||
-      target.tagName === 'TEXTAREA' ||
-      target.isContentEditable
-    ) {
+    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
       // Allow Escape to blur inputs
       if (e.key === 'Escape') {
         target.blur();
@@ -302,11 +284,7 @@ export class AccessibilityManager {
     // Filter visible elements only
     this.focusableElements = elements.filter((el) => {
       const style = window.getComputedStyle(el);
-      return (
-        style.display !== 'none' &&
-        style.visibility !== 'hidden' &&
-        el.offsetParent !== null
-      );
+      return style.display !== 'none' && style.visibility !== 'hidden' && el.offsetParent !== null;
     });
   }
 
@@ -381,7 +359,7 @@ export class AccessibilityManager {
 
     document.body.appendChild(modal);
     modal.style.display = 'flex';
-    
+
     // Register and center on next frame to ensure proper dimensions
     requestAnimationFrame(() => {
       WindowManager.registerWindow(modal);
@@ -410,7 +388,9 @@ export class AccessibilityManager {
    * Close the currently active window
    */
   private closeActiveWindow(): void {
-    const activeWindow = document.querySelector('.window.active, .cde-retro-modal.active') as HTMLElement;
+    const activeWindow = document.querySelector(
+      '.window.active, .cde-retro-modal.active'
+    ) as HTMLElement;
     if (activeWindow) {
       const closeBtn = activeWindow.querySelector('.close-btn') as HTMLElement;
       if (closeBtn) {

@@ -5,11 +5,13 @@ This document provides technical guidance for developers contributing to the CDE
 ## Prerequisites
 
 **Required:**
+
 - Node.js v20 or higher
 - npm v10 or higher
 - Git
 
 **Recommended:**
+
 - VS Code or similar IDE
 - Chrome/Firefox DevTools
 - Basic understanding of TypeScript, Astro, and CSS
@@ -158,16 +160,16 @@ import { CONFIG } from '../core/config';
  */
 class ExampleManager {
   private state: any = {};
-  
+
   constructor() {
     this.init();
   }
-  
+
   private init(): void {
     logger.log('[Example] Initializing...');
     // Setup code
   }
-  
+
   public doSomething(): void {
     // Public API
   }
@@ -302,8 +304,8 @@ async function loadData(): Promise<Data> {
 // Bad: Promise chains
 function loadData() {
   return fetch('/api/data')
-    .then(r => r.json())
-    .catch(e => console.error(e));
+    .then((r) => r.json())
+    .catch((e) => console.error(e));
 }
 ```
 
@@ -314,11 +316,11 @@ function loadData() {
 ```typescript
 // camelCase for variables and functions
 const userName = 'John';
-function getUserName() { }
+function getUserName() {}
 
 // PascalCase for classes and interfaces
-class WindowManager { }
-interface VFSNode { }
+class WindowManager {}
+interface VFSNode {}
 
 // UPPER_SNAKE_CASE for constants
 const MAX_RETRIES = 3;
@@ -342,13 +344,13 @@ DesktopIcons.astro
 
 **JSDoc for Public APIs:**
 
-```typescript
+````typescript
 /**
  * Registers a window for management.
- * 
+ *
  * @param win - The window element to register
  * @returns True if registration succeeded
- * 
+ *
  * @example
  * ```typescript
  * const win = document.getElementById('myWindow');
@@ -358,7 +360,7 @@ DesktopIcons.astro
 public registerWindow(win: HTMLElement): boolean {
   // Implementation
 }
-```
+````
 
 **Inline Comments:**
 
@@ -390,6 +392,7 @@ const x = 5;
 ### Browser Testing
 
 **Required Browsers:**
+
 - Chrome/Edge (latest)
 - Firefox (latest)
 - Safari (latest)
@@ -432,6 +435,7 @@ lighthouse http://localhost:4321 --view
 ```
 
 **Target Scores:**
+
 - Performance: 90+
 - Accessibility: 95+
 - Best Practices: 95+
@@ -547,10 +551,12 @@ npm run build
 ### Branch Strategy
 
 **Main Branches:**
+
 - `main`: Production-ready code
 - `develop`: Development branch
 
 **Feature Branches:**
+
 - `feature/feature-name`: New features
 - `fix/bug-name`: Bug fixes
 - `docs/doc-name`: Documentation updates
@@ -568,6 +574,7 @@ npm run build
 ```
 
 **Types:**
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation
@@ -608,24 +615,29 @@ Fixes #456
 
 ```markdown
 ## Description
+
 Brief description of changes
 
 ## Type of Change
+
 - [ ] Bug fix
 - [ ] New feature
 - [ ] Documentation update
 - [ ] Refactoring
 
 ## Testing
+
 - [ ] Tested locally
 - [ ] Tested on mobile
 - [ ] Tested in multiple browsers
 - [ ] No console errors
 
 ## Screenshots
+
 (if applicable)
 
 ## Related Issues
+
 Closes #123
 ```
 
@@ -647,21 +659,21 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Build
         run: npm run build
-      
+
       - name: Deploy
         if: github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v3
@@ -724,13 +736,13 @@ npx vite-bundle-visualizer
 
 ```typescript
 // Bad: Layout thrashing
-elements.forEach(el => {
+elements.forEach((el) => {
   const height = el.offsetHeight; // Read
   el.style.height = height + 10 + 'px'; // Write
 });
 
 // Good: Batch reads and writes
-const heights = elements.map(el => el.offsetHeight); // Read
+const heights = elements.map((el) => el.offsetHeight); // Read
 elements.forEach((el, i) => {
   el.style.height = heights[i] + 10 + 'px'; // Write
 });
@@ -748,7 +760,7 @@ elements.forEach((el, i) => {
 
 <!-- Icons -->
 <div class="cde-icon" role="button" tabindex="0" aria-label="File Manager">
-  <img src="/icons/filemanager.png" alt="">
+  <img src="/icons/filemanager.png" alt="" />
 </div>
 
 <!-- Windows -->
@@ -757,9 +769,7 @@ elements.forEach((el, i) => {
 </div>
 
 <!-- Live regions -->
-<div role="status" aria-live="polite" aria-atomic="true">
-  File saved successfully
-</div>
+<div role="status" aria-live="polite" aria-atomic="true">File saved successfully</div>
 ```
 
 ### Keyboard Navigation
@@ -773,7 +783,7 @@ modal.addEventListener('keydown', (e) => {
     const focusable = modal.querySelectorAll('[tabindex]:not([tabindex="-1"])');
     const first = focusable[0] as HTMLElement;
     const last = focusable[focusable.length - 1] as HTMLElement;
-    
+
     if (e.shiftKey && document.activeElement === first) {
       e.preventDefault();
       last.focus();
@@ -813,16 +823,16 @@ modal.addEventListener('keydown', (e) => {
 
 **JSDoc Comments:**
 
-```typescript
+````typescript
 /**
  * Calculates the distance between two points.
- * 
+ *
  * @param x1 - X coordinate of first point
  * @param y1 - Y coordinate of first point
  * @param x2 - X coordinate of second point
  * @param y2 - Y coordinate of second point
  * @returns The Euclidean distance between the points
- * 
+ *
  * @example
  * ```typescript
  * const distance = calculateDistance(0, 0, 3, 4);
@@ -832,7 +842,7 @@ modal.addEventListener('keydown', (e) => {
 function calculateDistance(x1: number, y1: number, x2: number, y2: number): number {
   return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
 }
-```
+````
 
 ### README Updates
 
@@ -875,18 +885,21 @@ npm version major
 Update `CHANGELOG.md`:
 
 ```markdown
-## [1.1.0] 
+## [1.1.0]
 
 ### Added
+
 - Workspace switching with Ctrl+Alt+1-4
 - High contrast mode
 - Mobile touch gestures
 
 ### Fixed
+
 - Window positioning on mobile
 - VFS path resolution bug
 
 ### Changed
+
 - Improved performance of Terminal Lab
 - Updated color palettes
 ```
@@ -907,17 +920,20 @@ git push origin main
 ## Resources
 
 ### Documentation
+
 - [Astro Docs](https://docs.astro.build/)
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/)
 - [MDN Web Docs](https://developer.mozilla.org/)
 
 ### Tools
+
 - [Chrome DevTools](https://developer.chrome.com/docs/devtools/)
 - [Lighthouse](https://developers.google.com/web/tools/lighthouse)
 - [Can I Use](https://caniuse.com/)
 - [TypeScript Playground](https://www.typescriptlang.org/play)
 
 ### Community
+
 - [GitHub Discussions](https://github.com/Victxrlarixs/debian-cde/discussions)
 - [GitHub Issues](https://github.com/Victxrlarixs/debian-cde/issues)
 - [Contributing Guide](../CONTRIBUTING.md)

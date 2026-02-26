@@ -594,4 +594,4 @@ if (typeof window !== 'undefined') {
   (window as any).openNetscape = () => netscape.open();
 }
 
-export { };
+export {};

@@ -13,6 +13,7 @@ The CDE Time Capsule is a browser-based recreation of the Common Desktop Environ
 The VFS provides a complete in-memory filesystem with O(1) path resolution using a flattened pointer map.
 
 **Key Features:**
+
 - O(1) path lookup via pre-computed hash map
 - Event-driven architecture with `cde-fs-change` broadcasts
 - Full CRUD operations (create, read, update, delete)
@@ -44,6 +45,7 @@ const fsMap: Record<string, VFSNode> = {};
 ```
 
 **Path Resolution:**
+
 - Handles absolute paths (`/home/user/file.txt`)
 - Tilde expansion (`~/Desktop` → `/home/victxrlarixs/Desktop`)
 - Relative path resolution with `.` and `..` support
@@ -53,9 +55,11 @@ const fsMap: Record<string, VFSNode> = {};
 All filesystem modifications dispatch a `cde-fs-change` event:
 
 ```typescript
-window.dispatchEvent(new CustomEvent('cde-fs-change', {
-  detail: { path: '/home/victxrlarixs/Desktop/' }
-}));
+window.dispatchEvent(
+  new CustomEvent('cde-fs-change', {
+    detail: { path: '/home/victxrlarixs/Desktop/' },
+  })
+);
 ```
 
 This enables reactive updates in FileManager and Desktop components.
@@ -65,6 +69,7 @@ This enables reactive updates in FileManager and Desktop components.
 Manages window lifecycle, positioning, focus, dragging, and workspace organization.
 
 **Responsibilities:**
+
 - Window registration and lifecycle management
 - Drag-and-drop with pointer event handling
 - Z-index management for focus ordering
@@ -105,10 +110,9 @@ function drag(e: PointerEvent, id: string): void {
 Mouse acceleration is applied during drag:
 
 ```typescript
-const acceleration = parseFloat(
-  getComputedStyle(document.documentElement)
-    .getPropertyValue('--mouse-acceleration')
-) || 1;
+const acceleration =
+  parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--mouse-acceleration')) ||
+  1;
 
 let left = currentLeft + deltaX * acceleration;
 let top = currentTop + deltaY * acceleration;
@@ -133,6 +137,7 @@ Each window has a `data-workspace` attribute (1-4). Switching workspaces:
 Centralized configuration and persistence layer using localStorage.
 
 **Managed Settings:**
+
 - Theme colors and fonts
 - Mouse settings (acceleration, handedness, double-click speed)
 - Keyboard settings (repeat rate, click sound)
@@ -178,11 +183,14 @@ interface Settings {
     enabled: boolean;
   };
   session: {
-    windows: Record<string, {
-      left: string;
-      top: string;
-      maximized: boolean;
-    }>;
+    windows: Record<
+      string,
+      {
+        left: string;
+        top: string;
+        maximized: boolean;
+      }
+    >;
   };
 }
 ```
@@ -200,6 +208,7 @@ localStorage.setItem('cde_settings', JSON.stringify(settings));
 Web Audio API-based sound synthesis for system feedback.
 
 **Sound Types:**
+
 - Click: 800Hz, 30ms (UI interactions)
 - Success: 1000Hz, 50ms (successful operations)
 - Error: 400Hz, 100ms (error conditions)
@@ -265,10 +274,10 @@ The parser recognizes CDE symbolic color tokens:
 
 ```typescript
 const colorMap: Record<string, string> = {
-  'topShadowColor': 'var(--top-shadow)',
-  'bottomShadowColor': 'var(--bottom-shadow)',
-  'selectColor': 'var(--select-color)',
-  'background': 'var(--bg-color)',
+  topShadowColor: 'var(--top-shadow)',
+  bottomShadowColor: 'var(--bottom-shadow)',
+  selectColor: 'var(--select-color)',
+  background: 'var(--bg-color)',
   // ... etc
 };
 ```
@@ -290,6 +299,7 @@ window.addEventListener('cde-fs-change', (e: CustomEvent) => {
 ```
 
 **Icon Actions:**
+
 - Single click: Select
 - Double click: Open (file → XEmacs, folder → FileManager)
 - Right click: Context menu (rename, delete, properties)
@@ -300,6 +310,7 @@ window.addEventListener('cde-fs-change', (e: CustomEvent) => {
 Full-featured file browser with VFS integration.
 
 **Features:**
+
 - Tree navigation with expandable folders
 - Icon and list view modes
 - Context menus (new file, new folder, rename, delete, properties)
@@ -325,25 +336,25 @@ Emacs-style text editor with authentic keybindings.
 
 **Keybindings:**
 
-| Binding | Action |
-|---------|--------|
-| C-x C-s | Save file |
+| Binding | Action                        |
+| ------- | ----------------------------- |
+| C-x C-s | Save file                     |
 | C-x C-f | Open file (minibuffer prompt) |
-| C-x C-w | Save as |
-| C-x C-c | Close editor |
-| C-x h | Select all |
-| C-s | Find |
-| C-g | Abort/Quit |
-| C-k | Kill line |
-| C-_ | Undo |
-| C-a | Move to line start |
-| C-e | Move to line end |
-| C-p | Previous line |
-| C-n | Next line |
-| C-f | Forward char |
-| C-b | Backward char |
-| C-d | Delete char |
-| M-x | Execute command |
+| C-x C-w | Save as                       |
+| C-x C-c | Close editor                  |
+| C-x h   | Select all                    |
+| C-s     | Find                          |
+| C-g     | Abort/Quit                    |
+| C-k     | Kill line                     |
+| C-\_    | Undo                          |
+| C-a     | Move to line start            |
+| C-e     | Move to line end              |
+| C-p     | Previous line                 |
+| C-n     | Next line                     |
+| C-f     | Forward char                  |
+| C-b     | Backward char                 |
+| C-d     | Delete char                   |
+| M-x     | Execute command               |
 
 **Minibuffer:**
 
@@ -402,6 +413,7 @@ Terminal content is truncated to 500 lines every 10 seconds to prevent memory bl
 Functional browser replica with internal pages and external link support.
 
 **Internal Pages:**
+
 - Welcome
 - What's New!
 - What's Cool!
@@ -443,6 +455,7 @@ public navigate(pageKey: string): void {
 Comprehensive theme customization system with 9 modules.
 
 **Modules:**
+
 - **Theme**: Color palette management (76+ CDE palettes)
 - **Font**: Typography controls (family, size, weight)
 - **Mouse**: Acceleration, handedness, double-click speed
@@ -611,6 +624,7 @@ npm run build
 ```
 
 Astro compiles:
+
 1. TypeScript → JavaScript (esbuild)
 2. Astro components → HTML
 3. CSS → Minified CSS
@@ -648,6 +662,7 @@ Static site deployed to GitHub Pages via GitHub Actions:
 ## Browser Compatibility
 
 **Minimum Requirements:**
+
 - ES2020 support
 - CSS Custom Properties
 - Pointer Events API
@@ -656,6 +671,7 @@ Static site deployed to GitHub Pages via GitHub Actions:
 - Service Workers (for PWA)
 
 **Tested Browsers:**
+
 - Chrome/Edge 90+
 - Firefox 88+
 - Safari 14+

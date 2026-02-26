@@ -40,7 +40,9 @@
   border-left-color: var(--border-light);
   border-bottom-color: var(--border-dark);
   border-right-color: var(--border-dark);
-  cursor: url('/icons/cursor.svg') 0 0, default;
+  cursor:
+    url('/icons/cursor.svg') 0 0,
+    default;
   height: 60px;
   background-position: center;
   transition: transform 0.1s ease;
