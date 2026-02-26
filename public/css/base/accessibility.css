@@ -1,0 +1,373 @@
+/* ============================================================================
+   CDE Accessibility Styles
+   High contrast mode, focus indicators, and screen reader utilities
+   ============================================================================ */
+
+/* ── Focus Indicators ────────────────────────────────────────────────────── */
+
+/* Enhanced focus outline for keyboard navigation */
+*:focus {
+  outline: 2px solid var(--focus-color, #faad49);
+  outline-offset: 2px;
+}
+
+/* Remove outline for mouse users (but keep for keyboard) */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 3px solid var(--focus-color, #faad49);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px rgba(250, 173, 73, 0.3);
+}
+
+/* Focus for interactive elements */
+.cde-icon:focus-visible,
+.menu-item:focus-visible,
+.cde-btn:focus-visible,
+.titlebar-btn:focus-visible {
+  outline: 3px solid var(--focus-color, #faad49);
+  outline-offset: 2px;
+  background-color: var(--button-active, #354662);
+}
+
+/* Focus for windows */
+.window:focus-within {
+  box-shadow: 0 0 0 3px var(--focus-color, #faad49);
+}
+
+/* ── Screen Reader Only Content ──────────────────────────────────────────── */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only-focusable:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* ── Skip Links ──────────────────────────────────────────────────────────── */
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--window-color, #4d648d);
+  color: var(--text-color, #ffffff);
+  padding: 8px 16px;
+  text-decoration: none;
+  z-index: 100000;
+  border: 2px solid var(--border-light, #6f8fb8);
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ── High Contrast Mode ──────────────────────────────────────────────────── */
+
+.high-contrast {
+  /* Override colors with high contrast values */
+  --window-color: #000000;
+  --topbar-color: #000000;
+  --titlebar-color: #ffff00;
+  --titlebar-text-color: #000000;
+  --terminal-bg-color: #000000;
+  --terminal-text-color: #00ff00;
+  --dock-color: #000000;
+  --menu-color: #000000;
+  --dock-icon-bg: #1a1a1a;
+  --dock-icon-hover: #333333;
+  --dock-icon-active: #ffff00;
+  --button-bg: #000000;
+  --button-active: #ffff00;
+  --separator-color: #ffffff;
+  --modal-bg: #000000;
+  --scrollbar-color: #ffff00;
+  --text-color: #ffffff;
+  --border-light: #ffffff;
+  --border-dark: #ffffff;
+  --border-inset-light: #ffffff;
+  --border-inset-dark: #ffffff;
+  --shadow-color: rgba(255, 255, 255, 0.5);
+  --focus-color: #00ffff;
+}
+
+.high-contrast * {
+  /* Force high contrast borders */
+  border-color: #ffffff !important;
+}
+
+.high-contrast .window,
+.high-contrast .cde-retro-modal {
+  border: 3px solid #ffffff !important;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5) !important;
+}
+
+.high-contrast .titlebar {
+  background: #ffff00 !important;
+  color: #000000 !important;
+  border-bottom: 3px solid #ffffff !important;
+}
+
+.high-contrast .cde-icon:hover,
+.high-contrast .menu-item:hover,
+.high-contrast .cde-btn:hover {
+  background: #ffff00 !important;
+  color: #000000 !important;
+}
+
+.high-contrast img {
+  /* Increase contrast for images */
+  filter: contrast(1.5) brightness(1.2);
+}
+
+.high-contrast .backdrop {
+  /* Remove background patterns in high contrast */
+  background-image: none !important;
+  background-color: #000000 !important;
+}
+
+/* ── Keyboard Shortcuts Help Modal ───────────────────────────────────────── */
+
+.shortcuts-help {
+  font-family: var(--font-family-base, monospace);
+  color: var(--text-color, #ffffff);
+}
+
+.shortcuts-help h2 {
+  margin: 0 0 20px 0;
+  font-size: 18px;
+  font-weight: bold;
+  border-bottom: 2px solid var(--border-light, #6f8fb8);
+  padding-bottom: 10px;
+}
+
+.shortcuts-help h3 {
+  margin: 20px 0 10px 0;
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--titlebar-color, #faad49);
+}
+
+.shortcuts-help table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 15px;
+}
+
+.shortcuts-help tr {
+  border-bottom: 1px solid var(--separator-color, #354662);
+}
+
+.shortcuts-help td {
+  padding: 8px 12px;
+  vertical-align: middle;
+}
+
+.shortcuts-help td:first-child {
+  width: 40%;
+  font-weight: bold;
+}
+
+.shortcuts-help kbd {
+  display: inline-block;
+  padding: 3px 8px;
+  font-family: var(--font-family-mono, monospace);
+  font-size: 11px;
+  color: var(--titlebar-text-color, #000000);
+  background-color: var(--titlebar-color, #faad49);
+  border: 2px solid var(--border-light, #6f8fb8);
+  border-radius: 3px;
+  box-shadow: 0 2px 0 var(--border-dark, #354662);
+  margin: 0 2px;
+}
+
+/* ── Reduced Motion ──────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Increased Text Size Support ─────────────────────────────────────────── */
+
+@media (min-width: 1px) {
+  html {
+    font-size: 100%;
+  }
+}
+
+/* Support for browser zoom and text-only zoom */
+@media (min-resolution: 120dpi) {
+  body {
+    font-size: 1rem;
+  }
+}
+
+/* ── Touch Target Size (Mobile Accessibility) ────────────────────────────── */
+
+@media (pointer: coarse) {
+  .cde-icon,
+  .menu-item,
+  .cde-btn,
+  .titlebar-btn,
+  button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* ── Color Blind Friendly Indicators ─────────────────────────────────────── */
+
+/* Add patterns/icons in addition to color for status */
+.active::before {
+  content: '▶ ';
+  font-size: 0.8em;
+}
+
+.error::before {
+  content: '⚠ ';
+}
+
+.success::before {
+  content: '✓ ';
+}
+
+/* ── Keyboard Navigation Hints ───────────────────────────────────────────── */
+
+[data-keyboard-hint]::after {
+  content: attr(data-keyboard-hint);
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--modal-bg, #4d648d);
+  color: var(--text-color, #ffffff);
+  padding: 4px 8px;
+  font-size: 10px;
+  border: 1px solid var(--border-light, #6f8fb8);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 10001;
+}
+
+[data-keyboard-hint]:focus::after,
+[data-keyboard-hint]:hover::after {
+  opacity: 1;
+}
+
+/* ── ARIA Live Region Styling ────────────────────────────────────────────── */
+
+[role='status'],
+[role='alert'] {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* ── Improved Button States ──────────────────────────────────────────────── */
+
+button:disabled,
+.cde-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(50%);
+}
+
+button:disabled:hover,
+.cde-btn:disabled:hover {
+  background-color: var(--button-bg, #4d648d) !important;
+}
+
+/* ── Loading/Busy State ──────────────────────────────────────────────────── */
+
+[aria-busy='true'] {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+[aria-busy='true']::after {
+  content: '⏳';
+  margin-left: 8px;
+}
+
+/* ── Error States ────────────────────────────────────────────────────────── */
+
+[aria-invalid='true'] {
+  border: 2px solid #ff0000 !important;
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
+[aria-invalid='true']:focus {
+  outline-color: #ff0000;
+}
+
+/* ── Tooltips for Accessibility ──────────────────────────────────────────── */
+
+[title]:hover::after,
+[aria-label]:hover::after {
+  content: attr(title) attr(aria-label);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--modal-bg, #4d648d);
+  color: var(--text-color, #ffffff);
+  padding: 6px 10px;
+  font-size: 11px;
+  border: 2px solid var(--border-light, #6f8fb8);
+  white-space: nowrap;
+  z-index: 10001;
+  pointer-events: none;
+  margin-bottom: 5px;
+}
+
+/* ── Print Styles ────────────────────────────────────────────────────────── */
+
+@media print {
+  .no-print,
+  #topbar,
+  #cde-panel,
+  .titlebar-controls {
+    display: none !important;
+  }
+
+  .window,
+  .cde-retro-modal {
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+}

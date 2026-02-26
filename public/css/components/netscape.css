@@ -4,7 +4,7 @@
 
 /* Window shell */
 #netscape {
-  display: flex;
+  display: none; /* Hidden by default, opened via Ctrl+Alt+N or menu */
   flex-direction: column;
   background: #c0c0c0;
   width: 780px;

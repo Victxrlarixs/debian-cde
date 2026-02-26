@@ -1,6 +1,7 @@
 // src/scripts/core/index.ts
 
 import './config';
+import './accessibility';
 import '../boot/init';
 import '../features/filemanager';
 import '../features/terminal';

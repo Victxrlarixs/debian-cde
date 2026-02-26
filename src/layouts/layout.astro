@@ -76,6 +76,10 @@ const { title } = Astro.props;
     </script>
   </head>
   <body>
+    <!-- Skip Links for Screen Readers -->
+    <a href="#desktop-ui" class="skip-link">Skip to main content</a>
+    <a href="#cde-panel" class="skip-link">Skip to panel</a>
+    
     <slot />
   </body>
 </html>
