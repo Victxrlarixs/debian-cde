@@ -64,6 +64,8 @@ Relive the experience of browsing the World Wide Web at its dawn with a fully fu
 | **Screenshot Tool**     | Capture your personalized setup with a single click in the system tray.                |
 | **Netscape Navigator**  | Step back to 1994 with a fully interactive Netscape 1.0.                               |
 
+> 💡 **Pro Tip**: Press `Ctrl + Shift + ?` to see all keyboard shortcuts anytime!
+
 ---
 
 ## Core System Architecture
@@ -107,6 +109,116 @@ We've spent months ensuring the retro experience doesn't break on modern hardwar
 - **Interaction Parity**: Double-tap to open, long-press for context menus, and tap-to-focus for the terminal virtual keyboard.
 
 ---
+
+## Accessibility First
+
+The CDE Desktop is built with accessibility in mind:
+
+- **Full Keyboard Navigation**: Navigate the entire desktop using Tab, Enter, and Escape
+- **Global Keyboard Shortcuts**: Quick access to all applications (Ctrl+Alt+T for Terminal, etc.)
+- **High Contrast Mode**: Toggle with Ctrl+Alt+H for enhanced visibility
+- **Focus Indicators**: Clear visual feedback for keyboard navigation
+- **Skip Links**: Quick navigation for screen reader users
+
+---
+
+## ⌨️ Keyboard Shortcuts
+
+Master the CDE Desktop with these powerful keyboard shortcuts. All shortcuts use `Ctrl + Alt` to avoid conflicts with browser shortcuts.
+
+### Quick Launch Applications
+
+| Shortcut | Action | Description |
+|----------|--------|-------------|
+| `Ctrl + Alt + T` | **Terminal** | Open the automated terminal with tutorial |
+| `Ctrl + Alt + F` | **File Manager** | Toggle the file manager window |
+| `Ctrl + Alt + E` | **XEmacs** | Launch the XEmacs text editor |
+| `Ctrl + Alt + N` | **Netscape** | Open Netscape Navigator browser |
+| `Ctrl + Alt + S` | **Style Manager** | Access the style customization panel |
+
+### Window Management
+
+| Shortcut | Action | Description |
+|----------|--------|-------------|
+| `Ctrl + W` | **Close Window** | Close the currently active window |
+| `Ctrl + M` | **Minimize** | Minimize the active window to the panel |
+| `Tab` | **Navigate Forward** | Move focus to the next interactive element |
+| `Shift + Tab` | **Navigate Backward** | Move focus to the previous element |
+| `Enter` | **Activate** | Activate the currently focused element |
+| `Escape` | **Cancel/Close** | Close dialogs or unfocus input fields |
+
+### Workspace Navigation
+
+| Shortcut | Action | Description |
+|----------|--------|-------------|
+| `Ctrl + Alt + 1` | **Workspace One** | Switch to the first workspace |
+| `Ctrl + Alt + 2` | **Workspace Two** | Switch to the second workspace |
+| `Ctrl + Alt + 3` | **Workspace Three** | Switch to the third workspace |
+| `Ctrl + Alt + 4` | **Workspace Four** | Switch to the fourth workspace |
+
+### Accessibility
+
+| Shortcut | Action | Description |
+|----------|--------|-------------|
+| `Ctrl + Alt + H` | **High Contrast** | Toggle high contrast mode for better visibility |
+| `Ctrl + Shift + ?` | **Shortcuts Help** | Display this keyboard shortcuts reference |
+
+### XEmacs Editor Shortcuts
+
+When XEmacs is active, these classic Emacs keybindings are available:
+
+| Shortcut | Action | Description |
+|----------|--------|-------------|
+| `Ctrl + X, Ctrl + F` | **Open File** | Visit a file from the filesystem |
+| `Ctrl + X, Ctrl + S` | **Save** | Save the current buffer |
+| `Ctrl + X, Ctrl + W` | **Save As** | Save buffer with a new name |
+| `Ctrl + X, Ctrl + C` | **Quit** | Exit XEmacs |
+| `Ctrl + K` | **Kill Line** | Delete from cursor to end of line |
+| `Ctrl + Y` | **Yank** | Paste the last killed text |
+| `Ctrl + W` | **Kill Region** | Cut the selected region |
+| `Meta + W` | **Copy Region** | Copy the selected region |
+| `Ctrl + X, H` | **Select All** | Select entire buffer |
+| `Ctrl + _` | **Undo** | Undo the last change |
+| `Ctrl + F` | **Find** | Open the search dialog |
+| `Meta + X` | **Execute Command** | Run an extended command |
+
+> **Note**: `Meta` key is typically `Alt` on most keyboards.
+
+### Netscape Navigator Shortcuts
+
+When Netscape is active:
+
+| Shortcut | Action | Description |
+|----------|--------|-------------|
+| `Ctrl + L` | **Open Location** | Focus the URL bar |
+| `Ctrl + R` | **Reload** | Refresh the current page |
+| `Ctrl + D` | **Add Bookmark** | Bookmark the current page |
+| `Ctrl + F` | **Find in Page** | Search within the page |
+| `Ctrl + P` | **Print** | Print the current page |
+| `Alt + ←` | **Back** | Navigate to previous page |
+| `Alt + →` | **Forward** | Navigate to next page |
+
+### Pro Tips
+
+- **Hover over icons** in the panel to see tooltips with keyboard hints
+- **Press `?` while holding Ctrl+Shift** to see all shortcuts in a modal dialog
+- **Use Tab navigation** to discover all interactive elements
+- **High contrast mode** persists across sessions for consistent accessibility
+- **Workspace shortcuts** allow quick multitasking without mouse interaction
+
+### Keyboard-First Workflow
+
+For maximum productivity, try this keyboard-only workflow:
+
+1. **Launch Terminal**: `Ctrl + Alt + T`
+2. **Open File Manager**: `Ctrl + Alt + F`
+3. **Navigate with Tab**: Move between files and folders
+4. **Open in XEmacs**: `Ctrl + Alt + E`, then `Ctrl + X, Ctrl + F`
+5. **Switch Workspaces**: `Ctrl + Alt + 1-4` to organize your work
+6. **Close Windows**: `Ctrl + W` when done
+
+---
+
 ## 🚀 Step Inside
 
 You don't need to install anything. No clones, no builds, just a window to the past.
