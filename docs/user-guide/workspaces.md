@@ -18,6 +18,15 @@ Located in the Front Panel, the workspace switcher shows 4 buttons:
 
 The active workspace is highlighted.
 
+### Visual Preview
+
+Hover over any workspace button to see a miniature preview showing:
+- Application icons for open windows
+- Window positions and layout
+- Number of open windows
+
+This helps you quickly identify which workspace contains what you're looking for without switching to it.
+
 ## Switching Workspaces
 
 ### Using Mouse

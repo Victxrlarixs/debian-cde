@@ -16,6 +16,7 @@
 /* Components */
 @import './components/topbar.css';
 @import './components/panel.css';
+@import './components/workspace-preview.css';
 @import './components/menus.css';
 @import './components/windows.css';
 @import './components/modals.css';

@@ -555,22 +555,33 @@ const WindowManager = (() => {
         );
       }
 
-      // Assign to current workspace if not specified
+      // CRITICAL: Only assign workspace if window is currently visible
+      // Hidden windows will get their workspace assigned when they're first shown
+      const isVisible = window.getComputedStyle(win).display !== 'none';
+      
       if (!win.getAttribute('data-workspace')) {
-        win.setAttribute('data-workspace', currentWorkspace);
-        // If it's a fresh registration without a workspace, it's likely a new window or modal
-        // Center it if it's visible, or wait for it to be shown
-        if (window.getComputedStyle(win).display !== 'none') {
-          requestAnimationFrame(() => centerWindow(win));
+        if (isVisible) {
+          // Window is visible on registration, assign current workspace
+          win.setAttribute('data-workspace', currentWorkspace);
+          win.setAttribute('data-was-opened', 'true');
+          logger.log(`[WindowManager] Visible window registered: ${id} in WS ${currentWorkspace}`);
+          
+          if (window.getComputedStyle(win).display !== 'none') {
+            requestAnimationFrame(() => centerWindow(win));
+          }
+        } else {
+          // Window is hidden, don't assign workspace yet
+          // It will be assigned when showWindow() is called
+          logger.log(`[WindowManager] Hidden window registered: ${id}, workspace will be assigned on first show`);
         }
       }
 
-      const ws = win.getAttribute('data-workspace') || currentWorkspace;
-      if (ws !== currentWorkspace) {
+      const ws = win.getAttribute('data-workspace');
+      if (ws && ws !== currentWorkspace) {
         win.style.display = 'none';
       }
 
-      logger.log(`[WindowManager] Window registered: ${id || 'anonymous'} in WS ${ws}`);
+      logger.log(`[WindowManager] Window registration complete: ${id || 'anonymous'}`);
     }
   }
 
@@ -578,15 +589,19 @@ const WindowManager = (() => {
     if (id === currentWorkspace) return;
 
     AudioManager.click();
-    logger.log(`[WindowManager] Switching to workspace: ${id}`);
+    logger.log(`[WindowManager] Switching from workspace ${currentWorkspace} to ${id}`);
 
     const windows = document.querySelectorAll('.window, .cde-retro-modal');
 
-    // Hide all windows of current workspace and remember which ones were open
+    // First pass: Hide all windows of current workspace and remember which ones were open
     windows.forEach((win) => {
       const el = win as HTMLElement;
-      if (el.getAttribute('data-workspace') === currentWorkspace) {
+      const winWorkspace = el.getAttribute('data-workspace');
+      
+      if (winWorkspace === currentWorkspace) {
         const isVisible = window.getComputedStyle(el).display !== 'none';
+        logger.log(`[WindowManager] Window ${el.id} in WS ${winWorkspace}: visible=${isVisible}`);
+        
         if (isVisible) {
           el.setAttribute('data-was-opened', 'true');
           el.style.display = 'none';
@@ -596,15 +611,28 @@ const WindowManager = (() => {
       }
     });
 
-    // Update state
+    // Update state BEFORE showing windows
+    const previousWorkspace = currentWorkspace;
     currentWorkspace = id;
 
-    // Show windows of new workspace only if they were opened
+    // Second pass: Show ONLY windows of new workspace, hide all others
     windows.forEach((win) => {
       const el = win as HTMLElement;
-      if (el.getAttribute('data-workspace') === currentWorkspace) {
+      const winWorkspace = el.getAttribute('data-workspace');
+      
+      logger.log(`[WindowManager] Processing ${el.id}: workspace=${winWorkspace}, current=${currentWorkspace}, was-opened=${el.getAttribute('data-was-opened')}`);
+      
+      if (winWorkspace === currentWorkspace) {
+        // Show windows that belong to current workspace and were opened
         if (el.getAttribute('data-was-opened') === 'true') {
           el.style.display = 'flex';
+          logger.log(`[WindowManager] Showing ${el.id} in WS ${currentWorkspace}`);
+        }
+      } else {
+        // Hide windows that belong to other workspaces
+        if (window.getComputedStyle(el).display !== 'none') {
+          el.style.display = 'none';
+          logger.log(`[WindowManager] Hiding ${el.id} (belongs to WS ${winWorkspace})`);
         }
       }
     });
@@ -618,6 +646,8 @@ const WindowManager = (() => {
         item.classList.remove('active');
       }
     });
+    
+    logger.log(`[WindowManager] Workspace switch complete: ${previousWorkspace} -> ${currentWorkspace}`);
   }
 
   function initPager(): void {
@@ -660,6 +690,16 @@ const WindowManager = (() => {
     const win = document.getElementById(id);
     if (!win) return;
 
+    // CRITICAL: Assign workspace if not already assigned
+    // This happens when window is shown for the first time
+    if (!win.getAttribute('data-workspace')) {
+      win.setAttribute('data-workspace', currentWorkspace);
+      logger.log(`[WindowManager] Assigned workspace ${currentWorkspace} to ${id} on first show`);
+    }
+    
+    // Mark as opened
+    win.setAttribute('data-was-opened', 'true');
+
     win.style.display = 'flex';
     win.classList.add('window-opening');
     
@@ -678,6 +718,8 @@ const WindowManager = (() => {
       },
       { once: true }
     );
+    
+    logger.log(`[WindowManager] Showed window ${id} in workspace ${win.getAttribute('data-workspace')}`);
   }
 
   function init(): void {

@@ -1,0 +1,134 @@
+/* Workspace Preview - Miniature view of workspaces on hover */
+
+.workspace-preview-container {
+  position: fixed;
+  transform: translateX(0);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s ease, visibility 0.15s ease;
+  z-index: 100000; /* Higher than panel */
+  pointer-events: none;
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.workspace-preview-container.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.preview-header {
+  background: var(--titlebar-color);
+  color: var(--titlebar-text-color);
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: bold;
+  text-align: center;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+}
+
+.preview-content {
+  position: relative;
+  background: var(--workspace-bg, #4d648d);
+  border: 2px solid;
+  border-top-color: var(--border-inset-dark);
+  border-left-color: var(--border-inset-dark);
+  border-right-color: var(--border-inset-light);
+  border-bottom-color: var(--border-inset-light);
+  overflow: hidden;
+}
+
+.preview-empty {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--text-color);
+  font-size: 10px;
+  opacity: 0.6;
+  text-align: center;
+}
+
+.preview-window {
+  position: absolute;
+  background: var(--window-color);
+  border: 1px solid var(--border-dark);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  min-width: 15px;
+  min-height: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.preview-window-titlebar {
+  background: var(--titlebar-color);
+  border-bottom: 1px solid var(--border-dark);
+  min-height: 4px;
+  max-height: 4px;
+}
+
+.preview-window-content {
+  flex: 1;
+  background: var(--window-color);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-window-icon {
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
+}
+
+/* Add some visual texture to window content */
+.preview-window-content::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(0, 0, 0, 0.05) 100%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+
+.preview-footer {
+  background: var(--button-bg);
+  color: var(--text-color);
+  padding: 2px 6px;
+  font-size: 9px;
+  text-align: center;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+}
+
+/* Smooth transition for workspace switching */
+.workspace-transition {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.workspace-transition.hiding {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.workspace-transition.showing {
+  opacity: 1;
+  transform: scale(1);
+}
