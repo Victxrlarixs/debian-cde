@@ -155,19 +155,24 @@ const WindowManager = (() => {
     const viewportHeight = window.innerHeight;
     const TOP_BAR_HEIGHT = CONFIG.WINDOW.TOP_BAR_HEIGHT;
 
+    // Calculate panel height based on device
+    const PANEL_HEIGHT = isMobile() ? 65 : 85;
+
     let left = (viewportWidth - winWidth) / 2;
     let top = (viewportHeight - winHeight) / 2;
 
-    // Strict clamping to prevent ANY desborde
-    const PANEL_OFFSET = isMobile() ? 65 : 85;
+    // Strict clamping to prevent ANY overflow
+    const minX = 0;
     const maxX = Math.max(0, viewportWidth - winWidth);
-    const maxY = Math.max(TOP_BAR_HEIGHT, viewportHeight - winHeight - PANEL_OFFSET);
+    const minY = TOP_BAR_HEIGHT;
+    const maxY = Math.max(minY, viewportHeight - winHeight - PANEL_HEIGHT);
 
-    left = Math.max(0, Math.min(left, maxX));
-    top = Math.max(TOP_BAR_HEIGHT, Math.min(top, maxY));
+    left = Math.max(minX, Math.min(left, maxX));
+    top = Math.max(minY, Math.min(top, maxY));
 
     // Ensure body doesn't scroll
     document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
 
     win.style.position = 'absolute';
     win.style.left = `${left}px`;
@@ -184,6 +189,12 @@ const WindowManager = (() => {
    * Initiates dragging of a window. Supports both mouse and touch via PointerEvent.
    */
   function drag(e: PointerEvent, id: string): void {
+    // Disable drag on mobile devices
+    if (isMobile()) {
+      logger.log(`[WindowManager] Drag disabled on mobile for window: ${id}`);
+      return;
+    }
+
     // Only handle primary pointer (usually left click or single touch)
     if (!e.isPrimary) return;
 
@@ -260,17 +271,17 @@ const WindowManager = (() => {
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     const TOP_BAR_HEIGHT = CONFIG.WINDOW.TOP_BAR_HEIGHT;
-    const PANEL_HEIGHT = 80; // Estimated panel height
+    const PANEL_HEIGHT = isMobile() ? 65 : 85;
 
     // --- STRICT VIEWPORT CLAMPING ---
-    // Prevent horizontal overflow (no right/left desborde)
+    // Prevent horizontal overflow (no right/left overflow)
     const minX = 0;
     const maxX = Math.max(0, viewportWidth - winWidth);
 
-    // Prevent vertical overflow (no top/bottom desborde)
+    // Prevent vertical overflow (no top/bottom overflow)
     // Account for TopBar (minY) and Panel (PANEL_HEIGHT)
     const minY = TOP_BAR_HEIGHT;
-    const maxY = Math.max(minY, viewportHeight - winHeight - (isMobile() ? 60 : PANEL_HEIGHT));
+    const maxY = Math.max(minY, viewportHeight - winHeight - PANEL_HEIGHT);
 
     left = Math.max(minX, Math.min(left, maxX));
     top = Math.max(minY, Math.min(top, maxY));
@@ -651,6 +662,12 @@ const WindowManager = (() => {
 
     win.style.display = 'flex';
     win.classList.add('window-opening');
+    
+    // Center window on mobile, normalize on desktop
+    if (isMobile()) {
+      centerWindow(win);
+    }
+    
     focusWindow(id);
     AudioManager.windowOpen();
 

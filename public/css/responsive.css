@@ -1,6 +1,26 @@
 /* Responsive.css - Media Queries for CDE Simulation
    Responsive adjustments for all components */
 
+/* Prevent any scrolling on mobile */
+@media (max-width: 767px) {
+  html,
+  body {
+    overflow: hidden !important;
+    position: fixed !important;
+    width: 100% !important;
+    height: 100% !important;
+    overscroll-behavior: none !important;
+  }
+
+  /* Prevent window overflow */
+  .window,
+  .cde-retro-modal {
+    position: absolute !important;
+    overflow: hidden !important;
+  }
+
+}
+
 /* Extra small screens (mobile, less than 480px) */
 @media (max-width: 479px) {
   /* Netscape Navigator Responsive */
@@ -211,9 +231,18 @@
   .window,
   .cde-retro-modal {
     max-width: 100vw !important;
-    max-height: calc(100vh - 30px) !important;
+    max-height: calc(100vh - 95px) !important;
     width: auto !important;
     box-sizing: border-box !important;
+    position: absolute !important;
+    overflow: auto !important;
+  }
+
+  /* Ensure window bodies don't cause overflow */
+  .window-body,
+  .modal-body {
+    overflow: auto !important;
+    max-height: 100% !important;
   }
 
   /* Terminal */
