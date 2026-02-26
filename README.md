@@ -29,6 +29,7 @@ No installation. No setup. Just pure 1990s Unix nostalgia.
 | **Virtual Filesystem** | Create files, make directories, navigate with context menus. A real filesystem in your browser | [File Manager Guide →](docs/user-guide/file-manager.md) |
 | **Netscape Navigator** | Web browsing from 1994. Animated logo. That nostalgic "Loading..." message | [Netscape Guide →](docs/user-guide/netscape.md) |
 | **4 Virtual Workspaces** | Just like real CDE. Organize across four desktops. Switch with `Ctrl+Alt+1-4` | [Workspaces Guide →](docs/user-guide/workspaces.md) |
+| **Authentic Updates** | Version updates show real Debian package manager sequences. Watch `apt-get` download and install packages | [Technical Docs →](docs/technical/version-updates.md) |
 
 ---
 
@@ -37,6 +38,7 @@ No installation. No setup. Just pure 1990s Unix nostalgia.
 | Feature | What You Feel |
 |---------|---------------|
 | **Boot Sequence** | Watch the system initialize, just like a real Unix workstation |
+| **System Updates** | Authentic apt-get package updates. |
 | **Window Dragging** | Smooth, authentic window management with title bars and borders |
 | **Style Manager** | Total control—change everything from colors to mouse behavior |
 | **Context Menus** | Right-click anywhere. Real menus, real actions |
