@@ -880,6 +880,47 @@ npm version minor
 npm version major
 ```
 
+**Important:** When bumping versions, the VersionManager will automatically handle cache clearing for users on their next visit. No manual intervention required.
+
+### Version Manager Integration
+
+The VersionManager automatically handles cache busting when deploying new versions:
+
+**How it works:**
+
+1. Update version in `package.json`
+2. Build and deploy
+3. On user's next visit:
+   - VersionManager detects version mismatch
+   - Clears localStorage and Service Worker caches
+   - Shows update notification
+   - Forces page reload with fresh code
+
+**Manual cache clear (for debugging):**
+
+```javascript
+// In browser console
+window.VersionManager.forceUpdate(); // Clears all caches and reloads
+window.VersionManager.getVersion(); // Shows current version
+```
+
+**Preserving user data across updates:**
+
+Edit `src/scripts/core/version-manager.ts` to preserve specific localStorage keys:
+
+```typescript
+const preserveKeys: string[] = [
+  'cde-system-settings', // Preserve user settings
+  'cde_high_contrast', // Preserve accessibility settings
+];
+```
+
+**When to bump versions:**
+
+- **Patch (1.0.x)**: Bug fixes, minor tweaks, no breaking changes
+- **Minor (1.x.0)**: New features, significant updates, cache clear recommended
+- **Major (x.0.0)**: Breaking changes, major refactors, cache clear required
+
 ### Changelog
 
 Update `CHANGELOG.md`:

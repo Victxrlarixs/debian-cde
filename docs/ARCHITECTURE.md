@@ -242,6 +242,88 @@ window.addEventListener('pointerdown', unlock, { once: true });
 window.addEventListener('keydown', unlock, { once: true });
 ```
 
+### VersionManager
+
+Handles cache busting and version migrations to ensure users always run the latest code without stale cache issues.
+
+**Key Features:**
+
+- Automatic version detection on app load
+- Cache clearing on version updates
+- Service Worker cache management
+- Visual update notifications
+- Preserves critical user data during updates
+
+**Version Detection:**
+
+The version is read from `package.json` and injected at build time:
+
+```typescript
+// @ts-ignore - Vite injects this at build time
+this.currentVersion = import.meta.env.PUBLIC_APP_VERSION || '1.0.0';
+```
+
+**Update Flow:**
+
+```
+1. App loads → checkVersion()
+   ↓
+2. Compare stored version with current version
+   ↓
+3. If mismatch detected:
+   - Clear localStorage (except preserved keys)
+   - Clear Service Worker caches
+   - Show update notification
+   - Update stored version
+   - Force page reload
+```
+
+**Storage Keys:**
+
+- `cde-app-version`: Stores current version string
+- Preserved keys can be configured to maintain user preferences across updates
+
+**Cache Clearing:**
+
+```typescript
+// Clear localStorage
+Object.keys(localStorage).forEach((key) => {
+  if (!preserveKeys.includes(key) && key !== VERSION_KEY) {
+    localStorage.removeItem(key);
+  }
+});
+
+// Clear Service Worker caches
+const cacheNames = await caches.keys();
+await Promise.all(cacheNames.map((name) => caches.delete(name)));
+```
+
+**Update Notification:**
+
+A modal notification appears during updates:
+
+```
+🔄 System Update
+Updating from v1.0.0 to v1.1.0
+Clearing cache and reloading...
+```
+
+**Manual Cache Clear:**
+
+For debugging, the VersionManager is exposed globally:
+
+```typescript
+window.VersionManager.forceUpdate(); // Clears cache and reloads
+window.VersionManager.getVersion(); // Returns current version
+```
+
+**Deployment Workflow:**
+
+1. Update version in `package.json`
+2. Build and deploy
+3. Users automatically get cache cleared on next visit
+4. No manual cache clearing needed
+
 ### XPM Parser
 
 Parses X PixMap (XPM) format backdrop files and converts them to CSS.
