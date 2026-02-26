@@ -238,16 +238,22 @@
     min-width: 44px;
     min-height: 44px;
   }
+  
+  /* Exception for panel icons on mobile - they need to stay compact */
+  #cde-panel .cde-icon {
+    min-width: 28px;
+    min-height: 30px;
+  }
+  
+  #cde-panel .cde-icon-btn {
+    min-width: 28px;
+    min-height: 16px;
+  }
 }
 
 /* ── Color Blind Friendly Indicators ─────────────────────────────────────── */
 
 /* Add patterns/icons in addition to color for status */
-.active::before {
-  content: '▶ ';
-  font-size: 0.8em;
-}
-
 .error::before {
   content: '⚠ ';
 }
@@ -260,10 +266,11 @@
 
 [data-keyboard-hint]::after {
   content: attr(data-keyboard-hint);
-  position: absolute;
-  bottom: -20px;
+  position: fixed; /* Changed from absolute to fixed */
+  bottom: auto;
+  top: auto;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(-100%);
   background: var(--modal-bg, #4d648d);
   color: var(--text-color, #ffffff);
   padding: 4px 8px;
@@ -274,6 +281,11 @@
   pointer-events: none;
   transition: opacity 0.2s;
   z-index: 10001;
+}
+
+/* Hide keyboard hints on panel icons to prevent overflow */
+#cde-panel [data-keyboard-hint]::after {
+  display: none;
 }
 
 [data-keyboard-hint]:focus::after,
@@ -347,6 +359,12 @@ button:disabled:hover,
   z-index: 10001;
   pointer-events: none;
   margin-bottom: 5px;
+}
+
+/* Disable tooltips on panel to prevent overflow */
+#cde-panel [title]:hover::after,
+#cde-panel [aria-label]:hover::after {
+  display: none;
 }
 
 /* ── Print Styles ────────────────────────────────────────────────────────── */
