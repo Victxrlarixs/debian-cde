@@ -11,7 +11,7 @@ import '../features/lab';
 import '../features/appmanager';
 import '../features/timemanager';
 import '../features/netscape';
-
+/*
 if (typeof window !== 'undefined') {
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
@@ -49,3 +49,4 @@ if (typeof window !== 'undefined') {
     }
   };
 }
+*/

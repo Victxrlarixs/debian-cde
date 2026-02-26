@@ -20,14 +20,13 @@ interface KeyboardShortcut {
 
 /**
  * Accessibility Manager for CDE Desktop
- * Handles keyboard navigation, shortcuts, screen reader support, and high contrast mode
+ * Handles keyboard navigation, shortcuts, and high contrast mode
  */
 export class AccessibilityManager {
   private shortcuts: KeyboardShortcut[] = [];
   private focusableElements: HTMLElement[] = [];
   private currentFocusIndex = -1;
   private highContrastMode = false;
-  private announceRegion: HTMLElement | null = null;
 
   constructor() {
     this.init();
@@ -37,45 +36,11 @@ export class AccessibilityManager {
    * Initialize accessibility features
    */
   public init(): void {
-    this.createAnnounceRegion();
     this.registerGlobalShortcuts();
     this.setupKeyboardNavigation();
-    this.enhanceARIA();
     this.loadHighContrastPreference();
-    this.setupFocusManagement();
 
     logger.log('[Accessibility] Initialized');
-  }
-
-  /**
-   * Create ARIA live region for screen reader announcements
-   */
-  private createAnnounceRegion(): void {
-    this.announceRegion = document.createElement('div');
-    this.announceRegion.id = 'cde-announce';
-    this.announceRegion.setAttribute('role', 'status');
-    this.announceRegion.setAttribute('aria-live', 'polite');
-    this.announceRegion.setAttribute('aria-atomic', 'true');
-    this.announceRegion.style.cssText = `
-      position: absolute;
-      left: -10000px;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-    `;
-    document.body.appendChild(this.announceRegion);
-  }
-
-  /**
-   * Announce message to screen readers
-   */
-  public announce(message: string, priority: 'polite' | 'assertive' = 'polite'): void {
-    if (!this.announceRegion) return;
-
-    this.announceRegion.setAttribute('aria-live', priority);
-    this.announceRegion.textContent = message;
-
-    logger.log(`[Accessibility] Announced: ${message}`);
   }
 
   /**
@@ -111,7 +76,6 @@ export class AccessibilityManager {
       action: () => {
         if (window.openTerminal) {
           window.openTerminal();
-          this.announce('Terminal opened');
         }
       },
       description: 'Open Terminal',
@@ -126,7 +90,6 @@ export class AccessibilityManager {
       action: () => {
         if ((window as any).toggleFileManager) {
           (window as any).toggleFileManager();
-          this.announce('File Manager toggled');
         }
       },
       description: 'Toggle File Manager',
@@ -141,7 +104,6 @@ export class AccessibilityManager {
       action: () => {
         if (window.Emacs) {
           window.Emacs.openSplash();
-          this.announce('XEmacs opened');
         }
       },
       description: 'Open XEmacs',
@@ -156,7 +118,6 @@ export class AccessibilityManager {
       action: () => {
         if ((window as any).Netscape) {
           (window as any).Netscape.open();
-          this.announce('Netscape Navigator opened');
         }
       },
       description: 'Open Netscape Navigator',
@@ -171,7 +132,6 @@ export class AccessibilityManager {
       action: () => {
         if ((window as any).styleManager) {
           (window as any).styleManager.openMain();
-          this.announce('Style Manager opened');
         }
       },
       description: 'Open Style Manager',
@@ -232,7 +192,6 @@ export class AccessibilityManager {
         alt: true,
         action: () => {
           WindowManager.switchWorkspace(String(i));
-          this.announce(`Switched to workspace ${i}`);
         },
         description: `Switch to Workspace ${i}`,
         category: 'Workspaces',
@@ -257,7 +216,6 @@ export class AccessibilityManager {
       // Allow Escape to blur inputs
       if (e.key === 'Escape') {
         target.blur();
-        this.announce('Input unfocused');
       }
       return;
     }
@@ -308,12 +266,6 @@ export class AccessibilityManager {
         if (element) {
           e.preventDefault();
           element.focus();
-
-          // Announce focused element
-          const label = this.getElementLabel(element);
-          if (label) {
-            this.announce(`Focused: ${label}`);
-          }
         }
       }
 
@@ -359,72 +311,6 @@ export class AccessibilityManager {
   }
 
   /**
-   * Get accessible label for element
-   */
-  private getElementLabel(element: HTMLElement): string {
-    return (
-      element.getAttribute('aria-label') ||
-      element.getAttribute('title') ||
-      element.getAttribute('alt') ||
-      element.textContent?.trim() ||
-      element.tagName
-    );
-  }
-
-  /**
-   * Enhance ARIA attributes for existing elements
-   */
-  private enhanceARIA(): void {
-    // Desktop icons
-    document.querySelectorAll('.cde-icon').forEach((icon) => {
-      const img = icon.querySelector('img');
-      const title = icon.getAttribute('title') || img?.getAttribute('alt') || 'Icon';
-
-      icon.setAttribute('role', 'button');
-      icon.setAttribute('tabindex', '0');
-      icon.setAttribute('aria-label', title);
-    });
-
-    // Windows
-    document.querySelectorAll('.window').forEach((win) => {
-      win.setAttribute('role', 'dialog');
-      win.setAttribute('aria-modal', 'false');
-
-      const titlebar = win.querySelector('.titlebar-text');
-      if (titlebar) {
-        const title = titlebar.textContent || 'Window';
-        win.setAttribute('aria-label', title);
-      }
-    });
-
-    // Buttons
-    document.querySelectorAll('.cde-btn, .titlebar-btn').forEach((btn) => {
-      if (!btn.getAttribute('role')) {
-        btn.setAttribute('role', 'button');
-      }
-      if (!btn.getAttribute('tabindex')) {
-        btn.setAttribute('tabindex', '0');
-      }
-    });
-
-    // Menu items
-    document.querySelectorAll('.menu-item').forEach((item) => {
-      item.setAttribute('role', 'menuitem');
-      item.setAttribute('tabindex', '0');
-    });
-
-    // Workspace pager
-    document.querySelectorAll('.pager-workspace').forEach((ws) => {
-      ws.setAttribute('role', 'button');
-      ws.setAttribute('tabindex', '0');
-      const num = ws.getAttribute('data-workspace');
-      ws.setAttribute('aria-label', `Workspace ${num}`);
-    });
-
-    logger.log('[Accessibility] ARIA attributes enhanced');
-  }
-
-  /**
    * Toggle high contrast mode
    */
   public toggleHighContrast(): void {
@@ -432,11 +318,9 @@ export class AccessibilityManager {
 
     if (this.highContrastMode) {
       document.documentElement.classList.add('high-contrast');
-      this.announce('High contrast mode enabled');
       localStorage.setItem('cde_high_contrast', 'true');
     } else {
       document.documentElement.classList.remove('high-contrast');
-      this.announce('High contrast mode disabled');
       localStorage.setItem('cde_high_contrast', 'false');
     }
 
@@ -481,13 +365,11 @@ export class AccessibilityManager {
     const modal = document.createElement('div');
     modal.className = 'cde-retro-modal';
     modal.id = 'shortcuts-help-modal';
-    modal.setAttribute('role', 'dialog');
-    modal.setAttribute('aria-labelledby', 'shortcuts-title');
     modal.innerHTML = `
       <div class="titlebar">
         <span class="titlebar-text" id="shortcuts-title">Keyboard Shortcuts</span>
         <div class="titlebar-controls">
-          <button class="close-btn" onclick="document.getElementById('shortcuts-help-modal').remove()" aria-label="Close">
+          <button class="close-btn" onclick="document.getElementById('shortcuts-help-modal').remove()">
             <img src="/icons/window-close.png" alt="Close" />
           </button>
         </div>
@@ -506,8 +388,6 @@ export class AccessibilityManager {
       WindowManager.centerWindow(modal);
       if (window.focusWindow) window.focusWindow('shortcuts-help-modal');
     });
-
-    this.announce('Keyboard shortcuts help opened');
   }
 
   /**
@@ -535,7 +415,6 @@ export class AccessibilityManager {
       const closeBtn = activeWindow.querySelector('.close-btn') as HTMLElement;
       if (closeBtn) {
         closeBtn.click();
-        this.announce('Window closed');
       }
     }
   }
@@ -548,32 +427,8 @@ export class AccessibilityManager {
     if (activeWindow && activeWindow.id) {
       if (window.minimizeWindow) {
         window.minimizeWindow(activeWindow.id);
-        this.announce('Window minimized');
       }
     }
-  }
-
-  /**
-   * Setup focus management for windows
-   */
-  private setupFocusManagement(): void {
-    // Announce when windows are focused
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-          const target = mutation.target as HTMLElement;
-          if (target.classList.contains('active') && target.classList.contains('window')) {
-            const title = target.querySelector('.titlebar-text')?.textContent || 'Window';
-            this.announce(`${title} focused`);
-          }
-        }
-      });
-    });
-
-    // Observe all windows
-    document.querySelectorAll('.window, .cde-retro-modal').forEach((win) => {
-      observer.observe(win, { attributes: true });
-    });
   }
 
   /**
