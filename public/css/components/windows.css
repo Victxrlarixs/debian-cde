@@ -13,7 +13,9 @@
   user-select: none;
   display: flex;
   flex-direction: column;
-  transition: opacity 0.2s ease-out, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition:
+    opacity 0.2s ease-out,
+    transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   max-width: 95vw !important;
   max-height: 90vh !important;
   overflow: hidden;

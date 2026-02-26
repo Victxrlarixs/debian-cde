@@ -11,37 +11,113 @@ import { CONFIG } from '../../scripts/core/config';
 
   <div class="cde-icon-block">
     <div class="cde-icon-buttons">
-      <div class="cde-icon-btn dropdown-btn" id="terminalBtn" role="button" tabindex="0" aria-label="Terminal menu" aria-haspopup="true" aria-expanded="false">
+      <div
+        class="cde-icon-btn dropdown-btn"
+        id="terminalBtn"
+        role="button"
+        tabindex="0"
+        aria-label="Terminal menu"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
         <img src="/icons/go-up.png" alt="arrow" class="arrow-icon" />
       </div>
-      <div class="cde-icon-btn cde-textured-btn" id="fileManagerBtn" role="button" tabindex="0" aria-label="File Manager"></div>
-      <div class="cde-icon-btn dropdown-btn" id="browserBtn" role="button" tabindex="0" aria-label="Browser menu" aria-haspopup="true" aria-expanded="false">
+      <div
+        class="cde-icon-btn cde-textured-btn"
+        id="fileManagerBtn"
+        role="button"
+        tabindex="0"
+        aria-label="File Manager"
+      >
+      </div>
+      <div
+        class="cde-icon-btn dropdown-btn"
+        id="browserBtn"
+        role="button"
+        tabindex="0"
+        aria-label="Browser menu"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
         <img src="/icons/go-up.png" alt="arrow" class="arrow-icon" />
       </div>
-      <div class="cde-icon-btn dropdown-btn" id="styleManagerBtn" role="button" tabindex="0" aria-label="Style Manager menu" aria-haspopup="true" aria-expanded="false">
+      <div
+        class="cde-icon-btn dropdown-btn"
+        id="styleManagerBtn"
+        role="button"
+        tabindex="0"
+        aria-label="Style Manager menu"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
         <img src="/icons/go-up.png" alt="arrow" class="arrow-icon" />
       </div>
-      <div class="cde-icon-btn dropdown-btn" id="utilitiesBtn" role="button" tabindex="0" aria-label="Utilities menu" aria-haspopup="true" aria-expanded="false">
+      <div
+        class="cde-icon-btn dropdown-btn"
+        id="utilitiesBtn"
+        role="button"
+        tabindex="0"
+        aria-label="Utilities menu"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
         <img src="/icons/go-up.png" alt="arrow" class="arrow-icon" />
       </div>
     </div>
 
     <div class="cde-icons" role="toolbar" aria-label="Quick launch icons">
-      <div class="cde-icon" onclick="TerminalLab.open()" title="Open Terminal" role="button" tabindex="0" aria-label="Open Terminal" data-keyboard-hint="Ctrl+Alt+T">
+      <div
+        class="cde-icon"
+        onclick="TerminalLab.open()"
+        title="Open Terminal"
+        role="button"
+        tabindex="0"
+        aria-label="Open Terminal"
+        data-keyboard-hint="Ctrl+Alt+T"
+      >
         <img src="/icons/konsole.png" alt="Terminal Lab" />
       </div>
-      <div class="cde-icon" onclick="toggleFileManager()" title="File Manager" role="button" tabindex="0" aria-label="File Manager" data-keyboard-hint="Ctrl+Alt+F">
+      <div
+        class="cde-icon"
+        onclick="toggleFileManager()"
+        title="File Manager"
+        role="button"
+        tabindex="0"
+        aria-label="File Manager"
+        data-keyboard-hint="Ctrl+Alt+F"
+      >
         <img src="/icons/filemanager.png" alt="File Manager" />
       </div>
-      <div class="cde-icon" title="Github Repo" role="button" tabindex="0" aria-label="Github Repository">
+      <div
+        class="cde-icon"
+        title="Github Repo"
+        role="button"
+        tabindex="0"
+        aria-label="Github Repository"
+      >
         <div onclick={`confirmExternalLink('${CONFIG.META.GITHUB_REPO}')`} style="cursor: pointer;">
           <img src="/icons/konqueror.png" alt="Browser" />
         </div>
       </div>
-      <div class="cde-icon" onclick="styleManager.openMain()" title="Style Manager" role="button" tabindex="0" aria-label="Style Manager" data-keyboard-hint="Ctrl+Alt+S">
+      <div
+        class="cde-icon"
+        onclick="styleManager.openMain()"
+        title="Style Manager"
+        role="button"
+        tabindex="0"
+        aria-label="Style Manager"
+        data-keyboard-hint="Ctrl+Alt+S"
+      >
         <img src="/icons/org.xfce.settings.manager.png" alt="Style Manager" />
       </div>
-      <div class="cde-icon" id="utilitiesIcon" title="Run" role="button" tabindex="0" aria-label="Utilities">
+      <div
+        class="cde-icon"
+        id="utilitiesIcon"
+        title="Run"
+        role="button"
+        tabindex="0"
+        aria-label="Utilities"
+      >
         <img src="/icons/applications-other.png" alt="Utilities" />
       </div>
     </div>
@@ -50,10 +126,46 @@ import { CONFIG } from '../../scripts/core/config';
   <div class="cde-sep" role="separator"></div>
 
   <div class="cde-pager" role="tablist" aria-label="Workspaces">
-    <div class="pager-workspace active" data-workspace="1" role="tab" tabindex="0" aria-label="Workspace One" aria-selected="true">One</div>
-    <div class="pager-workspace" data-workspace="2" role="tab" tabindex="0" aria-label="Workspace Two" aria-selected="false">Two</div>
-    <div class="pager-workspace" data-workspace="3" role="tab" tabindex="0" aria-label="Workspace Three" aria-selected="false">Three</div>
-    <div class="pager-workspace" data-workspace="4" role="tab" tabindex="0" aria-label="Workspace Four" aria-selected="false">Four</div>
+    <div
+      class="pager-workspace active"
+      data-workspace="1"
+      role="tab"
+      tabindex="0"
+      aria-label="Workspace One"
+      aria-selected="true"
+    >
+      One
+    </div>
+    <div
+      class="pager-workspace"
+      data-workspace="2"
+      role="tab"
+      tabindex="0"
+      aria-label="Workspace Two"
+      aria-selected="false"
+    >
+      Two
+    </div>
+    <div
+      class="pager-workspace"
+      data-workspace="3"
+      role="tab"
+      tabindex="0"
+      aria-label="Workspace Three"
+      aria-selected="false"
+    >
+      Three
+    </div>
+    <div
+      class="pager-workspace"
+      data-workspace="4"
+      role="tab"
+      tabindex="0"
+      aria-label="Workspace Four"
+      aria-selected="false"
+    >
+      Four
+    </div>
   </div>
 
   <div class="cde-scroll">
@@ -95,7 +207,15 @@ import { CONFIG } from '../../scripts/core/config';
     <img src="/icons/org.xfce.taskmanager.png" alt="TaskManager" />
   </div>
 
-  <div class="tray-icon" onclick="window.Emacs?.openSplash()" title="XEmacs" role="button" tabindex="0" aria-label="XEmacs" data-keyboard-hint="Ctrl+Alt+E">
+  <div
+    class="tray-icon"
+    onclick="window.Emacs?.openSplash()"
+    title="XEmacs"
+    role="button"
+    tabindex="0"
+    aria-label="XEmacs"
+    data-keyboard-hint="Ctrl+Alt+E"
+  >
     <img src="/icons/xemacs.png" alt="XEmacs" class="emacs-pixelated" />
   </div>
 </div>
@@ -113,7 +233,12 @@ import { CONFIG } from '../../scripts/core/config';
   <div class="menu-item" onclick="timeManager.open()" role="menuitem" tabindex="0">
     <img src="/icons/gtkclocksetup.png" alt="" /> Clock
   </div>
-</div><div class="dropdown-menu" id="styleManagerDropdown" role="menu" aria-label="Style Manager menu">
+</div><div
+  class="dropdown-menu"
+  id="styleManagerDropdown"
+  role="menu"
+  aria-label="Style Manager menu"
+>
   <div class="menu-item" onclick="styleManager.openColor()" role="menuitem" tabindex="0">
     <img src="/icons/org.xfce.settings.appearance.png" alt="" /> Color
   </div>
@@ -144,9 +269,6 @@ import { CONFIG } from '../../scripts/core/config';
 </div>
 
 <div class="dropdown-menu" id="terminalDropdown" role="menu" aria-label="Terminal menu">
-  <div class="menu-item" onclick="openTerminal()" role="menuitem" tabindex="0">
-    <img src="/icons/konsole.png" alt="" /> Terminal Automated
-  </div>
   <div class="menu-item" onclick="openTaskManagerInTerminal()" role="menuitem" tabindex="0">
     <img src="/icons/org.xfce.taskmanager.png" alt="" /> Process Monitor
   </div>
@@ -157,7 +279,13 @@ import { CONFIG } from '../../scripts/core/config';
 </div>
 
 <div class="dropdown-menu" id="browserDropdown" role="menu" aria-label="Browser menu">
-  <div class="menu-item" onclick="window.Netscape?.open()" role="menuitem" tabindex="0" data-keyboard-hint="Ctrl+Alt+N">
+  <div
+    class="menu-item"
+    onclick="window.Netscape?.open()"
+    role="menuitem"
+    tabindex="0"
+    data-keyboard-hint="Ctrl+Alt+N"
+  >
     <img src="/icons/netscape_classic.png" alt="" /> Netscape Navigator
   </div>
   <div class="menu-separator" role="separator"></div>

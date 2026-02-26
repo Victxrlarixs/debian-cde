@@ -14,6 +14,7 @@ import { CalendarManager } from '../features/calendar';
 import { VFS } from '../core/vfs';
 import { Preloader } from '../utilities/preloader';
 import { AudioManager } from '../core/audiomanager';
+import VersionManager from '../core/version-manager';
 
 /**
  * Global interface declarations for CDE desktop environment.
@@ -81,9 +82,9 @@ class DebianRealBoot {
         const timestamp = totalTime.toFixed(6).padStart(12, ' ');
         const text =
           phase.name === 'kernel' ||
-            phase.name === 'cpu' ||
-            phase.name === 'fs' ||
-            phase.name === 'memory'
+          phase.name === 'cpu' ||
+          phase.name === 'fs' ||
+          phase.name === 'memory'
             ? `[ ${timestamp} ] ${msg.text}`
             : msg.text;
 
@@ -299,8 +300,15 @@ function initDesktop(): void {
 // ---------------------------------------------------------------------
 // Automatic boot start
 // ---------------------------------------------------------------------
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   logger.log('[Boot] DOM Content Loaded, starting boot sequence');
+
+  // Check version and clear cache if needed (before anything else)
+  try {
+    await VersionManager.checkVersion();
+  } catch (error) {
+    logger.error('[Boot] Version check failed:', error);
+  }
 
   try {
     window.debianBoot = new DebianRealBoot();

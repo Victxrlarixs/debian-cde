@@ -1,7 +1,7 @@
 {
   "name": "zany-zenith",
   "type": "module",
-  "version": "0.0.1",
+  "version": "1.0.3",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -10,7 +10,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "astro": "^5.17.1",
+    "astro": "^5.18.0",
     "marked": "^17.0.3"
   },
   "devDependencies": {

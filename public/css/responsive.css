@@ -182,7 +182,7 @@
     width: 18px;
     height: 18px;
   }
-  
+
   /* Ensure nested divs don't break layout */
   .cde-icon > div {
     width: 100%;
@@ -243,22 +243,34 @@
   }
 
   .fm-toolbar {
-    padding: 2px;
+    padding: 3px;
+    gap: 3px;
   }
 
   .fm-btn {
-    width: 20px;
-    height: 18px;
+    width: 24px;
+    height: 22px;
+    padding: 2px;
   }
 
   .fm-btn img {
-    width: 14px;
-    height: 14px;
+    width: 16px;
+    height: 16px;
   }
 
   .fm-path {
-    height: 18px;
+    height: 22px;
     font-size: 10px;
+    padding: 3px 6px;
+  }
+
+  .fm-path-container {
+    height: 26px;
+  }
+
+  .fm-search-container {
+    height: 26px;
+    width: 130px;
   }
 
   .fm-sidebar {

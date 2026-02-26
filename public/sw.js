@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v3';
+const CACHE_VERSION = 'v4';
 const STATIC_CACHE = `static-cache-${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [
@@ -14,6 +14,8 @@ const PRECACHE_URLS = [
 ];
 
 self.addEventListener('install', (event) => {
+  // Skip waiting to activate immediately
+  self.skipWaiting();
   event.waitUntil(caches.open(STATIC_CACHE).then((cache) => cache.addAll(PRECACHE_URLS)));
 });
 
@@ -24,6 +26,7 @@ self.addEventListener('activate', (event) => {
       .then((keys) =>
         Promise.all(keys.filter((key) => key !== STATIC_CACHE).map((key) => caches.delete(key)))
       )
+      .then(() => self.clients.claim())
   );
 });
 
@@ -35,6 +38,12 @@ self.addEventListener('fetch', (event) => {
   }
 
   const url = new URL(request.url);
+
+  // Skip caching in development (localhost)
+  if (url.hostname === 'localhost' || url.hostname === '127.0.0.1') {
+    event.respondWith(fetch(request));
+    return;
+  }
 
   // Navegación: estrategia network-first con fallback a caché
   if (request.mode === 'navigate') {

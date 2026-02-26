@@ -15,23 +15,28 @@ Manages the global color palette with 76+ authentic CDE themes.
 The system includes all original CDE color schemes:
 
 **Earth Tones:**
+
 - Africa, Alpine, Arizona, Autumn, Broica, BroicaVUE, BroicaLtVUE
 - Cabernet, Camouflage, Charcoal, Chocolate, Cinnamon, Clay, Coalmine
 - Dakota, Dalla, DarkGold, Delphinium, Desert, Dusk
 
 **Blues:**
+
 - BlueNight, BlueShades, DarkBlue, Fjord, Glacier, Lilac, Neptune
 - NorthernSky, Nutmeg, Olive, Orchid, PaleGreen, Palms, Pbnj
 
 **Neutrals:**
+
 - Ashley, BeigeRose, Canvas, Crimson, Goldenrod, GrayScale, Greige
 - Lilac, Mauve, Mustard, Nutmeg, Olive, Orchid, PaleGreen
 
 **Vibrant:**
+
 - Crimson, Delphinium, Fjord, Goldenrod, Lilac, Mauve, Neptune
 - Nutmeg, Olive, Orchid, PaleGreen, Palms, Pbnj, Pepper
 
 **Special:**
+
 - BlackWhite, Chocolate, Cinnamon, Clay, Coalmine, Crimson
 - Default, Desert, Dusk, Fjord, Glacier, Goldenrod, GrayScale
 
@@ -41,27 +46,27 @@ Each palette defines 20+ CSS custom properties:
 
 ```css
 :root {
-  --bg-color: #ae9e8e;              /* Primary background */
-  --fg-color: #000000;              /* Primary foreground/text */
-  --top-shadow: #dfd6c6;            /* Light shadow (3D effect) */
-  --bottom-shadow: #5e5e5e;         /* Dark shadow (3D effect) */
-  --select-color: #ae9e8e;          /* Selection highlight */
-  --active-bg: #ae9e8e;             /* Active element background */
-  --active-fg: #000000;             /* Active element foreground */
-  --inactive-bg: #ae9e8e;           /* Inactive element background */
-  --inactive-fg: #000000;           /* Inactive element foreground */
-  --border-color: #000000;          /* Border color */
-  --titlebar-bg: #ae9e8e;           /* Window title bar background */
-  --titlebar-fg: #000000;           /* Window title bar text */
-  --menu-bg: #ae9e8e;               /* Menu background */
-  --menu-fg: #000000;               /* Menu text */
-  --panel-bg: #ae9e8e;              /* Panel background */
-  --panel-fg: #000000;              /* Panel text */
-  --desktop-bg: #5e5e5e;            /* Desktop background */
-  --shadow-color: #000000;          /* Drop shadow color */
-  --highlight-color: #ffffff;       /* Highlight color */
-  --input-bg: #ffffff;              /* Input field background */
-  --input-fg: #000000;              /* Input field text */
+  --bg-color: #ae9e8e; /* Primary background */
+  --fg-color: #000000; /* Primary foreground/text */
+  --top-shadow: #dfd6c6; /* Light shadow (3D effect) */
+  --bottom-shadow: #5e5e5e; /* Dark shadow (3D effect) */
+  --select-color: #ae9e8e; /* Selection highlight */
+  --active-bg: #ae9e8e; /* Active element background */
+  --active-fg: #000000; /* Active element foreground */
+  --inactive-bg: #ae9e8e; /* Inactive element background */
+  --inactive-fg: #000000; /* Inactive element foreground */
+  --border-color: #000000; /* Border color */
+  --titlebar-bg: #ae9e8e; /* Window title bar background */
+  --titlebar-fg: #000000; /* Window title bar text */
+  --menu-bg: #ae9e8e; /* Menu background */
+  --menu-fg: #000000; /* Menu text */
+  --panel-bg: #ae9e8e; /* Panel background */
+  --panel-fg: #000000; /* Panel text */
+  --desktop-bg: #5e5e5e; /* Desktop background */
+  --shadow-color: #000000; /* Drop shadow color */
+  --highlight-color: #ffffff; /* Highlight color */
+  --input-bg: #ffffff; /* Input field background */
+  --input-fg: #000000; /* Input field text */
 }
 ```
 
@@ -81,11 +86,8 @@ Each color variable has a dedicated picker:
 ```html
 <div class="color-control">
   <label>Background Color</label>
-  <input type="color" 
-         data-var="--bg-color" 
-         value="#ae9e8e">
-  <div class="color-swatch" 
-       style="background: var(--bg-color)"></div>
+  <input type="color" data-var="--bg-color" value="#ae9e8e" />
+  <div class="color-swatch" style="background: var(--bg-color)"></div>
 </div>
 ```
 
@@ -97,12 +99,12 @@ Applying a palette updates all CSS variables simultaneously:
 public applyCdePalette(paletteName: string): void {
   const palette = this.cdePalettes[paletteName];
   if (!palette) return;
-  
+
   Object.entries(palette.colors).forEach(([key, value]) => {
     document.documentElement.style.setProperty(key, value);
     this.styles[key] = value;
   });
-  
+
   this.saveColors();
 }
 ```
@@ -114,6 +116,7 @@ Controls typography across the entire system.
 ### Font Families
 
 **Available Fonts:**
+
 - System Default (sans-serif)
 - Monospace (monospace)
 - Serif (serif)
@@ -124,21 +127,25 @@ Controls typography across the entire system.
 ### Font Properties
 
 **Base Font Size:**
+
 - Range: 10px - 20px
 - Default: 12px
 - Affects all UI text
 
 **Font Weight:**
+
 - Normal: 100-900
 - Bold: 100-900
 - Default: 400 (normal), 700 (bold)
 
 **Line Height:**
+
 - Range: 1.0 - 2.0
 - Default: 1.5
 - Affects text readability
 
 **Letter Spacing:**
+
 - Range: -2px - 4px
 - Default: 0px
 - Affects character spacing
@@ -146,21 +153,25 @@ Controls typography across the entire system.
 ### Font Presets
 
 **Small:**
+
 - Size: 10px
 - Weight: 400
 - Line Height: 1.4
 
 **Medium (Default):**
+
 - Size: 12px
 - Weight: 400
 - Line Height: 1.5
 
 **Large:**
+
 - Size: 14px
 - Weight: 400
 - Line Height: 1.6
 
 **Extra Large:**
+
 - Size: 16px
 - Weight: 500
 - Line Height: 1.7
@@ -191,10 +202,9 @@ Controls cursor movement speed multiplier.
 ```typescript
 const deltaX = e.clientX - lastX;
 const deltaY = e.clientY - lastY;
-const acceleration = parseFloat(
-  getComputedStyle(document.documentElement)
-    .getPropertyValue('--mouse-acceleration')
-) || 1;
+const acceleration =
+  parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--mouse-acceleration')) ||
+  1;
 
 newX = currentX + deltaX * acceleration;
 newY = currentY + deltaY * acceleration;
@@ -235,10 +245,12 @@ lastClickTime = now;
 Swaps primary and secondary mouse buttons.
 
 **Options:**
+
 - Right-handed (default)
 - Left-handed
 
 **Effect:**
+
 - Right: Left button = primary, right button = context menu
 - Left: Right button = primary, left button = context menu
 
@@ -267,10 +279,12 @@ Initial delay before repetition starts.
 Audible feedback for keyboard input.
 
 **Options:**
+
 - Enabled (default)
 - Disabled
 
 **Sound Properties:**
+
 - Frequency: 800Hz
 - Duration: 30ms
 - Volume: Controlled by Audio module
@@ -296,6 +310,7 @@ Pitch of system beep.
 **Effect:** Higher values = higher pitch
 
 **Frequency Guide:**
+
 - 200-400Hz: Low, bass-like
 - 400-800Hz: Mid-range, comfortable
 - 800-1200Hz: High, attention-grabbing
@@ -314,6 +329,7 @@ Length of system beep.
 Waveform shape for audio synthesis.
 
 **Options:**
+
 - Sine (default): Smooth, pure tone
 - Square: Sharp, retro computer sound
 - Sawtooth: Harsh, buzzing sound
@@ -336,53 +352,64 @@ Manages desktop background appearance.
 The system includes 168 authentic XPM backdrop patterns:
 
 **Geometric:**
+
 - Ankh, ArabescaDark, ArabescaLight, ArabianMosaic, Asanoha
 - BellFlowers, Bijouterie, Binding, Bloom, Buckles
 - Celtic, Chip, CirclePieces, CircleWeave, CircuitBoards
 
 **Textures:**
+
 - Afternoon, Armor, ArtDeco, Background, Bark, Barrack
 - BrickWall, BrokenIce, Bubbles, Burl, Canvas, Carpet
 
 **Patterns:**
+
 - Carps, ChitzDk, ChitzLt, Corduroy, Crochet, Daisies
 - Diamonds, Dimple, Dolphin, Doodle, Dots, DragonFly
 
 **Nature:**
+
 - Feathers, Ferns, Flowers, Foliage, Forest, Fountain
 - Garden, Grass, Greenery, Grove, Hedge, Herbs
 
 **Abstract:**
+
 - Illusion, Infinity, Inlay, Interlock, Interlocking, Intricate
 - Kaleidoscope, Knit, Lace, Lattice, Leaves, Lightning
 
 **Industrial:**
+
 - Machinery, Marble, Matrix, Maze, Mesh, Metal, Mosaic
 - Network, Nuts, Octagon, Origami, Paisley, Panels
 
 ### Backdrop Styles
 
 **Tiled (Default):**
+
 - Repeats pattern across desktop
 - Best for small patterns
 - No distortion
 
 **Centered:**
+
 - Single instance at center
 - Best for large images
 - Maintains aspect ratio
 
 **Fit:**
+
 - Scales to fit screen
 - Maintains aspect ratio
 - May show background color
 
 **Fill:**
+
 - Scales to fill screen
 - May crop image
 - No background color visible
 
 **Stretched:**
+
 - Scales to exact screen size
 - May distort image
 - Fills entire screen
@@ -392,17 +419,17 @@ The system includes 168 authentic XPM backdrop patterns:
 ```typescript
 public applyBackdrop(name: string, style: string = 'tiled'): void {
   const backdropUrl = `/backdrops/${name}.pm`;
-  
+
   document.documentElement.style.setProperty(
     '--desktop-backdrop',
     `url('${backdropUrl}')`
   );
-  
+
   document.documentElement.style.setProperty(
     '--backdrop-style',
     style
   );
-  
+
   this.saveBackdrop(name, style);
 }
 ```
@@ -415,22 +442,22 @@ Backdrops are stored in XPM format and parsed at runtime:
 public parseXPM(xpmData: string): string {
   // Extract dimensions and colors
   const lines = xpmData.split('\n');
-  const [width, height, colorCount, charsPerPixel] = 
+  const [width, height, colorCount, charsPerPixel] =
     lines[0].match(/\d+/g).map(Number);
-  
+
   // Parse color definitions
   const colors: Record<string, string> = {};
   for (let i = 1; i <= colorCount; i++) {
     const [char, color] = parseColorLine(lines[i]);
     colors[char] = color;
   }
-  
+
   // Build pixel grid
   const pixels: string[][] = [];
   for (let i = colorCount + 1; i < lines.length; i++) {
     pixels.push(lines[i].split('').map(c => colors[c]));
   }
-  
+
   // Convert to base64 PNG
   return canvasToDataURL(pixels, width, height);
 }
@@ -445,11 +472,13 @@ Controls window behavior and appearance.
 Determines how windows receive focus.
 
 **Click-to-Focus (Default):**
+
 - Window focuses on click
 - Explicit user action required
 - Traditional desktop behavior
 
 **Point-to-Focus:**
+
 - Window focuses on mouse hover
 - No click required
 - X11-style behavior
@@ -458,10 +487,14 @@ Determines how windows receive focus.
 
 ```typescript
 if (focusMode === 'point') {
-  document.addEventListener('pointerenter', (e) => {
-    const win = e.target.closest('.window');
-    if (win) focusWindow(win.id);
-  }, true);
+  document.addEventListener(
+    'pointerenter',
+    (e) => {
+      const win = e.target.closest('.window');
+      if (win) focusWindow(win.id);
+    },
+    true
+  );
 }
 ```
 
@@ -470,11 +503,13 @@ if (focusMode === 'point') {
 Controls window appearance during drag.
 
 **Opaque (Default):**
+
 - Full window content visible while dragging
 - Higher visual fidelity
 - May impact performance on slow devices
 
 **Wireframe:**
+
 - Only window outline visible while dragging
 - Better performance
 - Classic X11 behavior
@@ -500,16 +535,19 @@ if (!opaqueDragging) {
 Controls initial window position.
 
 **Centered (Default):**
+
 - Windows open at screen center
 - Consistent placement
 - Mobile-friendly
 
 **Cascading:**
+
 - Windows offset from previous position
 - Classic desktop behavior
 - Prevents overlap
 
 **Smart:**
+
 - Avoids existing windows
 - Maximizes visible area
 - Complex algorithm
@@ -547,6 +585,7 @@ document.addEventListener('wheel', resetTimer);
 Visual effect displayed during screen saver.
 
 **Options:**
+
 - Blank Screen (default): Solid black
 - Starfield: Moving stars
 - Matrix: Falling characters
@@ -564,14 +603,14 @@ Test screen saver without waiting for timeout.
 ```typescript
 public previewScreenSaver(): void {
   activateScreenSaver();
-  
+
   // Exit on any input
   const exitHandler = () => {
     deactivateScreenSaver();
     document.removeEventListener('pointermove', exitHandler);
     document.removeEventListener('keydown', exitHandler);
   };
-  
+
   document.addEventListener('pointermove', exitHandler, { once: true });
   document.addEventListener('keydown', exitHandler, { once: true });
 }
@@ -584,6 +623,7 @@ Manages session data and system initialization.
 ### Session Management
 
 **Save Session:**
+
 - Window positions
 - Window sizes
 - Maximized states
@@ -591,11 +631,13 @@ Manages session data and system initialization.
 - Current workspace
 
 **Restore Session:**
+
 - Reopens windows at saved positions
 - Restores maximized states
 - Switches to last workspace
 
 **Clear Session:**
+
 - Removes all saved window states
 - Resets to default layout
 - Useful for troubleshooting
@@ -603,16 +645,19 @@ Manages session data and system initialization.
 ### Data Management
 
 **Export Settings:**
+
 - Downloads JSON file with all settings
 - Includes theme, fonts, mouse, keyboard, etc.
 - Useful for backup or sharing
 
 **Import Settings:**
+
 - Uploads JSON file
 - Applies all settings
 - Validates format before applying
 
 **Reset to Defaults:**
+
 - Clears all localStorage data
 - Resets to factory settings
 - Requires confirmation
@@ -625,7 +670,7 @@ public exportSettings(): void {
   const json = JSON.stringify(settings, null, 2);
   const blob = new Blob([json], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
-  
+
   const a = document.createElement('a');
   a.href = url;
   a.download = 'cde-settings.json';
@@ -721,11 +766,11 @@ Settings are loaded during initialization:
 ```typescript
 public init(): void {
   const settings = settingsManager.getAllSettings();
-  
+
   // Apply theme
   this.theme.loadSavedColors(settings.theme.colors);
   this.font.loadSavedFonts(settings.theme.fonts);
-  
+
   // Apply behavior
   this.mouse.load(settings.mouse);
   this.keyboard.load(settings.keyboard);
@@ -733,7 +778,7 @@ public init(): void {
   this.backdrop.load(settings.backdrop);
   this.window.load(settings.window);
   this.screen.load(settings.screen);
-  
+
   // Restore session
   this.startup.restoreSession(settings.session);
 }
@@ -790,7 +835,7 @@ public getBackdrop(name: string): string {
   if (backdropCache[name]) {
     return backdropCache[name];
   }
-  
+
   const parsed = this.parseXPM(xpmData);
   backdropCache[name] = parsed;
   return parsed;

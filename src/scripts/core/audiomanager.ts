@@ -97,7 +97,7 @@ export const AudioManager = (() => {
             logger.log('[AudioManager] AudioContext unlocked via user gesture');
             removeListeners();
           })
-          .catch(() => { });
+          .catch(() => {});
       } else if (audioCtx && audioCtx.state === 'running') {
         removeListeners();
       }
@@ -212,7 +212,7 @@ export const AudioManager = (() => {
       this.playMelody([
         { freq: 261.63, duration: 0.1, type: 'sine' }, // C4
         { freq: 329.63, duration: 0.1, type: 'sine', delay: 50 }, // E4
-        { freq: 392.00, duration: 0.1, type: 'sine', delay: 50 }, // G4
+        { freq: 392.0, duration: 0.1, type: 'sine', delay: 50 }, // G4
         { freq: 523.25, duration: 0.3, type: 'sine', delay: 50 }, // C5
         { freq: 659.25, duration: 0.4, type: 'sine', delay: 100 }, // E5
       ]);

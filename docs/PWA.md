@@ -49,6 +49,7 @@ The manifest file (`/public/manifest.webmanifest`) defines the app's metadata an
 **scope**: Navigation scope - URLs outside this scope open in browser
 
 **display**: Presentation mode
+
 - `standalone`: Looks like a native app (no browser UI)
 - `fullscreen`: Uses entire screen
 - `minimal-ui`: Minimal browser controls
@@ -63,6 +64,7 @@ The manifest file (`/public/manifest.webmanifest`) defines the app's metadata an
 **lang**: Primary language of the app
 
 **icons**: Array of icon objects for various contexts
+
 - Home screen icons
 - Splash screen
 - Task switcher
@@ -71,17 +73,20 @@ The manifest file (`/public/manifest.webmanifest`) defines the app's metadata an
 ### Icon Requirements
 
 **Sizes:**
+
 - 192x192: Minimum required size
 - 512x512: High-resolution displays
 - 144x144: Windows tiles (optional)
 - 96x96: Android launcher (optional)
 
 **Format:**
+
 - PNG recommended (best compatibility)
 - SVG supported in modern browsers
 - ICO for legacy support
 
 **Purpose:**
+
 - `any`: Default icon
 - `maskable`: Safe zone for adaptive icons (Android)
 - `monochrome`: Single-color variant
@@ -137,15 +142,12 @@ These assets are available immediately on subsequent visits, even offline.
 
 ```javascript
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(STATIC_CACHE).then((cache) => 
-      cache.addAll(PRECACHE_URLS)
-    )
-  );
+  event.waitUntil(caches.open(STATIC_CACHE).then((cache) => cache.addAll(PRECACHE_URLS)));
 });
 ```
 
 **Process:**
+
 1. Open cache storage
 2. Add all precache URLs
 3. Wait for completion before activating
@@ -158,18 +160,17 @@ If any precache URL fails to load, the entire installation fails and the Service
 ```javascript
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(
-        keys
-          .filter((key) => key !== STATIC_CACHE)
-          .map((key) => caches.delete(key))
+    caches
+      .keys()
+      .then((keys) =>
+        Promise.all(keys.filter((key) => key !== STATIC_CACHE).map((key) => caches.delete(key)))
       )
-    )
   );
 });
 ```
 
 **Process:**
+
 1. Get all cache names
 2. Filter out current cache
 3. Delete old caches
@@ -191,21 +192,16 @@ if (request.mode === 'navigate') {
     fetch(request)
       .then((response) => {
         const responseClone = response.clone();
-        caches.open(STATIC_CACHE).then((cache) => 
-          cache.put(request, responseClone)
-        );
+        caches.open(STATIC_CACHE).then((cache) => cache.put(request, responseClone));
         return response;
       })
-      .catch(() => 
-        caches.match(request).then((cached) => 
-          cached || caches.match('/')
-        )
-      )
+      .catch(() => caches.match(request).then((cached) => cached || caches.match('/')))
   );
 }
 ```
 
 **Rationale:**
+
 - Always try network first for fresh content
 - Cache successful responses for offline use
 - Fall back to cached version if offline
@@ -216,19 +212,19 @@ if (request.mode === 'navigate') {
 **Strategy**: Cache-first with network fallback
 
 ```javascript
-if (url.pathname.startsWith('/css/') ||
-    url.pathname.startsWith('/icons/') ||
-    url.pathname.startsWith('/backdrops/') ||
-    url.pathname.startsWith('/palettes/')) {
+if (
+  url.pathname.startsWith('/css/') ||
+  url.pathname.startsWith('/icons/') ||
+  url.pathname.startsWith('/backdrops/') ||
+  url.pathname.startsWith('/palettes/')
+) {
   event.respondWith(
     caches.match(request).then((cached) => {
       if (cached) return cached;
-      
+
       return fetch(request).then((response) => {
         const responseClone = response.clone();
-        caches.open(STATIC_CACHE).then((cache) => 
-          cache.put(request, responseClone)
-        );
+        caches.open(STATIC_CACHE).then((cache) => cache.put(request, responseClone));
         return response;
       });
     })
@@ -237,6 +233,7 @@ if (url.pathname.startsWith('/css/') ||
 ```
 
 **Rationale:**
+
 - Static assets rarely change
 - Instant loading from cache
 - Network request only on cache miss
@@ -247,12 +244,11 @@ if (url.pathname.startsWith('/css/') ||
 **Strategy**: Network-first with optional cache fallback
 
 ```javascript
-event.respondWith(
-  fetch(request).catch(() => caches.match(request))
-);
+event.respondWith(fetch(request).catch(() => caches.match(request)));
 ```
 
 **Rationale:**
+
 - External resources should be fresh
 - Graceful degradation if offline
 
@@ -286,6 +282,7 @@ async function trimCache(cacheName, maxItems) {
 4. App appears in Start Menu/Applications
 
 **Alternative:**
+
 - Menu → More Tools → Create Shortcut
 - Check "Open as window"
 
@@ -305,6 +302,7 @@ async function trimCache(cacheName, maxItems) {
 3. App appears in Dock
 
 **Limitations:**
+
 - No Service Worker support in Safari < 11.1
 - Limited offline functionality
 
@@ -318,6 +316,7 @@ async function trimCache(cacheName, maxItems) {
 4. App appears on home screen
 
 **Criteria for Install Prompt:**
+
 - HTTPS connection
 - Valid manifest.webmanifest
 - Service Worker registered
@@ -331,6 +330,7 @@ async function trimCache(cacheName, maxItems) {
 4. App appears on home screen
 
 **Limitations:**
+
 - No Service Worker support
 - No offline functionality
 - No background sync
@@ -341,6 +341,7 @@ async function trimCache(cacheName, maxItems) {
 ### What Works Offline
 
 **Fully Functional:**
+
 - Desktop UI and window management
 - File Manager (VFS operations)
 - XEmacs text editor
@@ -351,6 +352,7 @@ async function trimCache(cacheName, maxItems) {
 - Time Manager
 
 **Cached Assets:**
+
 - All CSS stylesheets
 - System icons
 - Cursor graphics
@@ -360,12 +362,14 @@ async function trimCache(cacheName, maxItems) {
 ### What Requires Network
 
 **External Resources:**
+
 - Netscape Navigator external links
 - Net Search functionality
 - External documentation links
 - GitHub repository links
 
 **Dynamic Content:**
+
 - Service Worker updates
 - Manifest updates
 - New backdrop/palette downloads
@@ -456,7 +460,7 @@ navigator.serviceWorker.addEventListener('controllerchange', () => {
 navigator.serviceWorker.ready.then((registration) => {
   registration.addEventListener('updatefound', () => {
     const newWorker = registration.installing;
-    
+
     newWorker.addEventListener('statechange', () => {
       if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
         // New version available
@@ -502,7 +506,7 @@ function updateApp() {
 if ('storage' in navigator && 'estimate' in navigator.storage) {
   navigator.storage.estimate().then((estimate) => {
     console.log(`Using ${estimate.usage} of ${estimate.quota} bytes`);
-    console.log(`${(estimate.usage / estimate.quota * 100).toFixed(2)}% used`);
+    console.log(`${((estimate.usage / estimate.quota) * 100).toFixed(2)}% used`);
   });
 }
 ```
@@ -526,12 +530,14 @@ if ('storage' in navigator && 'persist' in navigator.storage) {
 ### Precache Strategy
 
 **Critical Path Assets:**
+
 - HTML shell
 - Core CSS
 - Essential icons
 - Cursor graphics
 
 **Lazy-Loaded Assets:**
+
 - Backdrops (loaded on demand)
 - Palettes (loaded on demand)
 - Large images
@@ -553,6 +559,7 @@ const CACHES = {
 ```
 
 Benefits:
+
 - Granular cache invalidation
 - Easier debugging
 - Better organization
@@ -574,6 +581,7 @@ Content-Encoding: gzip
 ```
 
 **Compression Ratios:**
+
 - HTML: 70-80% reduction
 - CSS: 70-85% reduction
 - JavaScript: 60-70% reduction
@@ -586,6 +594,7 @@ Content-Encoding: gzip
 Service Workers require HTTPS (except localhost for development).
 
 **Why:**
+
 - Prevent man-in-the-middle attacks
 - Ensure cache integrity
 - Protect user data
@@ -595,11 +604,11 @@ Service Workers require HTTPS (except localhost for development).
 **Recommended CSP Header:**
 
 ```
-Content-Security-Policy: 
-  default-src 'self'; 
-  script-src 'self' 'unsafe-inline'; 
-  style-src 'self' 'unsafe-inline'; 
-  img-src 'self' data: https:; 
+Content-Security-Policy:
+  default-src 'self';
+  script-src 'self' 'unsafe-inline';
+  style-src 'self' 'unsafe-inline';
+  img-src 'self' data: https:;
   font-src 'self' data:;
 ```
 
@@ -638,6 +647,7 @@ lighthouse https://debian.com.mx --view
 ```
 
 Checks:
+
 - PWA installability
 - Offline functionality
 - Performance
@@ -647,18 +657,21 @@ Checks:
 ### Manual Testing
 
 **Installation:**
+
 - [ ] Install prompt appears
 - [ ] App installs successfully
 - [ ] App launches from home screen
 - [ ] App runs in standalone mode
 
 **Offline:**
+
 - [ ] Enable airplane mode
 - [ ] App loads from cache
 - [ ] Core functionality works
 - [ ] Appropriate offline messaging
 
 **Updates:**
+
 - [ ] New version detected
 - [ ] Update notification shown
 - [ ] Update applies correctly
@@ -707,16 +720,19 @@ caches.keys().then((names) => {
 ### Common Issues
 
 **Service Worker Not Updating:**
+
 - Hard refresh (Ctrl+Shift+R)
 - Unregister and re-register
 - Check cache version number
 
 **Assets Not Caching:**
+
 - Verify HTTPS connection
 - Check network tab for errors
 - Inspect cache storage in DevTools
 
 **Install Prompt Not Showing:**
+
 - Verify manifest is valid
 - Check Service Worker registration
 - Ensure HTTPS connection
@@ -724,16 +740,17 @@ caches.keys().then((names) => {
 
 ## Browser Support
 
-| Feature | Chrome | Firefox | Safari | Edge |
-|---------|--------|---------|--------|------|
-| Service Workers | 40+ | 44+ | 11.1+ | 17+ |
-| Web App Manifest | 39+ | 53+ | 11.3+ | 17+ |
-| Add to Home Screen | 31+ | 53+ | 11.3+ | 17+ |
-| Background Sync | 49+ | ❌ | ❌ | 79+ |
-| Push Notifications | 42+ | 44+ | 16+ | 17+ |
+| Feature            | Chrome | Firefox | Safari | Edge |
+| ------------------ | ------ | ------- | ------ | ---- |
+| Service Workers    | 40+    | 44+     | 11.1+  | 17+  |
+| Web App Manifest   | 39+    | 53+     | 11.3+  | 17+  |
+| Add to Home Screen | 31+    | 53+     | 11.3+  | 17+  |
+| Background Sync    | 49+    | ❌      | ❌     | 79+  |
+| Push Notifications | 42+    | 44+     | 16+    | 17+  |
 
 ## Future Enhancements
 
 **Planned Features:**
+
 - Background sync for VFS changes
 - Push notifications for system events

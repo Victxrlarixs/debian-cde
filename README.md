@@ -35,15 +35,15 @@ A pixel inspired of the Common Desktop Environment (CDE) running entirely in you
 
 ## Key Features
 
-| Component | Description |
-|-----------|-------------|
-| XEmacs | Text editor with authentic Emacs keybindings (C-x, C-s, M-x) and minibuffer |
-| Terminal Lab | 41-lesson interactive tutorial with typing animation |
-| File Manager | Context menus, renaming, VFS navigation with tree and icon views |
-| Style Manager | Complete theme customization with 76 palettes and 168 backdrops |
-| Netscape Navigator | Functional 1994 browser with internal pages and loading animation |
-| Process Monitor | Virtual process list with CPU/memory usage and kill functionality |
-| Workspace Pager | 4 virtual desktops with keyboard shortcuts (Ctrl+Alt+1-4) |
+| Component          | Description                                                                 |
+| ------------------ | --------------------------------------------------------------------------- |
+| XEmacs             | Text editor with authentic Emacs keybindings (C-x, C-s, M-x) and minibuffer |
+| Terminal Lab       | 41-lesson interactive tutorial with typing animation                        |
+| File Manager       | Context menus, renaming, VFS navigation with tree and icon views            |
+| Style Manager      | Complete theme customization with 76 palettes and 168 backdrops             |
+| Netscape Navigator | Functional 1994 browser with internal pages and loading animation           |
+| Process Monitor    | Virtual process list with CPU/memory usage and kill functionality           |
+| Workspace Pager    | 4 virtual desktops with keyboard shortcuts (Ctrl+Alt+1-4)                   |
 
 ## Quick Start
 
