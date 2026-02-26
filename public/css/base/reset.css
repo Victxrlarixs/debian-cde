@@ -1,0 +1,34 @@
+/* Reset and Base Styles
+   Ensures the container fills the entire window and defines
+   global typography inherited by components. */
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  background-color: #000; /* Match boot screen to prevent flash */
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-base);
+  background-size: auto;
+  background-repeat: repeat;
+  background-position: center;
+  background-attachment: fixed;
+
+  overflow: hidden !important;
+  touch-action: none;
+
+  /* Authentic font rendering (Aliased / No smoothing) */
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+  font-smooth: never;
+  text-rendering: optimizeSpeed;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}

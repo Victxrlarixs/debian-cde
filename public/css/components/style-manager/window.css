@@ -1,0 +1,59 @@
+/* Style Manager Window */
+#styleManagerWindow.style-manager-window {
+  width: 320px;
+}
+
+#styleManagerWindow .modal-body {
+  padding: 16px;
+}
+
+#styleManagerWindow .window-content {
+  display: flex;
+  gap: 16px;
+}
+
+#styleManagerWindow .window-icon {
+  flex-shrink: 0;
+}
+
+#styleManagerWindow .window-icon img {
+  width: 48px;
+  height: 48px;
+}
+
+#styleManagerWindow .window-controls-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#styleManagerWindow .window-section-title {
+  font-weight: bold;
+  font-size: 11px;
+  margin-top: 4px;
+  color: var(--titlebar-color);
+}
+
+#styleManagerWindow .window-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+
+#styleManagerWindow .window-row input[type='checkbox'] {
+  margin: 0;
+}
+
+#styleManagerWindow .cde-actionbar {
+  padding: 8px;
+  gap: 8px;
+  justify-content: center;
+}
+
+#styleManagerWindow .cde-actionbar .cde-btn {
+  padding: 4px 12px;
+  font-size: 11px;
+  min-width: 50px;
+}

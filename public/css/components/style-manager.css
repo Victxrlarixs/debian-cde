@@ -1,233 +1,12 @@
-/* ------------------------------------------------
-   CDE SIMULATION — COMPONENTES DE INTERFAZ
-   Terminal, File Manager y Style Manager
-   Dominio: debian.com.mx
-   ------------------------------------------------ */
-
-/* ------------------------------------------------------------------
-   1. TERMINAL EMULADOR
-      Estilo fósforo verde, fondo oscuro, tipografía monoespaciada.
-   ------------------------------------------------------------------ */
-.terminal-body {
-  background: var(--terminal-bg-color);
-  color: var(--terminal-text-color);
-  font-family: var(--font-family-terminal);
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-base);
-  padding: 10px;
-  height: 240px;
-  overflow-y: auto;
-  white-space: pre-wrap;
+/* Style Manager (Style Manager)
+   Modal window for customizing colors and typography.
+   Fixed design, centered, with CDE-style panels and controls. */
+#styleManager {
+  position: absolute;
+  display: none;
 }
 
-.terminal-line {
-  display: flex;
-  align-items: center;
-  background: black;
-  color: var(--terminal-text-color);
-  font-family: var(--font-family-terminal);
-  font-size: var(--font-size-base);
-  padding: 0 10px 10px 10px;
-}
-
-.prompt {
-  color: var(--terminal-text-color);
-  margin-right: 4px;
-}
-
-#terminalInput {
-  flex: 1;
-  background: transparent;
-  border: none;
-  color: var(--terminal-text-color);
-  font-family: var(--font-family-terminal);
-  font-size: var(--font-size-base);
-  outline: none;
-  caret-color: var(--terminal-text-color);
-  line-height: var(--line-height-base);
-}
-
-/* Scroll personalizado para el área de la terminal */
-.terminal-body::-webkit-scrollbar {
-  width: 6px;
-}
-
-.terminal-body::-webkit-scrollbar-thumb {
-  background: var(--scrollbar-color);
-}
-
-/* ------------------------------------------------------------------
-   2. GESTOR DE ARCHIVOS (FILE MANAGER)
-      Interfaz clásica CDE con toolbar, sidebar y vista de iconos.
-   ------------------------------------------------------------------ */
-#fm {
-  display: flex;
-  flex-direction: column;
-}
-
-.fm-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background: #cfc8bd;
-  overflow: hidden;
-}
-
-/* ----- Barra de menú superior ----- */
-.fm-menubar {
-  background: var(--button-bg);
-  padding: 2px 6px;
-  font-size: var(--font-size-base);
-  font-family: var(--font-family-base);
-  display: flex;
-  gap: 12px;
-  border-bottom: 2px solid var(--separator-color);
-  color: var(--text-color);
-}
-
-/* ----- Barra de herramientas ----- */
-.fm-toolbar {
-  background: var(--button-bg);
-  padding: 4px;
-  display: flex;
-  gap: 4px;
-  border-bottom: 2px solid var(--separator-color);
-}
-
-.fm-btn {
-  width: 24px;
-  height: 22px;
-  background: var(--button-active);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border: 2px solid;
-  border-top-color: var(--border-light);
-  border-left-color: var(--border-light);
-  border-right-color: var(--border-dark);
-  border-bottom-color: var(--border-dark);
-}
-
-.fm-btn img {
-  width: 16px;
-  height: 16px;
-}
-
-.fm-btn:active {
-  border: 2px solid;
-  border-top-color: var(--border-dark);
-  border-left-color: var(--border-dark);
-  border-right-color: var(--border-light);
-  border-bottom-color: var(--border-light);
-}
-
-.fm-path {
-  flex: 1;
-  height: 22px;
-  font-size: var(--font-size-base);
-  font-family: var(--font-family-base);
-  background: #f0ebe3;
-  padding: 2px 6px;
-  border: 2px solid;
-  border-top-color: var(--border-inset-dark);
-  border-left-color: var(--border-inset-dark);
-  border-right-color: var(--border-inset-light);
-  border-bottom-color: var(--border-inset-light);
-}
-
-/* ----- Cuerpo: sidebar + vista de archivos ----- */
-.fm-body {
-  flex: 1;
-  display: flex;
-  overflow: hidden;
-}
-
-/* Barra lateral (lugares y dispositivos) */
-.fm-sidebar {
-  width: 150px;
-  background: var(--titlebar-color);
-  border-right: 2px solid var(--separator-color);
-  padding: 6px;
-  font-size: var(--font-size-base);
-  font-family: var(--font-family-base);
-  overflow-y: auto;
-  color: var(--titlebar-text-color);
-}
-
-.fm-section {
-  font-weight: bold;
-  margin-top: 6px;
-}
-
-.fm-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 2px 4px;
-  cursor: pointer;
-  color: var(--titlebar-text-color);
-}
-
-.fm-item img.fm-icon {
-  width: 16px;
-  height: 16px;
-}
-
-.fm-item:hover {
-  background: var(--button-active);
-}
-
-/* Área de iconos (grid) */
-.fm-files {
-  flex: 1;
-  background: var(--window-color);
-  padding: 12px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 90px);
-  gap: 16px;
-  overflow-y: auto;
-}
-
-.fm-file {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: var(--font-size-base);
-  font-family: var(--font-family-base);
-  color: var(--text-color);
-  text-align: center;
-  cursor: pointer;
-}
-
-.fm-file img {
-  width: 40px;
-  height: 40px;
-}
-
-.fm-file.selected {
-  background: rgba(0, 80, 160, 0.2);
-  outline: 1px solid #0044aa;
-}
-
-/* Barra de estado inferior */
-.fm-status {
-  background: var(--button-bg);
-  font-size: var(--font-size-small);
-  font-family: var(--font-family-base);
-  color: var(--text-color);
-  padding: 2px 6px;
-  border-top: 2px solid var(--separator-color);
-}
-
-/* ------------------------------------------------------------------
-   3. STYLE MANAGER (ADMINISTRADOR DE ESTILOS)
-      Ventana modal para personalizar colores y tipografía.
-      Diseño fijo, centrado, con paneles y controles estilo CDE.
-   ------------------------------------------------------------------ */
-
-/* Barra de título (arrastrable) */
+/* Draggable title bar */
 #styleManager .titlebar {
   background: var(--titlebar-color);
   color: var(--titlebar-text-color);
@@ -244,7 +23,7 @@
   min-height: 24px;
 }
 
-/* Cuerpo principal: panel lateral + panel de controles */
+/* Main body: side panel + control panel */
 #styleManager .modal-body {
   flex: 1;
   display: flex;
@@ -253,7 +32,7 @@
   background: var(--modal-bg);
 }
 
-/* ----- Panel lateral de categorías (Colores / Fuentes) ----- */
+/* Side panel for categories (Colors / Fonts) */
 .cde-sidepanel {
   width: 150px;
   background: var(--button-bg);
@@ -305,7 +84,7 @@
   font-family: var(--font-family-base);
 }
 
-/* ----- Panel de controles (contenido dinámico) ----- */
+/* Control panel (dynamic content) */
 .cde-controlpanel {
   flex: 1;
   padding: 20px;
@@ -336,7 +115,7 @@
   color: var(--titlebar-color);
 }
 
-/* ----- Filas de controles (label + input) ----- */
+/* Control rows (label + input) */
 .cde-controlrow {
   display: flex;
   align-items: center;
@@ -355,7 +134,7 @@
   flex-shrink: 0;
 }
 
-/* Selector de color con swatch y nombre */
+/* Color selector with swatch and name */
 .cde-colorselector {
   display: flex;
   align-items: center;
@@ -392,7 +171,7 @@
   flex-shrink: 0;
 }
 
-/* ----- Controles de fuente ----- */
+/* Font controls */
 .cde-select {
   flex: 1;
   height: 24px;
@@ -439,7 +218,7 @@
   border: 1px solid var(--separator-color);
 }
 
-/* ----- Vista previa de fuentes ----- */
+/* Font preview */
 .cde-font-preview {
   flex: 1;
   padding: 12px;
@@ -485,7 +264,7 @@
   color: #666;
 }
 
-/* ----- Presets de temas CDE clásicos ----- */
+/* Classic CDE theme presets */
 .cde-presets {
   color: var(--text-color);
   margin-top: 0px;
@@ -539,7 +318,7 @@
   border-bottom-color: var(--border-light);
 }
 
-/* ----- Barra de estado inferior ----- */
+/* Bottom status bar */
 .cde-statusbar {
   background: var(--button-bg);
   border-top: 1px solid var(--separator-color);
@@ -560,51 +339,7 @@
   color: var(--titlebar-color);
 }
 
-/* ----- Barra de acciones (botones) ----- */
-.cde-actionbar {
-  background: var(--button-active);
-  border-top: 2px solid var(--separator-color);
-  padding: 8px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  flex-shrink: 0;
-}
-
-.cde-btn {
-  padding: 4px 16px;
-  background: var(--button-bg);
-  font-family: var(--font-family-base);
-  color: var(--text-color);
-  font-size: var(--font-size-small);
-  cursor: pointer;
-  min-width: 80px;
-  border: 2px solid;
-  border-top-color: var(--border-light);
-  border-left-color: var(--border-light);
-  border-right-color: var(--border-dark);
-  border-bottom-color: var(--border-dark);
-}
-
-.cde-btn:hover {
-  background: var(--button-active);
-}
-
-.cde-btn:active {
-  border: 2px solid;
-  border-top-color: var(--border-dark);
-  border-left-color: var(--border-dark);
-  border-right-color: var(--border-light);
-  border-bottom-color: var(--border-light);
-}
-
-.cde-btn-default {
-  background: var(--titlebar-color);
-  color: var(--titlebar-text-color);
-  font-weight: bold;
-}
-
-/* ----- Scrollbar personalizado para el panel de controles ----- */
+/* Custom scrollbar for control panel */
 .cde-controlpanel::-webkit-scrollbar {
   width: 16px;
 }
@@ -623,32 +358,86 @@
   border-bottom-color: var(--border-dark);
 }
 
-#terminal {
-  position: absolute;
-  width: min(380px, 95vw);
-  display: none;
+/* Style Manager Main Window */
+.style-manager-main {
+  width: fit-content;
+  min-width: 70vw;
+  max-width: 100vw;
 }
 
-#fm {
-  position: absolute;
-  width: min(420px, 95vw);
-  height: min(320px, 80vh);
-  display: none;
+.cde-menubar {
+  display: flex;
+  padding: 2px 6px;
+  background: var(--button-bg);
+  border-bottom: 2px solid var(--separator-color);
 }
 
-#styleManager {
-  position: absolute;
-  display: none;
+.cde-menu-item {
+  padding: 2px 8px;
+  cursor: pointer;
 }
 
-#netscape {
-  position: absolute;
-  display: none;
+.cde-menu-item:hover {
+  background: var(--titlebar-color);
+  color: var(--titlebar-text-color);
 }
 
-#emacs {
-  position: absolute;
-  display: none;
-  max-width: 95vw;
-  max-height: 85vh;
+.cde-menubar .cde-menu-item:hover {
+  background: var(--titlebar-color);
+  color: var(--titlebar-text-color);
+}
+
+.style-manager-body {
+  padding: 20px;
+  overflow-x: auto;
+}
+
+.style-manager-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.cde-category-icon-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--button-bg);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  cursor: pointer;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-small);
+  text-align: center;
+  min-width: 70px;
+  flex: 0 0 auto;
+  color: var(--text-color);
+}
+
+.cde-category-icon-btn:hover {
+  background: var(--button-active);
+}
+
+.cde-category-icon-btn:active {
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+}
+
+.cde-category-icon-btn img {
+  width: 32px;
+  height: 32px;
+  margin-bottom: 4px;
+}
+
+.cde-category-icon-btn-mouse img {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 4px;
 }

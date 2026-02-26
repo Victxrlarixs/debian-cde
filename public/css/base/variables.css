@@ -1,0 +1,43 @@
+/* CSS Variables (Design Tokens)
+   All variables are solid and customizable.
+   Control colors, typography, borders, and effects. */
+:root {
+  /* Base interface colors (Default: SkyRed) */
+  --topbar-color: #8b8ba5;
+  --window-color: #8b8ba5;
+  --titlebar-color: #a54a4a;
+  --titlebar-text-color: #ffffff;
+  --terminal-bg-color: #000000;
+  --terminal-text-color: #00ff00;
+  --dock-color: #8b8ba5;
+  --menu-color: #8b8ba5;
+  --dock-icon-bg: #7a7a9a;
+  --dock-icon-hover: #9a9ac5;
+  --dock-icon-active: #6a6a8a;
+  --button-bg: #8b8ba5;
+  --button-active: #6a6a8a;
+  --separator-color: #4a4a5a;
+  --modal-bg: #8b8ba5;
+  --scrollbar-color: #a54a4a;
+
+  /* CDE-style borders: fixed 3D bevel */
+  --border-light: #ffffff;
+  --border-dark: #404040;
+  --border-inset-light: #dfdfdf;
+  --border-inset-dark: #808080;
+
+  /* Typography - fully adjustable by user */
+  --font-family-base: 'Fixedsys', 'Lucida Console', monospace;
+  --font-family-terminal: 'Courier New', monospace;
+  --font-size-base: 12px;
+  --font-size-title: 13px;
+  --font-size-small: 11px;
+  --font-size-large: 13px;
+  --font-weight-normal: 400;
+  --font-weight-bold: 700;
+  --line-height-base: 1.45;
+
+  /* Visual effects */
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --text-color: #000000;
+}

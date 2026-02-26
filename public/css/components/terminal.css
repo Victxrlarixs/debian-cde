@@ -1,0 +1,51 @@
+/* Terminal Emulator
+   Green phosphor style, dark background, monospaced typography. */
+#terminal {
+  position: absolute;
+  width: min(380px, 95vw);
+  display: none;
+}
+
+.terminal-body {
+  background: var(--terminal-bg-color);
+  color: var(--terminal-text-color);
+  font-family: var(--font-family-terminal);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  padding: 10px;
+  height: 240px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+.terminal-line {
+  display: flex;
+  align-items: center;
+  background: black;
+  color: var(--terminal-text-color);
+  font-family: var(--font-family-terminal);
+  font-size: var(--font-size-base);
+  padding: 0 10px 10px 10px;
+}
+
+.prompt {
+  color: var(--terminal-text-color);
+  margin-right: 4px;
+}
+
+#terminalInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--terminal-text-color);
+  font-family: var(--font-family-terminal);
+  font-size: var(--font-size-base);
+  outline: none;
+  caret-color: var(--terminal-text-color);
+  line-height: var(--line-height-base);
+}
+
+#taskmanager .terminal-body {
+  background: var(--terminal-bg-color) !important;
+  color: var(--terminal-text-color) !important;
+}

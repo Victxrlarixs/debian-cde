@@ -1,0 +1,116 @@
+/* Style Manager Mouse */
+#styleManagerMouse.style-manager-mouse {
+  width: 400px;
+}
+
+#styleManagerMouse .modal-body {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#styleManagerMouse .mouse-icon-row {
+  display: flex;
+  gap: 16px;
+}
+
+#styleManagerMouse .mouse-icon-btn {
+  width: 120px;
+  height: 150px;
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--button-bg);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  cursor: pointer;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-small);
+  text-align: center;
+}
+
+#styleManagerMouse .mouse-icon-btn img {
+  width: 110px;
+  height: 135px;
+  margin-bottom: 4px;
+}
+
+#styleManagerMouse .mouse-controls-group {
+  display: flex;
+  gap: 24px;
+  flex: 1;
+}
+
+#styleManagerMouse .mouse-control-column {
+  flex: 1;
+}
+
+#styleManagerMouse .mouse-control-column>span {
+  font-weight: bold;
+  font-size: 11px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+#styleManagerMouse .mouse-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#styleManagerMouse .mouse-radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+}
+
+#styleManagerMouse .mouse-radio-group input[type='radio'] {
+  margin: 0;
+}
+
+#styleManagerMouse .mouse-sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+#styleManagerMouse .mouse-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#styleManagerMouse .mouse-slider-row span:first-child {
+  font-weight: bold;
+  font-size: 11px;
+  width: 75px;
+}
+
+#styleManagerMouse .mouse-slider-row input[type='range'] {
+  width: 160px;
+  height: 4px;
+}
+
+#styleManagerMouse .mouse-slider-row span:last-child {
+  font-size: 11px;
+  width: 30px;
+  text-align: right;
+}
+
+#styleManagerMouse .cde-actionbar {
+  padding: 8px;
+  gap: 8px;
+  justify-content: center;
+}
+
+#styleManagerMouse .cde-actionbar .cde-btn {
+  padding: 4px 16px;
+  font-size: 11px;
+}

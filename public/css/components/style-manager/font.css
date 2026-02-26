@@ -1,0 +1,117 @@
+/* Style Manager Font */
+#styleManagerFont.style-manager-font {
+  width: 350px;
+  height: 550px;
+}
+
+#styleManagerFont .modal-body {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: calc(100% - 70px);
+  overflow-y: auto;
+}
+
+#styleManagerFont .font-theme-section {
+  margin-bottom: 4px;
+}
+
+#styleManagerFont .font-preset-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+#styleManagerFont .font-preset-row .cde-preset {
+  padding: 4px 6px;
+  font-size: 10px;
+  min-width: 65px;
+}
+
+#styleManagerFont .cde-controlrow {
+  margin-bottom: 2px;
+  padding: 2px 0;
+  min-height: 28px;
+}
+
+#styleManagerFont .cde-label {
+  width: 100px;
+  font-size: 11px;
+}
+
+#styleManagerFont .cde-select {
+  height: 22px;
+  font-size: 11px;
+  padding: 0 4px;
+  width: 180px;
+  max-width: 180px;
+}
+
+#styleManagerFont .cde-slider {
+  width: 120px;
+  height: 5px;
+  margin: 0 8px;
+}
+
+#styleManagerFont .cde-slidervalue {
+  font-size: 11px;
+  padding: 2px 6px;
+  min-width: 35px;
+}
+
+#styleManagerFont .cde-font-preview {
+  padding: 10px;
+  margin-top: 8px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#styleManagerFont .font-preview-title {
+  font-size: 12px;
+  padding: 4px;
+}
+
+#styleManagerFont .font-preview-text {
+  font-size: 11px;
+}
+
+#styleManagerFont .font-preview-terminal {
+  font-size: 11px;
+  padding: 4px;
+}
+
+#styleManagerFont .font-preview-small {
+  font-size: 10px;
+}
+
+#styleManagerFont .cde-statusbar {
+  height: 22px;
+  font-size: 11px;
+  padding: 2px 8px;
+}
+
+#styleManagerFont .cde-actionbar {
+  padding: 8px;
+  gap: 8px;
+}
+
+#styleManagerFont .cde-actionbar .cde-btn {
+  padding: 4px 16px;
+  font-size: 11px;
+  min-width: 60px;
+}
+
+#styleManagerFont.style-manager-font .font-icon-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+#styleManagerFont.style-manager-font .font-icon-container img {
+  width: 48px;
+  height: 48px;
+}

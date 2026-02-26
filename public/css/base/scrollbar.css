@@ -1,0 +1,26 @@
+/* Scrollbar (WebKit) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--button-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--titlebar-color);
+  border: 1px solid var(--border-dark);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--separator-color);
+}
+
+/* Custom scrollbar for terminal area */
+.terminal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.terminal-body::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-color);
+}

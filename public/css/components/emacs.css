@@ -1,0 +1,427 @@
+/* Emacs Text Editor (XEmacs Style) */
+#emacs {
+  width: min(760px, 100vw);
+  height: min(580px, 90vh);
+  max-width: 100vw;
+  max-height: calc(100vh - 28px);
+  display: none;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #888;
+}
+
+/* Emacs titlebar override - plain gray like GTK Emacs */
+.emacs-titlebar,
+#emacs-titlebar {
+  background: #bfbfbf !important;
+  color: #000 !important;
+  font-family: 'DejaVu Sans', sans-serif !important;
+  font-size: 12px !important;
+  border-bottom: 2px solid #808080;
+}
+
+/* XEmacs Toolbar */
+.xemacs-toolbar {
+  display: flex;
+  background: #bfbfbf;
+  padding: 2px;
+  gap: 1px;
+  border-bottom: 1px solid #808080;
+  overflow-x: auto;
+}
+
+.xe-tool-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: #bfbfbf;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 9px;
+  color: #000;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.xe-tool-btn:hover {
+  border: 1px solid #fff;
+  border-right-color: #808080;
+  border-bottom-color: #808080;
+}
+
+.xe-tool-btn img {
+  width: 24px;
+  height: 24px;
+  image-rendering: pixelated;
+}
+
+/* XEmacs Tabs */
+.xemacs-tabs {
+  display: flex;
+  background: #bfbfbf;
+  border-bottom: 1px solid #808080;
+  padding-left: 10px;
+}
+
+.xe-tab {
+  background: #d0d0d0;
+  padding: 2px 12px;
+  font-size: 11px;
+  border: 1px solid #808080;
+  border-bottom: none;
+  margin-top: 4px;
+  margin-right: 2px;
+  cursor: pointer;
+}
+
+.xe-tab.active {
+  background: #fff;
+  font-weight: bold;
+}
+
+/* Emacs Menubar */
+.emacs-menubar,
+.te-menubar {
+  display: flex;
+  background: #e8e8e8;
+  border-bottom: 1px solid #aaa;
+  font-family: 'DejaVu Sans', Helvetica, sans-serif;
+  font-size: 13px;
+  color: #000;
+  user-select: none;
+  position: relative;
+  z-index: 9999;
+}
+
+.te-menu {
+  position: relative;
+}
+
+.emacs-menubar .te-menu-label,
+.te-menu-label {
+  padding: 3px 10px;
+  color: #000;
+  display: block;
+  cursor: pointer;
+}
+
+.emacs-menubar .te-menu-label:hover,
+.emacs-menubar .te-menu.open .te-menu-label,
+.te-menu-label:hover,
+.te-menu.open .te-menu-label {
+  background: #316ecb;
+  color: #fff;
+}
+
+/* Dropdown panel */
+.emacs-menubar .te-dropdown,
+.te-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  background: #f0f0f0;
+  border: 1px solid #888;
+  border-top: none;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.25);
+  font-family: 'DejaVu Sans', Helvetica, sans-serif;
+  font-size: 13px;
+  z-index: 10000;
+}
+
+.te-menu.open .te-dropdown {
+  display: block;
+}
+
+.emacs-menubar .te-item,
+.te-item {
+  color: #000;
+  padding: 4px 20px;
+  font-size: 13px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.emacs-menubar .te-item:hover,
+.te-item:hover {
+  background: #316ecb;
+  color: #fff;
+}
+
+.emacs-menubar .te-item.te-disabled,
+.te-item.te-disabled {
+  color: #888;
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: default;
+}
+
+.emacs-menubar .te-accel,
+.te-accel {
+  color: inherit;
+  opacity: 0.7;
+  font-size: 11px;
+  margin-left: 20px;
+}
+
+.te-accel:before {
+  content: none;
+}
+
+.emacs-menubar .te-separator,
+.te-separator {
+  background: #bbb;
+  margin: 2px 0;
+  height: 1px;
+}
+
+/* Find Bar */
+.te-find-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f0f0f0;
+  border-bottom: 1px solid #aaa;
+  padding: 3px 8px;
+  font-family: 'DejaVu Mono', monospace;
+  font-size: 13px;
+  color: #000;
+}
+
+.te-find-hidden {
+  display: none;
+}
+
+#te-find-input {
+  flex: 1;
+  max-width: 260px;
+  background: #fff;
+  border: 1px solid #888;
+  font-family: 'DejaVu Mono', monospace;
+  font-size: 13px;
+  padding: 1px 6px;
+  color: #000;
+  outline: none;
+}
+
+.te-find-bar button {
+  padding: 2px 8px;
+  background: #e0e0e0;
+  border: 1px solid #888;
+  font-size: 12px;
+  cursor: pointer;
+  color: #000;
+}
+
+/* Splash Screen */
+.emacs-splash {
+  flex: 1;
+  overflow-y: auto;
+  background: #bfbfbf;
+  color: #000;
+  padding: 40px;
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.emacs-hidden {
+  display: none !important;
+}
+
+.emacs-splash-logo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.emacs-splash-logo img {
+  height: 180px;
+  width: auto;
+  image-rendering: pixelated;
+}
+
+.emacs-splash-welcome {
+  color: #00048b;
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.xe-experimental {
+  color: #ff0000;
+  font-weight: bold;
+}
+
+.emacs-link {
+  color: #00048b;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.emacs-link:hover {
+  color: #0055cc;
+}
+
+.emacs-splash-links {
+  margin-bottom: 16px;
+}
+
+.emacs-splash-links table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.emacs-splash-links td {
+  padding: 2px 12px 2px 0;
+  vertical-align: top;
+  font-size: 13px;
+  color: #000;
+}
+
+.emacs-splash-links td:first-child {
+  white-space: nowrap;
+  min-width: 180px;
+}
+
+.emacs-splash-start {
+  margin: 8px 0;
+  font-size: 13px;
+  color: #000;
+}
+
+.emacs-splash-start code {
+  font-family: 'DejaVu Mono', monospace;
+  background: transparent;
+}
+
+.emacs-splash-version {
+  color: #000;
+  font-size: 12px;
+  margin-top: 20px;
+  line-height: 1.4;
+  font-family: 'DejaVu Mono', monospace;
+}
+
+/* Editor Container & Area */
+#emacs-editor-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #bbb;
+  overflow: hidden;
+  position: relative;
+}
+
+#emacs-textarea {
+  flex: 1;
+  background: #fff;
+  color: #000 !important;
+  font-family: 'DejaVu Mono', 'Courier New', monospace !important;
+  font-size: 13px !important;
+  border: none;
+  outline: none;
+  padding: 10px;
+  resize: none;
+  line-height: 1.5;
+  white-space: pre;
+  tab-size: 4;
+  caret-shape: block;
+}
+
+#emacs-textarea:focus {
+  outline: none;
+}
+
+/* Mode Line (XEmacs Style) */
+#emacs-mode-line {
+  background: #8080ff;
+  color: #000;
+  font-family: 'DejaVu Mono', monospace;
+  font-size: 11px;
+  height: 22px;
+  line-height: 22px;
+  padding: 0 4px;
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+}
+
+.xe-modeline-sep {
+  color: #ff0000;
+  font-weight: bold;
+}
+
+/* Shortcuts Hint */
+#emacs-shortcuts {
+  background: #222;
+  color: #00ff00;
+  font-family: 'DejaVu Mono', monospace;
+  font-size: 10px;
+  height: 18px;
+  line-height: 18px;
+  padding: 0 8px;
+  user-select: none;
+  letter-spacing: 0.5px;
+}
+
+/* Minibuffer */
+#emacs-minibuffer {
+  background: #fff;
+  color: #000;
+  font-family: 'DejaVu Mono', monospace;
+  font-size: 13px;
+  height: 22px;
+  line-height: 22px;
+  padding: 0 8px;
+  border-top: 1px solid #aaa;
+  display: flex;
+  align-items: center;
+}
+
+#emacs-minibuffer-content {
+  display: none;
+  flex: 1;
+  align-items: center;
+}
+
+#emacs-minibuffer-label {
+  margin-right: 4px;
+  color: #555;
+  font-weight: bold;
+}
+
+#emacs-minibuffer-input {
+  flex: 1;
+  background: transparent;
+  color: #000;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+  margin: 0;
+}
+
+#emacs-minibuffer-msg {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.emacs-pixelated {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}

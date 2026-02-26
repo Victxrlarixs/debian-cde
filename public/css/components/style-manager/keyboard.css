@@ -1,0 +1,58 @@
+/* Style Manager Keyboard - Versión con icono */
+#styleManagerKeyboard.style-manager-keyboard {
+  width: 320px;
+}
+
+#styleManagerKeyboard .modal-body {
+  padding: 16px;
+}
+
+#styleManagerKeyboard .keyboard-content {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+#styleManagerKeyboard .keyboard-icon {
+  flex-shrink: 0;
+}
+
+#styleManagerKeyboard .keyboard-icon img {
+  width: 48px;
+  height: 48px;
+}
+
+#styleManagerKeyboard .keyboard-controls {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#styleManagerKeyboard .keyboard-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#styleManagerKeyboard .keyboard-row label {
+  font-size: 11px;
+  min-width: 70px;
+}
+
+#styleManagerKeyboard .keyboard-row input[type='range'] {
+  width: 100px;
+  height: 4px;
+}
+
+#styleManagerKeyboard .cde-actionbar {
+  padding: 8px;
+  gap: 8px;
+  justify-content: center;
+}
+
+#styleManagerKeyboard .cde-actionbar .cde-btn {
+  padding: 4px 12px;
+  font-size: 11px;
+  min-width: 50px;
+}
