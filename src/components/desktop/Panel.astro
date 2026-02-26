@@ -3,64 +3,64 @@
 import { CONFIG } from '../../scripts/core/config';
 ---
 
-<div id="cde-panel">
-  <div class="cde-menu-btn">
+<div id="cde-panel" role="navigation" aria-label="Main panel">
+  <div class="cde-menu-btn" role="button" tabindex="0" aria-label="Main menu">
     <img src="/icons/Debian.png" alt="Menu" />
   </div>
-  <div class="cde-sep"></div>
+  <div class="cde-sep" role="separator"></div>
 
   <div class="cde-icon-block">
     <div class="cde-icon-buttons">
-      <div class="cde-icon-btn dropdown-btn" id="terminalBtn">
+      <div class="cde-icon-btn dropdown-btn" id="terminalBtn" role="button" tabindex="0" aria-label="Terminal menu" aria-haspopup="true" aria-expanded="false">
         <img src="/icons/go-up.png" alt="arrow" class="arrow-icon" />
       </div>
-      <div class="cde-icon-btn cde-textured-btn" id="fileManagerBtn"></div>
-      <div class="cde-icon-btn dropdown-btn" id="browserBtn">
+      <div class="cde-icon-btn cde-textured-btn" id="fileManagerBtn" role="button" tabindex="0" aria-label="File Manager"></div>
+      <div class="cde-icon-btn dropdown-btn" id="browserBtn" role="button" tabindex="0" aria-label="Browser menu" aria-haspopup="true" aria-expanded="false">
         <img src="/icons/go-up.png" alt="arrow" class="arrow-icon" />
       </div>
-      <div class="cde-icon-btn dropdown-btn" id="styleManagerBtn">
+      <div class="cde-icon-btn dropdown-btn" id="styleManagerBtn" role="button" tabindex="0" aria-label="Style Manager menu" aria-haspopup="true" aria-expanded="false">
         <img src="/icons/go-up.png" alt="arrow" class="arrow-icon" />
       </div>
-      <div class="cde-icon-btn dropdown-btn" id="utilitiesBtn">
+      <div class="cde-icon-btn dropdown-btn" id="utilitiesBtn" role="button" tabindex="0" aria-label="Utilities menu" aria-haspopup="true" aria-expanded="false">
         <img src="/icons/go-up.png" alt="arrow" class="arrow-icon" />
       </div>
     </div>
 
-    <div class="cde-icons">
-      <div class="cde-icon" onclick="TerminalLab.open()" title="Open Terminal">
+    <div class="cde-icons" role="toolbar" aria-label="Quick launch icons">
+      <div class="cde-icon" onclick="TerminalLab.open()" title="Open Terminal" role="button" tabindex="0" aria-label="Open Terminal" data-keyboard-hint="Ctrl+Alt+T">
         <img src="/icons/konsole.png" alt="Terminal Lab" />
       </div>
-      <div class="cde-icon" onclick="toggleFileManager()" title="File Manager">
+      <div class="cde-icon" onclick="toggleFileManager()" title="File Manager" role="button" tabindex="0" aria-label="File Manager" data-keyboard-hint="Ctrl+Alt+F">
         <img src="/icons/filemanager.png" alt="File Manager" />
       </div>
-      <div class="cde-icon" title="Github Repo">
+      <div class="cde-icon" title="Github Repo" role="button" tabindex="0" aria-label="Github Repository">
         <div onclick={`confirmExternalLink('${CONFIG.META.GITHUB_REPO}')`} style="cursor: pointer;">
           <img src="/icons/konqueror.png" alt="Browser" />
         </div>
       </div>
-      <div class="cde-icon" onclick="styleManager.openMain()" title="Style Manager">
+      <div class="cde-icon" onclick="styleManager.openMain()" title="Style Manager" role="button" tabindex="0" aria-label="Style Manager" data-keyboard-hint="Ctrl+Alt+S">
         <img src="/icons/org.xfce.settings.manager.png" alt="Style Manager" />
       </div>
-      <div class="cde-icon" id="utilitiesIcon" title="Run">
+      <div class="cde-icon" id="utilitiesIcon" title="Run" role="button" tabindex="0" aria-label="Utilities">
         <img src="/icons/applications-other.png" alt="Utilities" />
       </div>
     </div>
   </div>
 
-  <div class="cde-sep"></div>
+  <div class="cde-sep" role="separator"></div>
 
-  <div class="cde-pager">
-    <div class="pager-workspace active" data-workspace="1">One</div>
-    <div class="pager-workspace" data-workspace="2">Two</div>
-    <div class="pager-workspace" data-workspace="3">Three</div>
-    <div class="pager-workspace" data-workspace="4">Four</div>
+  <div class="cde-pager" role="tablist" aria-label="Workspaces">
+    <div class="pager-workspace active" data-workspace="1" role="tab" tabindex="0" aria-label="Workspace One" aria-selected="true">One</div>
+    <div class="pager-workspace" data-workspace="2" role="tab" tabindex="0" aria-label="Workspace Two" aria-selected="false">Two</div>
+    <div class="pager-workspace" data-workspace="3" role="tab" tabindex="0" aria-label="Workspace Three" aria-selected="false">Three</div>
+    <div class="pager-workspace" data-workspace="4" role="tab" tabindex="0" aria-label="Workspace Four" aria-selected="false">Four</div>
   </div>
 
   <div class="cde-scroll">
-    <div class="scroll-btn">
+    <div class="scroll-btn" role="button" tabindex="0" aria-label="Scroll up">
       <img src="/icons/go-up.png" alt="Up" style="width: 12px; height: 12px;" />
     </div>
-    <div class="scroll-btn">
+    <div class="scroll-btn" role="button" tabindex="0" aria-label="Scroll down">
       <img
         src="/icons/go-up.png"
         alt="Down"
@@ -69,13 +69,16 @@ import { CONFIG } from '../../scripts/core/config';
     </div>
   </div>
 
-  <div class="cde-sep"></div>
+  <div class="cde-sep" role="separator"></div>
 
   <div
     class="tray-icon"
     id="screenshot-btn"
     onclick="captureFullPageScreenshot()"
     title="Take Screenshot"
+    role="button"
+    tabindex="0"
+    aria-label="Take Screenshot"
   >
     <img src="/icons/org.xfce.screenshooter.png" alt="Camera" />
   </div>
@@ -85,74 +88,77 @@ import { CONFIG } from '../../scripts/core/config';
     id="taskmanager-btn"
     onclick="openTaskManagerInTerminal()"
     title="Process Monitor (top)"
+    role="button"
+    tabindex="0"
+    aria-label="Process Monitor"
   >
     <img src="/icons/org.xfce.taskmanager.png" alt="TaskManager" />
   </div>
 
-  <div class="tray-icon" onclick="window.Emacs?.openSplash()" title="XEmacs">
+  <div class="tray-icon" onclick="window.Emacs?.openSplash()" title="XEmacs" role="button" tabindex="0" aria-label="XEmacs" data-keyboard-hint="Ctrl+Alt+E">
     <img src="/icons/xemacs.png" alt="XEmacs" class="emacs-pixelated" />
   </div>
 </div>
 
-<div class="dropdown-menu" id="utilitiesDropdown">
-  <div class="menu-item" onclick="captureFullPageScreenshot()">
+<div class="dropdown-menu" id="utilitiesDropdown" role="menu" aria-label="Utilities menu">
+  <div class="menu-item" onclick="captureFullPageScreenshot()" role="menuitem" tabindex="0">
     <img src="/icons/org.xfce.screenshooter.png" alt="" /> Screenshot
   </div>
-  <div class="menu-item" onclick="window.Emacs?.openSplash()">
+  <div class="menu-item" onclick="window.Emacs?.openSplash()" role="menuitem" tabindex="0">
     <img src="/icons/xemacs.png" alt="" class="emacs-pixelated" /> XEmacs
   </div>
-  <div class="menu-item" onclick="openCalendar()">
+  <div class="menu-item" onclick="openCalendar()" role="menuitem" tabindex="0">
     <img src="/icons/calendar.png" alt="" /> Calendar
   </div>
-  <div class="menu-item" onclick="timeManager.open()">
+  <div class="menu-item" onclick="timeManager.open()" role="menuitem" tabindex="0">
     <img src="/icons/gtkclocksetup.png" alt="" /> Clock
   </div>
-</div><div class="dropdown-menu" id="styleManagerDropdown">
-  <div class="menu-item" onclick="styleManager.openColor()">
+</div><div class="dropdown-menu" id="styleManagerDropdown" role="menu" aria-label="Style Manager menu">
+  <div class="menu-item" onclick="styleManager.openColor()" role="menuitem" tabindex="0">
     <img src="/icons/org.xfce.settings.appearance.png" alt="" /> Color
   </div>
-  <div class="menu-item" onclick="styleManager.openFont()">
+  <div class="menu-item" onclick="styleManager.openFont()" role="menuitem" tabindex="0">
     <img src="/icons/font-x-generic.png" alt="" /> Font
   </div>
-  <div class="menu-item" onclick="styleManager.openBackdrop()">
+  <div class="menu-item" onclick="styleManager.openBackdrop()" role="menuitem" tabindex="0">
     <img src="/icons/org.xfce.PanelProfiles.png" alt="" /> Backdrop
   </div>
-  <div class="menu-item" onclick="styleManager.openKeyboard()">
+  <div class="menu-item" onclick="styleManager.openKeyboard()" role="menuitem" tabindex="0">
     <img src="/icons/org.xfce.settings.keyboard.png" alt="" /> Keyboard
   </div>
-  <div class="menu-item" onclick="styleManager.openMouse()">
+  <div class="menu-item" onclick="styleManager.openMouse()" role="menuitem" tabindex="0">
     <img src="/icons/org.xfce.settings.mouse.png" alt="" /> Mouse
   </div>
-  <div class="menu-item" onclick="styleManager.openBeep()">
+  <div class="menu-item" onclick="styleManager.openBeep()" role="menuitem" tabindex="0">
     <img src="/icons/multimedia-volume-control.png" alt="" /> Audio
   </div>
-  <div class="menu-item" onclick="styleManager.openWindow()">
+  <div class="menu-item" onclick="styleManager.openWindow()" role="menuitem" tabindex="0">
     <img src="/icons/org.xfce.xfwm4.png" alt="" /> Window
   </div>
-  <div class="menu-item" onclick="styleManager.openScreen()">
+  <div class="menu-item" onclick="styleManager.openScreen()" role="menuitem" tabindex="0">
     <img src="/icons/display.png" alt="" /> Screen
   </div>
-  <div class="menu-item" onclick="styleManager.openStartup()">
+  <div class="menu-item" onclick="styleManager.openStartup()" role="menuitem" tabindex="0">
     <img src="/icons/gcr-key.png" alt="" /> Startup
   </div>
 </div>
 
-<div class="dropdown-menu" id="terminalDropdown">
-  <div class="menu-item" onclick="openTerminal()">
+<div class="dropdown-menu" id="terminalDropdown" role="menu" aria-label="Terminal menu">
+  <div class="menu-item" onclick="openTerminal()" role="menuitem" tabindex="0">
     <img src="/icons/konsole.png" alt="" /> Terminal Automated
   </div>
-  <div class="menu-item" onclick="openTaskManagerInTerminal()">
+  <div class="menu-item" onclick="openTaskManagerInTerminal()" role="menuitem" tabindex="0">
     <img src="/icons/org.xfce.taskmanager.png" alt="" /> Process Monitor
   </div>
-  <div class="menu-separator"></div>
-  <div class="menu-item" onclick="TerminalLab.open()">
+  <div class="menu-separator" role="separator"></div>
+  <div class="menu-item" onclick="TerminalLab.open()" role="menuitem" tabindex="0">
     <img src="/icons/computer.png" alt="" /> Terminal Laboratory
   </div>
 </div>
 
-<div class="dropdown-menu" id="browserDropdown">
-  <div class="menu-item" onclick="window.Netscape?.open()">
+<div class="dropdown-menu" id="browserDropdown" role="menu" aria-label="Browser menu">
+  <div class="menu-item" onclick="window.Netscape?.open()" role="menuitem" tabindex="0" data-keyboard-hint="Ctrl+Alt+N">
     <img src="/icons/netscape_classic.png" alt="" /> Netscape Navigator
   </div>
-  <div class="menu-separator"></div>
+  <div class="menu-separator" role="separator"></div>
 </div>
