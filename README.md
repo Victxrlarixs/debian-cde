@@ -9,23 +9,26 @@
 
 Welcome to a pixel-perfect recreation of the Common Desktop Environment (CDE)—living right inside your modern browser. This isn't just a website; it's a living desktop where you're not a "visitor," you're a **user** of a classic Unix system.
 
+<p align="center">
+  <img src="public/images/Desk.png" alt="CDE Preview" width="900"/>
+</p>
+
 ## 🚀 [Experience It Now →](https://debian.com.mx)
 
 No installation. No setup. Just pure 1990s Unix nostalgia.
-
 ---
 
 ## ✨ What Makes This Special
 
 | Feature | Experience | Learn More |
 |---------|------------|------------|
-| 🎨 **76 Color Palettes** | From iconic **Platinum** to warm **Broica**—authentic Motif themes that transform your entire desktop | [Style Manager Guide →](docs/user-guide/style-manager.md) |
-| 🖼️ **168 Original Backdrops** | Dithered XPM textures from the 90s. **CircuitBoards**, **BrokenIce**, **Afternoon**—pure computing history | [Style Manager Guide →](docs/user-guide/style-manager.md) |
-| ⌨️ **XEmacs Editor** | Real Emacs keybindings (`C-x C-s`, `M-x`, `C-k`), interactive minibuffer, GNU splash screen. It feels **real** | [XEmacs Guide →](docs/user-guide/xemacs.md) |
-| 💻 **Terminal Lab** | 41 interactive lessons. Watch commands type themselves. Learn Unix by doing—from `ls` to pipes | [Terminal Lab Guide →](docs/user-guide/terminal-lab.md) |
-| 🗂️ **Virtual Filesystem** | Create files, make directories, navigate with context menus. A real filesystem in your browser | [File Manager Guide →](docs/user-guide/file-manager.md) |
-| 🌐 **Netscape Navigator** | Web browsing from 1994. Animated logo. That nostalgic "Loading..." message | [Netscape Guide →](docs/user-guide/netscape.md) |
-| 🖥️ **4 Virtual Workspaces** | Just like real CDE. Organize across four desktops. Switch with `Ctrl+Alt+1-4` | [Workspaces Guide →](docs/user-guide/workspaces.md) |
+| **76 Color Palettes** | From iconic **Platinum** to warm **Broica**—authentic Motif themes that transform your entire desktop | [Style Manager Guide →](docs/user-guide/style-manager.md) |
+| **168 Original Backdrops** | Dithered XPM textures from the 90s. **CircuitBoards**, **BrokenIce**, **Afternoon**—pure computing history | [Style Manager Guide →](docs/user-guide/style-manager.md) |
+| **XEmacs Editor** | Real Emacs keybindings (`C-x C-s`, `M-x`, `C-k`), interactive minibuffer, GNU splash screen. It feels **real** | [XEmacs Guide →](docs/user-guide/xemacs.md) |
+| **Terminal Lab** | 41 interactive lessons. Watch commands type themselves. Learn Unix by doing—from `ls` to pipes | [Terminal Lab Guide →](docs/user-guide/terminal-lab.md) |
+| **Virtual Filesystem** | Create files, make directories, navigate with context menus. A real filesystem in your browser | [File Manager Guide →](docs/user-guide/file-manager.md) |
+| **Netscape Navigator** | Web browsing from 1994. Animated logo. That nostalgic "Loading..." message | [Netscape Guide →](docs/user-guide/netscape.md) |
+| **4 Virtual Workspaces** | Just like real CDE. Organize across four desktops. Switch with `Ctrl+Alt+1-4` | [Workspaces Guide →](docs/user-guide/workspaces.md) |
 
 ---
 
