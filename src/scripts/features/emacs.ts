@@ -185,6 +185,7 @@ class EmacsManager {
     WindowManager.centerWindow(this.win);
     this.win.focus();
     if (window.focusWindow) window.focusWindow('emacs');
+    if (window.AudioManager) window.AudioManager.windowOpen();
   }
 
   /** Opens a specific file for editing. */
@@ -210,6 +211,7 @@ class EmacsManager {
 
     WindowManager.centerWindow(this.win);
     if (window.focusWindow) window.focusWindow('emacs');
+    if (window.AudioManager) window.AudioManager.windowOpen();
     this.textarea.focus();
   }
 
@@ -219,6 +221,7 @@ class EmacsManager {
     this.currentFilePath = '';
     this.ctrlXPressed = false;
     this.closeFindBar();
+    if (window.AudioManager) window.AudioManager.windowClose();
   }
 
   private updateTitle(text: string): void {
@@ -317,6 +320,7 @@ class EmacsManager {
 
     if (node.type !== 'file') {
       this.message(`${fullPath} is a directory.`);
+      if (window.AudioManager) window.AudioManager.error();
       return;
     }
 
@@ -344,6 +348,7 @@ class EmacsManager {
       if (window.AudioManager) window.AudioManager.success();
     } catch {
       this.message('Error: could not save file.');
+      if (window.AudioManager) window.AudioManager.error();
     }
   }
 
@@ -362,6 +367,7 @@ class EmacsManager {
 
     if (!VFS.getNode(parentDir)) {
       this.message(`No such directory: ${parentDir}`);
+      if (window.AudioManager) window.AudioManager.error();
       return;
     }
 
@@ -492,6 +498,7 @@ class EmacsManager {
 
     if (!matches.length) {
       this.message(`Search failed: ${query}`);
+      if (window.AudioManager) window.AudioManager.error();
       return;
     }
 

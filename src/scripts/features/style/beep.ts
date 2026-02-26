@@ -25,11 +25,16 @@ export class BeepModule {
 
   /**
    * Initializes the beep module and applies saved settings.
+   * Always ensures volume starts at 90% (0.9) if not previously configured.
    */
   public load(): void {
     const saved = settingsManager.getSection('beep');
     if (Object.keys(saved).length > 0) {
       Object.assign(this.settings, saved);
+    } else {
+      // First time load: ensure volume is set to 90%
+      this.settings.volume = 0.9;
+      this.save();
     }
     this.apply();
     logger.log('[BeepModule] Loaded:', this.settings);

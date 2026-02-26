@@ -354,10 +354,12 @@ function goHome(): void {
 
 async function touch(name: string): Promise<void> {
   await VFS.touch(currentPath, name);
+  if (window.AudioManager) window.AudioManager.success();
 }
 
 async function mkdir(name: string): Promise<void> {
   await VFS.mkdir(currentPath, name);
+  if (window.AudioManager) window.AudioManager.success();
 }
 
 async function rm(name: string): Promise<void> {
@@ -372,6 +374,7 @@ async function rm(name: string): Promise<void> {
         currentPath + name + (VFS.getNode(currentPath + name + '/') ? '/' : '')
       );
     fmSelected = null;
+    if (window.AudioManager) window.AudioManager.success();
   }
 }
 
@@ -385,17 +388,20 @@ async function emptyTrash(): Promise<void> {
         await VFS.rm(trashPath, name);
       }
     }
+    if (window.AudioManager) window.AudioManager.success();
   }
 }
 
 async function restore(name: string): Promise<void> {
   await VFS.restoreFromTrash(name);
   fmSelected = null;
+  if (window.AudioManager) window.AudioManager.success();
 }
 
 async function rename(oldName: string, newName: string): Promise<void> {
   await VFS.rename(currentPath, oldName, newName);
   fmSelected = null;
+  if (window.AudioManager) window.AudioManager.success();
 }
 
 async function openTextWindow(name: string, content: string): Promise<void> {
@@ -744,6 +750,7 @@ window.openFileManager = () => {
     WindowManager.showWindow('fm');
     win.style.zIndex = String(++zIndex);
     WindowManager.centerWindow(win);
+    if (window.AudioManager) window.AudioManager.windowOpen();
     initFileManager();
     openPath(currentPath);
   }
@@ -752,6 +759,7 @@ window.openFileManager = () => {
 window.closeFileManager = () => {
   const win = document.getElementById('fm');
   if (win) {
+    if (window.AudioManager) window.AudioManager.windowClose();
     if (window.minimizeWindow) window.minimizeWindow('fm');
     else win.style.display = 'none';
   }
