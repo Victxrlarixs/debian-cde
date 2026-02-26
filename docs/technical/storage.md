@@ -444,5 +444,3 @@ Use browser DevTools:
 ## Further Reading
 
 - [Architecture Overview](architecture.md)
-- [Performance Optimizations](performance.md)
-- [API Reference](../api/core-api.md)
