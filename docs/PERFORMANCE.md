@@ -11,7 +11,6 @@ The project implements several performance optimization strategies:
 3. **IndexedDB** - Robust data persistence
 4. **Virtual Scrolling** - Efficient rendering of large lists
 5. **Performance Monitoring** - Track Web Vitals
-6. **Lighthouse CI** - Continuous performance testing
 
 ---
 
@@ -278,64 +277,10 @@ window.performanceMonitor.getMetrics();
 
 ---
 
-## 6. Lighthouse CI
-
-### Continuous Performance Testing
-
-Lighthouse CI runs on every push/PR to track performance regressions.
-
-**Local Testing:**
-
-```bash
-# Build and run Lighthouse
-npm run perf:analyze
-
-# Run Lighthouse only
-npm run lighthouse
-
-# Desktop-specific config
-npm run lighthouse:desktop
-```
-
-**Configuration:**
-
-Edit `lighthouserc.json` to adjust thresholds:
-
-```json
-{
-  "ci": {
-    "assert": {
-      "assertions": {
-        "categories:performance": ["error", { "minScore": 0.85 }],
-        "first-contentful-paint": ["warn", { "maxNumericValue": 2000 }],
-        "largest-contentful-paint": ["warn", { "maxNumericValue": 3000 }]
-      }
-    }
-  }
-}
-```
-
-**GitHub Actions:**
-
-The workflow runs automatically on push/PR. View results in:
-- GitHub Actions artifacts
-- Temporary public storage (link in PR comments)
-
-**Thresholds:**
-- Performance: ≥85%
-- Accessibility: ≥95%
-- Best Practices: ≥90%
-- SEO: ≥85%
-- PWA: ≥80%
-
----
-
 ## Performance Checklist
 
 ### Before Deployment
 
-- [ ] Run `npm run perf:analyze`
-- [ ] Check Lighthouse scores (all ≥85%)
 - [ ] Verify FCP <2s, LCP <3s
 - [ ] Test on slow 3G network
 - [ ] Test on low-end mobile device
