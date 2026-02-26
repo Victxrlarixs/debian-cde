@@ -19,6 +19,8 @@ body {
 
   overflow: hidden !important;
   touch-action: none;
+  position: fixed !important;
+  overscroll-behavior: none !important;
 
   /* Authentic font rendering (Aliased / No smoothing) */
   -webkit-font-smoothing: none;
