@@ -514,9 +514,4 @@ Service worker enables:
 - Fast loading
 
 ## Further Reading
-
-- [VFS Implementation](vfs.md)
-- [Window Manager](window-manager.md)
 - [Storage & Cache](storage.md)
-- [Performance](performance.md)
-- [Web Workers](workers.md)
