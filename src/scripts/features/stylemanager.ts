@@ -296,16 +296,12 @@ export class StyleManager {
   }
 
   private showWindow(id: string): void {
+    // Use WindowManager.showWindow to ensure proper workspace assignment
+    WindowManager.showWindow(id);
+    
     const win = document.getElementById(id);
     if (win) {
-      win.style.display = 'flex';
       win.style.zIndex = '10000';
-
-      // Center on next frame to ensure dimensions are calculated after display: flex
-      requestAnimationFrame(() => {
-        WindowManager.centerWindow(win);
-        if (window.focusWindow) window.focusWindow(id);
-      });
     }
   }
 

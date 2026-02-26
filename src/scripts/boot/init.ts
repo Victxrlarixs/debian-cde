@@ -16,6 +16,7 @@ import { Preloader } from '../utilities/preloader';
 import { AudioManager } from '../core/audiomanager';
 import VersionManager from '../core/version-manager';
 import { initPerformanceOptimizations } from '../core/performance-integration';
+import { initWorkspacePreview } from '../features/workspace-preview';
 
 /**
  * Global interface declarations for CDE desktop environment.
@@ -309,6 +310,10 @@ async function initDesktop(): Promise<void> {
     // initDraggableTitlebars() runs after a 200ms delay to ensure the DOM is fully settled.
     WindowManager.init();
     logger.log('[initDesktop] Window manager initialized');
+
+    // Initialize workspace preview (miniatures on hover)
+    initWorkspacePreview();
+    logger.log('[initDesktop] Workspace preview initialized');
 
     // Desktop Icons initialization
     DesktopManager.init();
