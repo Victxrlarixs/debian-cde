@@ -1,10 +1,7 @@
-/* ------------------------------------------------
-   responsive.css - Media Queries para CDE Simulation
-   Ajustes responsivos para todos los componentes
-   Dominio: debian.com.mx
-   ------------------------------------------------ */
+/* Responsive.css - Media Queries for CDE Simulation
+   Responsive adjustments for all components */
 
-/* Pantallas extra pequeñas (móviles, menos de 480px) */
+/* Extra small screens (mobile, less than 480px) */
 @media (max-width: 479px) {
   /* Netscape Navigator Responsive */
   #netscape {
@@ -460,7 +457,7 @@
   }
 }
 
-/* Pantallas pequeñas (móviles grandes, 480px - 767px) */
+/* Small screens (large mobile, 480px - 767px) */
 @media (min-width: 480px) and (max-width: 767px) {
   /* Topbar */
   #topbar {
@@ -567,9 +564,9 @@
   }
 }
 
-/* Pantallas medianas (tablets, 768px - 1023px) */
+/* Medium screens (tablets, 768px - 1023px) */
 @media (min-width: 768px) and (max-width: 1023px) {
-  /* Ajustes menores para tablets */
+  /* Minor adjustments for tablets */
   .style-manager-main {
     min-width: 60vw !important;
   }
@@ -579,9 +576,9 @@
   }
 }
 
-/* Pantallas grandes (escritorio, más de 1024px) - sin cambios, mantiene diseño original */
+/* Large screens (desktop, more than 1024px) - no changes, maintains original design */
 
-/* Orientación horizontal en móviles */
+/* Landscape orientation on mobile */
 @media (max-height: 480px) and (orientation: landscape) {
   .window,
   .cde-retro-modal {
@@ -609,9 +606,7 @@
   }
 }
 
-/* ------------------------------------------------------------------
-   BOOT SCREEN - Responsive adjustments
-   ------------------------------------------------------------------ */
+/* Boot Screen - Responsive adjustments */
 
 /* Extra small screens (max-width: 479px) */
 @media (max-width: 479px) {

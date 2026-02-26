@@ -1,0 +1,213 @@
+/* Style Manager Color - Versión final */
+#styleManagerColor.style-manager-color {
+  width: 350px;
+}
+
+#styleManagerColor .modal-body {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* Palettes con scroll */
+#styleManagerColor .color-palettes-section {
+  border-bottom: 1px solid var(--separator-color);
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+#styleManagerColor .color-palettes-title {
+  font-size: 11px;
+  font-weight: bold;
+  margin: 0 0 8px 0;
+  color: var(--text-color);
+  padding-bottom: 4px;
+}
+
+.color-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 2px solid var(--separator-color);
+  margin-bottom: 4px;
+}
+
+.cde-status-indicator {
+  font-size: 10px;
+  color: var(--text-color);
+  margin-bottom: 4px;
+}
+
+.active-palette-name {
+  font-weight: bold;
+  margin-left: 4px;
+  color: var(--titlebar-color);
+}
+
+#styleManagerColor .color-palette-scroll {
+  max-height: 150px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-right: 4px;
+  border: 2px solid;
+  border-top-color: var(--border-inset-dark);
+  border-left-color: var(--border-inset-dark);
+  border-right-color: var(--border-inset-light);
+  border-bottom-color: var(--border-inset-light);
+  background: var(--dock-icon-bg);
+  padding: 2px;
+}
+
+#styleManagerColor .color-palette-item {
+  width: 100%;
+  padding: 4px 8px;
+  background: var(--button-bg);
+  border: 1px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  font-size: 10px;
+  text-align: left;
+  cursor: pointer;
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+  border-radius: 0;
+  background: transparent;
+}
+
+#styleManagerColor .color-palette-item:hover {
+  background: var(--button-active);
+  background: var(--dock-icon-hover) !important;
+}
+
+#styleManagerColor .color-palette-item.active {
+  background: var(--titlebar-color);
+  color: var(--titlebar-text-color);
+  background: var(--button-active) !important;
+  border: 1px solid var(--border-light);
+}
+
+.palette-preview-strip {
+  display: flex;
+  height: 14px;
+  width: 60px;
+  border: 1px solid var(--border-dark);
+  flex-shrink: 0;
+}
+
+.preview-color {
+  flex: 1;
+}
+
+.palette-name-label {
+  font-size: 11px;
+  font-weight: bold;
+  font-family: var(--font-family-base);
+  color: var(--text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Cuadros de color en fila */
+#styleManagerColor .color-swatches-row {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+#styleManagerColor .color-swatch-btn {
+  width: 30px;
+  height: 30px;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  cursor: pointer;
+  padding: 0;
+}
+
+#styleManagerColor .color-swatch-btn:active {
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+}
+
+/* Default button */
+#styleManagerColor .color-default-section {
+  margin-top: 5px;
+}
+
+#styleManagerColor .color-default-btn {
+  width: 100%;
+  padding: 4px;
+  font-size: 10px;
+}
+
+/* Action bar */
+#styleManagerColor .cde-actionbar {
+  padding: 8px;
+  gap: 6px;
+}
+
+#styleManagerColor .cde-actionbar .cde-btn {
+  padding: 3px 12px;
+  font-size: 10px;
+  min-width: 45px;
+}
+
+.color-swatches-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: 12px;
+  padding: 10px;
+  background: var(--dock-icon-bg);
+  border: 2px solid;
+  border-top-color: var(--border-inset-dark);
+  border-left-color: var(--border-inset-dark);
+  border-right-color: var(--border-inset-light);
+  border-bottom-color: var(--border-inset-light);
+}
+
+.color-swatch-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  text-align: center;
+}
+
+.color-swatch-item label {
+  color: var(--text-color);
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.color-swatches-section {
+  margin-top: 15px;
+}
+
+.color-swatches-grid .color-swatch-btn {
+  width: 32px;
+  height: 32px;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  cursor: pointer;
+}

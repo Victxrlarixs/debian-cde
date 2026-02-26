@@ -1,0 +1,208 @@
+/* CDE Global Modal - Fixed and centered positioning
+   Applied to any modal created by CDEModal */
+.cde-retro-modal,
+#cde-modal-global {
+  position: absolute;
+  margin: 0;
+  display: none;
+  flex-direction: column;
+  z-index: 10000;
+  background: var(--window-color);
+}
+
+#cde-modal-global,
+.cde-retro-modal.cde-modal-global {
+  position: absolute;
+  width: auto;
+  min-width: 320px;
+  max-width: 90vw;
+  background: var(--modal-bg);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  box-shadow: 4px 4px 0 var(--shadow-color);
+  display: none;
+  flex-direction: column;
+  z-index: 10000;
+  font-family: var(--font-family-base);
+}
+
+/* Modal body */
+#cde-modal-global .modal-body,
+.cde-retro-modal.cde-modal-global .modal-body {
+  padding: 20px;
+  min-height: 80px;
+  background: var(--modal-bg);
+  color: var(--text-color);
+  border: none;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+}
+
+.modal-body p {
+  color: var(--text-color);
+}
+
+.cde-retro-modal .modal-body {
+  padding: 16px;
+}
+
+.cde-retro-modal .modal-body p {
+  margin-bottom: 12px;
+  font-size: 11px;
+}
+
+/* Action bar (buttons) */
+#cde-modal-global .cde-actionbar,
+.cde-retro-modal.cde-modal-global .cde-actionbar {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+  background: var(--button-active);
+  border-top: 2px solid var(--separator-color);
+}
+
+.cde-actionbar {
+  background: var(--button-active);
+  border-top: 2px solid var(--separator-color);
+  padding: 8px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.cde-btn {
+  padding: 4px 16px;
+  background: var(--button-bg);
+  font-family: var(--font-family-base);
+  color: var(--text-color);
+  font-size: var(--font-size-small);
+  cursor: pointer;
+  min-width: 80px;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+}
+
+.cde-btn:hover {
+  background: var(--button-active);
+}
+
+.cde-btn:active {
+  border: 2px solid;
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+}
+
+.cde-btn-default {
+  background: var(--titlebar-color);
+  color: var(--titlebar-text-color);
+  font-weight: bold;
+}
+
+/* Prompt input */
+#cde-prompt-input {
+  width: 100%;
+  padding: 4px 6px;
+  background: var(--button-active);
+  border: 2px solid;
+  border-top-color: var(--border-inset-dark);
+  border-left-color: var(--border-inset-dark);
+  border-right-color: var(--border-inset-light);
+  border-bottom-color: var(--border-inset-light);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  box-sizing: border-box;
+  margin-top: 8px;
+}
+
+/* Modal layout and form utilities */
+.cde-modal-field {
+  margin-bottom: 20px;
+}
+
+.cde-modal-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 11px;
+}
+
+.cde-modal-input {
+  width: 100%;
+  height: 24px;
+  background: var(--button-bg);
+  border: 2px solid;
+  border-top-color: var(--border-inset-dark);
+  border-left-color: var(--border-inset-dark);
+  border-right-color: var(--border-inset-light);
+  border-bottom-color: var(--border-inset-light);
+  font-family: inherit;
+  font-size: 11px;
+  padding: 0 4px;
+  box-sizing: border-box;
+}
+
+.cde-modal-row {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* External Link Modal Styles */
+.external-link-icon {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.external-link-message {
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+
+.external-link-url {
+  background: var(--button-active);
+  padding: 8px;
+  border: 2px solid;
+  border-top-color: var(--border-inset-dark);
+  border-left-color: var(--border-inset-dark);
+  border-right-color: var(--border-inset-light);
+  border-bottom-color: var(--border-inset-light);
+  font-family: monospace;
+  font-size: 11px;
+  word-break: break-all;
+  margin-bottom: 10px;
+}
+
+.external-link-question {
+  font-size: 11px;
+  color: #666;
+}
+
+/* Screenshot Toast */
+.screenshot-toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--titlebar-color, #4a6c7a);
+  color: var(--titlebar-text-color);
+  padding: 8px 20px;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  font-family: var(--font-family-base, monospace);
+  font-size: 12px;
+  z-index: 99999;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+}

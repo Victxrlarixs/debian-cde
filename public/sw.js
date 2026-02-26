@@ -1,11 +1,9 @@
-const CACHE_VERSION = 'v2';
+const CACHE_VERSION = 'v3';
 const STATIC_CACHE = `static-cache-${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [
   '/',
-  '/css/core.css',
-  '/css/components.css',
-  '/css/app.css',
+  '/css/main.css',
   '/css/responsive.css',
   '/icons/cursor.svg',
   '/icons/cursor-wait.svg',

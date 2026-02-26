@@ -1,0 +1,65 @@
+/* CDE Desktop
+   Initially hidden; shown after boot completes. */
+#desktop-ui {
+  display: none;
+}
+
+/* Desktop Icons System */
+#desktop-icons-container {
+  position: absolute;
+  top: 60px;
+  /* Below TopBar (31px) */
+  left: 0;
+  width: 100%;
+  height: calc(100% - 130px);
+  pointer-events: auto;
+  z-index: 50;
+  /* Above backdrop, but below windows (10000) */
+  padding: 20px 10px 10px 10px;
+}
+
+.cde-desktop-icon {
+  position: absolute;
+  width: 74px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  pointer-events: auto;
+  user-select: none;
+  padding: 4px;
+}
+
+.cde-desktop-icon img {
+  width: 32px;
+  height: 32px;
+  filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.5));
+}
+
+.cde-desktop-icon span {
+  font-size: 11px;
+  color: white;
+  text-shadow: 1px 1px 1px black;
+  text-align: center;
+  word-break: break-all;
+  padding: 1px 4px;
+  background: rgba(0, 0, 0, 0);
+  border: 1px solid transparent;
+}
+
+.cde-desktop-icon:hover span {
+  background: var(--dock-icon-bg);
+  border-color: var(--border-light);
+}
+
+.cde-desktop-icon.selected span {
+  background: var(--titlebar-color);
+  color: var(--titlebar-text-color);
+  border-color: var(--border-light);
+  box-shadow: 1px 1px 0 black;
+}
+
+.cde-desktop-icon:active img {
+  transform: translate(1px, 1px);
+}

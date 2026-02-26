@@ -1,0 +1,64 @@
+/* Time Manager (dtclock) - Compact Version */
+.time-manager-window {
+  width: 280px;
+  display: none;
+  flex-direction: column;
+}
+
+.time-manager-body {
+  padding: 10px;
+  background-color: var(--modal-bg, #c0c0c0);
+}
+
+.time-main-container {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.time-section-left {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.time-icon-wrapper img {
+  width: 32px;
+  height: 32px;
+}
+
+.time-section-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.time-settings-section {
+  border: 1px solid var(--border-dark, #808080);
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.05);
+  box-shadow: inset 1px 1px 0 #fff;
+}
+
+.settings-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.group-label {
+  font-size: 10px;
+  font-weight: bold;
+  color: var(--text-main, #000);
+  margin-bottom: 2px;
+}
+
+.option-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+}
+
+.option-row input {
+  margin: 0;
+}

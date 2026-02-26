@@ -1,0 +1,58 @@
+/* X11/CDE Style Contextual Cursors */
+
+/* Base cursor: CDE arrow for everything */
+* {
+  cursor:
+    url('/icons/cursor.svg') 0 0,
+    default;
+}
+
+/* Move cursor: titlebar and draggable elements */
+.titlebar,
+[data-draggable='true'],
+.cde-menu-btn {
+  cursor:
+    url('/icons/cursor-move.svg') 12 12,
+    move;
+}
+
+/* Resize cursor: window corners */
+.window-resize-nw,
+.window-resize-se,
+[data-resize='nw'],
+[data-resize='se'] {
+  cursor:
+    url('/icons/cursor-resize-nw.svg') 12 12,
+    nw-resize;
+}
+
+/* Wait cursor: boot screen and app loading */
+#debian-boot-screen,
+.cde-loading,
+[data-state='loading'] {
+  cursor:
+    url('/icons/cursor-wait.svg') 12 12,
+    wait;
+}
+
+/* Text cursor: inputs and text areas */
+input[type='text'],
+input[type='color'],
+textarea,
+.fm-path,
+#cde-prompt-input {
+  cursor: text;
+}
+
+/* Interactive buttons: default pointer (CDE didn't use "hand") */
+button,
+.cde-btn,
+.cde-icon,
+.menu-item,
+.cde-preset,
+.fm-item,
+.fm-file {
+  cursor:
+    url('/icons/cursor.svg') 0 0,
+    default;
+}

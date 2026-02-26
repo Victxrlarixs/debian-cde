@@ -1,0 +1,366 @@
+/* CDE Panel (Dock)
+   Bottom-centered bar simulating the classic control panel.
+   Contains menu, pager, icons, tray, and exit button. */
+#cde-panel {
+  position: fixed;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 78px;
+  max-width: 90vw;
+  overflow-x: auto;
+  background: var(--dock-color);
+  padding: 2px 4px;
+  font-family: 'Lucida Sans', 'Helvetica', Arial, sans-serif;
+  font-size: 11px;
+  z-index: 9999;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  box-shadow: 2px 2px 0 var(--shadow-color);
+}
+
+/* Motif-style separators */
+.cde-sep {
+  width: 2px;
+  height: 62px;
+  margin: 0 1px;
+  background: var(--border-dark);
+  box-shadow:
+    inset 1px 0 0 var(--border-light),
+    inset -1px 0 0 var(--border-inset-dark);
+}
+
+/* Menu button */
+.cde-menu-btn {
+  width: 40px;
+  height: 50px;
+  background: var(--button-bg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  padding: 0;
+}
+
+.cde-menu-btn img {
+  width: 28px;
+  height: 28px;
+  pointer-events: none;
+}
+
+.cde-menu-btn:active {
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+  background: var(--button-active);
+}
+
+/* Workspace pager (2x2 grid) */
+.cde-pager {
+  display: grid;
+  grid-template-columns: 42px 42px;
+  grid-template-rows: 22px 22px;
+  gap: 2px;
+  height: 48px;
+  width: 88px;
+  padding: 2px;
+  background: var(--dock-icon-bg);
+  border: 2px solid;
+  border-top-color: var(--border-inset-dark);
+  border-left-color: var(--border-inset-dark);
+  border-right-color: var(--border-inset-light);
+  border-bottom-color: var(--border-inset-light);
+  margin: 0 auto;
+  align-self: center;
+}
+
+.pager-workspace {
+  width: 42px;
+  height: 22px;
+  text-align: center;
+  padding: 0;
+  background: var(--button-bg);
+  font-size: 11px;
+  line-height: 22px;
+  cursor: pointer;
+  border: 2px solid;
+  color: var(--text-color);
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+}
+
+.pager-workspace.active {
+  background: var(--titlebar-color);
+  color: var(--titlebar-text-color);
+  font-weight: bold;
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+}
+
+/* Scroll buttons */
+.cde-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  height: 48px;
+  padding: 0 2px;
+  background: var(--dock-icon-bg);
+  border: 2px solid;
+  border-top-color: var(--border-inset-dark);
+  border-left-color: var(--border-inset-dark);
+  border-right-color: var(--border-inset-light);
+  border-bottom-color: var(--border-inset-light);
+  align-self: center;
+}
+
+.scroll-btn {
+  width: 18px;
+  height: 23px;
+  background: var(--titlebar-color);
+  font-size: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scroll-btn:active {
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+  background: var(--button-active);
+}
+
+/* Icon block (double row) */
+.cde-icon-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  height: 62px;
+  background: var(--dock-icon-bg);
+  border: 2px solid;
+  border-top-color: var(--border-inset-dark);
+  border-left-color: var(--border-inset-dark);
+  border-right-color: var(--border-inset-light);
+  border-bottom-color: var(--border-inset-light);
+  padding: 2px;
+}
+
+/* Top row: action buttons */
+.cde-icon-buttons {
+  display: grid;
+  grid-template-columns: repeat(5, 36px);
+  gap: 1px;
+  height: 20px;
+}
+
+.cde-icon-btn {
+  width: 36px;
+  height: 20px;
+  background: var(--button-bg);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0;
+  color: black;
+}
+
+.cde-icon-btn:active {
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+  background: var(--button-active);
+}
+
+/* CSS Grid Alignment for specific buttons */
+.cde-textured-btn {
+  background-image: radial-gradient(var(--separator-color) 1px, transparent 1px);
+  background-size: 3px 3px;
+}
+
+#terminalBtn {
+  grid-column: 1;
+}
+
+#fileManagerBtn {
+  grid-column: 2;
+}
+
+#browserBtn {
+  grid-column: 3;
+}
+
+#styleManagerBtn {
+  grid-column: 4;
+}
+
+#utilitiesBtn {
+  grid-column: 5;
+}
+
+/* Bottom row: application icons */
+.cde-icons {
+  display: grid;
+  grid-template-columns: repeat(5, 36px);
+  gap: 1px;
+  height: 48px;
+}
+
+.cde-icon {
+  width: 36px;
+  height: 38px;
+  background: var(--button-bg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+}
+
+.cde-icon:hover {
+  background: var(--dock-icon-hover);
+}
+
+.cde-icon:active {
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+}
+
+.cde-icon img {
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+}
+
+.cde-icon a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* System tray (double row) */
+.cde-tray {
+  display: flex;
+  gap: 1px;
+  height: 62px;
+  padding: 0 2px;
+  background: var(--dock-icon-bg);
+  border: 2px solid;
+  border-top-color: var(--border-inset-dark);
+  border-left-color: var(--border-inset-dark);
+  border-right-color: var(--border-inset-light);
+  border-bottom-color: var(--border-inset-light);
+}
+
+.cde-tray .cde-icon-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+}
+
+.cde-tray .cde-icons {
+  margin-top: auto;
+}
+
+.tray-icon-btn {
+  width: 32px;
+  height: 20px;
+  background: var(--button-bg);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2px;
+}
+
+.tray-icon {
+  width: 32px;
+  height: 38px;
+  background: var(--button-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+}
+
+.tray-icon img {
+  width: 30px;
+  height: 30px;
+}
+
+/* Exit button */
+.cde-exit-btn {
+  padding: 0 10px;
+  height: 50px;
+  line-height: 48px;
+  background: var(--button-bg);
+  font-size: 11px;
+  font-weight: bold;
+  color: black;
+  cursor: pointer;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.cde-exit-btn:active {
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+  background: var(--button-active);
+}

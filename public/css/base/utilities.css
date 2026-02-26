@@ -1,0 +1,29 @@
+/* Utility Classes
+   Quick control of visibility and states. */
+.hidden {
+  display: none !important;
+}
+
+.visible {
+  display: flex !important;
+}
+
+.cde-icon.active {
+  background: var(--dock-icon-active) !important;
+}
+
+.u-margin-bottom-sm {
+  margin-bottom: 8px;
+}
+
+.u-margin-bottom-md {
+  margin-bottom: 16px;
+}
+
+.u-text-center {
+  text-align: center;
+}
+
+.u-margin-top-sm {
+  margin-top: 10px;
+}

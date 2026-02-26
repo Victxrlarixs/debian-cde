@@ -1,0 +1,56 @@
+/* Top Bar
+   Fixed at the top, contains system indicators. */
+#topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 28px;
+  background: var(--topbar-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  font-size: var(--font-size-base);
+  border-bottom: 2px solid var(--separator-color);
+  z-index: 9998;
+  border: 1px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+}
+
+.top-left,
+.top-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.top-center {
+  font-weight: bold;
+  color: #333;
+  font-size: 12px;
+}
+
+.sys-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px;
+  background: var(--dock-color);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-small);
+  color: var(--text-color);
+}
+
+.sys-icon {
+  width: 20px;
+  height: 20px;
+}

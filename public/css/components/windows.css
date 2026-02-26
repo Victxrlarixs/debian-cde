@@ -1,0 +1,226 @@
+/* CDE Windows
+   Classic style with 3D bevel, shadow, and draggable title. */
+.window {
+  position: absolute;
+  background: var(--window-color);
+  z-index: 1000;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  box-shadow: 4px 4px 0 var(--shadow-color);
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  transition: opacity 0.2s ease-out, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  max-width: 95vw !important;
+  max-height: 90vh !important;
+  overflow: hidden;
+}
+
+.window-opening {
+  animation: window-pop-in 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.window-closing {
+  animation: window-shrink-out 0.2s ease-in forwards;
+  pointer-events: none;
+}
+
+@keyframes window-pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes window-shrink-out {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.9) translateY(10px);
+  }
+}
+
+.cde-retro-modal {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  margin: 0;
+  z-index: 10000;
+  background: var(--window-color);
+  max-width: 95vw !important;
+  max-height: 90vh !important;
+  overflow: hidden;
+}
+
+.titlebar {
+  background: var(--titlebar-color);
+  color: var(--titlebar-text-color);
+  padding: 2px 4px;
+  cursor: move;
+  display: flex;
+  align-items: center;
+  font-size: var(--font-size-title);
+  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-bold);
+  border-bottom: 2px solid var(--border-dark);
+  height: 30px;
+  user-select: none;
+}
+
+.titlebar-text {
+  flex: 1;
+  margin: 0 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+/* Window buttons (minimize, close, maximize) */
+.min-btn,
+.close-btn,
+.max-btn,
+.cde-window-btn {
+  width: 24px;
+  height: 24px;
+  background: var(--button-bg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  flex-shrink: 0;
+  margin-left: 0;
+}
+
+.window-controls-right {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.window-controls {
+  display: flex;
+  gap: 2px;
+}
+
+.min-btn img,
+.close-btn img,
+.max-btn img {
+  width: 20px;
+  height: 20px;
+  image-rendering: pixelated;
+}
+
+.min-btn:active,
+.close-btn:active,
+.max-btn:active,
+.cde-window-btn:active {
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+  background: var(--button-active);
+}
+
+.min-btn:hover,
+.close-btn:hover,
+.max-btn:hover {
+  background: var(--dock-icon-hover);
+}
+
+/* Maximized state for windows and modals */
+.window.maximized,
+.cde-retro-modal.maximized {
+  top: 28px !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: calc(100% - 106px) !important;
+  max-width: none !important;
+  max-height: calc(100% - 106px) !important;
+  transform: none !important;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* General rules for maximized window content */
+.window.maximized .terminal-body,
+.window.maximized .fm-container,
+.window.maximized #process-monitor .terminal-body,
+.cde-retro-modal.maximized .modal-body {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* Specific adjustment for terminal */
+#terminal.maximized .terminal-body {
+  flex: 1 1 0;
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* Specific adjustment for File Manager */
+.window.maximized .fm-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.window.maximized .fm-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+.window.maximized .fm-files {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Adjustment for process monitor */
+.window.maximized #process-monitor .terminal-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.window.maximized #process-monitor-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Adjustment for Style Manager */
+.cde-retro-modal.maximized .modal-body {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+}
+
+.cde-retro-modal.maximized .cde-controlpanel {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Window Wireframe Dragging */
+.dragging-wireframe {
+  opacity: 0.5 !important;
+  border: 4px dashed var(--border-inset-dark) !important;
+  pointer-events: none;
+}
