@@ -66,14 +66,12 @@ export class VersionManager {
       // 3. Update version
       localStorage.setItem(VERSION_KEY, newVersion);
 
-      // 4. Show update notification
-      this.showUpdateNotification(oldVersion, newVersion);
+      // 4. Mark that we need to show update sequence on next boot
+      localStorage.setItem('cde-pending-update', 'true');
 
-      // 5. Force reload after a short delay
-      setTimeout(() => {
-        logger.log('[VersionManager] Forcing page reload...');
-        window.location.reload();
-      }, 2000);
+      // 5. Force reload to show update sequence
+      logger.log('[VersionManager] Forcing page reload to show update sequence...');
+      window.location.reload();
     } catch (error) {
       logger.error('[VersionManager] Error during version update:', error);
     }
@@ -133,43 +131,17 @@ export class VersionManager {
   }
 
   /**
-   * Shows a visual notification about the update
+   * Checks if there's a pending update to show
    */
-  private showUpdateNotification(oldVersion: string, newVersion: string): void {
-    const notification = document.createElement('div');
-    notification.style.cssText = `
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: var(--window-color, #4d648d);
-      border: 2px solid var(--border-light, #fff);
-      padding: 20px 30px;
-      z-index: 999999;
-      font-family: var(--font-family-base, monospace);
-      font-size: 14px;
-      color: var(--text-color, #fff);
-      box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
-      text-align: center;
-      min-width: 300px;
-    `;
+  public hasPendingUpdate(): boolean {
+    return localStorage.getItem('cde-pending-update') === 'true';
+  }
 
-    notification.innerHTML = `
-      <div style="margin-bottom: 10px; font-weight: bold;">🔄 System Update</div>
-      <div style="margin-bottom: 15px;">
-        Updating from v${oldVersion} to v${newVersion}
-      </div>
-      <div style="font-size: 12px; opacity: 0.8;">
-        Clearing cache and reloading...
-      </div>
-    `;
-
-    document.body.appendChild(notification);
-
-    // Remove after reload
-    setTimeout(() => {
-      notification.remove();
-    }, 3000);
+  /**
+   * Clears the pending update flag
+   */
+  public clearPendingUpdate(): void {
+    localStorage.removeItem('cde-pending-update');
   }
 
   /**

@@ -21,6 +21,9 @@ import { initPerformanceOptimizations } from '../core/performance-integration';
  * Global interface declarations for CDE desktop environment.
  */
 import bootMessagesData from '../../data/boot-messages.json';
+import updateMessagesData from '../../data/update-messages.json';
+
+type BootMessagesData = typeof bootMessagesData;
 
 /**
  * Global interface declarations for CDE desktop environment.
@@ -48,9 +51,11 @@ class DebianRealBoot {
   private container: HTMLElement | null;
   private bootScreen: HTMLElement | null;
   private progressBar: HTMLElement | null;
+  private isUpdateMode: boolean = false;
 
-  constructor() {
-    this.logo = CONFIG.BOOT.LOGO;
+  constructor(isUpdateMode: boolean = false) {
+    this.isUpdateMode = isUpdateMode;
+    this.logo = CONFIG.BOOT.LOGO; // Always show logo
     this.container = document.getElementById('boot-log-container');
     this.bootScreen = document.getElementById('debian-boot-screen');
     this.progressBar = document.getElementById('boot-progress-bar');
@@ -66,7 +71,8 @@ class DebianRealBoot {
    * Generates a randomized boot sequence based on phases.
    */
   private generateDynamicSequence(): void {
-    const phases = bootMessagesData.phases;
+    const messagesData: BootMessagesData = this.isUpdateMode ? updateMessagesData : bootMessagesData;
+    const phases = messagesData.phases;
     let totalTime = 0;
 
     phases.forEach((phase) => {
@@ -79,15 +85,22 @@ class DebianRealBoot {
         const increment = Math.random() * 0.3 + 0.05;
         totalTime += increment;
 
-        // Format [  timestamp ] Text
-        const timestamp = totalTime.toFixed(6).padStart(12, ' ');
-        const text =
-          phase.name === 'kernel' ||
-          phase.name === 'cpu' ||
-          phase.name === 'fs' ||
-          phase.name === 'memory'
-            ? `[ ${timestamp} ] ${msg.text}`
-            : msg.text;
+        // Format text based on mode
+        let text: string;
+        if (this.isUpdateMode) {
+          // Update mode: no timestamps, just messages
+          text = msg.text;
+        } else {
+          // Boot mode: add timestamps for kernel/system messages
+          const timestamp = totalTime.toFixed(6).padStart(12, ' ');
+          text =
+            phase.name === 'kernel' ||
+            phase.name === 'cpu' ||
+            phase.name === 'fs' ||
+            phase.name === 'memory'
+              ? `[ ${timestamp} ] ${msg.text}`
+              : msg.text;
+        }
 
         this.bootSequence.push({
           text,
@@ -98,8 +111,12 @@ class DebianRealBoot {
     });
 
     // Add final success message
+    const finalMessage = this.isUpdateMode
+      ? '[    OK    ] System update completed successfully'
+      : '[    OK    ] CDE Desktop ready ....';
+    
     this.bootSequence.push({
-      text: '[    OK    ] CDE Desktop ready ....',
+      text: finalMessage,
       type: 'desktop',
       delay: 500,
     });
@@ -114,7 +131,7 @@ class DebianRealBoot {
    * Inserts the Debian ASCII logo at the beginning of the container.
    */
   private insertLogo(): void {
-    if (!this.container) return;
+    if (!this.container || !this.logo) return;
 
     const logoDiv = document.createElement('div');
     logoDiv.className = 'boot-logo';
@@ -144,8 +161,12 @@ class DebianRealBoot {
     }
 
     this.container.innerHTML = '';
+    
+    // Always insert logo
     this.insertLogo();
-    logger.log('[DebianRealBoot] Boot sequence started');
+    
+    const mode = this.isUpdateMode ? 'update' : 'boot';
+    logger.log(`[DebianRealBoot] ${mode} sequence started`);
     this.startBootSequence();
   }
 
@@ -200,6 +221,9 @@ class DebianRealBoot {
       service: 'boot-service',
       drm: 'boot-drm',
       desktop: 'boot-desktop',
+      package: 'boot-package',
+      download: 'boot-download',
+      install: 'boot-install',
     };
     return map[type] || 'boot-default';
   }
@@ -210,6 +234,12 @@ class DebianRealBoot {
    */
   private async completeBoot(): Promise<void> {
     logger.log('[DebianRealBoot] Completing boot process');
+
+    // If this was an update sequence, clear the pending flag
+    if (this.isUpdateMode) {
+      VersionManager.clearPendingUpdate();
+      logger.log('[DebianRealBoot] Update sequence completed, flag cleared');
+    }
 
     // 1. Reveal desktop behind the boot screen (it has lower z-index)
     const desktop = document.getElementById('desktop-ui');
@@ -318,10 +348,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     logger.error('[Boot] Version check failed:', error);
   }
 
+  // Check if we need to show update sequence
+  const isUpdateMode = VersionManager.hasPendingUpdate();
+  
+  if (isUpdateMode) {
+    logger.log('[Boot] Pending update detected, showing update sequence');
+  }
+
   try {
-    window.debianBoot = new DebianRealBoot();
+    window.debianBoot = new DebianRealBoot(isUpdateMode);
     window.debianBoot.start();
-    logger.log('[Boot] Boot sequence initiated');
+    logger.log(`[Boot] ${isUpdateMode ? 'Update' : 'Boot'} sequence initiated`);
   } catch (error) {
     console.error('[Boot] Failed to start boot sequence:', error);
     // Fallback: try to initialize desktop directly

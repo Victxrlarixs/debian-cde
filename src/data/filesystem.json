@@ -11,16 +11,48 @@
           }
         }
       },
-      "man-pages": {
+      "Documentation": {
         "type": "folder",
         "children": {
-          "pure-sh-bible.md": {
+          "Getting-Started.md": {
             "type": "file",
-            "content": "[Dinamic content: pure-sh-bible.md]"
+            "content": "[Dinamic content: docs/user-guide/getting-started.md]"
           },
-          "pure-bash-bible.md": {
+          "XEmacs-Guide.md": {
             "type": "file",
-            "content": "[Dinamic content: pure-bash-bible.md]"
+            "content": "[Dinamic content: docs/user-guide/xemacs.md]"
+          },
+          "Terminal-Lab.md": {
+            "type": "file",
+            "content": "[Dinamic content: docs/user-guide/terminal-lab.md]"
+          },
+          "File-Manager.md": {
+            "type": "file",
+            "content": "[Dinamic content: docs/user-guide/file-manager.md]"
+          },
+          "Netscape.md": {
+            "type": "file",
+            "content": "[Dinamic content: docs/user-guide/netscape.md]"
+          },
+          "Style-Manager.md": {
+            "type": "file",
+            "content": "[Dinamic content: docs/user-guide/style-manager.md]"
+          },
+          "Workspaces.md": {
+            "type": "file",
+            "content": "[Dinamic content: docs/user-guide/workspaces.md]"
+          },
+          "Keyboard-Shortcuts.md": {
+            "type": "file",
+            "content": "[Dinamic content: docs/user-guide/keyboard-shortcuts.md]"
+          },
+          "Tips-and-Tricks.md": {
+            "type": "file",
+            "content": "[Dinamic content: docs/user-guide/tips-and-tricks.md]"
+          },
+          "README.md": {
+            "type": "file",
+            "content": "[Dinamic content: docs/user-guide/README.md]"
           }
         }
       },
@@ -38,6 +70,10 @@
           "boot-messages.json": {
             "type": "file",
             "content": "[Dinamic content: boot-messages.json]"
+          },
+          "update-messages.json": {
+            "type": "file",
+            "content": "[Dinamic content: update-messages.json]"
           },
           "backdrops.json": {
             "type": "file",
