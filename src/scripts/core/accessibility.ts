@@ -3,6 +3,7 @@
 import { logger } from '../utilities/logger';
 import { AudioManager } from './audiomanager';
 import { WindowManager } from './windowmanager';
+import { storageAdapter } from '../utilities/storage-adapter';
 
 /**
  * Keyboard shortcut definition
@@ -22,7 +23,7 @@ interface KeyboardShortcut {
  * Accessibility Manager for CDE Desktop
  * Handles keyboard navigation, shortcuts, and high contrast mode
  */
-export class AccessibilityManager {
+class AccessibilityManager {
   private shortcuts: KeyboardShortcut[] = [];
   private focusableElements: HTMLElement[] = [];
   private currentFocusIndex = -1;
@@ -296,10 +297,10 @@ export class AccessibilityManager {
 
     if (this.highContrastMode) {
       document.documentElement.classList.add('high-contrast');
-      localStorage.setItem('cde_high_contrast', 'true');
+      storageAdapter.setItemSync('cde_high_contrast', 'true');
     } else {
       document.documentElement.classList.remove('high-contrast');
-      localStorage.setItem('cde_high_contrast', 'false');
+      storageAdapter.setItemSync('cde_high_contrast', 'false');
     }
 
     logger.log(`[Accessibility] High contrast: ${this.highContrastMode}`);
@@ -309,7 +310,7 @@ export class AccessibilityManager {
    * Load high contrast preference
    */
   private loadHighContrastPreference(): void {
-    const saved = localStorage.getItem('cde_high_contrast');
+    const saved = storageAdapter.getItemSync('cde_high_contrast');
     if (saved === 'true') {
       this.highContrastMode = true;
       document.documentElement.classList.add('high-contrast');

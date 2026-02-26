@@ -15,6 +15,7 @@ import { VFS } from '../core/vfs';
 import { Preloader } from '../utilities/preloader';
 import { AudioManager } from '../core/audiomanager';
 import VersionManager from '../core/version-manager';
+import { initPerformanceOptimizations } from '../core/performance-integration';
 
 /**
  * Global interface declarations for CDE desktop environment.
@@ -207,7 +208,7 @@ class DebianRealBoot {
    * Finalizes the boot process.
    * @private
    */
-  private completeBoot(): void {
+  private async completeBoot(): Promise<void> {
     logger.log('[DebianRealBoot] Completing boot process');
 
     // 1. Reveal desktop behind the boot screen (it has lower z-index)
@@ -217,7 +218,7 @@ class DebianRealBoot {
     }
 
     // 2. Initialize all desktop modules (including backdrop rendering)
-    initDesktop();
+    await initDesktop();
 
     // 3. Wait a small cushion to let the initial backdrop render start
     setTimeout(() => {
@@ -237,7 +238,7 @@ class DebianRealBoot {
 /**
  * Initializes all CDE desktop modules.
  */
-function initDesktop(): void {
+async function initDesktop(): Promise<void> {
   if (desktopInitialized) {
     logger.log('[initDesktop] Desktop already initialized, skipping');
     return;
@@ -255,10 +256,14 @@ function initDesktop(): void {
   }
 
   try {
-    // 0. Preload assets as early as possible
+    // 0. Initialize performance optimizations first
+    await initPerformanceOptimizations();
+    logger.log('[initDesktop] Performance optimizations initialized');
+
+    // 1. Preload assets as early as possible
     Preloader.init();
 
-    // 1. Initialize VFS first as it's the core data layer
+    // 2. Initialize VFS first as it's the core data layer
     VFS.init();
     logger.log('[initDesktop] Virtual Filesystem initialized');
 
@@ -303,6 +308,9 @@ function initDesktop(): void {
 document.addEventListener('DOMContentLoaded', async () => {
   logger.log('[Boot] DOM Content Loaded, starting boot sequence');
 
+  // Mark boot start for performance tracking
+  performance.mark('boot-start');
+
   // Check version and clear cache if needed (before anything else)
   try {
     await VersionManager.checkVersion();
@@ -319,7 +327,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Fallback: try to initialize desktop directly
     const desktop = document.getElementById('desktop-ui');
     if (desktop) desktop.style.display = 'block';
-    initDesktop();
+    await initDesktop();
   }
 });
 

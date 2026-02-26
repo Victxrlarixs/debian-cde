@@ -7,13 +7,17 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "lighthouse": "lhci autorun",
+    "lighthouse:desktop": "lhci autorun --config=lighthouserc.json",
+    "perf:analyze": "astro build && npm run lighthouse"
   },
   "dependencies": {
     "astro": "^5.18.0",
     "marked": "^17.0.3"
   },
   "devDependencies": {
+    "@lhci/cli": "^0.13.0",
     "prettier": "^3.8.1",
     "prettier-plugin-astro": "^0.14.1"
   }
