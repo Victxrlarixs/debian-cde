@@ -639,12 +639,9 @@ fetch(request).then((response) => {
 5. Test offline mode
 6. Inspect cache storage
 
-**Lighthouse Audit:**
+**Performance Testing:**
 
-```bash
-npm install -g lighthouse
-lighthouse https://debian.com.mx --view
-```
+Use Chrome DevTools to audit performance, accessibility, and PWA compliance.
 
 Checks:
 

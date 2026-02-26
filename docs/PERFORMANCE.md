@@ -406,8 +406,7 @@ await indexedDBManager.set(STORES.FILESYSTEM, 'root', largeFilesystem);
 
 1. Check bundle size: `npm run build` and inspect `dist/_astro/`
 2. Verify lazy loading: Check Network tab for dynamic imports
-3. Check Lighthouse: `npm run lighthouse`
-4. Profile with Chrome DevTools Performance tab
+3. Profile with Chrome DevTools Performance tab
 
 ### High Memory Usage
 

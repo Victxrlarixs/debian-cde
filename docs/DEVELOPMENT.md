@@ -427,12 +427,9 @@ const x = 5;
 
 ### Performance Testing
 
-**Lighthouse Audit:**
+**Performance Audit:**
 
-```bash
-npm install -g lighthouse
-lighthouse http://localhost:4321 --view
-```
+Use Chrome DevTools Performance and Audits panels to analyze performance.
 
 **Target Scores:**
 
@@ -969,7 +966,6 @@ git push origin main
 ### Tools
 
 - [Chrome DevTools](https://developer.chrome.com/docs/devtools/)
-- [Lighthouse](https://developers.google.com/web/tools/lighthouse)
 - [Can I Use](https://caniuse.com/)
 - [TypeScript Playground](https://www.typescriptlang.org/play)
 
