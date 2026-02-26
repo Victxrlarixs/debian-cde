@@ -47,22 +47,29 @@ export const AudioManager = (() => {
       audioCtx = new AudioContextClass();
       masterGain = audioCtx.createGain();
       masterGain.connect(audioCtx.destination);
-      masterGain.gain.value = CONFIG.AUDIO.BEEP_GAIN;
+      // Always start at 90% volume (0.9)
+      masterGain.gain.value = 0.9;
 
-      logger.log('[AudioManager] Audio system initialized');
+      logger.log('[AudioManager] Audio system initialized with volume: 0.9');
     } catch (err) {
       logger.error('[AudioManager] Initialization failed:', err);
     }
   }
 
   async function ensureContext(): Promise<boolean> {
-    // Context does not exist yet — cannot create without user gesture
+    // Context does not exist yet — try to create it
+    if (!audioCtx) {
+      init();
+    }
+
     if (!audioCtx) return false;
 
     if (audioCtx.state === 'suspended') {
       try {
         await audioCtx.resume();
+        logger.log('[AudioManager] AudioContext resumed');
       } catch (e) {
+        logger.warn('[AudioManager] Failed to resume AudioContext:', e);
         return false;
       }
     }
@@ -72,8 +79,10 @@ export const AudioManager = (() => {
   // ── Lazy unlock: AudioContext is created on the very first user interaction ──
   if (typeof window !== 'undefined') {
     const removeListeners = () => {
-      window.removeEventListener('pointerdown', unlock);
-      window.removeEventListener('keydown', unlock);
+      window.removeEventListener('pointerdown', unlock, true);
+      window.removeEventListener('keydown', unlock, true);
+      window.removeEventListener('click', unlock, true);
+      window.removeEventListener('touchstart', unlock, true);
     };
 
     function unlock() {
@@ -94,8 +103,11 @@ export const AudioManager = (() => {
       }
     }
 
-    window.addEventListener('pointerdown', unlock);
-    window.addEventListener('keydown', unlock);
+    // Use capture phase to catch events early
+    window.addEventListener('pointerdown', unlock, true);
+    window.addEventListener('keydown', unlock, true);
+    window.addEventListener('click', unlock, true);
+    window.addEventListener('touchstart', unlock, true);
   }
 
   function playTone(
@@ -104,12 +116,27 @@ export const AudioManager = (() => {
     type: OscillatorType = 'sine',
     volume: number = 1.0
   ): void {
-    if (!audioCtx || audioCtx.state !== 'running') {
-      ensureContext();
+    // Try to ensure context is ready
+    if (!audioCtx) {
+      init();
+    }
+
+    if (!audioCtx || !masterGain) {
+      logger.warn('[AudioManager] AudioContext not ready. User interaction required.');
       return;
     }
 
-    if (!masterGain) return;
+    // If suspended, try to resume (this will fail if not in user gesture context)
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(() => {
+        logger.warn('[AudioManager] Cannot resume AudioContext outside user gesture');
+      });
+      return;
+    }
+
+    if (audioCtx.state !== 'running') {
+      return;
+    }
 
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();

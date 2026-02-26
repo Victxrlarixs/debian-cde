@@ -173,6 +173,7 @@ const ProcessMonitor = (() => {
     const element = document.getElementById(proc.elementId);
     if (!element) return;
     element.style.display = 'none';
+    if (window.AudioManager) window.AudioManager.success();
     updateDataAndDisplay();
   }
 
@@ -303,6 +304,7 @@ const ProcessMonitor = (() => {
     WindowManager.centerWindow(winElement);
     winElement.focus();
     if (window.focusWindow) window.focusWindow(WINDOW_ID);
+    if (window.AudioManager) window.AudioManager.windowOpen();
 
     contentDiv.innerHTML = '';
     rowElements = [];
@@ -322,6 +324,7 @@ const ProcessMonitor = (() => {
     }
     if (winElement) {
       winElement.style.display = 'none';
+      if (window.AudioManager) window.AudioManager.windowClose();
       logger.log(`[ProcessMonitor] Lifecycle stopped`);
     }
   }

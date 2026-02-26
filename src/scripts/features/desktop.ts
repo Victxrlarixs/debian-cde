@@ -351,6 +351,7 @@ export const DesktopManager = (() => {
       const sys = SYSTEM_ICONS.find((s) => s.id === sysId);
       if (sys) {
         logger.log(`[DesktopManager] Launching system icon: ${sys.name}`);
+        if (window.AudioManager) window.AudioManager.click();
         sys.action();
         return;
       }

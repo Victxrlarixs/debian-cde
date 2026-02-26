@@ -13,6 +13,7 @@ import { DesktopManager } from '../features/desktop';
 import { CalendarManager } from '../features/calendar';
 import { VFS } from '../core/vfs';
 import { Preloader } from '../utilities/preloader';
+import { AudioManager } from '../core/audiomanager';
 
 /**
  * Global interface declarations for CDE desktop environment.

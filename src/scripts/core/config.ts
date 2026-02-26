@@ -285,7 +285,7 @@ export const CONFIG: Config = {
   },
   AUDIO: {
     BEEP_FREQUENCY: 880,
-    BEEP_GAIN: 0.1,
+    BEEP_GAIN: 0.9,
     BEEP_DURATION: 0.1,
   },
   SCREENSHOT: {
