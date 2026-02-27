@@ -113,7 +113,6 @@ async function syncDynamicContent(): Promise<void> {
     workspacesGuide,
     keyboardShortcuts,
     tipsAndTricks,
-    docsReadme,
     lynxGuide,
   ] = await Promise.all([
     import('../../../README.md?raw'),
@@ -127,12 +126,11 @@ async function syncDynamicContent(): Promise<void> {
     import('../../../docs/user-guide/workspaces.md?raw'),
     import('../../../docs/user-guide/keyboard-shortcuts.md?raw'),
     import('../../../docs/user-guide/tips-and-tricks.md?raw'),
-    import('../../../docs/user-guide/README.md?raw'),
     import('../../../docs/user-guide/lynx.md?raw'),
   ]);
 
-  // README.md
-  const readmePath = CONFIG.FS.DESKTOP + 'readme.md';
+  // README.md in user home directory
+  const readmePath = CONFIG.FS.HOME + 'README.md';
   const readmeFile = fsMap[readmePath] as VFSFile;
   if (readmeFile?.type === 'file') {
     readmeFile.content = readme.default;
@@ -151,7 +149,6 @@ async function syncDynamicContent(): Promise<void> {
     'Workspaces.md': workspacesGuide.default,
     'Keyboard-Shortcuts.md': keyboardShortcuts.default,
     'Tips-and-Tricks.md': tipsAndTricks.default,
-    'README.md': docsReadme.default,
   };
 
   Object.entries(docFiles).forEach(([filename, content]) => {

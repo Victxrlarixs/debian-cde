@@ -42,7 +42,7 @@
 }
 
 .modal-body p {
-  color: var(--text-color);
+  color: var(--titlebar-text-color);
 }
 
 .cde-retro-modal .modal-body {

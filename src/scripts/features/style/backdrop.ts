@@ -20,7 +20,7 @@ export interface BackdropSettings {
 export class BackdropModule {
   private settings: BackdropSettings = {
     type: 'xpm',
-    value: '/backdrops/CyberTile.pm',
+    value: '/backdrops/SkyDarkTall.pm',
   };
 
   /** Cache for rendered XPM data URLs to avoid re-parsing */
@@ -33,9 +33,9 @@ export class BackdropModule {
     const saved = settingsManager.getSection('theme').backdrop;
     if (saved && (saved.type === 'image' || saved.type === 'xpm')) {
       this.settings = saved;
-      // Migration: if the saved value is an old pattern we want to change, or PNG, reset to CyberTile
+      // Migration: if the saved value is an old pattern we want to change, or PNG, reset to SkyDarkTall
       if (this.settings.value.endsWith('.png') || this.settings.value.includes('Toronto')) {
-        this.settings = { type: 'xpm', value: '/backdrops/CyberTile.pm' };
+        this.settings = { type: 'xpm', value: '/backdrops/SkyDarkTall.pm' };
       }
     }
     this.apply();

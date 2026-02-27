@@ -63,9 +63,9 @@ export class StyleManager {
   public init(): void {
     const themeSettings = settingsManager.getSection('theme');
 
-    // If no saved colors, apply Ashley as the system default
+    // If no saved colors, apply LateSummer as the system default
     if (!themeSettings.colors || Object.keys(themeSettings.colors).length === 0) {
-      this.theme.applyCdePalette('ashley');
+      this.theme.applyCdePalette('latesummer');
     } else {
       this.theme.loadSavedColors(themeSettings.colors);
       // Restore the palette ID if it was saved

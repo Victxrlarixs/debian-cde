@@ -2,14 +2,13 @@
   "/home/victxrlarixs/": {
     "type": "folder",
     "children": {
+      "README.md": {
+        "type": "file",
+        "content": "[Dinamic content: docs/user-guide/README.md]"
+      },
       "Desktop": {
         "type": "folder",
-        "children": {
-          "readme.md": {
-            "type": "file",
-            "content": "[Dinamic content: README.md]"
-          }
-        }
+        "children": {}
       },
       "Documentation": {
         "type": "folder",
@@ -61,10 +60,6 @@
           "Tips-and-Tricks.md": {
             "type": "file",
             "content": "[Dinamic content: docs/user-guide/tips-and-tricks.md]"
-          },
-          "README.md": {
-            "type": "file",
-            "content": "[Dinamic content: docs/user-guide/README.md]"
           }
         }
       },

@@ -203,7 +203,11 @@ function setupFileEvents(div: HTMLElement, name: string, item: VFSNode): void {
         const img = div.querySelector('img');
         if (img) img.src = '/icons/folder_open.png';
         setTimeout(() => openPath(currentPath + name + '/'), 50);
-      } else openTextWindow(name, (item as VFSFile).content);
+      } else {
+        const img = div.querySelector('img');
+        if (img) img.src = '/icons/edit-text.png';
+        setTimeout(() => openTextWindow(name, (item as VFSFile).content), 50);
+      }
       lastTapTime = 0;
       return;
     }
