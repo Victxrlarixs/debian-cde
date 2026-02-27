@@ -2,6 +2,7 @@ import { logger } from '../utilities/logger';
 import { VFS } from '../core/vfs';
 import { CDEModal } from '../ui/modals';
 import { WindowManager } from '../core/windowmanager';
+import { openWindow, closeWindow, createZIndexManager } from '../shared/window-helpers';
 
 /**
  * Emacs-style Editor Manager (Rebranded)
@@ -52,7 +53,7 @@ class EmacsManager {
 
   private currentFilePath: string = '';
   private isModified: boolean = false;
-  private zIndex: number = 20000;
+  private zIndexManager = createZIndexManager(20000);
   private ctrlXPressed: boolean = false;
   private wordWrap: boolean = false;
 
@@ -175,17 +176,22 @@ class EmacsManager {
 
     this.message('Welcome to XEmacs');
 
-    WindowManager.showWindow('emacs');
-    this.win.style.zIndex = String(++this.zIndex);
-
-    // Reset size to defaults if they were messed up, but respecting viewport
-    this.win.style.width = 'min(800px, 90vw)';
-    this.win.style.height = 'min(600px, 80vh)';
-
-    WindowManager.centerWindow(this.win);
-    this.win.focus();
-    if (window.focusWindow) window.focusWindow('emacs');
-    if (window.AudioManager) window.AudioManager.windowOpen();
+    openWindow({
+      id: 'emacs',
+      zIndex: this.zIndexManager.increment(),
+      center: true,
+      playSound: true,
+      focus: true,
+      onOpen: () => {
+        // Reset size to defaults if they were messed up, but respecting viewport
+        if (this.win) {
+          this.win.style.width = 'min(800px, 90vw)';
+          this.win.style.height = 'min(600px, 80vh)';
+          WindowManager.centerWindow(this.win);
+          this.win.focus();
+        }
+      },
+    });
   }
 
   /** Opens a specific file for editing. */
@@ -217,11 +223,10 @@ class EmacsManager {
 
   public close(): void {
     if (!this.win) return;
-    this.win.style.display = 'none';
+    closeWindow('emacs');
     this.currentFilePath = '';
     this.ctrlXPressed = false;
     this.closeFindBar();
-    if (window.AudioManager) window.AudioManager.windowClose();
   }
 
   private updateTitle(text: string): void {

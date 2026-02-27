@@ -3,15 +3,8 @@
 import './config';
 import './accessibility';
 import '../boot/init';
-import '../features/filemanager';
-import '../features/stylemanager';
-import '../features/emacs';
-import '../features/lab';
-import '../features/appmanager';
-import '../features/timemanager';
-import '../features/netscape';
-import '../features/lynx';
-import '../features/manviewer';
+// Features are now loaded dynamically via module-loader.ts
+// Static imports removed to enable proper code splitting
 import { initPWAInstaller } from '../utilities/pwa-installer';
 import '../utilities/share-config';
 import '../utilities/share-theme-ui';

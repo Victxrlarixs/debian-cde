@@ -5,6 +5,9 @@ import { VFS, type VFSNode, type VFSFile, type VFSFolder } from '../core/vfs';
 import { CDEModal } from '../ui/modals';
 import { logger } from '../utilities/logger';
 import { WindowManager } from '../core/windowmanager';
+import { copyToClipboard, cutToClipboard, pasteFromClipboard } from '../shared/clipboard';
+import { createContextMenu, type ContextMenuItem } from '../shared/context-menu';
+import { openWindow, closeWindow, createZIndexManager } from '../shared/window-helpers';
 
 declare global {
   interface Window {
@@ -36,21 +39,11 @@ let history: string[] = [];
 let historyIndex: number = -1;
 let fmSelected: string | null = null;
 let showHidden: boolean = false;
-let zIndex: number = CONFIG.FILEMANAGER.BASE_Z_INDEX;
+const zIndexManager = createZIndexManager(CONFIG.FILEMANAGER.BASE_Z_INDEX);
 let initialized: boolean = false;
 let activeMenu: HTMLElement | null = null;
 let activeContextMenu: HTMLElement | null = null;
 let searchQuery: string = '';
-
-// Global clipboard shared with desktop
-declare global {
-  interface Window {
-    fmClipboard: { path: string; operation: 'copy' | 'cut' } | null;
-  }
-}
-window.fmClipboard = null;
-let clipboard: { path: string; operation: 'copy' | 'cut' } | null = null;
-
 let multiSelect: Set<string> = new Set();
 let sortBy: 'name' | 'size' | 'date' = 'name';
 let sortOrder: 'asc' | 'desc' = 'asc';
@@ -492,14 +485,7 @@ async function showProperties(fullPath: string): Promise<void> {
 // MENUS
 // ------------------------------------------------------------------
 
-interface MenuItem {
-  label: string;
-  icon?: string;
-  action: () => Promise<void> | void;
-  disabled?: boolean;
-}
-
-const fmMenus: Record<string, MenuItem[]> = {
+const fmMenus: Record<string, ContextMenuItem[]> = {
   File: [
     {
       label: 'New File',
@@ -527,43 +513,28 @@ const fmMenus: Record<string, MenuItem[]> = {
     {
       label: 'Copy',
       icon: '/icons/edit-copy.png',
-      action: () => {
+      action: async () => {
         if (!fmSelected) return;
         const fullPath =
           currentPath + fmSelected + (VFS.getNode(currentPath + fmSelected + '/') ? '/' : '');
-        clipboard = { path: fullPath, operation: 'copy' };
-        window.fmClipboard = clipboard;
-        if (window.AudioManager) window.AudioManager.click();
+        copyToClipboard(fullPath);
       },
     },
     {
       label: 'Cut',
       icon: '/icons/edit-cut.png',
-      action: () => {
+      action: async () => {
         if (!fmSelected) return;
         const fullPath =
           currentPath + fmSelected + (VFS.getNode(currentPath + fmSelected + '/') ? '/' : '');
-        clipboard = { path: fullPath, operation: 'cut' };
-        window.fmClipboard = clipboard;
-        if (window.AudioManager) window.AudioManager.click();
+        cutToClipboard(fullPath);
       },
     },
     {
       label: 'Paste',
       icon: '/icons/edit-paste.png',
       action: async () => {
-        if (!clipboard) return;
-        const parts = clipboard.path.split('/').filter(Boolean);
-        const name = parts[parts.length - 1];
-        const destPath = currentPath + name + (clipboard.path.endsWith('/') ? '/' : '');
-
-        if (clipboard.operation === 'copy') {
-          await VFS.copy(clipboard.path, destPath);
-        } else {
-          await VFS.move(clipboard.path, destPath);
-          clipboard = null;
-        }
-        if (window.AudioManager) window.AudioManager.success();
+        await pasteFromClipboard(currentPath);
       },
     },
     {
@@ -711,11 +682,7 @@ function handleContextMenu(e: MouseEvent): void {
       ? (target.closest('.fm-file') as HTMLElement | null)
       : null;
 
-  const menu = document.createElement('div');
-  menu.className = 'fm-contextmenu';
-  menu.style.zIndex = String(CONFIG.DROPDOWN.Z_INDEX);
-
-  let items: MenuItem[] = [];
+  let items: ContextMenuItem[] = [];
 
   if (fileEl) {
     const name = fileEl.dataset.name;
@@ -750,9 +717,7 @@ function handleContextMenu(e: MouseEvent): void {
         icon: '/icons/edit-copy.png',
         action: () => {
           const fullPath = currentPath + name + (VFS.getNode(currentPath + name + '/') ? '/' : '');
-          clipboard = { path: fullPath, operation: 'copy' };
-          window.fmClipboard = clipboard;
-          if (window.AudioManager) window.AudioManager.click();
+          copyToClipboard(fullPath);
         },
       },
       {
@@ -760,9 +725,7 @@ function handleContextMenu(e: MouseEvent): void {
         icon: '/icons/edit-cut.png',
         action: () => {
           const fullPath = currentPath + name + (VFS.getNode(currentPath + name + '/') ? '/' : '');
-          clipboard = { path: fullPath, operation: 'cut' };
-          window.fmClipboard = clipboard;
-          if (window.AudioManager) window.AudioManager.click();
+          cutToClipboard(fullPath);
         },
       },
       {
@@ -789,64 +752,16 @@ function handleContextMenu(e: MouseEvent): void {
       {
         label: 'Paste',
         icon: '/icons/edit-paste.png',
+        disabled: !window.fmClipboard,
         action: async () => {
-          if (!clipboard) return;
-          const parts = clipboard.path.split('/').filter(Boolean);
-          const name = parts[parts.length - 1];
-          const destPath = currentPath + name + (clipboard.path.endsWith('/') ? '/' : '');
-
-          if (clipboard.operation === 'copy') {
-            await VFS.copy(clipboard.path, destPath);
-          } else {
-            await VFS.move(clipboard.path, destPath);
-            clipboard = null;
-          }
-          if (window.AudioManager) window.AudioManager.success();
+          await pasteFromClipboard(currentPath);
         },
       },
       ...fmMenus['File'],
     ];
-
-    // Mark Paste as disabled if no clipboard
-    if (!clipboard) {
-      items[0] = { ...items[0], disabled: true } as any;
-    }
   }
 
-  items.forEach((item) => {
-    const option = document.createElement('div');
-    option.className = 'fm-context-item';
-    if (item.disabled) {
-      option.classList.add('disabled');
-    }
-
-    if (item.icon) {
-      const img = document.createElement('img');
-      img.src = item.icon;
-      img.style.width = '16px';
-      img.style.height = '16px';
-      img.style.marginRight = '8px';
-      img.style.imageRendering = 'pixelated';
-      option.appendChild(img);
-    }
-
-    const text = document.createElement('span');
-    text.textContent = item.label;
-    option.appendChild(text);
-
-    if (!item.disabled) {
-      option.addEventListener('click', async () => {
-        await item.action();
-        menu.remove();
-      });
-    }
-    menu.appendChild(option);
-  });
-
-  document.body.appendChild(menu);
-  menu.style.left = e.clientX + 'px';
-  menu.style.top = e.clientY + 'px';
-  activeContextMenu = menu;
+  activeContextMenu = createContextMenu(items, e.clientX, e.clientY);
 }
 
 // ------------------------------------------------------------------
@@ -910,7 +825,7 @@ function initFileManager(): void {
   }
 
   // Keyboard shortcuts
-  document.addEventListener('keydown', (e: KeyboardEvent) => {
+  document.addEventListener('keydown', async (e: KeyboardEvent) => {
     const win = document.getElementById('fm');
     if (!win || win.style.display === 'none') return;
 
@@ -924,9 +839,7 @@ function initFileManager(): void {
           if (fmSelected) {
             const fullPath =
               currentPath + fmSelected + (VFS.getNode(currentPath + fmSelected + '/') ? '/' : '');
-            clipboard = { path: fullPath, operation: 'copy' };
-            window.fmClipboard = clipboard;
-            if (window.AudioManager) window.AudioManager.click();
+            copyToClipboard(fullPath);
           }
           break;
         case 'x':
@@ -934,26 +847,12 @@ function initFileManager(): void {
           if (fmSelected) {
             const fullPath =
               currentPath + fmSelected + (VFS.getNode(currentPath + fmSelected + '/') ? '/' : '');
-            clipboard = { path: fullPath, operation: 'cut' };
-            window.fmClipboard = clipboard;
-            if (window.AudioManager) window.AudioManager.click();
+            cutToClipboard(fullPath);
           }
           break;
         case 'v':
           e.preventDefault();
-          if (clipboard) {
-            const parts = clipboard.path.split('/').filter(Boolean);
-            const name = parts[parts.length - 1];
-            const destPath = currentPath + name + (clipboard.path.endsWith('/') ? '/' : '');
-
-            if (clipboard.operation === 'copy') {
-              VFS.copy(clipboard.path, destPath);
-            } else {
-              VFS.move(clipboard.path, destPath);
-              clipboard = null;
-            }
-            if (window.AudioManager) window.AudioManager.success();
-          }
+          await pasteFromClipboard(currentPath);
           break;
         case 'f':
           e.preventDefault();
@@ -983,24 +882,21 @@ function initFileManager(): void {
 // ------------------------------------------------------------------
 
 window.openFileManager = () => {
-  const win = document.getElementById('fm');
-  if (win) {
-    WindowManager.showWindow('fm');
-    win.style.zIndex = String(++zIndex);
-    WindowManager.centerWindow(win);
-    if (window.AudioManager) window.AudioManager.windowOpen();
-    initFileManager();
-    openPath(currentPath);
-  }
+  openWindow({
+    id: 'fm',
+    zIndex: zIndexManager.increment(),
+    center: true,
+    playSound: true,
+    focus: true,
+    onOpen: () => {
+      initFileManager();
+      openPath(currentPath);
+    },
+  });
 };
 
 window.closeFileManager = () => {
-  const win = document.getElementById('fm');
-  if (win) {
-    if (window.AudioManager) window.AudioManager.windowClose();
-    if (window.minimizeWindow) window.minimizeWindow('fm');
-    else win.style.display = 'none';
-  }
+  closeWindow('fm');
 };
 
 window.toggleFileManager = () => {

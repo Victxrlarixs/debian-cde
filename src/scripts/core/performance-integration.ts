@@ -2,9 +2,10 @@
 // Integration layer for all performance optimizations
 
 import { logger } from '../utilities/logger';
-import { lazyLoader, registerLazyFeatures } from '../utilities/lazy-loader';
 import { indexedDBManager } from '../utilities/indexeddb-manager';
 import { performanceMonitor } from './performance-monitor';
+import { performanceOptimizer } from '../shared/performance-optimizer';
+import { moduleLoader } from '../shared/module-loader';
 
 /**
  * Initialize all performance optimizations
@@ -17,15 +18,18 @@ export async function initPerformanceOptimizations(): Promise<void> {
     performanceMonitor.init();
     performanceMonitor.mark('perf-init-start');
 
-    // 2. Initialize storage adapter (IndexedDB with localStorage fallback)
+    // 2. Initialize performance optimizer (includes module loading strategy)
+    performanceOptimizer.init();
+
+    // 3. Initialize storage adapter (IndexedDB with localStorage fallback)
     const { storageAdapter } = await import('../utilities/storage-adapter');
     await storageAdapter.init();
     logger.log('[Performance] Storage adapter initialized');
 
-    // 3. Initialize IndexedDB
+    // 4. Initialize IndexedDB
     await indexedDBManager.init();
 
-    // 4. Migrate from localStorage if needed
+    // 5. Migrate from localStorage if needed
     const migrated = localStorage.getItem('cde-indexeddb-migrated');
     if (!migrated) {
       await indexedDBManager.migrateFromLocalStorage();
@@ -33,16 +37,10 @@ export async function initPerformanceOptimizations(): Promise<void> {
       logger.log('[Performance] Migrated to IndexedDB');
     }
 
-    // 5. Register lazy-loadable features
-    registerLazyFeatures();
+    // 6. Optimize initial load with module loader
+    await performanceOptimizer.optimizeInitialLoad();
 
-    // 6. Preload critical features in background
-    const criticalFeatures = ['filemanager', 'emacs'];
-    setTimeout(() => {
-      lazyLoader.preload(criticalFeatures);
-    }, 2000); // Wait 2s after initial load
-
-    // 6. Cleanup old cache entries
+    // 7. Cleanup old cache entries
     await indexedDBManager.cleanupCache();
 
     performanceMonitor.mark('perf-init-end');
@@ -50,11 +48,16 @@ export async function initPerformanceOptimizations(): Promise<void> {
 
     logger.log(`[Performance] Optimizations initialized in ${duration.toFixed(2)}ms`);
 
-    // 7. Log storage usage
+    // 8. Log storage usage
     const estimate = await indexedDBManager.getStorageEstimate();
     const usageMB = (estimate.usage / 1024 / 1024).toFixed(2);
     const quotaMB = (estimate.quota / 1024 / 1024).toFixed(2);
     logger.log(`[Performance] Storage: ${usageMB}MB / ${quotaMB}MB`);
+
+    // 9. Schedule performance report
+    setTimeout(() => {
+      performanceOptimizer.logReport();
+    }, 10000);
   } catch (error) {
     logger.error('[Performance] Failed to initialize optimizations:', error);
   }
@@ -180,13 +183,13 @@ export async function searchVFSWithWorker(
  */
 export function getPerformanceReport(): {
   metrics: any;
-  lazyLoading: any;
+  moduleLoading: any;
   storage: Promise<any>;
   memory: any;
 } {
   return {
     metrics: performanceMonitor.getMetrics(),
-    lazyLoading: lazyLoader.getStats(),
+    moduleLoading: moduleLoader.getStats(),
     storage: indexedDBManager.getStorageEstimate(),
     memory: performanceMonitor.getMemoryUsage(),
   };
@@ -203,13 +206,24 @@ export async function logPerformanceReport(): Promise<void> {
   // Metrics
   performanceMonitor.logSummary();
 
-  // Lazy Loading
-  const lazyStats = lazyLoader.getStats();
-  console.log('\n=== Lazy Loading ===');
-  console.log(`Total Features: ${lazyStats.total}`);
-  console.log(`Loaded: ${lazyStats.loaded}`);
-  console.log(`Loading: ${lazyStats.loading}`);
-  console.log(`Pending: ${lazyStats.total - lazyStats.loaded - lazyStats.loading}`);
+  // Module Loading (new system)
+  const moduleStats = moduleLoader.getStats();
+  console.log('\n=== Module Loading (Advanced) ===');
+  console.log(`Total Modules: ${moduleStats.total}`);
+  console.log(`Loaded: ${moduleStats.loaded}`);
+  console.log(`Loading: ${moduleStats.loading}`);
+  console.log(`Pending: ${moduleStats.total - moduleStats.loaded - moduleStats.loading}`);
+  console.log(`Avg Load Time: ${moduleStats.avgLoadTime.toFixed(2)}ms`);
+  console.log('By Priority:', moduleStats.byPriority);
+
+  // Performance Optimizer Metrics
+  const perfMetrics = performanceOptimizer.getMetrics();
+  console.log('\n=== Performance Metrics ===');
+  console.log(`Boot Time: ${perfMetrics.bootTime.toFixed(2)}ms`);
+  console.log(`First Paint: ${perfMetrics.firstPaint.toFixed(2)}ms`);
+  console.log(`First Contentful Paint: ${perfMetrics.firstContentfulPaint.toFixed(2)}ms`);
+  console.log(`DOM Content Loaded: ${perfMetrics.domContentLoaded.toFixed(2)}ms`);
+  console.log(`Load Complete: ${perfMetrics.loadComplete.toFixed(2)}ms`);
 
   // Storage
   const storage = await indexedDBManager.getStorageEstimate();

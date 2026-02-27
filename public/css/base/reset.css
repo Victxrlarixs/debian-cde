@@ -34,3 +34,134 @@ body {
 *::after {
   box-sizing: inherit;
 }
+
+/* Base Motif/CDE styles for form elements */
+input[type='text'],
+input[type='email'],
+input[type='password'],
+input[type='search'],
+input[type='url'],
+input[type='tel'],
+input[type='number'],
+textarea,
+select {
+  background: var(--button-active);
+  color: var(--text-color);
+  border: 2px solid;
+  border-top-color: var(--border-inset-dark);
+  border-left-color: var(--border-inset-dark);
+  border-right-color: var(--border-inset-light);
+  border-bottom-color: var(--border-inset-light);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  padding: 2px 4px;
+  outline: none;
+}
+
+input[type='text']:focus,
+input[type='email']:focus,
+input[type='password']:focus,
+input[type='search']:focus,
+input[type='url']:focus,
+input[type='tel']:focus,
+input[type='number']:focus,
+textarea:focus,
+select:focus {
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+}
+
+/* Buttons with Motif style */
+button,
+input[type='button'],
+input[type='submit'],
+input[type='reset'] {
+  background: var(--button-bg);
+  color: var(--text-color);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  padding: 4px 12px;
+  cursor: pointer;
+  outline: none;
+}
+
+button:hover,
+input[type='button']:hover,
+input[type='submit']:hover,
+input[type='reset']:hover {
+  background: var(--button-active);
+}
+
+button:active,
+input[type='button']:active,
+input[type='submit']:active,
+input[type='reset']:active {
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+}
+
+/* Checkboxes and radio buttons keep native appearance */
+input[type='checkbox'],
+input[type='radio'] {
+  /* Keep native appearance for better usability */
+}
+
+/* Range sliders (horizontal) with Motif style */
+input[type='range']:not(.vertical-slider) {
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--button-bg);
+  border: 2px solid;
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+  height: 8px;
+  outline: none;
+  padding: 0;
+}
+
+input[type='range']:not(.vertical-slider)::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: var(--button-bg);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  cursor: pointer;
+}
+
+input[type='range']:not(.vertical-slider)::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: var(--button-bg);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  cursor: pointer;
+  border-radius: 0;
+}
+
+input[type='range']:not(.vertical-slider)::-webkit-slider-runnable-track {
+  background: transparent;
+  border: none;
+}
+
+input[type='range']:not(.vertical-slider)::-moz-range-track {
+  background: transparent;
+  border: none;
+}

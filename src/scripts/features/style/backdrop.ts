@@ -2,7 +2,10 @@
 
 import { logger } from '../../utilities/logger';
 import { settingsManager } from '../../core/settingsmanager';
-import { loadXpmBackdrop } from '../../core/xpmparser';
+import {
+  loadXpmBackdropCached,
+  clearXpmCache as clearGlobalXpmCache,
+} from '../../shared/xpm-renderer';
 
 /**
  * Backdrop options for CDE.
@@ -22,9 +25,6 @@ export class BackdropModule {
     type: 'xpm',
     value: '/backdrops/SkyDarkTall.pm',
   };
-
-  /** Cache for rendered XPM data URLs to avoid re-parsing */
-  private xpmCache: Map<string, string> = new Map();
 
   /**
    * Initializes the backdrop module and applies saved settings.
@@ -69,13 +69,7 @@ export class BackdropModule {
   /** Render and apply an XPM pattern file */
   private async applyXpm(body: HTMLElement): Promise<void> {
     const path = this.settings.value;
-    let dataUrl = this.xpmCache.get(path);
-
-    if (!dataUrl) {
-      logger.log(`[BackdropModule] Parsing XPM: ${path}`);
-      dataUrl = (await loadXpmBackdrop(path)) ?? undefined;
-      if (dataUrl) this.xpmCache.set(path, dataUrl);
-    }
+    const dataUrl = await loadXpmBackdropCached(path, true);
 
     if (dataUrl) {
       body.style.backgroundImage = `url('${dataUrl}')`;
@@ -99,7 +93,7 @@ export class BackdropModule {
     const fallbackPath = '/backdrops/CyberTile.pm';
     if (this.settings.value !== fallbackPath) {
       logger.log(`[BackdropModule] Trying fallback XPM: ${fallbackPath}`);
-      const fallbackDataUrl = await loadXpmBackdrop(fallbackPath);
+      const fallbackDataUrl = await loadXpmBackdropCached(fallbackPath, true);
       if (fallbackDataUrl) {
         body.style.backgroundImage = `url('${fallbackDataUrl}')`;
         body.style.backgroundRepeat = 'repeat';
@@ -130,7 +124,6 @@ export class BackdropModule {
   public update(type: BackdropSettings['type'], value: string): void {
     if (value.endsWith('.pm')) type = 'xpm';
     this.settings = { type, value };
-    this.xpmCache.delete(value);
     this.apply();
     this.save();
     logger.log(`[BackdropModule] Updated to ${type}: ${value}`);
@@ -140,8 +133,8 @@ export class BackdropModule {
    * Clears the XPM render cache (call after theme color changes).
    */
   public clearCache(): void {
-    this.xpmCache.clear();
-    logger.log('[BackdropModule] XMP cache cleared');
+    clearGlobalXpmCache();
+    logger.log('[BackdropModule] XPM cache cleared');
   }
 
   /**

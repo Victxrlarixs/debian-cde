@@ -3,6 +3,8 @@ import { CONFIG } from '../core/config';
 import { logger } from '../utilities/logger';
 import { settingsManager } from '../core/settingsmanager';
 import { VFS, type IVFS } from '../core/vfs';
+import { copyToClipboard, cutToClipboard, pasteFromClipboard } from '../shared/clipboard';
+import { createContextMenu, type ContextMenuItem } from '../shared/context-menu';
 
 /**
  * Interface for stored icon positions.
@@ -488,21 +490,6 @@ export const DesktopManager = (() => {
     // Play menu open sound
     if (window.AudioManager) window.AudioManager.menuOpen();
 
-    const menu = document.createElement('div');
-    menu.className = 'fm-contextmenu';
-    menu.style.position = 'fixed';
-    menu.style.zIndex = String(CONFIG.DROPDOWN.Z_INDEX);
-    menu.style.left = e.clientX + 'px';
-    menu.style.top = e.clientY + 'px';
-
-    interface ContextMenuItem {
-      label: string;
-      icon?: string;
-      header?: boolean;
-      disabled?: boolean;
-      action: () => Promise<void> | void;
-    }
-
     const isSystem = targetIcon?.dataset.system === 'true';
 
     const items: ContextMenuItem[] = targetIcon
@@ -526,8 +513,7 @@ export const DesktopManager = (() => {
               if (!name) return;
               const fullPath =
                 CONFIG.FS.DESKTOP + name + (targetIcon.dataset.type === 'folder' ? '/' : '');
-              window.fmClipboard = { path: fullPath, operation: 'copy' };
-              if (window.AudioManager) window.AudioManager.click();
+              copyToClipboard(fullPath);
             },
           },
           {
@@ -540,8 +526,7 @@ export const DesktopManager = (() => {
               if (!name) return;
               const fullPath =
                 CONFIG.FS.DESKTOP + name + (targetIcon.dataset.type === 'folder' ? '/' : '');
-              window.fmClipboard = { path: fullPath, operation: 'cut' };
-              if (window.AudioManager) window.AudioManager.click();
+              cutToClipboard(fullPath);
             },
           },
           {
@@ -596,19 +581,7 @@ export const DesktopManager = (() => {
             icon: '/icons/edit-paste.png',
             disabled: !window.fmClipboard,
             action: async () => {
-              if (!window.fmClipboard) return;
-              const parts = window.fmClipboard.path.split('/').filter(Boolean);
-              const name = parts[parts.length - 1];
-              const destPath =
-                CONFIG.FS.DESKTOP + name + (window.fmClipboard.path.endsWith('/') ? '/' : '');
-
-              if (window.fmClipboard.operation === 'copy') {
-                await VFS.copy(window.fmClipboard.path, destPath);
-              } else {
-                await VFS.move(window.fmClipboard.path, destPath);
-                window.fmClipboard = null;
-              }
-              if (window.AudioManager) window.AudioManager.success();
+              await pasteFromClipboard(CONFIG.FS.DESKTOP);
             },
           },
           {
@@ -715,43 +688,7 @@ export const DesktopManager = (() => {
           },
         ];
 
-    items.forEach((item: any) => {
-      const div = document.createElement('div');
-      if (item.header) {
-        div.className = 'fm-context-header';
-        div.textContent = item.label;
-      } else {
-        div.className = 'fm-context-item' + (item.disabled ? ' disabled' : '');
-        if (item.icon) {
-          const img = document.createElement('img');
-          img.src = item.icon;
-          img.style.width = '14px';
-          img.style.height = '14px';
-          img.style.marginRight = '8px';
-          div.appendChild(img);
-        }
-        const span = document.createElement('span');
-        span.textContent = item.label;
-        div.appendChild(span);
-
-        if (!item.disabled) {
-          div.addEventListener('click', () => {
-            item.action();
-            closeContextMenu();
-          });
-        }
-      }
-      menu.appendChild(div);
-    });
-
-    document.body.appendChild(menu);
-    activeContextMenu = menu;
-
-    // Prevent menu from going off-screen
-    const rect = menu.getBoundingClientRect();
-    if (rect.right > window.innerWidth) menu.style.left = window.innerWidth - rect.width - 5 + 'px';
-    if (rect.bottom > window.innerHeight)
-      menu.style.top = window.innerHeight - rect.height - 5 + 'px';
+    activeContextMenu = createContextMenu(items, e.clientX, e.clientY);
   }
 
   function closeContextMenu(): void {

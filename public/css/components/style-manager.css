@@ -196,16 +196,48 @@
   appearance: none;
   height: 8px;
   background: var(--button-bg);
-  border: 1px solid var(--separator-color);
+  border: 2px solid;
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+  outline: none;
 }
 
 .cde-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 16px;
   height: 16px;
-  background: var(--titlebar-color);
+  background: var(--button-bg);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
   cursor: pointer;
-  border: 1px solid var(--border-dark);
+}
+
+.cde-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: var(--button-bg);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  cursor: pointer;
+  border-radius: 0;
+}
+
+.cde-slider::-webkit-slider-runnable-track {
+  background: transparent;
+  border: none;
+}
+
+.cde-slider::-moz-range-track {
+  background: transparent;
+  border: none;
 }
 
 .cde-slidervalue {
