@@ -106,7 +106,7 @@ function resolveColor(entry: string, root: CSSStyleDeclaration): string {
   return '#808080'; // ultimate fallback
 }
 
-/** Parse XPM text using worker if available, with throttling */
+/** Parse XPM text using worker if available, with throttling and timeout */
 async function parseXpmWithWorker(xpmText: string): Promise<string | null> {
   return new Promise((resolve) => {
     const task = () => {
@@ -129,8 +129,18 @@ async function parseXpmWithWorker(xpmText: string): Promise<string | null> {
         themeColors[cssVar] = root.getPropertyValue(cssVar).trim();
       });
 
+      // Add timeout to prevent hanging
+      const timeout = setTimeout(() => {
+        worker.removeEventListener('message', handleMessage);
+        activeProcessing--;
+        processQueue();
+        logger.warn('[XPMParser] Worker timeout, falling back to main thread');
+        parseXpmMainThread(xpmText).then(resolve);
+      }, 5000); // 5 second timeout
+
       const handleMessage = (e: MessageEvent) => {
         if (e.data.type === 'result') {
+          clearTimeout(timeout);
           worker.removeEventListener('message', handleMessage);
           activeProcessing--;
           processQueue();
@@ -224,14 +234,36 @@ export async function parseXpmToDataUrl(xpmText: string): Promise<string | null>
 
 /** Fetch a .pm file and render it as a repeating background data URL */
 export async function loadXpmBackdrop(path: string): Promise<string | null> {
-  try {
-    const res = await fetch(path);
-    if (!res.ok) {
-      return null;
+  const maxRetries = 2;
+  let lastError: Error | null = null;
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const res = await fetch(path);
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+      }
+      const text = await res.text();
+      const result = await parseXpmToDataUrl(text);
+      
+      if (result) {
+        if (attempt > 0) {
+          logger.log(`[XPMParser] Success on attempt ${attempt + 1} for ${path}`);
+        }
+        return result;
+      } else {
+        throw new Error('XPM parsing returned null');
+      }
+    } catch (err) {
+      lastError = err instanceof Error ? err : new Error(String(err));
+      if (attempt < maxRetries) {
+        logger.warn(`[XPMParser] Attempt ${attempt + 1} failed for ${path}, retrying...`);
+        // Wait a bit before retry
+        await new Promise(resolve => setTimeout(resolve, 100 * (attempt + 1)));
+      }
     }
-    const text = await res.text();
-    return await parseXpmToDataUrl(text);
-  } catch (err) {
-    return null;
   }
+
+  logger.error(`[XPMParser] All attempts failed for ${path}:`, lastError);
+  return null;
 }

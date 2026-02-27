@@ -85,10 +85,41 @@ export class BackdropModule {
       body.style.backgroundAttachment = 'scroll';
       logger.log('[BackdropModule] XPM backdrop applied');
     } else {
-      body.style.backgroundImage = 'none';
-      body.style.backgroundColor = 'var(--window-color)';
-      logger.warn('[BackdropModule] XPM parse failed, using solid color fallback');
+      // If XPM parsing fails, try a fallback XPM or use solid color
+      logger.warn(`[BackdropModule] XPM parse failed for ${path}, trying fallback`);
+      await this.applyFallbackBackdrop(body);
     }
+  }
+
+  /** Apply fallback backdrop when XPM parsing fails */
+  private async applyFallbackBackdrop(body: HTMLElement): Promise<void> {
+    // Try a simple fallback XPM first
+    const fallbackPath = '/backdrops/CyberTile.pm';
+    if (this.settings.value !== fallbackPath) {
+      logger.log(`[BackdropModule] Trying fallback XPM: ${fallbackPath}`);
+      const fallbackDataUrl = await loadXpmBackdrop(fallbackPath);
+      if (fallbackDataUrl) {
+        body.style.backgroundImage = `url('${fallbackDataUrl}')`;
+        body.style.backgroundRepeat = 'repeat';
+        body.style.backgroundSize = 'auto';
+        body.style.backgroundPosition = 'top left';
+        body.style.backgroundAttachment = 'scroll';
+        logger.log('[BackdropModule] Fallback XPM backdrop applied');
+        return;
+      }
+    }
+
+    // Ultimate fallback: solid color with subtle pattern
+    body.style.backgroundImage = 'none';
+    body.style.backgroundColor = 'var(--window-color)';
+    // Add a subtle CSS pattern as backup
+    body.style.backgroundImage = `
+      radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 1px, transparent 1px),
+      radial-gradient(circle at 75% 75%, rgba(0,0,0,0.1) 1px, transparent 1px)
+    `;
+    body.style.backgroundSize = '20px 20px';
+    body.style.backgroundPosition = '0 0, 10px 10px';
+    logger.warn('[BackdropModule] Using CSS pattern fallback');
   }
 
   /**
@@ -108,7 +139,15 @@ export class BackdropModule {
    */
   public clearCache(): void {
     this.xpmCache.clear();
-    logger.log('[BackdropModule] XPM cache cleared');
+    logger.log('[BackdropModule] XMP cache cleared');
+  }
+
+  /**
+   * Force re-apply current backdrop (useful after theme changes or failures).
+   */
+  public async reapply(): Promise<void> {
+    logger.log('[BackdropModule] Force re-applying backdrop');
+    await this.apply();
   }
 
   /**

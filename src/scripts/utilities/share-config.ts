@@ -106,6 +106,7 @@ export async function loadSharedConfig(): Promise<boolean> {
         // Clear XPM cache and re-render backdrop with new colors
         if (window.styleManager?.backdrop) {
           window.styleManager.backdrop.clearCache();
+          window.styleManager.backdrop.apply();
         }
         logger.log('[ShareConfig] Palette applied successfully');
       } else {

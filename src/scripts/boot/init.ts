@@ -337,7 +337,7 @@ async function initDesktop(): Promise<void> {
       if (window.ShareConfig) {
         window.ShareConfig.load();
       }
-    }, 1500);
+    }, 500); // Reduced from 1500ms to 500ms
 
     desktopInitialized = true;
     logger.log('[initDesktop] Desktop initialization completed successfully');
