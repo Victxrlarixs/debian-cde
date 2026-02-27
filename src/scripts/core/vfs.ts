@@ -42,9 +42,13 @@ export interface IVFS {
   rm(path: string, name: string): Promise<boolean>;
   rename(path: string, oldName: string, newName: string): Promise<void>;
   move(oldPath: string, newPath: string): Promise<void>;
+  copy(sourcePath: string, destPath: string): Promise<void>;
   writeFile(path: string, content: string): Promise<void>;
   moveToTrash(path: string): Promise<void>;
   restoreFromTrash(name: string): Promise<void>;
+  search(basePath: string, query: string, recursive?: boolean): Promise<string[]>;
+  getSize(path: string): number;
+  exists(path: string): boolean;
 }
 
 declare global {
@@ -483,6 +487,126 @@ export const VFS: IVFS = {
     const trashItemPath = CONFIG.FS.TRASH + name;
     const restorePath = CONFIG.FS.DESKTOP + name;
     await this.move(trashItemPath, restorePath);
+  },
+
+  async copy(sourcePath: string, destPath: string): Promise<void> {
+    const sourceNode = this.getNode(sourcePath);
+    if (!sourceNode) {
+      logger.error(`[VFS] copy: source not found: ${sourcePath}`);
+      return;
+    }
+
+    // Deep clone the node
+    const cloneNode = (node: VFSNode): VFSNode => {
+      if (node.type === 'file') {
+        return {
+          type: 'file',
+          content: node.content,
+          metadata: node.metadata
+            ? { ...node.metadata, mtime: new Date().toISOString() }
+            : undefined,
+        };
+      } else {
+        const cloned: VFSFolder = {
+          type: 'folder',
+          children: {},
+          metadata: node.metadata
+            ? { ...node.metadata, mtime: new Date().toISOString() }
+            : undefined,
+        };
+        for (const [name, child] of Object.entries(node.children)) {
+          cloned.children[name] = cloneNode(child);
+        }
+        return cloned;
+      }
+    };
+
+    const clonedNode = cloneNode(sourceNode);
+
+    // Get destination parent
+    const destParts = destPath.split('/').filter(Boolean);
+    const destName = destParts.pop()!;
+    const destParentPath = '/' + destParts.join('/') + (destParts.length > 0 ? '/' : '');
+    const destParent = this.getNode(destParentPath);
+
+    if (destParent?.type === 'folder') {
+      destParent.children[destName] = clonedNode;
+      const finalPath = destPath + (clonedNode.type === 'folder' ? '/' : '');
+
+      // Recursively add to fsMap
+      const addToMap = (base: string, n: VFSNode) => {
+        fsMap[base] = n;
+        if (n.type === 'folder') {
+          for (const [cName, child] of Object.entries(n.children)) {
+            const cp = base + cName + (child.type === 'folder' ? '/' : '');
+            addToMap(cp, child);
+          }
+        }
+      };
+      addToMap(finalPath, clonedNode);
+
+      logger.log(`[VFS] copy: ${sourcePath} -> ${destPath}`);
+      dispatchChange(destParentPath);
+    }
+  },
+
+  async search(basePath: string, query: string, recursive = false): Promise<string[]> {
+    const results: string[] = [];
+    const lowerQuery = query.toLowerCase();
+
+    const searchDir = (path: string) => {
+      const children = this.getChildren(path);
+      if (!children) return;
+
+      for (const [name, node] of Object.entries(children)) {
+        const fullPath = path + name + (node.type === 'folder' ? '/' : '');
+
+        // Match filename
+        if (name.toLowerCase().includes(lowerQuery)) {
+          results.push(fullPath);
+        }
+
+        // Search file content if it's a text file
+        if (node.type === 'file' && node.content.toLowerCase().includes(lowerQuery)) {
+          if (!results.includes(fullPath)) {
+            results.push(fullPath);
+          }
+        }
+
+        // Recurse into folders
+        if (recursive && node.type === 'folder') {
+          searchDir(fullPath);
+        }
+      }
+    };
+
+    searchDir(basePath);
+    return results;
+  },
+
+  getSize(path: string): number {
+    const node = this.getNode(path);
+    if (!node) return 0;
+
+    if (node.type === 'file') {
+      return node.content.length;
+    }
+
+    // Recursive size for folders
+    const calcSize = (n: VFSNode): number => {
+      if (n.type === 'file') return n.content.length;
+      let sum = 0;
+      for (const child of Object.values(n.children)) {
+        sum += calcSize(child);
+      }
+      return sum;
+    };
+
+    return calcSize(node);
+  },
+
+  exists(path: string): boolean {
+    return !!this.getNode(path);
   },
 };
 

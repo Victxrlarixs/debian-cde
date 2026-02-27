@@ -485,6 +485,9 @@ export const DesktopManager = (() => {
   function showContextMenu(e: MouseEvent, targetIcon: HTMLElement | null): void {
     closeContextMenu();
 
+    // Play menu open sound
+    if (window.AudioManager) window.AudioManager.menuOpen();
+
     const menu = document.createElement('div');
     menu.className = 'fm-contextmenu';
     menu.style.position = 'fixed';
@@ -497,7 +500,7 @@ export const DesktopManager = (() => {
       icon?: string;
       header?: boolean;
       disabled?: boolean;
-      action: () => Promise<void>;
+      action: () => Promise<void> | void;
     }
 
     const isSystem = targetIcon?.dataset.system === 'true';
@@ -505,7 +508,45 @@ export const DesktopManager = (() => {
     const items: ContextMenuItem[] = targetIcon
       ? [
           {
+            label: isSystem ? 'Open' : 'Open',
+            icon: '/icons/org.xfce.catfish.png',
+            action: async () => {
+              const name = targetIcon.dataset.name || '';
+              const type = (targetIcon.dataset.type as 'file' | 'folder') || 'file';
+              await onIconDoubleClick(name, type);
+            },
+          },
+          {
+            label: 'Copy',
+            icon: '/icons/edit-copy.png',
+            disabled: isSystem,
+            action: () => {
+              if (isSystem) return;
+              const name = targetIcon.dataset.name;
+              if (!name) return;
+              const fullPath =
+                CONFIG.FS.DESKTOP + name + (targetIcon.dataset.type === 'folder' ? '/' : '');
+              window.fmClipboard = { path: fullPath, operation: 'copy' };
+              if (window.AudioManager) window.AudioManager.click();
+            },
+          },
+          {
+            label: 'Cut',
+            icon: '/icons/edit-cut.png',
+            disabled: isSystem,
+            action: () => {
+              if (isSystem) return;
+              const name = targetIcon.dataset.name;
+              if (!name) return;
+              const fullPath =
+                CONFIG.FS.DESKTOP + name + (targetIcon.dataset.type === 'folder' ? '/' : '');
+              window.fmClipboard = { path: fullPath, operation: 'cut' };
+              if (window.AudioManager) window.AudioManager.click();
+            },
+          },
+          {
             label: 'Rename',
+            icon: '/icons/edit-text.png',
             disabled: isSystem,
             action: async () => {
               if (isSystem) return;
@@ -516,17 +557,8 @@ export const DesktopManager = (() => {
             },
           },
           {
-            label: 'Delete',
-            disabled: isSystem,
-            action: async () => {
-              if (isSystem) return;
-              const name = targetIcon.dataset.name;
-              if (!name) return;
-              await VFS.rm(CONFIG.FS.DESKTOP, name);
-            },
-          },
-          {
             label: 'Properties',
+            icon: '/icons/system-search.png',
             action: async () => {
               const name = targetIcon.dataset.name;
               if (!name) return;
@@ -546,8 +578,39 @@ export const DesktopManager = (() => {
               }
             },
           },
+          {
+            label: 'Delete',
+            icon: '/icons/edit-delete.png',
+            disabled: isSystem,
+            action: async () => {
+              if (isSystem) return;
+              const name = targetIcon.dataset.name;
+              if (!name) return;
+              await VFS.rm(CONFIG.FS.DESKTOP, name);
+            },
+          },
         ]
       : [
+          {
+            label: 'Paste',
+            icon: '/icons/edit-paste.png',
+            disabled: !window.fmClipboard,
+            action: async () => {
+              if (!window.fmClipboard) return;
+              const parts = window.fmClipboard.path.split('/').filter(Boolean);
+              const name = parts[parts.length - 1];
+              const destPath =
+                CONFIG.FS.DESKTOP + name + (window.fmClipboard.path.endsWith('/') ? '/' : '');
+
+              if (window.fmClipboard.operation === 'copy') {
+                await VFS.copy(window.fmClipboard.path, destPath);
+              } else {
+                await VFS.move(window.fmClipboard.path, destPath);
+                window.fmClipboard = null;
+              }
+              if (window.AudioManager) window.AudioManager.success();
+            },
+          },
           {
             label: '--- Programs ---',
             header: true,
@@ -693,6 +756,8 @@ export const DesktopManager = (() => {
 
   function closeContextMenu(): void {
     if (activeContextMenu) {
+      // Play menu close sound
+      if (window.AudioManager) window.AudioManager.menuClose();
       activeContextMenu.remove();
       activeContextMenu = null;
     }

@@ -42,6 +42,19 @@ let activeMenu: HTMLElement | null = null;
 let activeContextMenu: HTMLElement | null = null;
 let searchQuery: string = '';
 
+// Global clipboard shared with desktop
+declare global {
+  interface Window {
+    fmClipboard: { path: string; operation: 'copy' | 'cut' } | null;
+  }
+}
+window.fmClipboard = null;
+let clipboard: { path: string; operation: 'copy' | 'cut' } | null = null;
+
+let multiSelect: Set<string> = new Set();
+let sortBy: 'name' | 'size' | 'date' = 'name';
+let sortOrder: 'asc' | 'desc' = 'asc';
+
 // Mobile support: Tap & Long-press state
 let lastTapTime = 0;
 let longPressTimer: number | null = null;
@@ -95,10 +108,26 @@ function renderFiles(): void {
     .filter(([name]) => !searchQuery || name.toLowerCase().includes(searchQuery))
     .map(([name, node]) => ({ name, node }));
 
+  // Apply sorting
   items.sort((a, b) => {
+    // Folders first
     if (a.node.type === 'folder' && b.node.type === 'file') return -1;
     if (a.node.type === 'file' && b.node.type === 'folder') return 1;
-    return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+
+    let comparison = 0;
+    if (sortBy === 'name') {
+      comparison = a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+    } else if (sortBy === 'size') {
+      const sizeA = VFS.getSize(currentPath + a.name + (a.node.type === 'folder' ? '/' : ''));
+      const sizeB = VFS.getSize(currentPath + b.name + (b.node.type === 'folder' ? '/' : ''));
+      comparison = sizeA - sizeB;
+    } else if (sortBy === 'date') {
+      const dateA = new Date(a.node.metadata?.mtime || 0).getTime();
+      const dateB = new Date(b.node.metadata?.mtime || 0).getTime();
+      comparison = dateA - dateB;
+    }
+
+    return sortOrder === 'asc' ? comparison : -comparison;
   });
 
   renderIconView(container, items);
@@ -132,9 +161,11 @@ function renderIconView(container: HTMLElement, items: { name: string; node: VFS
 }
 
 function formatSize(bytes: number): string {
+  if (bytes === 0) return '0 B';
   if (bytes < 1024) return bytes + ' B';
   if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-  return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  if (bytes < 1024 * 1024 * 1024) return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  return (bytes / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
 }
 
 function setupFileEvents(div: HTMLElement, name: string, item: VFSNode): void {
@@ -204,8 +235,6 @@ function setupFileEvents(div: HTMLElement, name: string, item: VFSNode): void {
         if (img) img.src = '/icons/folder_open.png';
         setTimeout(() => openPath(currentPath + name + '/'), 50);
       } else {
-        const img = div.querySelector('img');
-        if (img) img.src = '/icons/edit-text.png';
         setTimeout(() => openTextWindow(name, (item as VFSFile).content), 50);
       }
       lastTapTime = 0;
@@ -423,8 +452,17 @@ async function showProperties(fullPath: string): Promise<void> {
   const parts = fullPath.split('/').filter(Boolean);
   const name = parts[parts.length - 1] || '/';
   const meta = (node as any).metadata;
-  const sizeStr = node.type === 'folder' ? '--' : formatSize(meta?.size || 0);
+  const size = VFS.getSize(fullPath + (node.type === 'folder' ? '/' : ''));
+  const sizeStr = formatSize(size);
   const dateStr = meta?.mtime ? new Date(meta.mtime).toLocaleString() : 'Unknown';
+
+  // Count items in folder
+  let itemCount = '';
+  if (node.type === 'folder') {
+    const children = VFS.getChildren(fullPath + '/');
+    const count = children ? Object.keys(children).length : 0;
+    itemCount = `<tr><td style="padding: 2px 0; color: #555;">Items:</td><td>${count}</td></tr>`;
+  }
 
   const html = `
     <div class="fm-properties">
@@ -439,6 +477,7 @@ async function showProperties(fullPath: string): Promise<void> {
       <table style="width: 100%; font-size: 12px; border-collapse: collapse;">
         <tr><td style="padding: 2px 0; color: #555;">Path:</td><td>${fullPath}</td></tr>
         <tr><td style="padding: 2px 0; color: #555;">Size:</td><td>${sizeStr}</td></tr>
+        ${itemCount}
         <tr><td style="padding: 2px 0; color: #555;">Modified:</td><td>${dateStr}</td></tr>
         <tr><td style="padding: 2px 0; color: #555;">Owner:</td><td>${meta?.owner || 'victx'}</td></tr>
         <tr><td style="padding: 2px 0; color: #555;">Permissions:</td><td><code>${meta?.permissions || (node.type === 'folder' ? 'rwxr-xr-x' : 'rw-r--r--')}</code></td></tr>
@@ -457,6 +496,7 @@ interface MenuItem {
   label: string;
   icon?: string;
   action: () => Promise<void> | void;
+  disabled?: boolean;
 }
 
 const fmMenus: Record<string, MenuItem[]> = {
@@ -485,6 +525,48 @@ const fmMenus: Record<string, MenuItem[]> = {
   ],
   Edit: [
     {
+      label: 'Copy',
+      icon: '/icons/edit-copy.png',
+      action: () => {
+        if (!fmSelected) return;
+        const fullPath =
+          currentPath + fmSelected + (VFS.getNode(currentPath + fmSelected + '/') ? '/' : '');
+        clipboard = { path: fullPath, operation: 'copy' };
+        window.fmClipboard = clipboard;
+        if (window.AudioManager) window.AudioManager.click();
+      },
+    },
+    {
+      label: 'Cut',
+      icon: '/icons/edit-cut.png',
+      action: () => {
+        if (!fmSelected) return;
+        const fullPath =
+          currentPath + fmSelected + (VFS.getNode(currentPath + fmSelected + '/') ? '/' : '');
+        clipboard = { path: fullPath, operation: 'cut' };
+        window.fmClipboard = clipboard;
+        if (window.AudioManager) window.AudioManager.click();
+      },
+    },
+    {
+      label: 'Paste',
+      icon: '/icons/edit-paste.png',
+      action: async () => {
+        if (!clipboard) return;
+        const parts = clipboard.path.split('/').filter(Boolean);
+        const name = parts[parts.length - 1];
+        const destPath = currentPath + name + (clipboard.path.endsWith('/') ? '/' : '');
+
+        if (clipboard.operation === 'copy') {
+          await VFS.copy(clipboard.path, destPath);
+        } else {
+          await VFS.move(clipboard.path, destPath);
+          clipboard = null;
+        }
+        if (window.AudioManager) window.AudioManager.success();
+      },
+    },
+    {
       label: 'Rename',
       icon: '/icons/edit-copy.png',
       action: async () => {
@@ -495,6 +577,39 @@ const fmMenus: Record<string, MenuItem[]> = {
     },
   ],
   View: [
+    {
+      label: 'Sort by Name',
+      action: () => {
+        if (sortBy === 'name') sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+        else {
+          sortBy = 'name';
+          sortOrder = 'asc';
+        }
+        renderFiles();
+      },
+    },
+    {
+      label: 'Sort by Size',
+      action: () => {
+        if (sortBy === 'size') sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+        else {
+          sortBy = 'size';
+          sortOrder = 'asc';
+        }
+        renderFiles();
+      },
+    },
+    {
+      label: 'Sort by Date',
+      action: () => {
+        if (sortBy === 'date') sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+        else {
+          sortBy = 'date';
+          sortOrder = 'asc';
+        }
+        renderFiles();
+      },
+    },
     {
       label: 'Show Hidden Files',
       action: () => {
@@ -615,6 +730,7 @@ function handleContextMenu(e: MouseEvent): void {
     items = [
       {
         label: isTrashDir ? 'Restore' : 'Open',
+        icon: '/icons/org.xfce.catfish.png',
         action: () => {
           if (isTrashDir) {
             restore(name);
@@ -630,7 +746,28 @@ function handleContextMenu(e: MouseEvent): void {
         },
       },
       {
+        label: 'Copy',
+        icon: '/icons/edit-copy.png',
+        action: () => {
+          const fullPath = currentPath + name + (VFS.getNode(currentPath + name + '/') ? '/' : '');
+          clipboard = { path: fullPath, operation: 'copy' };
+          window.fmClipboard = clipboard;
+          if (window.AudioManager) window.AudioManager.click();
+        },
+      },
+      {
+        label: 'Cut',
+        icon: '/icons/edit-cut.png',
+        action: () => {
+          const fullPath = currentPath + name + (VFS.getNode(currentPath + name + '/') ? '/' : '');
+          clipboard = { path: fullPath, operation: 'cut' };
+          window.fmClipboard = clipboard;
+          if (window.AudioManager) window.AudioManager.click();
+        },
+      },
+      {
         label: 'Rename',
+        icon: '/icons/edit-text.png',
         action: async () => {
           const newName = await CDEModal.prompt('New name:', name);
           if (newName) await rename(name, newName);
@@ -638,20 +775,50 @@ function handleContextMenu(e: MouseEvent): void {
       },
       {
         label: 'Properties',
+        icon: '/icons/system-search.png',
         action: () => showProperties(currentPath + name),
       },
       {
         label: 'Delete',
+        icon: '/icons/edit-delete.png',
         action: () => rm(name),
       },
     ];
   } else {
-    items = fmMenus['File'];
+    items = [
+      {
+        label: 'Paste',
+        icon: '/icons/edit-paste.png',
+        action: async () => {
+          if (!clipboard) return;
+          const parts = clipboard.path.split('/').filter(Boolean);
+          const name = parts[parts.length - 1];
+          const destPath = currentPath + name + (clipboard.path.endsWith('/') ? '/' : '');
+
+          if (clipboard.operation === 'copy') {
+            await VFS.copy(clipboard.path, destPath);
+          } else {
+            await VFS.move(clipboard.path, destPath);
+            clipboard = null;
+          }
+          if (window.AudioManager) window.AudioManager.success();
+        },
+      },
+      ...fmMenus['File'],
+    ];
+
+    // Mark Paste as disabled if no clipboard
+    if (!clipboard) {
+      items[0] = { ...items[0], disabled: true } as any;
+    }
   }
 
   items.forEach((item) => {
     const option = document.createElement('div');
     option.className = 'fm-context-item';
+    if (item.disabled) {
+      option.classList.add('disabled');
+    }
 
     if (item.icon) {
       const img = document.createElement('img');
@@ -667,10 +834,12 @@ function handleContextMenu(e: MouseEvent): void {
     text.textContent = item.label;
     option.appendChild(text);
 
-    option.addEventListener('click', async () => {
-      await item.action();
-      menu.remove();
-    });
+    if (!item.disabled) {
+      option.addEventListener('click', async () => {
+        await item.action();
+        menu.remove();
+      });
+    }
     menu.appendChild(option);
   });
 
@@ -739,6 +908,71 @@ function initFileManager(): void {
       renderFiles();
     });
   }
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', (e: KeyboardEvent) => {
+    const win = document.getElementById('fm');
+    if (!win || win.style.display === 'none') return;
+
+    // Don't intercept if typing in input
+    if (e.target instanceof HTMLInputElement) return;
+
+    if (e.ctrlKey || e.metaKey) {
+      switch (e.key.toLowerCase()) {
+        case 'c':
+          e.preventDefault();
+          if (fmSelected) {
+            const fullPath =
+              currentPath + fmSelected + (VFS.getNode(currentPath + fmSelected + '/') ? '/' : '');
+            clipboard = { path: fullPath, operation: 'copy' };
+            window.fmClipboard = clipboard;
+            if (window.AudioManager) window.AudioManager.click();
+          }
+          break;
+        case 'x':
+          e.preventDefault();
+          if (fmSelected) {
+            const fullPath =
+              currentPath + fmSelected + (VFS.getNode(currentPath + fmSelected + '/') ? '/' : '');
+            clipboard = { path: fullPath, operation: 'cut' };
+            window.fmClipboard = clipboard;
+            if (window.AudioManager) window.AudioManager.click();
+          }
+          break;
+        case 'v':
+          e.preventDefault();
+          if (clipboard) {
+            const parts = clipboard.path.split('/').filter(Boolean);
+            const name = parts[parts.length - 1];
+            const destPath = currentPath + name + (clipboard.path.endsWith('/') ? '/' : '');
+
+            if (clipboard.operation === 'copy') {
+              VFS.copy(clipboard.path, destPath);
+            } else {
+              VFS.move(clipboard.path, destPath);
+              clipboard = null;
+            }
+            if (window.AudioManager) window.AudioManager.success();
+          }
+          break;
+        case 'f':
+          e.preventDefault();
+          searchInput?.focus();
+          break;
+      }
+    } else if (e.key === 'Delete' && fmSelected) {
+      e.preventDefault();
+      rm(fmSelected);
+    } else if (e.key === 'F2' && fmSelected) {
+      e.preventDefault();
+      CDEModal.prompt('New name:', fmSelected).then((newName) => {
+        if (newName) rename(fmSelected!, newName);
+      });
+    } else if (e.key === 'Backspace') {
+      e.preventDefault();
+      goUp();
+    }
+  });
 
   initialized = true;
   logger.log('[FileManager] Initialized');

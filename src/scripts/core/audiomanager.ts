@@ -9,6 +9,12 @@ export interface IAudioManager {
   success(): void;
   windowOpen(): void;
   windowClose(): void;
+  windowMinimize(): void;
+  windowMaximize(): void;
+  windowShade(): void;
+  menuOpen(): void;
+  menuClose(): void;
+  notification(): void;
   setVolume(volume: number): void;
   playMelody(
     notes: Array<{ freq: number; duration: number; type?: OscillatorType; delay?: number }>
@@ -188,6 +194,41 @@ export const AudioManager = (() => {
       this.playMelody([
         { freq: 880, duration: 0.05, type: 'sine', delay: 0 },
         { freq: 440, duration: 0.1, type: 'sine', delay: 50 },
+      ]);
+    },
+
+    windowMinimize(): void {
+      this.playMelody([
+        { freq: 800, duration: 0.05, type: 'sine', delay: 0 },
+        { freq: 600, duration: 0.05, type: 'sine', delay: 30 },
+        { freq: 400, duration: 0.08, type: 'sine', delay: 30 },
+      ]);
+    },
+
+    windowMaximize(): void {
+      this.playMelody([
+        { freq: 400, duration: 0.05, type: 'sine', delay: 0 },
+        { freq: 600, duration: 0.05, type: 'sine', delay: 30 },
+        { freq: 800, duration: 0.08, type: 'sine', delay: 30 },
+      ]);
+    },
+
+    windowShade(): void {
+      playTone(700, 0.08, 'sine', 0.3);
+    },
+
+    menuOpen(): void {
+      playTone(1000, 0.03, 'sine', 0.2);
+    },
+
+    menuClose(): void {
+      playTone(800, 0.03, 'sine', 0.2);
+    },
+
+    notification(): void {
+      this.playMelody([
+        { freq: 800, duration: 0.08, type: 'sine', delay: 0 },
+        { freq: 1000, duration: 0.08, type: 'sine', delay: 80 },
       ]);
     },
 
