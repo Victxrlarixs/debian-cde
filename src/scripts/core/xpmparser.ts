@@ -245,7 +245,7 @@ export async function loadXpmBackdrop(path: string): Promise<string | null> {
       }
       const text = await res.text();
       const result = await parseXpmToDataUrl(text);
-      
+
       if (result) {
         if (attempt > 0) {
           logger.log(`[XPMParser] Success on attempt ${attempt + 1} for ${path}`);
@@ -259,7 +259,7 @@ export async function loadXpmBackdrop(path: string): Promise<string | null> {
       if (attempt < maxRetries) {
         logger.warn(`[XPMParser] Attempt ${attempt + 1} failed for ${path}, retrying...`);
         // Wait a bit before retry
-        await new Promise(resolve => setTimeout(resolve, 100 * (attempt + 1)));
+        await new Promise((resolve) => setTimeout(resolve, 100 * (attempt + 1)));
       }
     }
   }

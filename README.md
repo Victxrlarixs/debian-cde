@@ -48,13 +48,12 @@ Welcome to a pixel recreation of the Common Desktop Environment (CDE)—living r
 
 ---
 
-## 🎨 Share Your Theme 
+## 🎨 Share Your Theme
 
-Created an amazing CDE theme? Share it with the community! 
-Click the **Share Theme** button (found in the Panel, Desktop, or right-click menu) to generate a shareable URL. 
-Your theme configuration gets encoded into a compact link that others can use to instantly load your color palette and backdrop combo. 
-Post your themes in [GitHub Discussions](https://github.com/Victxrlarixs/debian-cde/discussions) with a screenshot and watch the retro magic spread! 
-
+Created an amazing CDE theme? Share it with the community!
+Click the **Share Theme** button (found in the Panel, Desktop, or right-click menu) to generate a shareable URL.
+Your theme configuration gets encoded into a compact link that others can use to instantly load your color palette and backdrop combo.
+Post your themes in [GitHub Discussions](https://github.com/Victxrlarixs/debian-cde/discussions) with a screenshot and watch the retro magic spread!
 
 <p align="center">
   <img src="public/images/Share_Themes.png" alt="CDE Preview" width="600"/>

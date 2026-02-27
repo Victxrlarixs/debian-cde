@@ -8,41 +8,49 @@ import { WindowManager } from '../core/windowmanager';
 // ============================================================================
 
 // Declaration for html2canvas (assumed to be loaded globally)
-/**
- * Type declaration for html2canvas library.
- * Assumes html2canvas is loaded globally via script tag.
- *
- * @param element - The HTML element to capture
- * @param options - Configuration options for the capture
- * @returns Promise resolving to an HTMLCanvasElement
- */
 declare function html2canvas(element: HTMLElement, options?: any): Promise<HTMLCanvasElement>;
 
+const DISCUSSIONS_URL =
+  'https://github.com/Victxrlarixs/debian-cde/discussions/categories/-dev-random';
+
 /**
- * Captures a full-page screenshot using html2canvas and triggers a download.
- *
- * @remarks
- * This function captures the entire document element (html2canvas) and saves it
- * as a PNG file with a timestamp in the filename. During capture:
- * - The screenshot button is visually disabled (opacity 0.5, cursor wait)
- * - A toast notification is displayed (temporarily hidden in the cloned document)
- * - Error handling shows a modal alert if capture fails
- *
- * Configuration is loaded from CONFIG.SCREENSHOT:
- * - SCALE: Resolution scale factor
- * - TOAST_MESSAGE: Message displayed during capture
- * - FILENAME_PREFIX: Prefix for the generated filename
- *
- * The function is exposed globally as window.captureFullPageScreenshot
- * for use in HTML onclick handlers.
- *
- * @example
- * ```html
- * <button onclick="captureFullPageScreenshot()">Capture Screenshot</button>
- * ```
+ * Saves a screenshot from a data URL.
+ */
+function saveScreenshot(dataUrl: string): void {
+  const now = new Date();
+  const filename = `${CONFIG.SCREENSHOT.FILENAME_PREFIX}-${now.getFullYear()}-${(now.getMonth() + 1)
+    .toString()
+    .padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')} ${now
+    .getHours()
+    .toString()
+    .padStart(2, '0')}.${now.getMinutes().toString().padStart(2, '0')}.${now
+    .getSeconds()
+    .toString()
+    .padStart(2, '0')}.png`;
+
+  logger.log(`[Screenshot] Generated filename: ${filename}`);
+
+  const link = document.createElement('a');
+  link.download = filename;
+  link.href = dataUrl;
+  link.click();
+  logger.log('[Screenshot] Download triggered');
+}
+
+/**
+ * Opens GitHub Discussions for sharing screenshot
+ */
+function shareToDiscussions(dataUrl: string): void {
+  logger.log('[Screenshot] Opening GitHub Discussions for sharing');
+  window.open(DISCUSSIONS_URL, '_blank');
+  CDEModal.close();
+}
+
+/**
+ * Captures a full-page screenshot using html2canvas.
  */
 export function captureFullPageScreenshot(): void {
-  logger.log('[Screenshot] captureFullPageScreenshot: starting screenshot capture');
+  logger.log('[Screenshot] Starting screenshot capture');
 
   const btn = document.getElementById('screenshot-btn') as HTMLElement | null;
 
@@ -52,7 +60,6 @@ export function captureFullPageScreenshot(): void {
     btn.style.cursor = 'wait';
   }
 
-  // Create and show toast notification
   const toast = document.createElement('div');
   toast.textContent = CONFIG.SCREENSHOT.TOAST_MESSAGE;
   toast.className = 'screenshot-toast';
@@ -74,6 +81,11 @@ export function captureFullPageScreenshot(): void {
         (clonedToast as HTMLElement).style.display = 'none';
         logger.log('[Screenshot] Toast hidden in cloned document');
       }
+      // Hide screenshot button in clone
+      const clonedBtn = clonedDoc.getElementById('screenshot-btn');
+      if (clonedBtn) {
+        (clonedBtn as HTMLElement).style.display = 'none';
+      }
     },
   };
 
@@ -85,7 +97,7 @@ export function captureFullPageScreenshot(): void {
 
       const dataUrl = canvas.toDataURL('image/png');
       const resolution = `${canvas.width}x${canvas.height}`;
-      const sizeBytes = Math.round((dataUrl.length * 3) / 4); // Approx size from base64
+      const sizeBytes = Math.round((dataUrl.length * 3) / 4);
       const sizeStr = formatBytes(sizeBytes);
 
       const html = `
@@ -95,48 +107,34 @@ export function captureFullPageScreenshot(): void {
             Resolution: ${resolution} | Est. Size: ${sizeStr}
           </div>
         </div>
+        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+          <button 
+            onclick="window.saveScreenshot('${dataUrl}'); window.CDEModal.close();" 
+            class="cde-btn cde-btn-default"
+            style="padding: 8px 16px; font-size: 12px;"
+          >
+            <img src="/icons/floppy.png" alt="" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;" />
+            Save
+          </button>
+          <button 
+            onclick="window.shareToDiscussions('${dataUrl}');" 
+            class="cde-btn"
+            style="padding: 8px 16px; font-size: 12px;"
+          >
+            <img src="/icons/konqueror.png" alt="" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;" />
+            Post to Discussions
+          </button>
+        </div>
       `;
 
-      // Clean up toast immediately after capture
       if (document.body.contains(toast)) document.body.removeChild(toast);
 
-      const modalPromise = CDEModal.open('SnapShot Viewer', html, [
-        { label: 'Save', value: 'SAVE', isDefault: true },
-        { label: 'Discard', value: 'DISCARD' },
-      ]);
+      CDEModal.open('SnapShot Viewer', html, []);
 
-      // Center again after a short delay to account for image layout
       const modal = document.getElementById('cde-modal-global');
       if (modal) {
         requestAnimationFrame(() => WindowManager.centerWindow(modal));
         setTimeout(() => WindowManager.centerWindow(modal), 100);
-      }
-
-      const result = await modalPromise;
-
-      if (result === 'SAVE') {
-        // Generate timestamp-based filename
-        const now = new Date();
-        const filename = `${CONFIG.SCREENSHOT.FILENAME_PREFIX}-${now.getFullYear()}-${(
-          now.getMonth() + 1
-        )
-          .toString()
-          .padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')} ${now
-          .getHours()
-          .toString()
-          .padStart(2, '0')}.${now.getMinutes().toString().padStart(2, '0')}.${now
-          .getSeconds()
-          .toString()
-          .padStart(2, '0')}.png`;
-
-        logger.log(`[Screenshot] Generated filename: ${filename}`);
-
-        // Create download link
-        const link = document.createElement('a');
-        link.download = filename;
-        link.href = dataUrl;
-        link.click();
-        logger.log('[Screenshot] Download triggered');
       }
 
       if (btn) {
@@ -150,7 +148,6 @@ export function captureFullPageScreenshot(): void {
     .catch((error: any) => {
       console.error('[Screenshot] Error during capture:', error);
 
-      // Clean up on error
       if (document.body.contains(toast)) {
         document.body.removeChild(toast);
         logger.log('[Screenshot] Toast removed after error');
@@ -162,7 +159,6 @@ export function captureFullPageScreenshot(): void {
         logger.log('[Screenshot] Button restored after error');
       }
 
-      // Show error to user
       CDEModal.alert('Error capturing screenshot.').then(() => {
         logger.log('[Screenshot] Error alert displayed to user');
       });
@@ -176,26 +172,19 @@ function formatBytes(bytes: number): string {
 }
 
 // ============================================================================
-// Global exposure (compatibility with existing HTML)
+// Global exposure
 // ============================================================================
 
 declare global {
   interface Window {
-    /**
-     * Global function for capturing full-page screenshots.
-     * Made available for HTML onclick handlers.
-     *
-     * @example
-     * ```html
-     * <button onclick="captureFullPageScreenshot()">Capture</button>
-     * ```
-     */
     captureFullPageScreenshot: () => void;
+    saveScreenshot: (dataUrl: string) => void;
+    shareToDiscussions: (dataUrl: string) => void;
   }
 }
 
-// Assign to window for onclick handlers in HTML
 window.captureFullPageScreenshot = captureFullPageScreenshot;
+window.saveScreenshot = saveScreenshot;
+window.shareToDiscussions = shareToDiscussions;
 
-// Log module load
 logger.log('[Screenshot] Module loaded and ready');

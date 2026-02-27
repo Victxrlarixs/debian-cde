@@ -639,7 +639,8 @@ export const DesktopManager = (() => {
             label: 'Share Theme',
             icon: '/icons/org.xfce.PanelProfiles.png',
             action: async () => {
-              if ((window as any).shareThemeToDiscussions) (window as any).shareThemeToDiscussions();
+              if ((window as any).shareThemeToDiscussions)
+                (window as any).shareThemeToDiscussions();
             },
           },
           {

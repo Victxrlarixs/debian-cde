@@ -41,12 +41,12 @@ import WindowMinimize from '../../common/WindowMinimize.astro';
       <!-- Sliders -->
       <div class="mixer-sliders">
         <div class="slider-channel">
-          <input 
-            type="range" 
-            class="vertical-slider" 
-            min="0" 
-            max="100" 
-            value="90" 
+          <input
+            type="range"
+            class="vertical-slider"
+            min="0"
+            max="100"
+            value="90"
             orient="vertical"
             data-key="volume"
             oninput="styleManager.beep.update('volume', parseInt(this.value) / 100); this.parentElement.querySelector('.volume-display').textContent = this.value + '%'"
@@ -54,12 +54,12 @@ import WindowMinimize from '../../common/WindowMinimize.astro';
           <div class="volume-display">90%</div>
         </div>
         <div class="slider-channel">
-          <input 
-            type="range" 
-            class="vertical-slider" 
-            min="200" 
-            max="2000" 
-            value="880" 
+          <input
+            type="range"
+            class="vertical-slider"
+            min="200"
+            max="2000"
+            value="880"
             orient="vertical"
             data-key="frequency"
             oninput="styleManager.beep.update('frequency', parseInt(this.value)); this.parentElement.querySelector('.volume-display').textContent = this.value + 'Hz'"
@@ -67,12 +67,12 @@ import WindowMinimize from '../../common/WindowMinimize.astro';
           <div class="volume-display">880Hz</div>
         </div>
         <div class="slider-channel">
-          <input 
-            type="range" 
-            class="vertical-slider" 
-            min="10" 
-            max="500" 
-            value="100" 
+          <input
+            type="range"
+            class="vertical-slider"
+            min="10"
+            max="500"
+            value="100"
             orient="vertical"
             data-key="duration"
             oninput="styleManager.beep.update('duration', parseInt(this.value) / 1000); this.parentElement.querySelector('.volume-display').textContent = this.value + 'ms'"
@@ -80,26 +80,54 @@ import WindowMinimize from '../../common/WindowMinimize.astro';
           <div class="volume-display">100ms</div>
         </div>
         <div class="slider-channel">
-          <input type="range" class="vertical-slider" min="0" max="100" value="80" orient="vertical" disabled />
+          <input
+            type="range"
+            class="vertical-slider"
+            min="0"
+            max="100"
+            value="80"
+            orient="vertical"
+            disabled
+          />
           <div class="volume-display">80%</div>
         </div>
         <div class="slider-channel">
-          <input type="range" class="vertical-slider" min="0" max="100" value="70" orient="vertical" disabled />
+          <input
+            type="range"
+            class="vertical-slider"
+            min="0"
+            max="100"
+            value="70"
+            orient="vertical"
+            disabled
+          />
           <div class="volume-display">70%</div>
         </div>
         <div class="slider-channel">
-          <input type="range" class="vertical-slider" min="0" max="100" value="85" orient="vertical" disabled />
+          <input
+            type="range"
+            class="vertical-slider"
+            min="0"
+            max="100"
+            value="85"
+            orient="vertical"
+            disabled
+          />
           <div class="volume-display">85%</div>
         </div>
         <div class="slider-channel">
-          <input 
-            type="range" 
-            class="vertical-slider" 
-            min="0" 
-            max="100" 
-            value="90" 
+          <input
+            type="range"
+            class="vertical-slider"
+            min="0"
+            max="100"
+            value="90"
             orient="vertical"
-            oninput="styleManager.beep.update('volume', parseInt(this.value) / 100); document.querySelector('[data-key=\"volume\"]').value = this.value; document.querySelector('[data-key=\"volume\"]').parentElement.querySelector('.volume-display').textContent = this.value + '%'"
+            oninput="styleManager.beep.update('volume', parseInt(this.value) / 100); document.querySelector('[data-key=\"
+            volume\"]').value="this.value;"
+            document.querySelector('[data-key="\&quot;volume\&quot;]').parentElement.querySelector('.volume-display').textContent"
+            +
+            '%'"
           />
           <div class="volume-display">90%</div>
         </div>
@@ -113,7 +141,8 @@ import WindowMinimize from '../../common/WindowMinimize.astro';
           <button class="cde-btn test-btn" onclick="AudioManager.success()">Success</button>
           <button class="cde-btn test-btn" onclick="AudioManager.error()">Error</button>
           <button class="cde-btn test-btn" onclick="AudioManager.windowOpen()">Window</button>
-          <button class="cde-btn test-btn" onclick="AudioManager.playStartupChime()">Startup</button>
+          <button class="cde-btn test-btn" onclick="AudioManager.playStartupChime()">Startup</button
+          >
         </div>
         <div class="audio-icon">
           <img src="/icons/multimedia-volume-control.png" alt="Audio" width="32" height="32" />
