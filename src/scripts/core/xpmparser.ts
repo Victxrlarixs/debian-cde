@@ -25,6 +25,47 @@ const CDE_SEMANTIC_MAP: Record<string, string> = {
   backgroundColor: '--window-color',
 };
 
+// Worker pool for parallel processing
+let workerPool: Worker[] = [];
+let workerIndex = 0;
+const MAX_WORKERS = 2; // Limit concurrent workers to avoid blocking
+
+// Queue for throttling requests
+let processingQueue: Array<() => void> = [];
+let activeProcessing = 0;
+const MAX_CONCURRENT = 3; // Max concurrent parsing operations
+
+function getNextWorker(): Worker | null {
+  if (workerPool.length === 0) {
+    // Initialize worker pool
+    try {
+      for (let i = 0; i < MAX_WORKERS; i++) {
+        const worker = new Worker(new URL('../workers/xpm-worker.ts', import.meta.url), {
+          type: 'module',
+        });
+        workerPool.push(worker);
+      }
+    } catch (err) {
+      logger.warn('[XPMParser] Worker not available, falling back to main thread');
+      return null;
+    }
+  }
+
+  const worker = workerPool[workerIndex];
+  workerIndex = (workerIndex + 1) % workerPool.length;
+  return worker;
+}
+
+function processQueue(): void {
+  while (activeProcessing < MAX_CONCURRENT && processingQueue.length > 0) {
+    const next = processingQueue.shift();
+    if (next) {
+      activeProcessing++;
+      next();
+    }
+  }
+}
+
 /** Convert 16-bit-per-channel XPM hex (#RRRRGGGGBBBB) to CSS #RRGGBB */
 function normalizeXpmColor(raw: string): string {
   if (!raw.startsWith('#')) return raw;
@@ -65,8 +106,49 @@ function resolveColor(entry: string, root: CSSStyleDeclaration): string {
   return '#808080'; // ultimate fallback
 }
 
-/** Parse XPM text and render to a canvas, returning a pattern data URL */
-export async function parseXpmToDataUrl(xpmText: string): Promise<string | null> {
+/** Parse XPM text using worker if available, with throttling */
+async function parseXpmWithWorker(xpmText: string): Promise<string | null> {
+  return new Promise((resolve) => {
+    const task = () => {
+      const worker = getNextWorker();
+
+      if (!worker) {
+        // Fallback to main thread
+        parseXpmMainThread(xpmText).then((result) => {
+          activeProcessing--;
+          processQueue();
+          resolve(result);
+        });
+        return;
+      }
+
+      // Get theme colors
+      const root = getComputedStyle(document.documentElement);
+      const themeColors: Record<string, string> = {};
+      Object.values(CDE_SEMANTIC_MAP).forEach((cssVar) => {
+        themeColors[cssVar] = root.getPropertyValue(cssVar).trim();
+      });
+
+      const handleMessage = (e: MessageEvent) => {
+        if (e.data.type === 'result') {
+          worker.removeEventListener('message', handleMessage);
+          activeProcessing--;
+          processQueue();
+          resolve(e.data.dataUrl);
+        }
+      };
+
+      worker.addEventListener('message', handleMessage);
+      worker.postMessage({ type: 'parse', xpmText, themeColors });
+    };
+
+    processingQueue.push(task);
+    processQueue();
+  });
+}
+
+/** Fallback: Parse XPM on main thread (synchronous) */
+async function parseXpmMainThread(xpmText: string): Promise<string | null> {
   try {
     // Strip C-style comments
     const text = xpmText.replace(/\/\*.*?\*\//gs, '');
@@ -75,7 +157,6 @@ export async function parseXpmToDataUrl(xpmText: string): Promise<string | null>
     const strings = Array.from(text.matchAll(/"(.*?)"/gs)).map((m) => m[1].replace(/\\n/g, ''));
 
     if (strings.length < 2) {
-      logger.warn('[XPMParser] Not enough data in file');
       return null;
     }
 
@@ -84,7 +165,6 @@ export async function parseXpmToDataUrl(xpmText: string): Promise<string | null>
     const [width, height, numColors, cpp] = header;
 
     if (!width || !height || !numColors || !cpp) {
-      logger.warn('[XPMParser] Invalid header:', strings[0]);
       return null;
     }
 
@@ -109,7 +189,8 @@ export async function parseXpmToDataUrl(xpmText: string): Promise<string | null>
     }
 
     if (pixelRows.length < height) {
-      logger.warn(`[XPMParser] Only got ${pixelRows.length}/${height} pixel rows`);
+      // Skip incomplete XPM files silently
+      return null;
     }
 
     // Render to canvas
@@ -130,12 +211,15 @@ export async function parseXpmToDataUrl(xpmText: string): Promise<string | null>
     }
 
     const dataUrl = canvas.toDataURL('image/png');
-    logger.log(`[XPMParser] Rendered ${width}x${height} XPM pattern`);
     return dataUrl;
   } catch (err) {
-    logger.error('[XPMParser] Parse error:', err);
     return null;
   }
+}
+
+/** Parse XPM text and render to a canvas, returning a pattern data URL */
+export async function parseXpmToDataUrl(xpmText: string): Promise<string | null> {
+  return parseXpmWithWorker(xpmText);
 }
 
 /** Fetch a .pm file and render it as a repeating background data URL */
@@ -143,13 +227,11 @@ export async function loadXpmBackdrop(path: string): Promise<string | null> {
   try {
     const res = await fetch(path);
     if (!res.ok) {
-      logger.warn(`[XPMParser] Failed to fetch: ${path}`);
       return null;
     }
     const text = await res.text();
     return await parseXpmToDataUrl(text);
   } catch (err) {
-    logger.error('[XPMParser] Fetch error:', err);
     return null;
   }
 }
