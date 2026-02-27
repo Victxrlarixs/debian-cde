@@ -25,11 +25,11 @@ const SYSTEM_ICONS: any[] = [
     },
   },
   {
-    id: 'terminal-lab-icon',
-    name: 'Terminal Lab',
-    icon: '/icons/konsole.png',
+    id: 'share-theme-icon',
+    name: 'Share Theme',
+    icon: '/icons/org.xfce.PanelProfiles.png',
     action: () => {
-      if ((window as any).TerminalLab?.open) (window as any).TerminalLab.open();
+      if ((window as any).shareThemeToDiscussions) (window as any).shareThemeToDiscussions();
     },
   },
   {
@@ -532,7 +532,12 @@ export const DesktopManager = (() => {
               if (!name) return;
               if (isSystem) {
                 const sysId = targetIcon.dataset.id;
-                const path = sysId === 'emacs-icon' ? '/usr/bin/emacs' : '/usr/bin/terminal-lab';
+                let path = '/usr/bin/unknown';
+                if (sysId === 'emacs-icon') path = '/usr/bin/emacs';
+                else if (sysId === 'share-theme-icon') path = '/usr/bin/share-theme';
+                else if (sysId === 'netscape-icon') path = '/usr/bin/netscape';
+                else if (sysId === 'lynx-icon') path = '/usr/bin/lynx';
+
                 const { showProperties } = await import('./filemanager');
                 showProperties(path);
               } else {
@@ -576,61 +581,30 @@ export const DesktopManager = (() => {
           },
           {
             label: 'Workspace 1',
+            icon: '/icons/system-workspaces-pages-manager.png',
             action: async () => {
               if (window.WindowManager?.switchWorkspace) window.WindowManager.switchWorkspace('1');
             },
           },
           {
             label: 'Workspace 2',
+            icon: '/icons/system-workspaces-pages-manager.png',
             action: async () => {
               if (window.WindowManager?.switchWorkspace) window.WindowManager.switchWorkspace('2');
             },
           },
           {
             label: 'Workspace 3',
+            icon: '/icons/system-workspaces-pages-manager.png',
             action: async () => {
               if (window.WindowManager?.switchWorkspace) window.WindowManager.switchWorkspace('3');
             },
           },
           {
             label: 'Workspace 4',
+            icon: '/icons/system-workspaces-pages-manager.png',
             action: async () => {
               if (window.WindowManager?.switchWorkspace) window.WindowManager.switchWorkspace('4');
-            },
-          },
-          {
-            label: '--- Quick Themes ---',
-            header: true,
-            action: async () => {},
-          },
-          {
-            label: 'Theme: Gold',
-            action: async () => {
-              if (window.styleManager) {
-                window.styleManager.theme.applyPreset('golden');
-                window.styleManager.theme.updateUI();
-                window.styleManager.saveColor();
-              }
-            },
-          },
-          {
-            label: 'Theme: Emerald',
-            action: async () => {
-              if (window.styleManager) {
-                window.styleManager.theme.applyPreset('greenshades');
-                window.styleManager.theme.updateUI();
-                window.styleManager.saveColor();
-              }
-            },
-          },
-          {
-            label: 'Theme: Alpine',
-            action: async () => {
-              if (window.styleManager) {
-                window.styleManager.theme.applyPreset('alpine');
-                window.styleManager.theme.updateUI();
-                window.styleManager.saveColor();
-              }
             },
           },
           {
@@ -659,6 +633,13 @@ export const DesktopManager = (() => {
             icon: '/icons/org.xfce.settings.appearance.png',
             action: async () => {
               if (window.styleManager) window.styleManager.openMain();
+            },
+          },
+          {
+            label: 'Share Theme',
+            icon: '/icons/org.xfce.PanelProfiles.png',
+            action: async () => {
+              if ((window as any).shareThemeToDiscussions) (window as any).shareThemeToDiscussions();
             },
           },
           {

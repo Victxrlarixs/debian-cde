@@ -364,3 +364,104 @@
   border-bottom-color: var(--border-light);
   background: var(--button-active);
 }
+
+/* Desktop: Larger dock for better visibility */
+@media (min-width: 1024px) {
+  #cde-panel {
+    height: 98px;
+    gap: 3px;
+    padding: 3px 6px;
+  }
+
+  .cde-sep {
+    height: 82px;
+  }
+
+  .cde-menu-btn {
+    width: 52px;
+    height: 66px;
+  }
+
+  .cde-menu-btn img {
+    width: 38px;
+    height: 38px;
+  }
+
+  .cde-pager {
+    grid-template-columns: 54px 54px;
+    grid-template-rows: 28px 28px;
+    gap: 3px;
+    height: 62px;
+    width: 114px;
+    padding: 3px;
+  }
+
+  .pager-workspace {
+    width: 54px;
+    height: 28px;
+    font-size: 13px;
+    line-height: 28px;
+  }
+
+  .cde-scroll {
+    height: 62px;
+    gap: 2px;
+    padding: 0 3px;
+  }
+
+  .scroll-btn {
+    width: 24px;
+    height: 30px;
+  }
+
+  .cde-icon-block {
+    height: 82px;
+    gap: 3px;
+    padding: 3px;
+  }
+
+  .cde-icon-buttons {
+    grid-template-columns: repeat(5, 48px);
+    gap: 2px;
+    height: 26px;
+  }
+
+  .cde-icon-btn {
+    width: 48px;
+    height: 26px;
+    font-size: 12px;
+  }
+
+  .cde-icons {
+    grid-template-columns: repeat(5, 48px);
+    gap: 2px;
+    height: 50px;
+  }
+
+  .cde-icon {
+    width: 48px;
+    height: 50px;
+  }
+
+  .cde-icon img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .tray-icon {
+    width: 42px;
+    height: 50px;
+  }
+
+  .tray-icon img {
+    width: 38px;
+    height: 38px;
+  }
+
+  .cde-exit-btn {
+    padding: 0 14px;
+    height: 66px;
+    line-height: 62px;
+    font-size: 13px;
+  }
+}

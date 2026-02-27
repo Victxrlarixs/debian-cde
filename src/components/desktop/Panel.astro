@@ -197,6 +197,18 @@ import { CONFIG } from '../../scripts/core/config';
 
   <div
     class="tray-icon"
+    id="share-theme-btn"
+    onclick="shareThemeToDiscussions()"
+    title="Share Your Theme"
+    role="button"
+    tabindex="0"
+    aria-label="Share Your Theme"
+  >
+    <img src="/icons/org.xfce.PanelProfiles.png" alt="Share" />
+  </div>
+
+  <div
+    class="tray-icon"
     id="taskmanager-btn"
     onclick="openTaskManagerInTerminal()"
     title="Process Monitor (top)"
@@ -301,4 +313,12 @@ import { CONFIG } from '../../scripts/core/config';
     <img src="/icons/Lynx.svg" alt="" /> Lynx Browser
   </div>
   <div class="menu-separator" role="separator"></div>
+  <div
+    class="menu-item"
+    onclick="shareThemeToDiscussions()"
+    role="menuitem"
+    tabindex="0"
+  >
+    <img src="/icons/org.xfce.PanelProfiles.png" alt="" /> Share Theme
+  </div>
 </div>

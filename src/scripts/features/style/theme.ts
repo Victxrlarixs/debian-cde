@@ -15,6 +15,7 @@ export class ThemeModule {
   public styles: Record<string, string>;
   public cdePalettes: CdePalette[];
   public defaultStyles: Record<string, string>;
+  public currentPaletteId: string | null = null;
 
   constructor() {
     this.styles = { ...CONFIG.DEFAULT_STYLES.COLORS };
@@ -32,6 +33,9 @@ export class ThemeModule {
       logger.warn(`[ThemeModule] Palette not found: ${id}`);
       return;
     }
+
+    // Store the current palette ID for sharing
+    this.currentPaletteId = id;
 
     const c = palette.colors;
     // CDE Mapping (8 Colors):

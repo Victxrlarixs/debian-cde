@@ -13,6 +13,8 @@ import '../features/netscape';
 import '../features/lynx';
 import '../features/manviewer';
 import { initPWAInstaller } from '../utilities/pwa-installer';
+import '../utilities/share-config';
+import '../utilities/share-theme-ui';
 
 // Initialize PWA installer
 if (typeof window !== 'undefined') {

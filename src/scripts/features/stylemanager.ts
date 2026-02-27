@@ -68,6 +68,10 @@ export class StyleManager {
       this.theme.applyCdePalette('ashley');
     } else {
       this.theme.loadSavedColors(themeSettings.colors);
+      // Restore the palette ID if it was saved
+      if (themeSettings.paletteId) {
+        this.theme.currentPaletteId = themeSettings.paletteId;
+      }
     }
     this.font.loadSavedFonts(themeSettings.fonts || {});
 
@@ -148,6 +152,10 @@ export class StyleManager {
       this.highlightActivePreset(target, '[data-scheme]');
       this.saveColor();
       this.updateStatus(`Theme: ${scheme}`, 'colorStatus');
+
+      // Clear XPM cache and re-render backdrop with new palette colors
+      this.backdrop.clearCache();
+      this.backdrop.apply();
     }
   };
 
@@ -313,6 +321,9 @@ export class StyleManager {
   public applyColor(): void {
     this.theme.applyColor();
     this.showMessage('Colors applied.');
+    // Clear XPM cache and re-render backdrop with new colors
+    this.backdrop.clearCache();
+    this.backdrop.apply();
   }
   public applyFont(): void {
     this.font.applyFont();
@@ -322,6 +333,9 @@ export class StyleManager {
     this.theme.resetColor();
     this.theme.updateUI();
     this.saveColor();
+    // Clear XPM cache and re-render backdrop with reset colors
+    this.backdrop.clearCache();
+    this.backdrop.apply();
   }
   public resetFont(): void {
     this.font.resetFont();
@@ -332,6 +346,7 @@ export class StyleManager {
   public saveColor(): void {
     const theme = settingsManager.getSection('theme');
     theme.colors = this.theme.styles;
+    theme.paletteId = this.theme.currentPaletteId;
     settingsManager.setSection('theme', theme);
   }
 

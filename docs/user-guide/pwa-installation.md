@@ -52,6 +52,7 @@ To uninstall the PWA:
 ## Technical Details
 
 The PWA uses:
+
 - Service Worker for offline caching and performance
 - Web App Manifest for installation metadata
 - Cache-first strategy for static assets
@@ -60,17 +61,20 @@ The PWA uses:
 ## Troubleshooting
 
 **Icon doesn't appear:**
+
 - Make sure you're using a compatible browser
 - Check that the site is served over HTTPS
 - The app may already be installed
 - Try refreshing the page
 
 **Installation fails:**
+
 - Check your browser's PWA support
 - Ensure you have sufficient storage space
 - Try clearing browser cache and reloading
 
 **App doesn't work offline:**
+
 - Wait for the initial cache to complete
 - Check your browser's service worker status
 - Reinstall the app if issues persist

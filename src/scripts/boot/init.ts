@@ -332,6 +332,13 @@ async function initDesktop(): Promise<void> {
       logger.log('[initDesktop] Style manager initialized');
     }
 
+    // Load shared theme from URL if present (after StyleManager is ready)
+    setTimeout(() => {
+      if (window.ShareConfig) {
+        window.ShareConfig.load();
+      }
+    }, 1500);
+
     desktopInitialized = true;
     logger.log('[initDesktop] Desktop initialization completed successfully');
   } catch (error) {
