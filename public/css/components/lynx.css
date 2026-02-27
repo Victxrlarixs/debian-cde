@@ -130,12 +130,12 @@
   #lynx {
     width: 95vw !important;
     height: auto !important;
-    max-height: calc(100vh - 95px) !important;
+    max-height: calc(100vh - 106px) !important;
     min-width: unset !important;
     min-height: unset !important;
     max-width: 100vw !important;
-    left: auto !important;
-    top: auto !important;
+    left: 2.5vw !important;
+    top: 28px !important;
     position: absolute !important;
     box-sizing: border-box !important;
   }
@@ -175,7 +175,7 @@
 @media (max-width: 479px) {
   #lynx {
     width: 95vw !important;
-    max-height: calc(100vh - 95px) !important;
+    max-height: calc(100vh - 106px) !important;
   }
 
   .lynx-content {

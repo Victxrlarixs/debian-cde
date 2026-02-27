@@ -259,8 +259,15 @@
     padding: 0 6px 6px 6px;
   }
 
+  /* Terminal Lab & XEmacs Menubar - Make scrollable on mobile */
+  .te-menubar,
+  .emacs-menubar {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
   /* File Manager */
-  #fm {
+  #fm:not(.maximized) {
     width: 300px !important;
     height: 280px !important;
   }
@@ -580,8 +587,15 @@
     width: 340px !important;
   }
 
+  /* Terminal Lab & XEmacs Menubar - Make scrollable on mobile */
+  .te-menubar,
+  .emacs-menubar {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
   /* File Manager */
-  #fm {
+  #fm:not(.maximized) {
     width: 380px !important;
   }
 
@@ -637,15 +651,22 @@
     max-height: 85vh !important;
   }
 
-  #terminal {
+  #terminal:not(.maximized) {
     height: 200px !important;
   }
 
-  #fm {
+  /* Terminal Lab & XEmacs Menubar - Make scrollable on mobile landscape */
+  .te-menubar,
+  .emacs-menubar {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
+  #fm:not(.maximized) {
     height: 200px !important;
   }
 
-  #process-monitor {
+  #process-monitor:not(.maximized) {
     height: 300px !important;
   }
 
