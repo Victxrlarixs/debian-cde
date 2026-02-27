@@ -252,3 +252,21 @@
   border: 4px dashed var(--border-inset-dark) !important;
   pointer-events: none;
 }
+
+/* Window Shading (CDE behavior) */
+.window.shaded,
+.cde-retro-modal.shaded {
+  overflow: hidden !important;
+  transition: height 0.2s ease-out;
+  min-height: 0 !important; /* Override any min-height when shaded */
+}
+
+.window.shaded > *:not(.titlebar),
+.cde-retro-modal.shaded > *:not(.titlebar) {
+  display: none !important;
+}
+
+.window.shaded .titlebar,
+.cde-retro-modal.shaded .titlebar {
+  border-bottom: none;
+}
