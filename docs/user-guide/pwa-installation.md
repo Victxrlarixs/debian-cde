@@ -15,10 +15,14 @@ Debian CDE Desktop can be installed as a Progressive Web App (PWA) on your devic
 
 ### Method 1: Desktop Icon (Recommended)
 
-When you first visit the site in a compatible browser, an "Install App" icon will appear on the desktop:
+When you first visit the site in a compatible browser, an "Install PWA" icon will appear on the desktop:
+
+<p align="center">
+  <img src="/images/Install_PWA.png" alt="Install PWA Icon" width="300"/>
+</p>
 
 1. Wait for the boot sequence to complete
-2. Look for the "Install App" icon on the desktop (floppy disk icon)
+2. Look for the "Install PWA" icon on the desktop (floppy disk icon)
 3. Double-click the icon
 4. Follow the browser's installation prompt
 5. The app will be installed and the icon will disappear
