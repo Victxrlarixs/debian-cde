@@ -8,9 +8,6 @@
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)
 ![PWA](https://img.shields.io/badge/PWA-5A0FC8?style=flat&logo=pwa&logoColor=white)
 ![IndexedDB](https://img.shields.io/badge/IndexedDB-FF6F00?style=flat&logo=firebase&logoColor=white)
-![Debian](https://img.shields.io/badge/Debian-A81D33?style=flat&logo=debian&logoColor=white)
-![CDE](https://img.shields.io/badge/CDE-1990s-orange?style=flat)
-![Unix](https://img.shields.io/badge/Unix-Inspired-black?style=flat)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat)](CONTRIBUTING.md)
 ![GitHub stars](https://img.shields.io/github/stars/Victxrlarixs/debian-cde?style=flat&logo=github)
 
@@ -23,7 +20,7 @@ Remember when "desktop" meant a beige box the size of a microwave? When xterm wa
 Welcome to a pixel recreation of the Common Desktop Environment (CDE)—living right inside your modern browser. This isn't just a website; it's a living desktop where you're not a "visitor," you're a **user** of a classic Unix system.
 
 <p align="center">
-  <img src="public/images/Desk.png" alt="CDE Preview" width="900"/>
+  <img src="public/images/Explore.png" alt="CDE Preview" width="600"/>
 </p>
 
 ## 🚀 [Experience It Now →](https://debian.com.mx)
@@ -56,11 +53,11 @@ Welcome to a pixel recreation of the Common Desktop Environment (CDE)—living r
 Created an amazing CDE theme? Share it with the community! 
 Click the **Share Theme** button (found in the Panel, Desktop, or right-click menu) to generate a shareable URL. 
 Your theme configuration gets encoded into a compact link that others can use to instantly load your color palette and backdrop combo. 
-Post your themes in [GitHub Discussions](/dev/random) with a screenshot and watch the retro magic spread! 
+Post your themes in [GitHub Discussions](https://github.com/Victxrlarixs/debian-cde/discussions) with a screenshot and watch the retro magic spread! 
 
 
 <p align="center">
-  <img src="public/images/Share_Themes.png" alt="CDE Preview" width="900"/>
+  <img src="public/images/Share_Themes.png" alt="CDE Preview" width="600"/>
 </p>
 
 ## 📱 Works Everywhere
