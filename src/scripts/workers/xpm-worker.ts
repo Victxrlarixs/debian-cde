@@ -5,11 +5,13 @@ interface XPMParseMessage {
   type: 'parse';
   xpmText: string;
   themeColors: Record<string, string>;
+  requestId: string;
 }
 
 interface XPMParseResult {
   type: 'result';
   dataUrl: string | null;
+  requestId: string;
   error?: string;
 }
 
@@ -127,12 +129,14 @@ self.onmessage = async (e: MessageEvent<XPMParseMessage>) => {
       const result: XPMParseResult = {
         type: 'result',
         dataUrl,
+        requestId: e.data.requestId,
       };
       self.postMessage(result);
     } catch (error) {
       const result: XPMParseResult = {
         type: 'result',
         dataUrl: null,
+        requestId: e.data.requestId,
         error: error instanceof Error ? error.message : 'Unknown error',
       };
       self.postMessage(result);

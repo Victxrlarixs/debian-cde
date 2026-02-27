@@ -156,6 +156,10 @@ export class StyleManager {
       // Clear XPM cache and re-render backdrop with new palette colors
       this.backdrop.clearCache();
       this.backdrop.apply();
+      // Clear backdrop thumbnail cache
+      if ((window as any).clearBackdropThumbnailCache) {
+        (window as any).clearBackdropThumbnailCache();
+      }
     }
   };
 
@@ -324,6 +328,10 @@ export class StyleManager {
     // Clear XPM cache and re-render backdrop with new colors
     this.backdrop.clearCache();
     this.backdrop.apply();
+    // Clear backdrop thumbnail cache
+    if ((window as any).clearBackdropThumbnailCache) {
+      (window as any).clearBackdropThumbnailCache();
+    }
   }
   public applyFont(): void {
     this.font.applyFont();
@@ -336,6 +344,10 @@ export class StyleManager {
     // Clear XPM cache and re-render backdrop with reset colors
     this.backdrop.clearCache();
     this.backdrop.apply();
+    // Clear backdrop thumbnail cache
+    if ((window as any).clearBackdropThumbnailCache) {
+      (window as any).clearBackdropThumbnailCache();
+    }
   }
   public resetFont(): void {
     this.font.resetFont();
@@ -365,7 +377,7 @@ export class StyleManager {
     const msgBox = document.createElement('div');
     msgBox.style.cssText = `
       position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      background: var(--modal-bg, #c0c0c0); border: 2px solid; padding: 20px; z-index: 10001;
+      background: var(--modal-bg, #c0c0c0); border: 2px solid; padding: 20px; z-index: 100000;
       font-family: var(--font-family-base, monospace); font-size: 12px;
       box-shadow: 4px 4px 0 var(--shadow-color, #000000); min-width: 200px; text-align: center;
     `;

@@ -14,8 +14,8 @@ body {
   line-height: var(--line-height-base);
   background-size: auto;
   background-repeat: repeat;
-  background-position: center;
-  background-attachment: fixed;
+  background-position: top left;
+  background-attachment: scroll;
 
   overflow: hidden !important;
   touch-action: none;
