@@ -2,20 +2,17 @@
 
 import { CONFIG } from '../core/config';
 import { initClock } from '../utilities/clock';
-import { WindowManager } from '../core/windowmanager';
 import type { StyleManager } from '../features/stylemanager';
 
 import { captureFullPageScreenshot } from '../utilities/screenshot';
 import '../ui/external-links';
-import { ProcessMonitor } from '../features/processmonitor';
 import { logger } from '../utilities/logger';
-import { DesktopManager } from '../features/desktop';
-import { CalendarManager } from '../features/calendar';
-import { VFS } from '../core/vfs';
 import { Preloader } from '../utilities/preloader';
 import { AudioManager } from '../core/audiomanager';
 import VersionManager from '../core/version-manager';
 import { initPerformanceOptimizations } from '../core/performance-integration';
+import { registerModules, moduleLoader } from '../shared/module-loader';
+import { performanceOptimizer } from '../shared/performance-optimizer';
 import { initWorkspacePreview } from '../features/workspace-preview';
 
 /**
@@ -281,24 +278,39 @@ async function initDesktop(): Promise<void> {
   if (typeof window.captureFullPageScreenshot === 'function') {
     logger.log('[Init] Screenshot utility available');
   }
-  if (ProcessMonitor) {
+
+  // ProcessMonitor is loaded dynamically via module loader
+  if ((window as any).ProcessMonitor) {
     logger.log('[Init] ProcessMonitor module loaded');
+    const ProcessMonitor = (window as any).ProcessMonitor;
     if (typeof ProcessMonitor.open === 'function' && typeof ProcessMonitor.close === 'function') {
       logger.log('[Init]   - ProcessMonitor API ready (open/close)');
     }
   }
 
   try {
-    // 0. Initialize performance optimizations first
+    // 0. Register all modules for lazy loading
+    registerModules();
+    logger.log('[initDesktop] Modules registered for lazy loading');
+
+    // 1. Initialize performance optimizations and load critical modules
     await initPerformanceOptimizations();
     logger.log('[initDesktop] Performance optimizations initialized');
 
-    // 1. Preload assets as early as possible
+    // 2. Preload assets as early as possible
     Preloader.init();
 
-    // 2. Initialize VFS first as it's the core data layer
-    VFS.init();
-    logger.log('[initDesktop] Virtual Filesystem initialized');
+    // 3. Load VFS module (CRITICAL priority)
+    const vfsModule = await moduleLoader.load('vfs');
+    if (vfsModule && vfsModule.VFS) {
+      vfsModule.VFS.init();
+      logger.log('[initDesktop] Virtual Filesystem initialized');
+    } else {
+      // Fallback: dynamic import if module loader fails
+      const { VFS } = await import('../core/vfs');
+      VFS.init();
+      logger.log('[initDesktop] Virtual Filesystem initialized (fallback)');
+    }
 
     initClock();
     logger.log('[initDesktop] Clock initialized');
@@ -308,28 +320,55 @@ async function initDesktop(): Promise<void> {
       window.AudioManager.playStartupChime();
     }
 
-    // WindowManager owns drag for ALL windows (StyleManager, Terminal, FileManager, Emacs).
-    // initDraggableTitlebars() runs after a 200ms delay to ensure the DOM is fully settled.
-    WindowManager.init();
-    logger.log('[initDesktop] Window manager initialized');
+    // 4. Load WindowManager module (CRITICAL priority)
+    const wmModule = await moduleLoader.load('windowmanager');
+    if (wmModule && wmModule.WindowManager) {
+      wmModule.WindowManager.init();
+      logger.log('[initDesktop] Window manager initialized');
+    } else {
+      // Fallback: dynamic import if module loader fails
+      const { WindowManager } = await import('../core/windowmanager');
+      WindowManager.init();
+      logger.log('[initDesktop] Window manager initialized (fallback)');
+    }
 
     // Initialize workspace preview (miniatures on hover)
     initWorkspacePreview();
     logger.log('[initDesktop] Workspace preview initialized');
 
-    // Desktop Icons initialization
-    DesktopManager.init();
-    logger.log('[initDesktop] Desktop icons initialized');
+    // 5. Load Desktop module (HIGH priority)
+    const desktopModule = await moduleLoader.load('desktop');
+    if (desktopModule && desktopModule.DesktopManager) {
+      desktopModule.DesktopManager.init();
+      logger.log('[initDesktop] Desktop icons initialized');
+    } else {
+      // Fallback: dynamic import
+      const { DesktopManager } = await import('../features/desktop');
+      DesktopManager.init();
+      logger.log('[initDesktop] Desktop icons initialized (fallback)');
+    }
 
-    // Calendar initialization
-    CalendarManager.init();
-    logger.log('[initDesktop] Calendar initialized');
+    // 6. Load Calendar module (MEDIUM priority, but load now for immediate use)
+    const calendarModule = await moduleLoader.load('calendar');
+    if (calendarModule && calendarModule.CalendarManager) {
+      calendarModule.CalendarManager.init();
+      logger.log('[initDesktop] Calendar initialized');
+    } else {
+      // Fallback: dynamic import
+      const { CalendarManager } = await import('../features/calendar');
+      CalendarManager.init();
+      logger.log('[initDesktop] Calendar initialized (fallback)');
+    }
 
-    // StyleManager.init() must run AFTER WindowManager so its windows exist when
-    // initDraggableTitlebars fires. StyleManager no longer registers its own drag handlers.
-    if (window.styleManager) {
+    // 7. Load StyleManager module (HIGH priority)
+    const styleModule = await moduleLoader.load('stylemanager');
+    if (styleModule && window.styleManager) {
       window.styleManager.init();
       logger.log('[initDesktop] Style manager initialized');
+    } else if (window.styleManager) {
+      // Fallback to direct initialization
+      window.styleManager.init();
+      logger.log('[initDesktop] Style manager initialized (fallback)');
     }
 
     // Load shared theme from URL if present (after StyleManager is ready)

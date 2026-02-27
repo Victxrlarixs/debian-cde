@@ -806,7 +806,7 @@ function minimizeWindow(id: string): void {
 
     // Add closing animation
     win.classList.add('window-closing');
-    AudioManager.windowClose();
+    if (window.AudioManager) window.AudioManager.windowMinimize();
 
     // Wait for animation to finish before hiding
     win.addEventListener(
@@ -833,7 +833,7 @@ function shadeWindow(id: string): void {
     if (windowStates[id]?.height) {
       win.style.height = windowStates[id].height!;
     }
-    AudioManager.click();
+    if (window.AudioManager) window.AudioManager.windowShade();
     logger.log(`[WindowManager] Window "${id}" unshaded`);
   } else {
     // Shade: collapse to titlebar only
@@ -843,7 +843,7 @@ function shadeWindow(id: string): void {
     };
     win.classList.add('shaded');
     win.style.height = titlebar.offsetHeight + 'px';
-    AudioManager.click();
+    if (window.AudioManager) window.AudioManager.windowShade();
     logger.log(`[WindowManager] Window "${id}" shaded`);
   }
 }
@@ -854,7 +854,7 @@ function maximizeWindow(id: string): void {
 
   if (win.classList.contains('maximized')) {
     win.classList.remove('maximized');
-    AudioManager.click();
+    if (window.AudioManager) window.AudioManager.windowMaximize();
 
     // Icon update
     const maxBtnImg = win.querySelector('.max-btn img') as HTMLImageElement;
@@ -879,7 +879,7 @@ function maximizeWindow(id: string): void {
       maximized: false,
     };
     win.classList.add('maximized');
-    AudioManager.click();
+    if (window.AudioManager) window.AudioManager.windowMaximize();
 
     // Icon update
     const maxBtnImg = win.querySelector('.max-btn img') as HTMLImageElement;

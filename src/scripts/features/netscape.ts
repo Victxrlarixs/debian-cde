@@ -1,6 +1,8 @@
 // src/scripts/features/netscape.ts
 import { WindowManager } from '../core/windowmanager';
 import { logger } from '../utilities/logger';
+import { openWindow, closeWindow } from '../shared/window-helpers';
+import { HistoryManager } from '../shared/history-manager';
 
 // ─── Page content definitions ────────────────────────────────────────────────
 
@@ -203,14 +205,14 @@ const NS_PAGES: Record<string, { title: string; url: string; content: () => stri
 
 class NetscapeNavigator {
   private id = 'netscape';
-  private history: string[] = ['whats-new'];
-  private historyIndex = 0;
+  private history: HistoryManager<string>;
   private currentPage = 'whats-new';
   private isLoading = false;
   private animationFrame: number | null = null;
   private starInterval: ReturnType<typeof setInterval> | null = null;
 
   constructor() {
+    this.history = new HistoryManager<string>('whats-new');
     this.init();
   }
 
@@ -223,24 +225,17 @@ class NetscapeNavigator {
   // ── Window controls ─────────────────────────────────────────────────────
 
   public open(): void {
-    WindowManager.showWindow(this.id);
-
-    const win = document.getElementById(this.id);
-    if (win) {
-      win.style.flexDirection = 'column';
-      win.style.zIndex = '10000';
-      WindowManager.centerWindow(win);
-    }
+    openWindow({
+      id: this.id,
+      zIndex: 10000,
+      center: true,
+      playSound: false, // Netscape doesn't use standard window sound
+    });
     logger.log('[Netscape] Window opened');
   }
 
   public close(): void {
-    if (window.minimizeWindow) window.minimizeWindow(this.id);
-    else {
-      const win = document.getElementById(this.id);
-      if (win) win.style.display = 'none';
-      if (window.AudioManager) window.AudioManager.windowClose();
-    }
+    closeWindow(this.id);
     logger.log('[Netscape] Window closed');
   }
 
@@ -249,28 +244,24 @@ class NetscapeNavigator {
   public navigate(pageKey: string): void {
     if (pageKey === this.currentPage) return;
 
-    // Truncate forward history if we branched
-    if (this.historyIndex < this.history.length - 1) {
-      this.history = this.history.slice(0, this.historyIndex + 1);
-    }
-
     this.history.push(pageKey);
-    this.historyIndex = this.history.length - 1;
     this.renderPage(pageKey, true);
     this.updateHistoryMenu();
   }
 
   public goBack(): void {
-    if (this.historyIndex <= 0) return;
-    this.historyIndex--;
-    this.renderPage(this.history[this.historyIndex], true);
+    const prev = this.history.back();
+    if (prev) {
+      this.renderPage(prev, true);
+    }
   }
 
   public goForward(): void {
     if ((window as any).AudioManager) (window as any).AudioManager.click();
-    if (this.historyIndex >= this.history.length - 1) return;
-    this.historyIndex++;
-    this.renderPage(this.history[this.historyIndex], true);
+    const next = this.history.forward();
+    if (next) {
+      this.renderPage(next, true);
+    }
   }
 
   public goHome(): void {
@@ -309,8 +300,8 @@ class NetscapeNavigator {
     // Update nav buttons state
     const backBtn = document.getElementById('ns-btn-back') as HTMLButtonElement | null;
     const fwdBtn = document.getElementById('ns-btn-forward') as HTMLButtonElement | null;
-    if (backBtn) backBtn.disabled = this.historyIndex <= 0;
-    if (fwdBtn) fwdBtn.disabled = this.historyIndex >= this.history.length - 1;
+    if (backBtn) backBtn.disabled = !this.history.canGoBack();
+    if (fwdBtn) fwdBtn.disabled = !this.history.canGoForward();
 
     if (animate) {
       this.startLoading(page.content);
@@ -563,24 +554,28 @@ class NetscapeNavigator {
     sep.className = 'ns-separator';
     menu.appendChild(sep);
 
-    [...this.history]
-      .reverse()
-      .slice(0, 10)
-      .forEach((key, idx) => {
-        const page = NS_PAGES[key];
-        if (!page) return;
-        const item = document.createElement('div');
-        item.className = 'ns-item ns-history-item';
-        if (this.history.length - 1 - idx === this.historyIndex) {
-          item.style.fontWeight = 'bold';
+    const recentHistory = this.history.getRecent(10);
+    const currentIndex = this.history.getCurrentIndex();
+    const totalLength = this.history.length();
+
+    recentHistory.forEach((key, idx) => {
+      const page = NS_PAGES[key];
+      if (!page) return;
+      const item = document.createElement('div');
+      item.className = 'ns-item ns-history-item';
+      const actualIndex = totalLength - 1 - idx;
+      if (actualIndex === currentIndex) {
+        item.style.fontWeight = 'bold';
+      }
+      item.textContent = page.title.replace(' - Netscape', '');
+      item.onclick = () => {
+        const histItem = this.history.jumpTo(actualIndex);
+        if (histItem) {
+          this.renderPage(histItem, true);
         }
-        item.textContent = page.title.replace(' - Netscape', '');
-        item.onclick = () => {
-          this.historyIndex = this.history.length - 1 - idx;
-          this.renderPage(this.history[this.historyIndex], true);
-        };
-        menu.appendChild(item);
-      });
+      };
+      menu.appendChild(item);
+    });
   }
 }
 

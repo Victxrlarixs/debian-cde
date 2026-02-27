@@ -2,6 +2,8 @@
 import { WindowManager } from '../core/windowmanager';
 import { logger } from '../utilities/logger';
 import lynxPagesData from '../../data/lynx-pages.json';
+import { openWindow, closeWindow } from '../shared/window-helpers';
+import { HistoryManager } from '../shared/history-manager';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -29,13 +31,13 @@ class LynxBrowser {
   private currentUrl = 'lynx://start';
   private currentPage: LynxPage | null = null;
   private selectedLink = 0;
-  private history: string[] = ['lynx://start'];
-  private historyIndex = 0;
+  private history: HistoryManager<string>;
   private bookmarks: string[] = ['lynx://start', 'debian.com.mx', 'gnu.org', 'debian.org'];
   private inputMode: 'navigation' | 'prompt' = 'navigation';
   private promptCallback: ((value: string) => void) | null = null;
 
   constructor() {
+    this.history = new HistoryManager<string>('lynx://start');
     this.init();
   }
 
@@ -50,34 +52,24 @@ class LynxBrowser {
   // ── Window controls ──────────────────────────────────────────────────────
 
   public open(): void {
-    WindowManager.showWindow(this.id);
-
-    const win = document.getElementById(this.id);
-    if (win) {
-      win.style.flexDirection = 'column';
-
-      // Center window on open with proper timing
-      requestAnimationFrame(() => {
-        WindowManager.centerWindow(win);
-
-        // Ensure focus after centering
+    openWindow({
+      id: this.id,
+      center: true,
+      playSound: true,
+      focus: true,
+      onOpen: () => {
+        // Ensure focus after centering with delay
         setTimeout(() => {
           this.focus();
         }, 50);
-      });
-    }
+      },
+    });
 
-    if (window.AudioManager) window.AudioManager.windowOpen();
     logger.log('[Lynx] Window opened');
   }
 
   public close(): void {
-    if (window.minimizeWindow) window.minimizeWindow(this.id);
-    else {
-      const win = document.getElementById(this.id);
-      if (win) win.style.display = 'none';
-      if (window.AudioManager) window.AudioManager.windowClose();
-    }
+    closeWindow(this.id);
     logger.log('[Lynx] Window closed');
   }
 
@@ -107,9 +99,10 @@ class LynxBrowser {
   }
 
   public goBack(): void {
-    if (this.historyIndex <= 0) return;
-    this.historyIndex--;
-    this.navigate(this.history[this.historyIndex], false);
+    const prev = this.history.back();
+    if (prev) {
+      this.navigate(prev, false);
+    }
   }
 
   public followLink(num: number): void {
@@ -523,8 +516,11 @@ class LynxBrowser {
 
   public viewHistory(): void {
     let content = '\n  HISTORY LIST\n  ============\n\n';
-    this.history.forEach((url, i) => {
-      const marker = i === this.historyIndex ? ' * ' : '   ';
+    const allHistory = this.history.getAll();
+    const currentIndex = this.history.getCurrentIndex();
+
+    allHistory.forEach((url, i) => {
+      const marker = i === currentIndex ? ' * ' : '   ';
       content += `${marker}${i + 1}. ${url}\n`;
     });
     content += '\n  * = current page\n  Press any key to return';

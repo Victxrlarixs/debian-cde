@@ -1,8 +1,9 @@
 // src/scripts/features/style/beep.ts
 
 import { logger } from '../../utilities/logger';
-import { settingsManager } from '../../core/settingsmanager';
 import { CONFIG } from '../../core/config';
+import { StyleModuleBase } from '../../shared/style-module-base';
+import { settingsManager } from '../../core/settingsmanager';
 
 /**
  * System beep and sound settings.
@@ -16,20 +17,29 @@ export interface BeepSettings {
 /**
  * Module to manage system beep settings and volume.
  */
-export class BeepModule {
-  public settings: BeepSettings = {
-    volume: CONFIG.AUDIO.BEEP_GAIN,
-    frequency: CONFIG.AUDIO.BEEP_FREQUENCY,
-    duration: CONFIG.AUDIO.BEEP_DURATION,
-  };
+export class BeepModule extends StyleModuleBase<BeepSettings> {
+  constructor() {
+    super({
+      name: 'BeepModule',
+      settingsKey: 'beep',
+      panelId: 'styleManagerBeep',
+      defaultSettings: {
+        volume: CONFIG.AUDIO.BEEP_GAIN,
+        frequency: CONFIG.AUDIO.BEEP_FREQUENCY,
+        duration: CONFIG.AUDIO.BEEP_DURATION,
+      },
+    });
+  }
 
   /**
    * Initializes the beep module and applies saved settings.
    * Always ensures volume starts at 90% (0.9) if not previously configured.
    */
   public load(): void {
-    const saved = settingsManager.getSection('beep');
-    if (Object.keys(saved).length > 0) {
+    const saved = this.config.settingsKey
+      ? settingsManager.getSection(this.config.settingsKey)
+      : {};
+    if (saved && Object.keys(saved).length > 0) {
       Object.assign(this.settings, saved);
     } else {
       // First time load: ensure volume is set to 90%
@@ -37,7 +47,7 @@ export class BeepModule {
       this.save();
     }
     this.apply();
-    logger.log('[BeepModule] Loaded:', this.settings);
+    logger.log(`[${this.config.name}] Loaded:`, this.settings);
   }
 
   /**
@@ -51,47 +61,12 @@ export class BeepModule {
   }
 
   /**
-   * Updates a specific beep setting and persists it.
-   */
-  public update(key: keyof BeepSettings, value: number): void {
-    if (key in this.settings) {
-      this.settings[key] = value;
-      this.apply();
-      this.save();
-      logger.log(`[BeepModule] "${key}" updated to ${value}`);
-    }
-  }
-
-  /**
-   * Persists the current beep settings.
-   */
-  private save(): void {
-    settingsManager.setSection('beep', this.settings);
-  }
-
-  /**
    * Syncs the UI in StyleManagerBeep.astro.
    */
-  public syncUI(): void {
-    const panel = document.getElementById('styleManagerBeep');
-    if (!panel) return;
-
-    const volumeSlider = panel.querySelector('input[data-key="volume"]') as HTMLInputElement;
-    if (volumeSlider) {
-      volumeSlider.value = String(this.settings.volume * 100);
-    }
-
-    const freqSlider = panel.querySelector('input[data-key="frequency"]') as HTMLInputElement;
-    if (freqSlider) {
-      freqSlider.value = String(this.settings.frequency);
-    }
-
-    const durSlider = panel.querySelector('input[data-key="duration"]') as HTMLInputElement;
-    if (durSlider) {
-      durSlider.value = String(this.settings.duration * 1000);
-    }
-
-    logger.log('[BeepModule] UI synchronized');
+  protected syncUIImpl(panel: HTMLElement): void {
+    this.syncSlider(panel, 'volume', this.settings.volume * 100);
+    this.syncSlider(panel, 'frequency', this.settings.frequency);
+    this.syncSlider(panel, 'duration', this.settings.duration * 1000);
   }
 
   /**

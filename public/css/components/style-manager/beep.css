@@ -1,4 +1,3 @@
-/* Motif Audio Mixer 8 - Compact Version */
 .style-manager-beep {
   width: 460px;
   display: none;
@@ -64,10 +63,13 @@
 }
 
 .vertical-slider {
-  writing-mode: bt-lr; /* IE */
-  -webkit-appearance: slider-vertical; /* WebKit */
+  /* Modern standard for vertical sliders */
+  writing-mode: vertical-lr;
+  direction: rtl;
   width: 18px;
   height: 110px;
+  -webkit-appearance: none;
+  appearance: none;
   background: var(--button-bg);
   border: 2px solid;
   border-top-color: var(--border-dark);
@@ -106,6 +108,16 @@
   border-bottom-color: var(--border-dark);
   cursor: pointer;
   border-radius: 0;
+}
+
+.vertical-slider::-webkit-slider-runnable-track {
+  background: transparent;
+  border: none;
+}
+
+.vertical-slider::-moz-range-track {
+  background: transparent;
+  border: none;
 }
 
 .volume-display {
