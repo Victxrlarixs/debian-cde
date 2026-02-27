@@ -8,7 +8,9 @@
 ![PWA](https://img.shields.io/badge/PWA-5A0FC8?style=flat&logo=pwa&logoColor=white)
 ![IndexedDB](https://img.shields.io/badge/IndexedDB-FF6F00?style=flat&logo=firebase&logoColor=white)
 
-> **Ever wonder what it felt like to sit in front of a $20,000 Unix workstation in 1996?**
+> **You've just logged into the coolest Unix terminal on the internet. ☀️**
+>
+Remember when "desktop" meant a beige box the size of a microwave? When xterm was cutting-edge? When you had to chmod your way through life? Welcome home, time traveler.
 
 > A modern Progressive Web App that brings 1990s Unix to any device. Desktop, tablet, phone—the experience adapts. Touch gestures on mobile. Keyboard shortcuts on desktop. Always authentic.
 
