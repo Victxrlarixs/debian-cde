@@ -43,6 +43,7 @@ window.debianBoot = new DebianRealBoot(isUpdateMode);
 ```
 
 Both modes use the same:
+
 - Boot screen component
 - CSS classes and animations
 - Progress bar
@@ -59,9 +60,7 @@ Both modes use the same:
       "name": "kernel",
       "min": 5,
       "max": 8,
-      "messages": [
-        { "text": "Linux version 2.0.36...", "type": "kernel" }
-      ]
+      "messages": [{ "text": "Linux version 2.0.36...", "type": "kernel" }]
     }
   ]
 }
@@ -76,25 +75,19 @@ Both modes use the same:
       "name": "preparation",
       "min": 3,
       "max": 5,
-      "messages": [
-        { "text": "Reading package lists... Done", "type": "package" }
-      ]
+      "messages": [{ "text": "Reading package lists... Done", "type": "package" }]
     },
     {
       "name": "packages",
       "min": 8,
       "max": 12,
-      "messages": [
-        { "text": "Get:1 http://archive.debian.org/debian...", "type": "download" }
-      ]
+      "messages": [{ "text": "Get:1 http://archive.debian.org/debian...", "type": "download" }]
     },
     {
       "name": "installation",
       "min": 6,
       "max": 9,
-      "messages": [
-        { "text": "Unpacking libxpm4...", "type": "install" }
-      ]
+      "messages": [{ "text": "Unpacking libxpm4...", "type": "install" }]
     }
   ]
 }
@@ -103,6 +96,7 @@ Both modes use the same:
 ## Message Types and Colors
 
 ### Boot Mode
+
 - `kernel` - Gray (#cccccc) - Kernel messages
 - `cpu` - Light blue (#88aaff) - CPU detection
 - `memory` - Orange (#ffaa88) - Memory info
@@ -113,6 +107,7 @@ Both modes use the same:
 - `desktop` - Bright cyan (#00ffaa) - Desktop ready
 
 ### Update Mode
+
 - `package` - Light blue (#88aaff) - Package operations
 - `download` - Orange (#ffaa88) - Downloads
 - `install` - Green (#00ff00) - Installation
@@ -170,8 +165,8 @@ Edit `src/scripts/core/version-manager.ts`:
 
 ```typescript
 const preserveKeys: string[] = [
-  'cde-system-settings',    // User preferences
-  'cde_high_contrast',      // Accessibility
+  'cde-system-settings', // User preferences
+  'cde_high_contrast', // Accessibility
   // Add more keys to preserve
 ];
 ```

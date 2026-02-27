@@ -34,6 +34,10 @@
             "type": "file",
             "content": "[Dinamic content: docs/user-guide/netscape.md]"
           },
+          "Lynx.md": {
+            "type": "file",
+            "content": "[Dinamic content: docs/user-guide/lynx.md]"
+          },
           "Style-Manager.md": {
             "type": "file",
             "content": "[Dinamic content: docs/user-guide/style-manager.md]"

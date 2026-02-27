@@ -80,20 +80,22 @@ Core functionality works without JavaScript, enhanced features require it.
 Manages file and directory operations in memory.
 
 **Key Features:**
+
 - O(1) path resolution using Map
 - Unix-like path handling
 - CRUD operations
 - Event notifications
 
 **Implementation:**
+
 ```typescript
 class VirtualFileSystem {
   private fsMap: Map<string, FSNode>;
-  
+
   resolvePath(path: string): FSNode | null {
     return this.fsMap.get(this.normalizePath(path));
   }
-  
+
   createFile(path: string, content: string): boolean {
     const node = { type: 'file', content, ...metadata };
     this.fsMap.set(path, node);
@@ -110,6 +112,7 @@ See [VFS Documentation](vfs.md) for details.
 Handles window lifecycle, positioning, and z-index management.
 
 **Responsibilities:**
+
 - Window creation/destruction
 - Position and size management
 - Z-index ordering
@@ -117,22 +120,23 @@ Handles window lifecycle, positioning, and z-index management.
 - Workspace assignment
 
 **Implementation:**
+
 ```typescript
 class WindowManager {
   private windows: Map<string, Window>;
   private zIndexCounter: number = 1000;
-  
+
   createWindow(config: WindowConfig): Window {
     const window = new Window({
       ...config,
-      zIndex: this.zIndexCounter++
+      zIndex: this.zIndexCounter++,
     });
-    
+
     this.windows.set(window.id, window);
     this.emit('window:created', window);
     return window;
   }
-  
+
   bringToFront(id: string): void {
     const window = this.windows.get(id);
     window.zIndex = this.zIndexCounter++;
@@ -148,11 +152,13 @@ See [Window Manager Documentation](window-manager.md) for details.
 Manages user preferences and configuration.
 
 **Storage Hierarchy:**
+
 1. Memory cache (runtime)
 2. IndexedDB (persistent)
 3. localStorage (fallback)
 
 **Implementation:**
+
 ```typescript
 class SettingsManager {
   async get(key: string): Promise<any> {
@@ -160,13 +166,13 @@ class SettingsManager {
     if (this.cache.has(key)) {
       return this.cache.get(key);
     }
-    
+
     // Load from storage
     const value = await storageAdapter.get(key);
     this.cache.set(key, value);
     return value;
   }
-  
+
   async set(key: string, value: any): Promise<void> {
     this.cache.set(key, value);
     await storageAdapter.set(key, value);
@@ -180,30 +186,32 @@ class SettingsManager {
 Central pub/sub system for component communication.
 
 **Features:**
+
 - Type-safe events
 - Wildcard subscriptions
 - Once listeners
 - Event namespacing
 
 **Implementation:**
+
 ```typescript
 class EventBus {
   private listeners: Map<string, Set<Function>>;
-  
+
   on(event: string, callback: Function): void {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, new Set());
     }
     this.listeners.get(event).add(callback);
   }
-  
+
   emit(event: string, data?: any): void {
     const callbacks = this.listeners.get(event);
     if (callbacks) {
-      callbacks.forEach(cb => cb(data));
+      callbacks.forEach((cb) => cb(data));
     }
   }
-  
+
   off(event: string, callback: Function): void {
     this.listeners.get(event)?.delete(callback);
   }
@@ -217,12 +225,14 @@ class EventBus {
 Text editor with Emacs keybindings.
 
 **Components:**
+
 - Editor core (CodeMirror-like)
 - Minibuffer
 - Keybinding handler
 - File operations
 
 **Lazy Loading:**
+
 ```typescript
 lazyLoader.register('emacs', () => import('./features/emacs'));
 ```
@@ -232,6 +242,7 @@ lazyLoader.register('emacs', () => import('./features/emacs'));
 Interactive terminal with lessons.
 
 **Components:**
+
 - Terminal emulator
 - Lesson system
 - Command parser
@@ -242,6 +253,7 @@ Interactive terminal with lessons.
 File browsing and management.
 
 **Components:**
+
 - Tree view
 - List view
 - Icon view
@@ -253,6 +265,7 @@ File browsing and management.
 Theme customization interface.
 
 **Components:**
+
 - Palette selector
 - Backdrop browser
 - Font settings
@@ -268,16 +281,16 @@ Dynamic import system with caching.
 class LazyLoader {
   private modules: Map<string, () => Promise<any>>;
   private cache: Map<string, any>;
-  
+
   register(name: string, loader: () => Promise<any>): void {
     this.modules.set(name, loader);
   }
-  
+
   async load(name: string): Promise<any> {
     if (this.cache.has(name)) {
       return this.cache.get(name);
     }
-    
+
     const loader = this.modules.get(name);
     const module = await loader();
     this.cache.set(name, module);
@@ -311,7 +324,7 @@ class VirtualScroller {
   private renderVisibleItems(): void {
     const start = Math.floor(this.scrollTop / this.itemHeight);
     const end = start + this.visibleCount + this.overscan;
-    
+
     // Only render visible items
     for (let i = start; i < end; i++) {
       this.renderItem(i);
@@ -421,6 +434,7 @@ File Manager updates
 ### Lazy Loading
 
 Features load on-demand:
+
 - Initial: Core systems only
 - On interaction: Feature islands
 - On visibility: Background features
@@ -428,6 +442,7 @@ Features load on-demand:
 ### Virtual Scrolling
 
 Render only visible items:
+
 - 10,000 files: Only ~20 DOM nodes
 - Constant memory usage
 - 60fps scrolling
@@ -435,12 +450,14 @@ Render only visible items:
 ### Web Workers
 
 Offload heavy operations:
+
 - XPM parsing: ~100ms → non-blocking
 - VFS operations: ~50ms → non-blocking
 
 ### Caching
 
 Multiple cache layers:
+
 - Memory: Instant access
 - IndexedDB: Fast persistent
 - localStorage: Fallback
@@ -501,6 +518,7 @@ dist/
 ### Static Hosting
 
 Built as static site, deployable to:
+
 - GitHub Pages
 - Netlify
 - Vercel
@@ -509,9 +527,11 @@ Built as static site, deployable to:
 ### PWA
 
 Service worker enables:
+
 - Offline functionality
 - Install as app
 - Fast loading
 
 ## Further Reading
+
 - [Storage & Cache](storage.md)

@@ -1,0 +1,48 @@
+---
+// src/components/features/Lynx.astro
+import WindowControls from '../common/WindowControls.astro';
+import WindowMinimize from '../common/WindowMinimize.astro';
+---
+
+<div class="window" id="lynx">
+  <div class="titlebar" onmousedown="drag(event, 'lynx')">
+    <WindowMinimize windowId="lynx" />
+    <span class="titlebar-text" id="lynx-title">Lynx Browser — victxrlarixs@debian</span>
+    <WindowControls windowId="lynx" closeFunction="window.Lynx.close" />
+  </div>
+
+  <!-- Content area (text-based) -->
+  <div class="lynx-content" id="lynxContent" tabindex="0"></div>
+
+  <!-- Input line (hidden by default, shown when needed) -->
+  <div class="lynx-input-line" id="lynxInputLine" style="display: none;">
+    <span id="lynxInputPrompt" class="lynx-input-prompt"></span>
+    <input
+      type="text"
+      id="lynxInput"
+      class="lynx-input"
+      autocomplete="off"
+      autocorrect="off"
+      autocapitalize="off"
+      spellcheck="false"
+    />
+  </div>
+
+  <!-- Status bar -->
+  <div class="lynx-statusbar">
+    <div id="lynxStatus" class="lynx-status-text"></div>
+  </div>
+
+  <!-- Command bar -->
+  <div class="lynx-commandbar">
+    <span class="lynx-commands"
+      >Arrow keys: Up and Down to move. Right to follow a link; Left to go back.</span
+    >
+  </div>
+
+  <div class="lynx-commandbar">
+    <span class="lynx-commands"
+      >H)elp O)ptions P)rint G)o M)ain screen Q)uit /=search [delete]=history list</span
+    >
+  </div>
+</div>

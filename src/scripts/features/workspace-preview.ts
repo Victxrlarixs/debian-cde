@@ -42,7 +42,7 @@ export class WorkspacePreview {
 
   private attachPagerListeners(): void {
     const pagerItems = document.querySelectorAll('.pager-workspace');
-    
+
     pagerItems.forEach((item) => {
       const workspaceId = (item as HTMLElement).dataset.workspace;
       if (!workspaceId) return;
@@ -78,10 +78,10 @@ export class WorkspacePreview {
     const rect = pagerItem.getBoundingClientRect();
     const previewWidth = 200; // Compact width
     const previewHeight = 150; // Compact height
-    
+
     // Center horizontally relative to pager item
-    const left = rect.left + (rect.width / 2) - (previewWidth / 2);
-    
+    const left = rect.left + rect.width / 2 - previewWidth / 2;
+
     this.previewContainer.style.left = `${left}px`;
     this.previewContainer.style.bottom = `${window.innerHeight - rect.top + 10}px`;
     this.previewContainer.style.width = `${previewWidth}px`;
@@ -90,12 +90,14 @@ export class WorkspacePreview {
     this.previewContainer.innerHTML = preview;
     this.previewContainer.classList.add('visible');
 
-    logger.log(`[WorkspacePreview] Showing preview for workspace ${workspaceId} with ${windows.length} windows`);
+    logger.log(
+      `[WorkspacePreview] Showing preview for workspace ${workspaceId} with ${windows.length} windows`
+    );
   }
 
   private hidePreview(): void {
     if (!this.previewContainer) return;
-    
+
     this.previewContainer.classList.remove('visible');
     this.currentHoveredWorkspace = null;
   }
@@ -113,7 +115,7 @@ export class WorkspacePreview {
       if (ws === workspaceId && wasOpened === 'true') {
         const rect = element.getBoundingClientRect();
         const computedStyle = window.getComputedStyle(element);
-        
+
         windows.push({
           id: element.id,
           title: this.getWindowTitle(element),
@@ -134,24 +136,24 @@ export class WorkspacePreview {
   private getWindowIcon(windowId: string): string {
     // Map window IDs to their icons (using only existing icons)
     const iconMap: Record<string, string> = {
-      'emacs': '/icons/xemacs.png',
+      emacs: '/icons/xemacs.png',
       'terminal-lab': '/icons/konsole.png',
-      'fm': '/icons/filemanager.png',
-      'netscape': '/icons/netscape_classic.png',
-      'styleManagerMain': '/icons/org.xfce.settings.manager.png',
-      'styleManagerColor': '/icons/org.xfce.settings.appearance.png',
-      'styleManagerFont': '/icons/font-x-generic.png',
-      'styleManagerBackdrop': '/icons/desktop.png',
-      'styleManagerMouse': '/icons/org.xfce.settings.mouse.png',
-      'styleManagerKeyboard': '/icons/org.xfce.settings.keyboard.png',
-      'styleManagerWindow': '/icons/org.xfce.xfwm4.png',
-      'styleManagerScreen': '/icons/display.png',
-      'styleManagerBeep': '/icons/audio-volume-low.png',
-      'styleManagerStartup': '/icons/org.xfce.session.png',
+      fm: '/icons/filemanager.png',
+      netscape: '/icons/netscape_classic.png',
+      styleManagerMain: '/icons/org.xfce.settings.manager.png',
+      styleManagerColor: '/icons/org.xfce.settings.appearance.png',
+      styleManagerFont: '/icons/font-x-generic.png',
+      styleManagerBackdrop: '/icons/desktop.png',
+      styleManagerMouse: '/icons/org.xfce.settings.mouse.png',
+      styleManagerKeyboard: '/icons/org.xfce.settings.keyboard.png',
+      styleManagerWindow: '/icons/org.xfce.xfwm4.png',
+      styleManagerScreen: '/icons/display.png',
+      styleManagerBeep: '/icons/audio-volume-low.png',
+      styleManagerStartup: '/icons/org.xfce.session.png',
       'process-monitor': '/icons/org.xfce.taskmanager.png',
       'calendar-window': '/icons/calendar.png',
-      'appManager': '/icons/applications-other.png',
-      'timeManager': '/icons/gtkclocksetup.png',
+      appManager: '/icons/applications-other.png',
+      timeManager: '/icons/gtkclocksetup.png',
     };
 
     return iconMap[windowId] || '/icons/gtk-file.png';
@@ -210,7 +212,7 @@ export class WorkspacePreview {
       const pagerItem = document.querySelector(
         `.pager-workspace[data-workspace="${this.currentHoveredWorkspace}"]`
       ) as HTMLElement;
-      
+
       if (pagerItem) {
         this.showPreview(this.currentHoveredWorkspace, pagerItem);
       }

@@ -5,6 +5,7 @@ Terminal Lab is an interactive learning environment for Unix commands. Complete 
 ## What is Terminal Lab?
 
 Terminal Lab teaches you Unix/Linux commands through hands-on practice. Each lesson:
+
 - Explains a command
 - Shows examples
 - Lets you practice
@@ -65,6 +66,7 @@ Each lesson follows this pattern:
 ### Basics (Lessons 1-10)
 
 Learn fundamental commands:
+
 - `pwd` - Print working directory
 - `ls` - List files
 - `cd` - Change directory
@@ -77,6 +79,7 @@ Learn fundamental commands:
 ### File Operations (Lessons 11-20)
 
 Work with files:
+
 - `cp` - Copy files
 - `mv` - Move/rename files
 - `rm` - Remove files
@@ -90,6 +93,7 @@ Work with files:
 ### Text Processing (Lessons 21-30)
 
 Manipulate text:
+
 - `sort` - Sort lines
 - `uniq` - Remove duplicates
 - `cut` - Extract columns
@@ -101,6 +105,7 @@ Manipulate text:
 ### Advanced (Lessons 31-41)
 
 Master advanced topics:
+
 - Pipes and redirection
 - File permissions
 - Process management
@@ -185,24 +190,24 @@ $ wc -l file.txt
 
 ### Terminal Control
 
-| Shortcut | Action |
-|----------|--------|
+| Shortcut | Action                 |
+| -------- | ---------------------- |
 | `Ctrl+C` | Cancel current command |
-| `Ctrl+L` | Clear screen |
-| `Ctrl+D` | Exit terminal |
-| `Tab` | Auto-complete |
-| `↑` | Previous command |
-| `↓` | Next command |
+| `Ctrl+L` | Clear screen           |
+| `Ctrl+D` | Exit terminal          |
+| `Tab`    | Auto-complete          |
+| `↑`      | Previous command       |
+| `↓`      | Next command           |
 
 ### Editing
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl+A` | Move to line start |
-| `Ctrl+E` | Move to line end |
-| `Ctrl+U` | Clear line |
+| Shortcut | Action                |
+| -------- | --------------------- |
+| `Ctrl+A` | Move to line start    |
+| `Ctrl+E` | Move to line end      |
+| `Ctrl+U` | Clear line            |
 | `Ctrl+K` | Delete to end of line |
-| `Ctrl+W` | Delete previous word |
+| `Ctrl+W` | Delete previous word  |
 
 ## Tips for Success
 
@@ -279,6 +284,7 @@ $ cd /path/to/directory
 ### Viewing Progress
 
 Your progress is saved automatically. You can:
+
 - See completed lessons
 - Resume where you left off
 - Repeat any lesson
@@ -288,12 +294,14 @@ Your progress is saved automatically. You can:
 ### Command History
 
 Use arrow keys to navigate through previous commands:
+
 - `↑` - Previous command
 - `↓` - Next command
 
 ### Auto-completion
 
 Press `Tab` to auto-complete:
+
 - File names
 - Directory names
 - Commands

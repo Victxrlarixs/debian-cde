@@ -5,6 +5,7 @@ Technical documentation for the storage and caching system in CDE Time Capsule.
 ## Overview
 
 CDE uses a layered storage approach:
+
 1. **IndexedDB** - Primary storage for structured data
 2. **localStorage** - Fallback for browsers without IndexedDB
 3. **Memory Cache** - Runtime caching for performance
@@ -34,16 +35,17 @@ const DB_VERSION = 1;
 
 // Object Stores
 const STORES = {
-  SETTINGS: 'settings',    // User preferences
-  SESSION: 'session',      // Window positions, state
-  FILESYSTEM: 'filesystem',// VFS data (future)
-  CACHE: 'cache'          // Temporary data
+  SETTINGS: 'settings', // User preferences
+  SESSION: 'session', // Window positions, state
+  FILESYSTEM: 'filesystem', // VFS data (future)
+  CACHE: 'cache', // Temporary data
 };
 ```
 
 ### Store Details
 
 #### 1. Settings Store
+
 ```typescript
 // Key-value pairs for user settings
 {
@@ -63,6 +65,7 @@ const STORES = {
 ```
 
 #### 2. Session Store
+
 ```typescript
 // Window and workspace state
 {
@@ -82,6 +85,7 @@ const STORES = {
 ```
 
 #### 3. Cache Store
+
 ```typescript
 // Temporary cached data with TTL
 {
@@ -120,7 +124,7 @@ await storageAdapter.clear();
 ```typescript
 class StorageAdapter {
   private useIndexedDB: boolean;
-  
+
   async init() {
     // Try IndexedDB first
     try {
@@ -131,7 +135,7 @@ class StorageAdapter {
       this.useIndexedDB = false;
     }
   }
-  
+
   async set(key: string, value: any) {
     if (this.useIndexedDB) {
       return indexedDBManager.set(STORES.SETTINGS, key, value);
@@ -139,7 +143,7 @@ class StorageAdapter {
       localStorage.setItem(key, JSON.stringify(value));
     }
   }
-  
+
   async get(key: string) {
     if (this.useIndexedDB) {
       return indexedDBManager.get(STORES.SETTINGS, key);
@@ -160,20 +164,20 @@ Low-level IndexedDB operations.
 ```typescript
 class IndexedDBManager {
   private db: IDBDatabase | null = null;
-  
+
   async init() {
     return new Promise((resolve, reject) => {
       const request = indexedDB.open(DB_NAME, DB_VERSION);
-      
+
       request.onerror = () => reject(request.error);
       request.onsuccess = () => {
         this.db = request.result;
         resolve(this.db);
       };
-      
+
       request.onupgradeneeded = (event) => {
         const db = (event.target as IDBOpenDBRequest).result;
-        
+
         // Create object stores
         if (!db.objectStoreNames.contains(STORES.SETTINGS)) {
           db.createObjectStore(STORES.SETTINGS);
@@ -233,41 +237,41 @@ async clear(storeName: string) {
 ```typescript
 class CacheManager {
   private readonly DEFAULT_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
-  
+
   async set(key: string, data: any, ttl = this.DEFAULT_TTL) {
     const cacheEntry = {
       data,
       timestamp: Date.now(),
-      ttl
+      ttl,
     };
-    
+
     await indexedDBManager.set(STORES.CACHE, key, cacheEntry);
   }
-  
+
   async get(key: string) {
     const entry = await indexedDBManager.get(STORES.CACHE, key);
-    
+
     if (!entry) return null;
-    
+
     // Check if expired
     const age = Date.now() - entry.timestamp;
     if (age > entry.ttl) {
       await this.remove(key);
       return null;
     }
-    
+
     return entry.data;
   }
-  
+
   async cleanup() {
     // Remove expired entries
     const tx = this.db.transaction(STORES.CACHE, 'readwrite');
     const store = tx.objectStore(STORES.CACHE);
     const index = store.index('timestamp');
-    
+
     const cutoff = Date.now() - this.DEFAULT_TTL;
     const range = IDBKeyRange.upperBound(cutoff);
-    
+
     const cursor = await index.openCursor(range);
     while (cursor) {
       await cursor.delete();
@@ -295,7 +299,7 @@ async migrateFromLocalStorage() {
     'cde-accessibility',
     'cde-session'
   ];
-  
+
   for (const key of keysToMigrate) {
     const value = localStorage.getItem(key);
     if (value) {
@@ -335,10 +339,10 @@ async getStorageEstimate() {
 async handleQuotaExceeded() {
   // 1. Clean up cache
   await cacheManager.cleanup();
-  
+
   // 2. Remove old session data
   await this.cleanOldSessions();
-  
+
   // 3. Notify user
   showToast('Storage space low. Old data cleaned up.', 'warning');
 }
@@ -355,7 +359,7 @@ const DB_VERSION = 2; // Changed from 1
 request.onupgradeneeded = (event) => {
   const db = (event.target as IDBOpenDBRequest).result;
   const oldVersion = event.oldVersion;
-  
+
   // Migration from v1 to v2
   if (oldVersion < 2) {
     // Add new index
@@ -429,6 +433,7 @@ console.log(result); // { foo: 'bar' }
 ### Storage Inspector
 
 Use browser DevTools:
+
 - Chrome: Application → Storage → IndexedDB
 - Firefox: Storage → IndexedDB
 - Safari: Storage → IndexedDB

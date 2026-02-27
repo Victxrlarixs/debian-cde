@@ -42,7 +42,10 @@ class StorageAdapter {
         const value = await indexedDBManager.get<string>(STORES.SETTINGS, key);
         return value;
       } catch (error) {
-        logger.warn(`[StorageAdapter] IndexedDB get failed for ${key}, trying localStorage:`, error);
+        logger.warn(
+          `[StorageAdapter] IndexedDB get failed for ${key}, trying localStorage:`,
+          error
+        );
         return localStorage.getItem(key);
       }
     }
@@ -81,7 +84,10 @@ class StorageAdapter {
         await indexedDBManager.delete(STORES.SETTINGS, key);
         localStorage.removeItem(key);
       } catch (error) {
-        logger.warn(`[StorageAdapter] IndexedDB delete failed for ${key}, using localStorage:`, error);
+        logger.warn(
+          `[StorageAdapter] IndexedDB delete failed for ${key}, using localStorage:`,
+          error
+        );
         localStorage.removeItem(key);
       }
     } else {
@@ -138,7 +144,7 @@ class StorageAdapter {
    */
   setItemSync(key: string, value: string): void {
     localStorage.setItem(key, value);
-    
+
     // Async update to IndexedDB in background
     if (this.useIndexedDB) {
       this.setItem(key, value).catch((error) => {
@@ -152,7 +158,7 @@ class StorageAdapter {
    */
   removeItemSync(key: string): void {
     localStorage.removeItem(key);
-    
+
     // Async delete from IndexedDB in background
     if (this.useIndexedDB) {
       this.removeItem(key).catch((error) => {
@@ -179,5 +185,7 @@ export const storage = {
   removeItem: (key: string) => storageAdapter.removeItemSync(key),
   clear: () => localStorage.clear(),
   key: (index: number) => localStorage.key(index),
-  get length() { return localStorage.length; },
+  get length() {
+    return localStorage.length;
+  },
 };

@@ -15,36 +15,36 @@ Welcome to a pixel-perfect recreation of the Common Desktop Environment (CDE)—
 
 ## 🚀 [Experience It Now →](https://debian.com.mx)
 
-No installation. No setup. Just pure 1990s Unix nostalgia.
----
+## No installation. No setup. Just pure 1990s Unix nostalgia.
 
 ## ✨ What Makes This Special
 
-| Feature | Experience | Learn More |
-|---------|------------|------------|
-| **76 Color Palettes** | From iconic **Platinum** to warm **Broica**—authentic Motif themes that transform your entire desktop | [Style Manager Guide →](docs/user-guide/style-manager.md) |
-| **168 Original Backdrops** | Dithered XPM textures from the 90s. **CircuitBoards**, **BrokenIce**, **Afternoon**—pure computing history | [Style Manager Guide →](docs/user-guide/style-manager.md) |
-| **XEmacs Editor** | Real Emacs keybindings (`C-x C-s`, `M-x`, `C-k`), interactive minibuffer, GNU splash screen. It feels **real** | [XEmacs Guide →](docs/user-guide/xemacs.md) |
-| **Terminal Lab** | 41 interactive lessons. Watch commands type themselves. Learn Unix by doing—from `ls` to pipes | [Terminal Lab Guide →](docs/user-guide/terminal-lab.md) |
-| **Virtual Filesystem** | Create files, make directories, navigate with context menus. A real filesystem in your browser | [File Manager Guide →](docs/user-guide/file-manager.md) |
-| **Netscape Navigator** | Web browsing from 1994. Animated logo. That nostalgic "Loading..." message | [Netscape Guide →](docs/user-guide/netscape.md) |
-| **4 Virtual Workspaces** | Just like real CDE. Organize across four desktops. Switch with `Ctrl+Alt+1-4` | [Workspaces Guide →](docs/user-guide/workspaces.md) |
-| **Authentic Updates** | Version updates show real Debian package manager sequences. Watch `apt-get` download and install packages | [Technical Docs →](docs/technical/version-updates.md) |
+| Feature                    | Experience                                                                                                     | Learn More                                                |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| **76 Color Palettes**      | From iconic **Platinum** to warm **Broica**—authentic Motif themes that transform your entire desktop          | [Style Manager Guide →](docs/user-guide/style-manager.md) |
+| **168 Original Backdrops** | Dithered XPM textures from the 90s. **CircuitBoards**, **BrokenIce**, **Afternoon**—pure computing history     | [Style Manager Guide →](docs/user-guide/style-manager.md) |
+| **XEmacs Editor**          | Real Emacs keybindings (`C-x C-s`, `M-x`, `C-k`), interactive minibuffer, GNU splash screen. It feels **real** | [XEmacs Guide →](docs/user-guide/xemacs.md)               |
+| **Terminal Lab**           | 41 interactive lessons. Watch commands type themselves. Learn Unix by doing—from `ls` to pipes                 | [Terminal Lab Guide →](docs/user-guide/terminal-lab.md)   |
+| **Virtual Filesystem**     | Create files, make directories, navigate with context menus. A real filesystem in your browser                 | [File Manager Guide →](docs/user-guide/file-manager.md)   |
+| **Netscape Navigator**     | Web browsing from 1994. Animated logo. That nostalgic "Loading..." message                                     | [Netscape Guide →](docs/user-guide/netscape.md)           |
+| **Lynx Browser**           | Text-based web browser from 1992. Keyboard-driven navigation. Pure terminal browsing experience                | [Lynx Guide →](docs/user-guide/lynx.md)                   |
+| **4 Virtual Workspaces**   | Just like real CDE. Organize across four desktops. Switch with `Ctrl+Alt+1-4`                                  | [Workspaces Guide →](docs/user-guide/workspaces.md)       |
+| **Authentic Updates**      | Version updates show real Debian package manager sequences. Watch `apt-get` download and install packages      | [Technical Docs →](docs/technical/version-updates.md)     |
 
 ---
 
 ## 🎯 The Experience
 
-| Feature | What You Feel |
-|---------|---------------|
-| **Boot Sequence** | Watch the system initialize, just like a real Unix workstation |
-| **System Updates** | Authentic apt-get package updates. |
-| **Window Dragging** | Smooth, authentic window management with title bars and borders |
-| **Style Manager** | Total control—change everything from colors to mouse behavior |
-| **Context Menus** | Right-click anywhere. Real menus, real actions |
-| **Keyboard Shortcuts** | 20+ shortcuts. Navigate like a power user |
-| **Sound Synthesis** | Authentic system beeps via Web Audio API |
-| **PWA Support** | Install it. Use it offline. It's your desktop now |
+| Feature                | What You Feel                                                   |
+| ---------------------- | --------------------------------------------------------------- |
+| **Boot Sequence**      | Watch the system initialize, just like a real Unix workstation  |
+| **System Updates**     | Authentic apt-get package updates.                              |
+| **Window Dragging**    | Smooth, authentic window management with title bars and borders |
+| **Style Manager**      | Total control—change everything from colors to mouse behavior   |
+| **Context Menus**      | Right-click anywhere. Real menus, real actions                  |
+| **Keyboard Shortcuts** | 20+ shortcuts. Navigate like a power user                       |
+| **Sound Synthesis**    | Authentic system beeps via Web Audio API                        |
+| **PWA Support**        | Install it. Use it offline. It's your desktop now               |
 
 ---
 

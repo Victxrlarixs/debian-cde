@@ -1,0 +1,207 @@
+/* Lynx Browser Styles */
+
+#lynx {
+  width: 640px;
+  height: 480px;
+  min-width: 500px;
+  min-height: 400px;
+  display: none;
+}
+
+/* Content area */
+.lynx-content {
+  flex: 1;
+  background: #000000;
+  color: #c0c0c0;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  padding: 12px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  white-space: pre-wrap;
+  line-height: 1.4;
+  outline: none;
+}
+
+.lynx-line {
+  margin: 0;
+  padding: 0;
+}
+
+.lynx-link {
+  color: #5555ff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.lynx-link:hover {
+  background: #0000aa;
+  color: #ffffff;
+}
+
+.lynx-link-selected {
+  background: #ffff00;
+  color: #000000;
+  font-weight: bold;
+}
+
+.lynx-content mark {
+  background: #ffff00;
+  color: #000000;
+}
+
+/* Input line */
+.lynx-input-line {
+  background: #000000;
+  color: #ffffff;
+  padding: 4px 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #333333;
+}
+
+.lynx-input-prompt {
+  color: #ffffff;
+  margin-right: 4px;
+  white-space: nowrap;
+}
+
+.lynx-input {
+  flex: 1;
+  background: #000000;
+  color: #ffffff;
+  border: none;
+  outline: none;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  padding: 0;
+}
+
+/* Status bar */
+.lynx-statusbar {
+  background: #000000;
+  color: #ffffff;
+  border-top: 1px solid #808080;
+  padding: 4px 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+}
+
+.lynx-status-text {
+  font-weight: bold;
+}
+
+/* Command bar */
+.lynx-commandbar {
+  background: #000000;
+  color: #c0c0c0;
+  padding: 2px 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  border-top: 1px solid #333333;
+}
+
+.lynx-commands {
+  display: block;
+}
+
+/* Scrollbar for Lynx content */
+.lynx-content::-webkit-scrollbar {
+  width: 16px;
+}
+
+.lynx-content::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+.lynx-content::-webkit-scrollbar-thumb {
+  background: #808080;
+  border: 2px solid #000000;
+}
+
+.lynx-content::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  #lynx {
+    width: 95vw !important;
+    height: auto !important;
+    max-height: calc(100vh - 95px) !important;
+    min-width: unset !important;
+    min-height: unset !important;
+    max-width: 100vw !important;
+    left: auto !important;
+    top: auto !important;
+    position: absolute !important;
+    box-sizing: border-box !important;
+  }
+
+  .lynx-content {
+    font-size: 12px;
+    padding: 8px;
+    -webkit-overflow-scrolling: touch;
+    overflow: auto !important;
+    max-height: 100% !important;
+  }
+
+  .lynx-statusbar,
+  .lynx-commandbar {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+
+  .lynx-input-line {
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+
+  .lynx-input {
+    font-size: 12px;
+  }
+
+  /* Hide command bars on very small screens */
+  @media (max-height: 500px) {
+    .lynx-commandbar {
+      display: none;
+    }
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 479px) {
+  #lynx {
+    width: 95vw !important;
+    max-height: calc(100vh - 95px) !important;
+  }
+
+  .lynx-content {
+    font-size: 11px;
+    padding: 6px;
+  }
+
+  .lynx-statusbar,
+  .lynx-commandbar {
+    font-size: 9px;
+    padding: 2px 4px;
+  }
+
+  .lynx-input-line {
+    font-size: 11px;
+    padding: 4px 6px;
+  }
+
+  .lynx-input {
+    font-size: 11px;
+  }
+}
+
+/* Landscape orientation on mobile */
+@media (max-height: 480px) and (orientation: landscape) {
+  #lynx {
+    max-height: 85vh !important;
+  }
+}

@@ -5,7 +5,9 @@
   transform: translateX(0);
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.15s ease, visibility 0.15s ease;
+  transition:
+    opacity 0.15s ease,
+    visibility 0.15s ease;
   z-index: 100000; /* Higher than panel */
   pointer-events: none;
   filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
@@ -96,11 +98,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.05) 0%,
-    rgba(0, 0, 0, 0.05) 100%
-  );
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(0, 0, 0, 0.05) 100%);
   pointer-events: none;
   z-index: -1;
 }
@@ -120,7 +118,9 @@
 
 /* Smooth transition for workspace switching */
 .workspace-transition {
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 }
 
 .workspace-transition.hiding {

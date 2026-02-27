@@ -35,7 +35,7 @@ class LazyLoader {
    */
   async load(name: string): Promise<any> {
     const feature = this.features.get(name);
-    
+
     if (!feature) {
       logger.warn(`[LazyLoader] Feature not found: ${name}`);
       return null;
@@ -50,7 +50,7 @@ class LazyLoader {
       logger.log(`[LazyLoader] Feature already loading: ${name}, waiting...`);
       // Wait for the loading to complete
       while (feature.loading) {
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100));
       }
       return feature.module;
     }
@@ -58,14 +58,14 @@ class LazyLoader {
     try {
       feature.loading = true;
       logger.log(`[LazyLoader] Loading feature: ${name}...`);
-      
+
       const startTime = performance.now();
       feature.module = await feature.loader();
       const loadTime = performance.now() - startTime;
-      
+
       feature.loaded = true;
       feature.loading = false;
-      
+
       logger.log(`[LazyLoader] Feature loaded: ${name} (${loadTime.toFixed(2)}ms)`);
       return feature.module;
     } catch (error) {
@@ -80,18 +80,18 @@ class LazyLoader {
    */
   async preload(names: string[]): Promise<void> {
     logger.log(`[LazyLoader] Preloading ${names.length} features...`);
-    
+
     // Use requestIdleCallback if available
     const loadNext = async (index: number) => {
       if (index >= names.length) return;
-      
+
       const name = names[index];
       try {
         await this.load(name);
       } catch (error) {
         logger.warn(`[LazyLoader] Preload failed for ${name}:`, error);
       }
-      
+
       // Schedule next load
       if ('requestIdleCallback' in window) {
         requestIdleCallback(() => loadNext(index + 1));
@@ -99,7 +99,7 @@ class LazyLoader {
         setTimeout(() => loadNext(index + 1), 100);
       }
     };
-    
+
     loadNext(0);
   }
 
@@ -127,7 +127,7 @@ class LazyLoader {
 
     observer.observe(element);
     this.observers.set(name, observer);
-    
+
     logger.log(`[LazyLoader] Observing visibility for: ${name}`);
   }
 
@@ -163,12 +163,12 @@ class LazyLoader {
   getStats(): { total: number; loaded: number; loading: number } {
     let loaded = 0;
     let loading = 0;
-    
+
     this.features.forEach((feature) => {
       if (feature.loaded) loaded++;
       if (feature.loading) loading++;
     });
-    
+
     return {
       total: this.features.size,
       loaded,
@@ -185,12 +185,13 @@ export function registerLazyFeatures(): void {
   // Register features for lazy loading
   lazyLoader.register('emacs', () => import('../features/emacs'));
   lazyLoader.register('netscape', () => import('../features/netscape'));
+  lazyLoader.register('lynx', () => import('../features/lynx'));
   lazyLoader.register('terminal', () => import('../features/lab'));
   lazyLoader.register('filemanager', () => import('../features/filemanager'));
   lazyLoader.register('processmonitor', () => import('../features/processmonitor'));
   lazyLoader.register('calendar', () => import('../features/calendar'));
   lazyLoader.register('timemanager', () => import('../features/timemanager'));
   lazyLoader.register('appmanager', () => import('../features/appmanager'));
-  
+
   logger.log('[LazyLoader] All features registered');
 }

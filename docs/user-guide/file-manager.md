@@ -20,16 +20,19 @@ The File Manager lets you browse, organize, and manage files in the virtual file
 ### View Modes
 
 **Icon View**
+
 - Large icons for files and folders
 - Good for visual browsing
 - Shows file type icons
 
 **List View**
+
 - Detailed file information
 - Name, size, date modified
 - Good for many files
 
 **Tree View**
+
 - Hierarchical folder structure
 - Expand/collapse folders
 - Navigate quickly
@@ -49,25 +52,27 @@ Home → Documents → Projects → myproject
 
 ### Keyboard Navigation
 
-| Shortcut | Action |
-|----------|--------|
-| `Enter` | Open selected item |
-| `Backspace` | Go to parent folder |
-| `Alt+↑` | Go up one level |
-| `Alt+Home` | Go to home directory |
-| `Alt+←` | Go back |
-| `Alt+→` | Go forward |
+| Shortcut    | Action               |
+| ----------- | -------------------- |
+| `Enter`     | Open selected item   |
+| `Backspace` | Go to parent folder  |
+| `Alt+↑`     | Go up one level      |
+| `Alt+Home`  | Go to home directory |
+| `Alt+←`     | Go back              |
+| `Alt+→`     | Go forward           |
 
 ## File Operations
 
 ### Creating Files and Folders
 
 **New Folder**
+
 1. Click "New Folder" button or press `Ctrl+N`
 2. Enter folder name
 3. Press Enter
 
 **New File**
+
 1. Right-click in empty space
 2. Select "New File"
 3. Enter filename
@@ -75,18 +80,21 @@ Home → Documents → Projects → myproject
 ### Copying and Moving
 
 **Copy**
+
 1. Select file(s)
 2. Press `Ctrl+C` or right-click → Copy
 3. Navigate to destination
 4. Press `Ctrl+V` or right-click → Paste
 
 **Move**
+
 1. Select file(s)
 2. Press `Ctrl+X` or right-click → Cut
 3. Navigate to destination
 4. Press `Ctrl+V` or right-click → Paste
 
 **Drag and Drop**
+
 - Drag file to another folder to move
 - Hold `Ctrl` while dragging to copy
 
@@ -114,12 +122,12 @@ Home → Documents → Projects → myproject
 
 ### Selection Shortcuts
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl+A` | Select all |
-| `Ctrl+Click` | Add to selection |
-| `Shift+Click` | Select range |
-| `Ctrl+I` | Invert selection |
+| Shortcut      | Action           |
+| ------------- | ---------------- |
+| `Ctrl+A`      | Select all       |
+| `Ctrl+Click`  | Add to selection |
+| `Shift+Click` | Select range     |
+| `Ctrl+I`      | Invert selection |
 
 ## Context Menu
 
