@@ -10,7 +10,7 @@ import WindowMinimize from '../../common/WindowMinimize.astro';
     onmousedown="window.drag(event, 'styleManagerBeep')"
   >
     <WindowMinimize windowId="styleManagerBeep" />
-    <span class="titlebar-text">Style Manager - Audio & Beep</span>
+    <span class="titlebar-text">Motif Audio Mixer 8</span>
     <WindowControls
       windowId="styleManagerBeep"
       closeFunction="styleManager.closeBeep"
@@ -18,74 +18,105 @@ import WindowMinimize from '../../common/WindowMinimize.astro';
     />
   </div>
 
+  <!-- Menu Bar -->
+  <div class="audio-mixer-menubar">
+    <div class="menu-item">File</div>
+    <div class="menu-item">Options</div>
+    <div class="menu-item" style="margin-left: auto;">Help</div>
+  </div>
+
   <div class="modal-body">
-    <div class="beep-content">
-      <div class="beep-icon-section">
-        <img src="/icons/multimedia-volume-control.png" alt="Audio" width="48" height="48" />
-        <div class="beep-test-buttons">
-          <button class="cde-btn" onclick="styleManager.beep.testBeep()">Test Beep</button>
-          <button class="cde-btn" onclick="AudioManager.playThemeMelody()">Play Theme</button>
+    <div class="audio-mixer-content">
+      <!-- Channel Labels -->
+      <div class="channel-labels">
+        <div class="channel-label">System</div>
+        <div class="channel-label">Beep</div>
+        <div class="channel-label">Click</div>
+        <div class="channel-label">Success</div>
+        <div class="channel-label">Error</div>
+        <div class="channel-label">Window</div>
+        <div class="channel-label">Master</div>
+      </div>
+
+      <!-- Sliders -->
+      <div class="mixer-sliders">
+        <div class="slider-channel">
+          <input 
+            type="range" 
+            class="vertical-slider" 
+            min="0" 
+            max="100" 
+            value="90" 
+            orient="vertical"
+            data-key="volume"
+            oninput="styleManager.beep.update('volume', parseInt(this.value) / 100); this.parentElement.querySelector('.volume-display').textContent = this.value + '%'"
+          />
+          <div class="volume-display">90%</div>
+        </div>
+        <div class="slider-channel">
+          <input 
+            type="range" 
+            class="vertical-slider" 
+            min="200" 
+            max="2000" 
+            value="880" 
+            orient="vertical"
+            data-key="frequency"
+            oninput="styleManager.beep.update('frequency', parseInt(this.value)); this.parentElement.querySelector('.volume-display').textContent = this.value + 'Hz'"
+          />
+          <div class="volume-display">880Hz</div>
+        </div>
+        <div class="slider-channel">
+          <input 
+            type="range" 
+            class="vertical-slider" 
+            min="10" 
+            max="500" 
+            value="100" 
+            orient="vertical"
+            data-key="duration"
+            oninput="styleManager.beep.update('duration', parseInt(this.value) / 1000); this.parentElement.querySelector('.volume-display').textContent = this.value + 'ms'"
+          />
+          <div class="volume-display">100ms</div>
+        </div>
+        <div class="slider-channel">
+          <input type="range" class="vertical-slider" min="0" max="100" value="80" orient="vertical" disabled />
+          <div class="volume-display">80%</div>
+        </div>
+        <div class="slider-channel">
+          <input type="range" class="vertical-slider" min="0" max="100" value="70" orient="vertical" disabled />
+          <div class="volume-display">70%</div>
+        </div>
+        <div class="slider-channel">
+          <input type="range" class="vertical-slider" min="0" max="100" value="85" orient="vertical" disabled />
+          <div class="volume-display">85%</div>
+        </div>
+        <div class="slider-channel">
+          <input 
+            type="range" 
+            class="vertical-slider" 
+            min="0" 
+            max="100" 
+            value="90" 
+            orient="vertical"
+            oninput="styleManager.beep.update('volume', parseInt(this.value) / 100); document.querySelector('[data-key=\"volume\"]').value = this.value; document.querySelector('[data-key=\"volume\"]').parentElement.querySelector('.volume-display').textContent = this.value + '%'"
+          />
+          <div class="volume-display">90%</div>
         </div>
       </div>
 
-      <div class="beep-controls">
-        <div class="beep-group-title">Audio Settings</div>
-
-        <div class="beep-control-row">
-          <label for="beep-volume">System Volume:</label>
-          <div class="slider-container">
-            <input
-              type="range"
-              id="beep-volume"
-              min="0"
-              max="100"
-              value="50"
-              oninput="styleManager.beep.update('volume', parseInt(this.value)); this.nextElementSibling.textContent = this.value + '%'"
-            />
-            <span class="value-display">50%</span>
-          </div>
+      <!-- Test Buttons and Audio Icon in same row -->
+      <div class="bottom-section">
+        <div class="test-buttons">
+          <button class="cde-btn test-btn" onclick="styleManager.beep.testBeep()">Test Beep</button>
+          <button class="cde-btn test-btn" onclick="AudioManager.click()">Click</button>
+          <button class="cde-btn test-btn" onclick="AudioManager.success()">Success</button>
+          <button class="cde-btn test-btn" onclick="AudioManager.error()">Error</button>
+          <button class="cde-btn test-btn" onclick="AudioManager.windowOpen()">Window</button>
+          <button class="cde-btn test-btn" onclick="AudioManager.playStartupChime()">Startup</button>
         </div>
-
-        <div class="beep-control-row">
-          <label for="beep-pitch">Beep Pitch (Hz):</label>
-          <div class="slider-container">
-            <input
-              type="range"
-              id="beep-pitch"
-              min="200"
-              max="2000"
-              step="10"
-              value="880"
-              oninput="styleManager.beep.update('pitch', parseInt(this.value)); this.nextElementSibling.textContent = this.value + 'Hz'"
-            />
-            <span class="value-display">880Hz</span>
-          </div>
-        </div>
-
-        <div class="beep-control-row">
-          <label for="beep-duration">Beep Duration (ms):</label>
-          <div class="slider-container">
-            <input
-              type="range"
-              id="beep-duration"
-              min="10"
-              max="500"
-              step="10"
-              value="100"
-              oninput="styleManager.beep.update('duration', parseInt(this.value)); this.nextElementSibling.textContent = this.value + 'ms'"
-            />
-            <span class="value-display">100ms</span>
-          </div>
-        </div>
-
-        <div class="beep-group-title u-margin-top-sm">Melody Presets</div>
-        <div class="melody-grid">
-          <button class="cde-btn melody-btn" onclick="AudioManager.playStartupChime()"
-            >Startup</button
-          >
-          <button class="cde-btn melody-btn" onclick="AudioManager.success()">Success</button>
-          <button class="cde-btn melody-btn" onclick="AudioManager.error()">Error</button>
-          <button class="cde-btn melody-btn" onclick="AudioManager.windowOpen()">Window</button>
+        <div class="audio-icon">
+          <img src="/icons/multimedia-volume-control.png" alt="Audio" width="32" height="32" />
         </div>
       </div>
     </div>
