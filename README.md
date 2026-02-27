@@ -15,8 +15,8 @@
 ![GitHub stars](https://img.shields.io/github/stars/Victxrlarixs/debian-cde?style=flat&logo=github)
 
 > **You've just logged into the coolest Unix terminal on the internet. ☀️**
->
-> Remember when "desktop" meant a beige box the size of a microwave? When xterm was cutting-edge? When you had to chmod your way through life? Welcome home, time traveler.
+
+Remember when "desktop" meant a beige box the size of a microwave? When xterm was cutting-edge? When you had to chmod your way through life? Welcome home, time traveler.
 
 > A modern Progressive Web App that brings 1990s Unix to any device. Desktop, tablet, phone—the experience adapts. Touch gestures on mobile. Keyboard shortcuts on desktop. Always authentic.
 
@@ -27,8 +27,6 @@ Welcome to a pixel recreation of the Common Desktop Environment (CDE)—living r
 </p>
 
 ## 🚀 [Experience It Now →](https://debian.com.mx)
-
-## No installation. No setup. Just pure 1990s Unix nostalgia.
 
 ## ✨ What Makes This Special
 
@@ -52,6 +50,18 @@ Welcome to a pixel recreation of the Common Desktop Environment (CDE)—living r
 | **Sound Synthesis**        | Authentic system beeps via Web Audio API. Window open/close, clicks, and alerts                                | [Getting Started →](docs/user-guide/getting-started.md)    |
 
 ---
+
+## 🎨 Share Your Theme 
+
+Created an amazing CDE theme? Share it with the community! 
+Click the **Share Theme** button (found in the Panel, Desktop, or right-click menu) to generate a shareable URL. 
+Your theme configuration gets encoded into a compact link that others can use to instantly load your color palette and backdrop combo. 
+Post your themes in [GitHub Discussions](/dev/random) with a screenshot and watch the retro magic spread! 
+
+
+<p align="center">
+  <img src="public/images/Share_Themes.png" alt="CDE Preview" width="900"/>
+</p>
 
 ## 📱 Works Everywhere
 
