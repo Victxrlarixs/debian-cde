@@ -80,6 +80,8 @@ export class BackdropModule {
     if (dataUrl) {
       body.style.backgroundImage = `url('${dataUrl}')`;
       body.style.backgroundRepeat = 'repeat';
+      // Use a minimum size to make small patterns less repetitive
+      // This scales up small patterns while keeping large ones at their natural size
       body.style.backgroundSize = 'auto';
       body.style.backgroundPosition = 'top left';
       body.style.backgroundAttachment = 'scroll';

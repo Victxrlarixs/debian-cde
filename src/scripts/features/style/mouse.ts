@@ -2,6 +2,7 @@
 
 import { logger } from '../../utilities/logger';
 import { settingsManager } from '../../core/settingsmanager';
+import { parseXpmToDataUrl } from '../../core/xpmparser';
 
 export interface MouseSettings {
   handedness: string;
@@ -53,9 +54,44 @@ export class MouseModule {
     }
   }
 
+  /**
+   * Render the mouse icon XPM to canvas
+   */
+  public async renderMouseIcon(): Promise<void> {
+    const canvas = document.getElementById('mouse-icon-canvas') as HTMLCanvasElement;
+    if (!canvas) {
+      logger.log('[MouseModule] Canvas not found, skipping icon render');
+      return;
+    }
+
+    try {
+      const response = await fetch('/icons/Mouse-Setup-Clicked.xpm');
+      const xpmText = await response.text();
+      const dataUrl = await parseXpmToDataUrl(xpmText);
+
+      if (dataUrl) {
+        const img = new Image();
+        img.onload = () => {
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            logger.log('[MouseModule] Mouse icon rendered successfully');
+          }
+        };
+        img.src = dataUrl;
+      }
+    } catch (error) {
+      logger.error('[MouseModule] Failed to render mouse icon:', error);
+    }
+  }
+
   public syncUI(): void {
     const panel = document.getElementById('styleManagerMouse');
     if (!panel) return;
+
+    // Render mouse icon with current palette
+    this.renderMouseIcon();
 
     // Handedness
     const handednessRight = panel.querySelector(

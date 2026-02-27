@@ -129,6 +129,9 @@ async function parseXpmWithWorker(xpmText: string): Promise<string | null> {
         themeColors[cssVar] = root.getPropertyValue(cssVar).trim();
       });
 
+      // Generate unique ID for this request
+      const requestId = Math.random().toString(36).substring(7);
+
       // Add timeout to prevent hanging
       const timeout = setTimeout(() => {
         worker.removeEventListener('message', handleMessage);
@@ -139,7 +142,8 @@ async function parseXpmWithWorker(xpmText: string): Promise<string | null> {
       }, 5000); // 5 second timeout
 
       const handleMessage = (e: MessageEvent) => {
-        if (e.data.type === 'result') {
+        // Only process messages with matching requestId
+        if (e.data.type === 'result' && e.data.requestId === requestId) {
           clearTimeout(timeout);
           worker.removeEventListener('message', handleMessage);
           activeProcessing--;
@@ -149,7 +153,7 @@ async function parseXpmWithWorker(xpmText: string): Promise<string | null> {
       };
 
       worker.addEventListener('message', handleMessage);
-      worker.postMessage({ type: 'parse', xpmText, themeColors });
+      worker.postMessage({ type: 'parse', xpmText, themeColors, requestId });
     };
 
     processingQueue.push(task);

@@ -108,6 +108,10 @@ export async function loadSharedConfig(): Promise<boolean> {
           window.styleManager.backdrop.clearCache();
           window.styleManager.backdrop.apply();
         }
+        // Clear backdrop thumbnail cache
+        if ((window as any).clearBackdropThumbnailCache) {
+          (window as any).clearBackdropThumbnailCache();
+        }
         logger.log('[ShareConfig] Palette applied successfully');
       } else {
         logger.error('[ShareConfig] StyleManager or theme not available');
