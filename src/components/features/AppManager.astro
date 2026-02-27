@@ -77,11 +77,17 @@ import WindowMinimize from '../common/WindowMinimize.astro';
         <img src="/icons/Lynx.svg" alt="Lynx Browser" />
         <span>Lynx</span>
       </div>
+
+      <!-- Man Page Viewer -->
+      <div class="app-item" onclick="window.ManViewer?.open(); appManager.close()">
+        <img src="/icons/help.png" alt="Man Page Viewer" />
+        <span>Man Pages</span>
+      </div>
     </div>
   </div>
 
   <div class="cde-statusbar">
     <div class="cde-statusleft">Application Manager</div>
-    <div class="cde-statusright">11 Objects</div>
+    <div class="cde-statusright">12 Objects</div>
   </div>
 </div>

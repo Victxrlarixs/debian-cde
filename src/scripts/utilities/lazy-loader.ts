@@ -186,6 +186,7 @@ export function registerLazyFeatures(): void {
   lazyLoader.register('emacs', () => import('../features/emacs'));
   lazyLoader.register('netscape', () => import('../features/netscape'));
   lazyLoader.register('lynx', () => import('../features/lynx'));
+  lazyLoader.register('manviewer', () => import('../features/manviewer'));
   lazyLoader.register('terminal', () => import('../features/lab'));
   lazyLoader.register('filemanager', () => import('../features/filemanager'));
   lazyLoader.register('processmonitor', () => import('../features/processmonitor'));

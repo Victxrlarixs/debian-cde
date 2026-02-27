@@ -1,0 +1,44 @@
+---
+// src/components/features/ManViewer.astro
+import WindowControls from '../common/WindowControls.astro';
+import WindowMinimize from '../common/WindowMinimize.astro';
+---
+
+<div class="window" id="man-viewer">
+  <div class="titlebar" onmousedown="drag(event, 'man-viewer')">
+    <WindowMinimize windowId="man-viewer" />
+    <span class="titlebar-text" id="man-title">Man Page Viewer — victxrlarixs@debian</span>
+    <WindowControls windowId="man-viewer" closeFunction="window.ManViewer.close" />
+  </div>
+
+  <!-- Content area (text-based, similar to Lynx) -->
+  <div class="man-content" id="manContent" tabindex="0"></div>
+
+  <!-- Input line for search (hidden by default, reusing Lynx pattern) -->
+  <div class="man-input-line" id="manInputLine" style="display: none;">
+    <span id="manInputPrompt" class="man-input-prompt"></span>
+    <input
+      type="text"
+      id="manInput"
+      class="man-input"
+      autocomplete="off"
+      autocorrect="off"
+      autocapitalize="off"
+      spellcheck="false"
+    />
+  </div>
+
+  <!-- Status bar -->
+  <div class="man-statusbar">
+    <div id="manStatus" class="man-status-text"></div>
+  </div>
+
+  <!-- Command bar -->
+  <div class="man-commandbar">
+    <span class="man-commands">Arrow keys: Up and Down to scroll. / to search. Q to quit.</span>
+  </div>
+
+  <div class="man-commandbar">
+    <span class="man-commands">H)elp Q)uit /=search [number]=copy example [link]=open related</span>
+  </div>
+</div>

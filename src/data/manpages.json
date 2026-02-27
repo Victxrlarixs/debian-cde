@@ -1,0 +1,344 @@
+{
+  "ls": {
+    "name": "ls",
+    "section": "1",
+    "description": "list directory contents",
+    "synopsis": "ls [OPTION]... [FILE]...",
+    "content": "NAME\n       ls - list directory contents\n\nSYNOPSIS\n       ls [OPTION]... [FILE]...\n\nDESCRIPTION\n       List information about the FILEs (the current directory by default).\n       Sort entries alphabetically if none of -cftuvSUX nor --sort is specified.\n\n       Mandatory arguments to long options are mandatory for short options too.\n\n       -a, --all\n              do not ignore entries starting with .\n\n       -l     use a long listing format\n\n       -h, --human-readable\n              with -l, print sizes in human readable format (e.g., 1K 234M 2G)\n\n       -t     sort by modification time, newest first\n\n       -r, --reverse\n              reverse order while sorting\n\nEXAMPLES\n       ls\n              List files in current directory\n\n       ls -la\n              List all files with details\n\n       ls -lh\n              List files with human-readable sizes\n\nSEE ALSO\n       dir(1), vdir(1)",
+    "examples": [
+      { "cmd": "ls", "desc": "List files in current directory" },
+      { "cmd": "ls -la", "desc": "List all files including hidden with details" },
+      { "cmd": "ls -lh", "desc": "List with human-readable file sizes" }
+    ],
+    "related": ["dir", "cd", "pwd"]
+  },
+  "cd": {
+    "name": "cd",
+    "section": "1",
+    "description": "change the working directory",
+    "synopsis": "cd [DIRECTORY]",
+    "content": "NAME\n       cd - change the working directory\n\nSYNOPSIS\n       cd [DIRECTORY]\n\nDESCRIPTION\n       Change the current directory to DIRECTORY. The default DIRECTORY is the\n       value of the HOME shell variable.\n\n       cd ~\n              Change to home directory\n\n       cd ..\n              Change to parent directory\n\n       cd -\n              Change to previous directory\n\nEXAMPLES\n       cd /home/user\n              Change to specific directory\n\n       cd ..\n              Go up one directory level\n\n       cd ~\n              Go to home directory\n\nSEE ALSO\n       pwd(1), ls(1)",
+    "examples": [
+      { "cmd": "cd Documents", "desc": "Change to Documents directory" },
+      { "cmd": "cd ..", "desc": "Go to parent directory" },
+      { "cmd": "cd ~", "desc": "Go to home directory" }
+    ],
+    "related": ["pwd", "ls", "mkdir"]
+  },
+  "pwd": {
+    "name": "pwd",
+    "section": "1",
+    "description": "print name of current/working directory",
+    "synopsis": "pwd [OPTION]...",
+    "content": "NAME\n       pwd - print name of current/working directory\n\nSYNOPSIS\n       pwd [OPTION]...\n\nDESCRIPTION\n       Print the full filename of the current working directory.\n\n       -L, --logical\n              use PWD from environment, even if it contains symlinks\n\n       -P, --physical\n              avoid all symlinks\n\nEXAMPLES\n       pwd\n              Display current directory path\n\nSEE ALSO\n       cd(1), ls(1)",
+    "examples": [{ "cmd": "pwd", "desc": "Show current directory path" }],
+    "related": ["cd", "ls"]
+  },
+  "cat": {
+    "name": "cat",
+    "section": "1",
+    "description": "concatenate files and print on the standard output",
+    "synopsis": "cat [OPTION]... [FILE]...",
+    "content": "NAME\n       cat - concatenate files and print on the standard output\n\nSYNOPSIS\n       cat [OPTION]... [FILE]...\n\nDESCRIPTION\n       Concatenate FILE(s) to standard output.\n\n       With no FILE, or when FILE is -, read standard input.\n\n       -n, --number\n              number all output lines\n\n       -b, --number-nonblank\n              number nonempty output lines, overrides -n\n\n       -s, --squeeze-blank\n              suppress repeated empty output lines\n\nEXAMPLES\n       cat file.txt\n              Display file contents\n\n       cat file1.txt file2.txt\n              Display multiple files\n\n       cat -n file.txt\n              Display with line numbers\n\nSEE ALSO\n       less(1), more(1), head(1), tail(1)",
+    "examples": [
+      { "cmd": "cat file.txt", "desc": "Display file contents" },
+      { "cmd": "cat -n file.txt", "desc": "Display with line numbers" }
+    ],
+    "related": ["less", "more", "head", "tail"]
+  },
+  "mkdir": {
+    "name": "mkdir",
+    "section": "1",
+    "description": "make directories",
+    "synopsis": "mkdir [OPTION]... DIRECTORY...",
+    "content": "NAME\n       mkdir - make directories\n\nSYNOPSIS\n       mkdir [OPTION]... DIRECTORY...\n\nDESCRIPTION\n       Create the DIRECTORY(ies), if they do not already exist.\n\n       -p, --parents\n              no error if existing, make parent directories as needed\n\n       -m, --mode=MODE\n              set file mode (as in chmod), not a=rwx - umask\n\n       -v, --verbose\n              print a message for each created directory\n\nEXAMPLES\n       mkdir project\n              Create a directory\n\n       mkdir -p path/to/directory\n              Create nested directories\n\n       mkdir dir1 dir2 dir3\n              Create multiple directories\n\nSEE ALSO\n       rmdir(1), rm(1), ls(1)",
+    "examples": [
+      { "cmd": "mkdir project", "desc": "Create a directory" },
+      { "cmd": "mkdir -p path/to/dir", "desc": "Create nested directories" }
+    ],
+    "related": ["rmdir", "cd", "ls"]
+  },
+  "touch": {
+    "name": "touch",
+    "section": "1",
+    "description": "change file timestamps",
+    "synopsis": "touch [OPTION]... FILE...",
+    "content": "NAME\n       touch - change file timestamps\n\nSYNOPSIS\n       touch [OPTION]... FILE...\n\nDESCRIPTION\n       Update the access and modification times of each FILE to the current time.\n\n       A FILE argument that does not exist is created empty, unless -c or -h\n       is supplied.\n\n       -c, --no-create\n              do not create any files\n\n       -t STAMP\n              use [[CC]YY]MMDDhhmm[.ss] instead of current time\n\nEXAMPLES\n       touch file.txt\n              Create empty file or update timestamp\n\n       touch file1.txt file2.txt file3.txt\n              Create multiple files\n\nSEE ALSO\n       ls(1), stat(1)",
+    "examples": [
+      { "cmd": "touch file.txt", "desc": "Create empty file" },
+      { "cmd": "touch file1 file2 file3", "desc": "Create multiple files" }
+    ],
+    "related": ["ls", "cat", "echo"]
+  },
+  "chmod": {
+    "name": "chmod",
+    "section": "1",
+    "description": "change file mode bits",
+    "synopsis": "chmod [OPTION]... MODE[,MODE]... FILE...",
+    "content": "NAME\n       chmod - change file mode bits\n\nSYNOPSIS\n       chmod [OPTION]... MODE[,MODE]... FILE...\n\nDESCRIPTION\n       This manual page documents the GNU version of chmod. chmod changes the\n       file mode bits of each given file according to mode.\n\n       The format of a symbolic mode is [ugoa...][[+-=][perms...]...].\n\n       Numeric modes:\n       0755 = rwxr-xr-x (owner: rwx, group: r-x, others: r-x)\n       0644 = rw-r--r-- (owner: rw-, group: r--, others: r--)\n       0777 = rwxrwxrwx (all permissions)\n\n       -R, --recursive\n              change files and directories recursively\n\nEXAMPLES\n       chmod 755 script.sh\n              Make file executable\n\n       chmod +x script.sh\n              Add execute permission\n\n       chmod -R 755 directory\n              Change directory recursively\n\nSEE ALSO\n       chown(1), ls(1)",
+    "examples": [
+      { "cmd": "chmod 755 file", "desc": "Set rwxr-xr-x permissions" },
+      { "cmd": "chmod +x script.sh", "desc": "Make file executable" }
+    ],
+    "related": ["chown", "ls", "stat"]
+  },
+  "grep": {
+    "name": "grep",
+    "section": "1",
+    "description": "print lines that match patterns",
+    "synopsis": "grep [OPTION]... PATTERNS [FILE]...",
+    "content": "NAME\n       grep - print lines that match patterns\n\nSYNOPSIS\n       grep [OPTION]... PATTERNS [FILE]...\n\nDESCRIPTION\n       grep searches for PATTERNS in each FILE. PATTERNS is one or more patterns\n       separated by newline characters, and grep prints each line that matches a\n       pattern.\n\n       -i, --ignore-case\n              ignore case distinctions\n\n       -r, --recursive\n              read all files under each directory, recursively\n\n       -n, --line-number\n              prefix each line of output with the line number\n\n       -v, --invert-match\n              select non-matching lines\n\nEXAMPLES\n       grep \"error\" log.txt\n              Search for \"error\" in file\n\n       grep -i \"warning\" *.log\n              Case-insensitive search in all .log files\n\n       grep -rn \"TODO\" .\n              Recursive search with line numbers\n\nSEE ALSO\n       egrep(1), fgrep(1), sed(1)",
+    "examples": [
+      { "cmd": "grep \"text\" file.txt", "desc": "Search for text in file" },
+      { "cmd": "grep -i \"error\" log.txt", "desc": "Case-insensitive search" },
+      { "cmd": "grep -rn \"TODO\" .", "desc": "Recursive search with line numbers" }
+    ],
+    "related": ["find", "sed", "awk"]
+  },
+  "find": {
+    "name": "find",
+    "section": "1",
+    "description": "search for files in a directory hierarchy",
+    "synopsis": "find [-H] [-L] [-P] [-D debugopts] [-Olevel] [starting-point...] [expression]",
+    "content": "NAME\n       find - search for files in a directory hierarchy\n\nSYNOPSIS\n       find [starting-point...] [expression]\n\nDESCRIPTION\n       This manual page documents the GNU version of find. GNU find searches\n       the directory tree rooted at each given starting-point by evaluating the\n       given expression from left to right.\n\n       -name pattern\n              Base of file name matches shell pattern\n\n       -type c\n              File is of type c (f=file, d=directory, l=link)\n\n       -size n\n              File uses n units of space\n\n       -mtime n\n              File's data was last modified n*24 hours ago\n\nEXAMPLES\n       find . -name \"*.txt\"\n              Find all .txt files\n\n       find /home -type d -name \"project\"\n              Find directories named \"project\"\n\n       find . -size +10M\n              Find files larger than 10MB\n\nSEE ALSO\n       locate(1), grep(1), ls(1)",
+    "examples": [
+      { "cmd": "find . -name \"*.txt\"", "desc": "Find all .txt files" },
+      { "cmd": "find . -type d", "desc": "Find all directories" },
+      { "cmd": "find . -size +10M", "desc": "Find files larger than 10MB" }
+    ],
+    "related": ["locate", "grep", "ls"]
+  },
+  "ps": {
+    "name": "ps",
+    "section": "1",
+    "description": "report a snapshot of the current processes",
+    "synopsis": "ps [options]",
+    "content": "NAME\n       ps - report a snapshot of the current processes\n\nSYNOPSIS\n       ps [options]\n\nDESCRIPTION\n       ps displays information about a selection of the active processes.\n\n       a      Lift the BSD-style \"only yourself\" restriction\n\n       u      Display user-oriented format\n\n       x      Lift the BSD-style \"must have a tty\" restriction\n\n       -e     Select all processes\n\n       -f     Do full-format listing\n\nEXAMPLES\n       ps\n              Show your processes\n\n       ps aux\n              Show all processes\n\n       ps -ef\n              Full format listing\n\nSEE ALSO\n       top(1), kill(1), pgrep(1)",
+    "examples": [
+      { "cmd": "ps", "desc": "Show your processes" },
+      { "cmd": "ps aux", "desc": "Show all processes" },
+      { "cmd": "ps -ef | grep nginx", "desc": "Find nginx processes" }
+    ],
+    "related": ["top", "kill", "htop"]
+  },
+  "kill": {
+    "name": "kill",
+    "section": "1",
+    "description": "send a signal to a process",
+    "synopsis": "kill [-s signal|-p] [-q sigval] [-a] [--] pid...",
+    "content": "NAME\n       kill - send a signal to a process\n\nSYNOPSIS\n       kill [-s signal] pid...\n\nDESCRIPTION\n       The default signal for kill is TERM. Use -l or -L to list available signals.\n\n       Common signals:\n       TERM (15) - Termination signal\n       KILL (9)  - Kill signal (cannot be caught)\n       HUP (1)   - Hangup\n       INT (2)   - Interrupt from keyboard\n\n       -9     Send SIGKILL (force kill)\n\n       -15    Send SIGTERM (graceful termination)\n\nEXAMPLES\n       kill 1234\n              Terminate process 1234\n\n       kill -9 1234\n              Force kill process 1234\n\n       kill -HUP 1234\n              Send hangup signal\n\nSEE ALSO\n       ps(1), killall(1), pkill(1)",
+    "examples": [
+      { "cmd": "kill 1234", "desc": "Terminate process 1234" },
+      { "cmd": "kill -9 1234", "desc": "Force kill process" }
+    ],
+    "related": ["ps", "killall", "pkill"]
+  },
+  "man": {
+    "name": "man",
+    "section": "1",
+    "description": "an interface to the system reference manuals",
+    "synopsis": "man [OPTION]... [SECTION] PAGE...",
+    "content": "NAME\n       man - an interface to the system reference manuals\n\nSYNOPSIS\n       man [OPTION]... [SECTION] PAGE...\n\nDESCRIPTION\n       man is the system's manual pager. Each page argument given to man is\n       normally the name of a program, utility or function.\n\n       Manual sections:\n       1   Executable programs or shell commands\n       2   System calls\n       3   Library calls\n       4   Special files\n       5   File formats and conventions\n       6   Games\n       7   Miscellaneous\n       8   System administration commands\n\n       -k, --apropos\n              Search the short descriptions for keywords\n\nEXAMPLES\n       man ls\n              Display manual for ls command\n\n       man 5 passwd\n              Display section 5 of passwd manual\n\n       man -k network\n              Search for network-related commands\n\nSEE ALSO\n       apropos(1), whatis(1), info(1)",
+    "examples": [
+      { "cmd": "man ls", "desc": "View ls manual page" },
+      { "cmd": "man 5 passwd", "desc": "View passwd file format" },
+      { "cmd": "man -k search", "desc": "Search man pages" }
+    ],
+    "related": ["apropos", "whatis", "info"]
+  },
+  "cp": {
+    "name": "cp",
+    "section": "1",
+    "description": "copy files and directories",
+    "synopsis": "cp [OPTION]... SOURCE DEST",
+    "content": "NAME\n       cp - copy files and directories\n\nSYNOPSIS\n       cp [OPTION]... SOURCE DEST\n       cp [OPTION]... SOURCE... DIRECTORY\n\nDESCRIPTION\n       Copy SOURCE to DEST, or multiple SOURCE(s) to DIRECTORY.\n\n       -r, -R, --recursive\n              copy directories recursively\n\n       -i, --interactive\n              prompt before overwrite\n\n       -f, --force\n              if an existing destination file cannot be opened, remove it\n\n       -v, --verbose\n              explain what is being done\n\n       -p     preserve mode, ownership, timestamps\n\nEXAMPLES\n       cp file.txt backup.txt\n              Copy file to new name\n\n       cp -r dir1 dir2\n              Copy directory recursively\n\n       cp -v *.txt /backup/\n              Copy all .txt files with verbose output\n\nSEE ALSO\n       mv(1), rm(1), install(1)",
+    "examples": [
+      { "cmd": "cp file.txt backup.txt", "desc": "Copy file" },
+      { "cmd": "cp -r folder backup/", "desc": "Copy directory recursively" },
+      { "cmd": "cp -v *.txt dest/", "desc": "Copy with verbose output" }
+    ],
+    "related": ["mv", "rm", "rsync"]
+  },
+  "mv": {
+    "name": "mv",
+    "section": "1",
+    "description": "move (rename) files",
+    "synopsis": "mv [OPTION]... SOURCE DEST",
+    "content": "NAME\n       mv - move (rename) files\n\nSYNOPSIS\n       mv [OPTION]... SOURCE DEST\n       mv [OPTION]... SOURCE... DIRECTORY\n\nDESCRIPTION\n       Rename SOURCE to DEST, or move SOURCE(s) to DIRECTORY.\n\n       -f, --force\n              do not prompt before overwriting\n\n       -i, --interactive\n              prompt before overwrite\n\n       -n, --no-clobber\n              do not overwrite an existing file\n\n       -v, --verbose\n              explain what is being done\n\nEXAMPLES\n       mv file.txt newname.txt\n              Rename a file\n\n       mv file.txt /tmp/\n              Move file to directory\n\n       mv *.log /var/log/\n              Move all .log files\n\nSEE ALSO\n       cp(1), rm(1), rename(1)",
+    "examples": [
+      { "cmd": "mv old.txt new.txt", "desc": "Rename file" },
+      { "cmd": "mv file.txt /tmp/", "desc": "Move file to directory" },
+      { "cmd": "mv -i file.txt dest/", "desc": "Move with confirmation" }
+    ],
+    "related": ["cp", "rm", "rename"]
+  },
+  "rm": {
+    "name": "rm",
+    "section": "1",
+    "description": "remove files or directories",
+    "synopsis": "rm [OPTION]... FILE...",
+    "content": "NAME\n       rm - remove files or directories\n\nSYNOPSIS\n       rm [OPTION]... FILE...\n\nDESCRIPTION\n       rm removes each specified file. By default, it does not remove directories.\n\n       -f, --force\n              ignore nonexistent files, never prompt\n\n       -i     prompt before every removal\n\n       -r, -R, --recursive\n              remove directories and their contents recursively\n\n       -v, --verbose\n              explain what is being done\n\n       WARNING: rm is permanent. There is no trash or recycle bin.\n\nEXAMPLES\n       rm file.txt\n              Remove a file\n\n       rm -r directory\n              Remove directory and contents\n\n       rm -rf /tmp/cache\n              Force remove directory\n\nSEE ALSO\n       rmdir(1), unlink(1), shred(1)",
+    "examples": [
+      { "cmd": "rm file.txt", "desc": "Remove file" },
+      { "cmd": "rm -r folder/", "desc": "Remove directory recursively" },
+      { "cmd": "rm -i *.tmp", "desc": "Remove with confirmation" }
+    ],
+    "related": ["rmdir", "mv", "trash"]
+  },
+  "echo": {
+    "name": "echo",
+    "section": "1",
+    "description": "display a line of text",
+    "synopsis": "echo [OPTION]... [STRING]...",
+    "content": "NAME\n       echo - display a line of text\n\nSYNOPSIS\n       echo [OPTION]... [STRING]...\n\nDESCRIPTION\n       Echo the STRING(s) to standard output.\n\n       -n     do not output the trailing newline\n\n       -e     enable interpretation of backslash escapes\n\n       -E     disable interpretation of backslash escapes (default)\n\n       Escape sequences (with -e):\n       \\n     new line\n       \\t     horizontal tab\n       \\\\     backslash\n\nEXAMPLES\n       echo \"Hello World\"\n              Print text\n\n       echo -n \"No newline\"\n              Print without newline\n\n       echo -e \"Line1\\nLine2\"\n              Print with newline escape\n\nSEE ALSO\n       printf(1), cat(1)",
+    "examples": [
+      { "cmd": "echo \"Hello World\"", "desc": "Print text" },
+      { "cmd": "echo $PATH", "desc": "Print environment variable" },
+      { "cmd": "echo -e \"Line1\\nLine2\"", "desc": "Print with escape sequences" }
+    ],
+    "related": ["printf", "cat"]
+  },
+  "tar": {
+    "name": "tar",
+    "section": "1",
+    "description": "archive files",
+    "synopsis": "tar [OPTION]... [FILE]...",
+    "content": "NAME\n       tar - archive files\n\nSYNOPSIS\n       tar [OPTION]... [FILE]...\n\nDESCRIPTION\n       GNU tar saves many files together into a single tape or disk archive,\n       and can restore individual files from the archive.\n\n       -c, --create\n              create a new archive\n\n       -x, --extract\n              extract files from an archive\n\n       -t, --list\n              list the contents of an archive\n\n       -f, --file=ARCHIVE\n              use archive file\n\n       -v, --verbose\n              verbosely list files processed\n\n       -z, --gzip\n              filter the archive through gzip\n\nEXAMPLES\n       tar -czf archive.tar.gz folder/\n              Create compressed archive\n\n       tar -xzf archive.tar.gz\n              Extract compressed archive\n\n       tar -tzf archive.tar.gz\n              List archive contents\n\nSEE ALSO\n       gzip(1), bzip2(1), zip(1)",
+    "examples": [
+      { "cmd": "tar -czf backup.tar.gz folder/", "desc": "Create compressed archive" },
+      { "cmd": "tar -xzf backup.tar.gz", "desc": "Extract archive" },
+      { "cmd": "tar -tzf backup.tar.gz", "desc": "List archive contents" }
+    ],
+    "related": ["gzip", "zip", "unzip"]
+  },
+  "wget": {
+    "name": "wget",
+    "section": "1",
+    "description": "network downloader",
+    "synopsis": "wget [OPTION]... [URL]...",
+    "content": "NAME\n       wget - network downloader\n\nSYNOPSIS\n       wget [OPTION]... [URL]...\n\nDESCRIPTION\n       GNU Wget is a free utility for non-interactive download of files from\n       the Web. It supports HTTP, HTTPS, and FTP protocols.\n\n       -O file\n              write documents to FILE\n\n       -c, --continue\n              resume getting a partially-downloaded file\n\n       -r, --recursive\n              specify recursive download\n\n       -q, --quiet\n              quiet (no output)\n\n       -v, --verbose\n              be verbose (this is the default)\n\nEXAMPLES\n       wget https://example.com/file.zip\n              Download file\n\n       wget -O output.html https://example.com\n              Download and rename\n\n       wget -c https://example.com/large.iso\n              Resume download\n\nSEE ALSO\n       curl(1), ftp(1)",
+    "examples": [
+      { "cmd": "wget https://example.com/file.zip", "desc": "Download file" },
+      { "cmd": "wget -O page.html https://example.com", "desc": "Download with custom name" },
+      { "cmd": "wget -c https://example.com/large.iso", "desc": "Resume interrupted download" }
+    ],
+    "related": ["curl", "ftp", "rsync"]
+  },
+  "curl": {
+    "name": "curl",
+    "section": "1",
+    "description": "transfer data from or to a server",
+    "synopsis": "curl [OPTIONS] [URL...]",
+    "content": "NAME\n       curl - transfer data from or to a server\n\nSYNOPSIS\n       curl [OPTIONS] [URL...]\n\nDESCRIPTION\n       curl is a tool to transfer data from or to a server, using one of the\n       supported protocols (HTTP, HTTPS, FTP, FTPS, SCP, SFTP, TFTP, DICT,\n       TELNET, LDAP or FILE).\n\n       -o, --output <file>\n              Write output to <file> instead of stdout\n\n       -O, --remote-name\n              Write output to a file named as the remote file\n\n       -L, --location\n              Follow redirects\n\n       -I, --head\n              Fetch headers only\n\n       -d, --data <data>\n              HTTP POST data\n\nEXAMPLES\n       curl https://example.com\n              Fetch webpage\n\n       curl -O https://example.com/file.zip\n              Download file\n\n       curl -I https://example.com\n              Get headers only\n\nSEE ALSO\n       wget(1), ftp(1)",
+    "examples": [
+      { "cmd": "curl https://example.com", "desc": "Fetch webpage content" },
+      { "cmd": "curl -O https://example.com/file.zip", "desc": "Download file" },
+      { "cmd": "curl -I https://example.com", "desc": "Get HTTP headers" }
+    ],
+    "related": ["wget", "ftp", "http"]
+  },
+  "df": {
+    "name": "df",
+    "section": "1",
+    "description": "report file system disk space usage",
+    "synopsis": "df [OPTION]... [FILE]...",
+    "content": "NAME\n       df - report file system disk space usage\n\nSYNOPSIS\n       df [OPTION]... [FILE]...\n\nDESCRIPTION\n       df displays the amount of disk space available on the file system\n       containing each file name argument.\n\n       -h, --human-readable\n              print sizes in human readable format (e.g., 1K 234M 2G)\n\n       -T, --print-type\n              print file system type\n\n       -i, --inodes\n              list inode information instead of block usage\n\n       -a, --all\n              include dummy file systems\n\nEXAMPLES\n       df -h\n              Show disk usage in human-readable format\n\n       df -T\n              Show disk usage with filesystem types\n\n       df /home\n              Show usage for specific mount point\n\nSEE ALSO\n       du(1), mount(8)",
+    "examples": [
+      { "cmd": "df -h", "desc": "Show disk usage in human-readable format" },
+      { "cmd": "df -T", "desc": "Show filesystem types" },
+      { "cmd": "df -i", "desc": "Show inode usage" }
+    ],
+    "related": ["du", "mount", "lsblk"]
+  },
+  "du": {
+    "name": "du",
+    "section": "1",
+    "description": "estimate file space usage",
+    "synopsis": "du [OPTION]... [FILE]...",
+    "content": "NAME\n       du - estimate file space usage\n\nSYNOPSIS\n       du [OPTION]... [FILE]...\n\nDESCRIPTION\n       Summarize disk usage of each FILE, recursively for directories.\n\n       -h, --human-readable\n              print sizes in human readable format (e.g., 1K 234M 2G)\n\n       -s, --summarize\n              display only a total for each argument\n\n       -c, --total\n              produce a grand total\n\n       -a, --all\n              write counts for all files, not just directories\n\n       --max-depth=N\n              print the total for a directory only if it is N or fewer levels\n\nEXAMPLES\n       du -h\n              Show sizes in human-readable format\n\n       du -sh *\n              Show summary of each item in current directory\n\n       du -h --max-depth=1\n              Show sizes one level deep\n\nSEE ALSO\n       df(1), ls(1)",
+    "examples": [
+      { "cmd": "du -sh *", "desc": "Show size of each item" },
+      { "cmd": "du -h --max-depth=1", "desc": "Show sizes one level deep" },
+      { "cmd": "du -ch *.log", "desc": "Show total size of log files" }
+    ],
+    "related": ["df", "ls", "ncdu"]
+  },
+  "top": {
+    "name": "top",
+    "section": "1",
+    "description": "display Linux processes",
+    "synopsis": "top [OPTIONS]",
+    "content": "NAME\n       top - display Linux processes\n\nSYNOPSIS\n       top [OPTIONS]\n\nDESCRIPTION\n       The top program provides a dynamic real-time view of a running system.\n       It can display system summary information as well as a list of processes\n       or threads currently being managed by the Linux kernel.\n\n       Interactive commands:\n       h or ?    Help\n       q         Quit\n       k         Kill a process\n       r         Renice a process\n       M         Sort by memory usage\n       P         Sort by CPU usage\n\n       -d delay  Specify delay between updates\n       -n num    Number of iterations\n       -p pid    Monitor specific process\n\nEXAMPLES\n       top\n              Display processes\n\n       top -d 5\n              Update every 5 seconds\n\n       top -p 1234\n              Monitor specific process\n\nSEE ALSO\n       ps(1), htop(1), kill(1)",
+    "examples": [
+      { "cmd": "top", "desc": "Display running processes" },
+      { "cmd": "top -d 5", "desc": "Update every 5 seconds" },
+      { "cmd": "top -p 1234", "desc": "Monitor specific process" }
+    ],
+    "related": ["ps", "htop", "kill"]
+  },
+  "ssh": {
+    "name": "ssh",
+    "section": "1",
+    "description": "OpenSSH SSH client (remote login program)",
+    "synopsis": "ssh [OPTIONS] [user@]hostname [command]",
+    "content": "NAME\n       ssh - OpenSSH SSH client (remote login program)\n\nSYNOPSIS\n       ssh [OPTIONS] [user@]hostname [command]\n\nDESCRIPTION\n       ssh (SSH client) is a program for logging into a remote machine and for\n       executing commands on a remote machine.\n\n       -p port\n              Port to connect to on the remote host\n\n       -i identity_file\n              Selects a file from which the identity (private key) is read\n\n       -L port:host:hostport\n              Local port forwarding\n\n       -v     Verbose mode\n\n       -X     Enables X11 forwarding\n\nEXAMPLES\n       ssh user@example.com\n              Connect to remote host\n\n       ssh -p 2222 user@example.com\n              Connect on specific port\n\n       ssh user@example.com 'ls -la'\n              Execute remote command\n\nSEE ALSO\n       scp(1), sftp(1), ssh-keygen(1)",
+    "examples": [
+      { "cmd": "ssh user@example.com", "desc": "Connect to remote host" },
+      { "cmd": "ssh -p 2222 user@host", "desc": "Connect on custom port" },
+      { "cmd": "ssh user@host 'ls -la'", "desc": "Execute remote command" }
+    ],
+    "related": ["scp", "sftp", "ssh-keygen"]
+  },
+  "sed": {
+    "name": "sed",
+    "section": "1",
+    "description": "stream editor for filtering and transforming text",
+    "synopsis": "sed [OPTION]... {script} [input-file]...",
+    "content": "NAME\n       sed - stream editor for filtering and transforming text\n\nSYNOPSIS\n       sed [OPTION]... {script} [input-file]...\n\nDESCRIPTION\n       sed is a stream editor. A stream editor is used to perform basic text\n       transformations on an input stream (a file or input from a pipeline).\n\n       -i[SUFFIX], --in-place[=SUFFIX]\n              edit files in place (makes backup if SUFFIX supplied)\n\n       -e script\n              add the script to the commands to be executed\n\n       -n, --quiet, --silent\n              suppress automatic printing of pattern space\n\n       Common commands:\n       s/pattern/replacement/    Substitute\n       d                         Delete line\n       p                         Print line\n\nEXAMPLES\n       sed 's/old/new/' file.txt\n              Replace first occurrence\n\n       sed 's/old/new/g' file.txt\n              Replace all occurrences\n\n       sed -i 's/old/new/g' file.txt\n              Edit file in place\n\nSEE ALSO\n       awk(1), grep(1), ed(1)",
+    "examples": [
+      { "cmd": "sed 's/old/new/g' file.txt", "desc": "Replace all occurrences" },
+      { "cmd": "sed -i 's/foo/bar/g' file.txt", "desc": "Edit file in place" },
+      { "cmd": "sed -n '1,10p' file.txt", "desc": "Print lines 1-10" }
+    ],
+    "related": ["awk", "grep", "perl"]
+  },
+  "awk": {
+    "name": "awk",
+    "section": "1",
+    "description": "pattern scanning and processing language",
+    "synopsis": "awk [OPTIONS] 'program' [file...]",
+    "content": "NAME\n       awk - pattern scanning and processing language\n\nSYNOPSIS\n       awk [OPTIONS] 'program' [file...]\n\nDESCRIPTION\n       awk scans each input file for lines that match any of a set of patterns\n       specified literally in program or in one or more files specified with -f.\n\n       -F fs  Use fs for the input field separator\n\n       -v var=value\n              Assign a value to a variable\n\n       Built-in variables:\n       $0     Entire line\n       $1, $2, ...  Fields\n       NF     Number of fields\n       NR     Number of records (lines)\n\nEXAMPLES\n       awk '{print $1}' file.txt\n              Print first column\n\n       awk -F: '{print $1}' /etc/passwd\n              Print usernames from passwd\n\n       awk 'NR==5' file.txt\n              Print line 5\n\nSEE ALSO\n       sed(1), grep(1), perl(1)",
+    "examples": [
+      { "cmd": "awk '{print $1}' file.txt", "desc": "Print first column" },
+      { "cmd": "awk -F: '{print $1}' /etc/passwd", "desc": "Print with custom delimiter" },
+      { "cmd": "awk 'NR==5' file.txt", "desc": "Print specific line" }
+    ],
+    "related": ["sed", "grep", "cut"]
+  },
+  "tail": {
+    "name": "tail",
+    "section": "1",
+    "description": "output the last part of files",
+    "synopsis": "tail [OPTION]... [FILE]...",
+    "content": "NAME\n       tail - output the last part of files\n\nSYNOPSIS\n       tail [OPTION]... [FILE]...\n\nDESCRIPTION\n       Print the last 10 lines of each FILE to standard output. With more than\n       one FILE, precede each with a header giving the file name.\n\n       -n, --lines=K\n              output the last K lines, instead of the last 10\n\n       -f, --follow\n              output appended data as the file grows\n\n       -F     same as --follow=name --retry\n\n       -c, --bytes=K\n              output the last K bytes\n\nEXAMPLES\n       tail file.txt\n              Show last 10 lines\n\n       tail -n 20 file.txt\n              Show last 20 lines\n\n       tail -f /var/log/syslog\n              Follow log file in real-time\n\nSEE ALSO\n       head(1), cat(1), less(1)",
+    "examples": [
+      { "cmd": "tail file.txt", "desc": "Show last 10 lines" },
+      { "cmd": "tail -n 50 file.txt", "desc": "Show last 50 lines" },
+      { "cmd": "tail -f /var/log/syslog", "desc": "Follow log file" }
+    ],
+    "related": ["head", "cat", "less"]
+  },
+  "head": {
+    "name": "head",
+    "section": "1",
+    "description": "output the first part of files",
+    "synopsis": "head [OPTION]... [FILE]...",
+    "content": "NAME\n       head - output the first part of files\n\nSYNOPSIS\n       head [OPTION]... [FILE]...\n\nDESCRIPTION\n       Print the first 10 lines of each FILE to standard output. With more than\n       one FILE, precede each with a header giving the file name.\n\n       -n, --lines=K\n              print the first K lines instead of the first 10\n\n       -c, --bytes=K\n              print the first K bytes\n\n       -q, --quiet, --silent\n              never print headers giving file names\n\nEXAMPLES\n       head file.txt\n              Show first 10 lines\n\n       head -n 20 file.txt\n              Show first 20 lines\n\n       head -c 100 file.txt\n              Show first 100 bytes\n\nSEE ALSO\n       tail(1), cat(1), less(1)",
+    "examples": [
+      { "cmd": "head file.txt", "desc": "Show first 10 lines" },
+      { "cmd": "head -n 20 file.txt", "desc": "Show first 20 lines" },
+      { "cmd": "head -c 100 file.txt", "desc": "Show first 100 bytes" }
+    ],
+    "related": ["tail", "cat", "less"]
+  }
+}

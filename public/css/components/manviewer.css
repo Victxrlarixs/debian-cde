@@ -1,0 +1,229 @@
+/* Man Viewer Styles - Based on Lynx styles */
+
+#man-viewer {
+  width: 700px;
+  height: 550px;
+  min-width: 500px;
+  min-height: 400px;
+  display: none;
+}
+
+/* Content area - similar to Lynx */
+.man-content {
+  flex: 1;
+  background: #000000;
+  color: #c0c0c0;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  padding: 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  white-space: pre-wrap;
+  line-height: 1.6;
+  outline: none;
+}
+
+.man-line {
+  margin: 0;
+  padding: 0;
+}
+
+/* Section headers (NAME, SYNOPSIS, etc.) */
+.man-section {
+  color: #ffffff;
+  font-weight: bold;
+  margin-top: 12px;
+  margin-bottom: 4px;
+}
+
+/* Command name header */
+.man-header {
+  color: #00ff00;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+/* Examples - clickable */
+.man-example {
+  color: #ffff00;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.man-example:hover {
+  background: #333333;
+}
+
+/* Related commands - clickable links */
+.man-link {
+  color: #5555ff;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.man-link:hover {
+  background: #0000aa;
+  color: #ffffff;
+}
+
+/* Search highlights */
+.man-content mark {
+  background: #ffff00;
+  color: #000000;
+}
+
+/* Input line - reusing Lynx pattern */
+.man-input-line {
+  background: #000000;
+  color: #ffffff;
+  padding: 4px 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #333333;
+}
+
+.man-input-prompt {
+  color: #ffffff;
+  margin-right: 4px;
+  white-space: nowrap;
+}
+
+.man-input {
+  flex: 1;
+  background: #000000;
+  color: #ffffff;
+  border: none;
+  outline: none;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  padding: 0;
+}
+
+/* Status bar - reusing Lynx pattern */
+.man-statusbar {
+  background: #000000;
+  color: #ffffff;
+  border-top: 1px solid #808080;
+  padding: 4px 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+}
+
+.man-status-text {
+  font-weight: bold;
+}
+
+/* Command bar - reusing Lynx pattern */
+.man-commandbar {
+  background: #000000;
+  color: #c0c0c0;
+  padding: 2px 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  border-top: 1px solid #333333;
+}
+
+.man-commands {
+  display: block;
+}
+
+/* Scrollbar - reusing Lynx pattern */
+.man-content::-webkit-scrollbar {
+  width: 16px;
+}
+
+.man-content::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+.man-content::-webkit-scrollbar-thumb {
+  background: #808080;
+  border: 2px solid #000000;
+}
+
+.man-content::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+}
+
+/* Mobile responsive - reusing Lynx pattern */
+@media (max-width: 768px) {
+  #man-viewer {
+    width: 95vw !important;
+    height: auto !important;
+    max-height: calc(100vh - 95px) !important;
+    min-width: unset !important;
+    min-height: unset !important;
+    max-width: 100vw !important;
+    left: auto !important;
+    top: auto !important;
+    position: absolute !important;
+    box-sizing: border-box !important;
+  }
+
+  .man-content {
+    font-size: 12px;
+    padding: 8px;
+    -webkit-overflow-scrolling: touch;
+    overflow: auto !important;
+    max-height: 100% !important;
+  }
+
+  .man-statusbar,
+  .man-commandbar {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+
+  .man-input-line {
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+
+  .man-input {
+    font-size: 12px;
+  }
+
+  @media (max-height: 500px) {
+    .man-commandbar {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 479px) {
+  #man-viewer {
+    width: 95vw !important;
+    max-height: calc(100vh - 95px) !important;
+  }
+
+  .man-content {
+    font-size: 11px;
+    padding: 6px;
+  }
+
+  .man-statusbar,
+  .man-commandbar {
+    font-size: 9px;
+    padding: 2px 4px;
+  }
+
+  .man-input-line {
+    font-size: 11px;
+    padding: 4px 6px;
+  }
+
+  .man-input {
+    font-size: 11px;
+  }
+}
+
+@media (max-height: 480px) and (orientation: landscape) {
+  #man-viewer {
+    max-height: 85vh !important;
+  }
+}

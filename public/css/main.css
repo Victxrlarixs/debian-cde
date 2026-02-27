@@ -37,6 +37,7 @@
 @import './components/emacs.css';
 @import './components/netscape.css';
 @import './components/lynx.css';
+@import './components/manviewer.css';
 @import './components/misc.css';
 
 /* Responsive Styles */
