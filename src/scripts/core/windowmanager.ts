@@ -735,7 +735,56 @@ const WindowManager = (() => {
     initGlobalInteraction();
     initDropdowns();
     initPager();
+    initTitlebarShading();
     logger.log('[WindowManager] Initialized');
+  }
+
+  /**
+   * Initialize double-click on titlebars for window shading (CDE behavior)
+   */
+  function initTitlebarShading(): void {
+    let lastClickTime = 0;
+    let lastClickTarget: HTMLElement | null = null;
+    const DOUBLE_CLICK_DELAY = 300; // ms
+
+    document.addEventListener(
+      'pointerdown',
+      (e: PointerEvent) => {
+        const target = e.target as HTMLElement;
+        const titlebar = target.closest('.titlebar') as HTMLElement;
+
+        if (titlebar && !isMobile()) {
+          const now = Date.now();
+          const timeSinceLastClick = now - lastClickTime;
+
+          // Check if this is a double-click
+          if (
+            timeSinceLastClick < DOUBLE_CLICK_DELAY &&
+            lastClickTarget === titlebar &&
+            e.button === 0
+          ) {
+            // This is a double-click - shade the window
+            const win = titlebar.closest('.window, .cde-retro-modal') as HTMLElement;
+            if (win && win.id) {
+              e.preventDefault();
+              e.stopPropagation();
+              e.stopImmediatePropagation();
+              shadeWindow(win.id);
+              lastClickTime = 0; // Reset to prevent triple-click issues
+              lastClickTarget = null;
+              return;
+            }
+          }
+
+          // Record this click for double-click detection
+          lastClickTime = now;
+          lastClickTarget = titlebar;
+        }
+      },
+      { capture: true }
+    ); // Use capture phase to intercept before drag
+
+    logger.log('[WindowManager] Titlebar shading initialized');
   }
 
   return { init, drag, focusWindow, registerWindow, centerWindow, switchWorkspace, showWindow };
@@ -768,6 +817,34 @@ function minimizeWindow(id: string): void {
       },
       { once: true }
     );
+  }
+}
+
+function shadeWindow(id: string): void {
+  const win = document.getElementById(id);
+  if (!win) return;
+
+  const titlebar = win.querySelector('.titlebar') as HTMLElement;
+  if (!titlebar) return;
+
+  if (win.classList.contains('shaded')) {
+    // Unshade: restore original height
+    win.classList.remove('shaded');
+    if (windowStates[id]?.height) {
+      win.style.height = windowStates[id].height!;
+    }
+    AudioManager.click();
+    logger.log(`[WindowManager] Window "${id}" unshaded`);
+  } else {
+    // Shade: collapse to titlebar only
+    windowStates[id] = {
+      ...windowStates[id],
+      height: win.style.height || getComputedStyle(win).height,
+    };
+    win.classList.add('shaded');
+    win.style.height = titlebar.offsetHeight + 'px';
+    AudioManager.click();
+    logger.log(`[WindowManager] Window "${id}" shaded`);
   }
 }
 
@@ -822,6 +899,7 @@ declare global {
     centerWindow: (win: HTMLElement) => void;
     minimizeWindow: typeof minimizeWindow;
     maximizeWindow: typeof maximizeWindow;
+    shadeWindow: typeof shadeWindow;
     WindowManager: typeof WindowManager;
   }
 }
@@ -831,6 +909,7 @@ window.focusWindow = WindowManager.focusWindow;
 window.centerWindow = WindowManager.centerWindow;
 window.minimizeWindow = minimizeWindow;
 window.maximizeWindow = maximizeWindow;
+window.shadeWindow = shadeWindow;
 window.WindowManager = WindowManager;
 
-export { WindowManager, minimizeWindow, maximizeWindow };
+export { WindowManager, minimizeWindow, maximizeWindow, shadeWindow };
