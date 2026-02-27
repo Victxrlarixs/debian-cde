@@ -95,16 +95,19 @@ mkdir -p a/b/c   Create nested directories
 Try these palette + backdrop combos:
 
 **Dark Mode Pro**
+
 - Palette: Coalmine
 - Backdrop: BrokenIce
 - Font: Medium
 
 **Retro Terminal**
+
 - Palette: Charcoal
 - Backdrop: CircuitBoards
 - Font: Large
 
 **Zen Mode**
+
 - Palette: Alpine
 - Backdrop: Canvas
 - Font: Medium
@@ -140,6 +143,7 @@ F2                  Quick rename
 ### Easter Eggs
 
 Try these (if implemented):
+
 - Konami code: ↑↑↓↓←→←→BA
 - Triple-click CDE logo
 - Type "xyzzy" in terminal
@@ -184,16 +188,19 @@ Ctrl+Alt+H      Toggle high contrast
 Create themed setups:
 
 **Morning**
+
 - Light palette
 - Subtle backdrop
 - Medium font
 
 **Evening**
+
 - Dark palette
 - Calm backdrop
 - Large font
 
 **Focus**
+
 - Minimal palette
 - Plain backdrop
 - Large font
@@ -322,6 +329,7 @@ cat file1 file2      Combine files
 ## Share Your Tips
 
 Found a great tip? Share it:
+
 - GitHub Discussions
 - Social media
 - With friends

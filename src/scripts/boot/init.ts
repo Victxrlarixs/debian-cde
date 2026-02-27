@@ -72,7 +72,9 @@ class DebianRealBoot {
    * Generates a randomized boot sequence based on phases.
    */
   private generateDynamicSequence(): void {
-    const messagesData: BootMessagesData = this.isUpdateMode ? updateMessagesData : bootMessagesData;
+    const messagesData: BootMessagesData = this.isUpdateMode
+      ? updateMessagesData
+      : bootMessagesData;
     const phases = messagesData.phases;
     let totalTime = 0;
 
@@ -115,7 +117,7 @@ class DebianRealBoot {
     const finalMessage = this.isUpdateMode
       ? '[    OK    ] System update completed successfully'
       : '[    OK    ] CDE Desktop ready ....';
-    
+
     this.bootSequence.push({
       text: finalMessage,
       type: 'desktop',
@@ -162,10 +164,10 @@ class DebianRealBoot {
     }
 
     this.container.innerHTML = '';
-    
+
     // Always insert logo
     this.insertLogo();
-    
+
     const mode = this.isUpdateMode ? 'update' : 'boot';
     logger.log(`[DebianRealBoot] ${mode} sequence started`);
     this.startBootSequence();
@@ -355,7 +357,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Check if we need to show update sequence
   const isUpdateMode = VersionManager.hasPendingUpdate();
-  
+
   if (isUpdateMode) {
     logger.log('[Boot] Pending update detected, showing update sequence');
   }

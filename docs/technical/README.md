@@ -23,11 +23,13 @@ Technical documentation for developers contributing to or learning from CDE Time
 ## Quick Links
 
 ### For New Contributors
+
 1. Read [Architecture Overview](architecture.md)
 2. Check [Contributing Guide](contributing.md)
 3. Review [API Reference](../api/README.md)
 
 ### For Learning
+
 - [VFS Implementation](vfs.md) - Learn about virtual filesystems
 - [Performance Optimizations](performance.md) - Modern web performance techniques
 - [Web Workers](workers.md) - Offloading work to background threads
@@ -72,18 +74,21 @@ docs/
 ## Development Workflow
 
 ### Setup
+
 ```bash
 npm install
 npm run dev
 ```
 
 ### Build
+
 ```bash
 npm run build
 npm run preview
 ```
 
 ### Code Style
+
 - TypeScript strict mode enabled
 - ESLint configuration (to be added)
 - Prettier for formatting
@@ -107,6 +112,7 @@ Graceful degradation for older browsers.
 ## Contributing
 
 See [Contributing Guide](contributing.md) for detailed information on:
+
 - Code style
 - Commit conventions
 - Pull request process

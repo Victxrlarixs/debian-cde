@@ -78,6 +78,7 @@ Click any icon in the Front Panel to launch that application.
 ### Windows
 
 Every application opens in a window. Windows can be:
+
 - **Moved** - Drag the title bar
 - **Resized** - Drag the edges or corners
 - **Minimized** - Click the minimize button
@@ -87,18 +88,21 @@ Every application opens in a window. Windows can be:
 ### Workspaces
 
 CDE has 4 virtual workspaces. Think of them as 4 separate desktops:
+
 - Workspace 1 - Your main workspace
 - Workspace 2 - For different tasks
 - Workspace 3 - For more tasks
 - Workspace 4 - Even more space!
 
 Switch between them by:
+
 - Clicking the workspace buttons
 - Using `Ctrl+Alt+1` through `Ctrl+Alt+4`
 
 ### The Desktop
 
 The desktop is your main work area. You can:
+
 - Open multiple windows
 - Arrange them however you like
 - Switch between workspaces
@@ -161,6 +165,7 @@ You can't break anything! Try different themes, open multiple windows, explore.
 ### Read the Guides
 
 Each application has its own guide:
+
 - [XEmacs Guide](xemacs.md)
 - [Terminal Lab Guide](terminal-lab.md)
 - [File Manager Guide](file-manager.md)
@@ -177,6 +182,7 @@ Each application has its own guide:
 ### Title Bars
 
 Every window has a title bar with:
+
 - **Title** - Application name
 - **Minimize** - Hide window
 - **Maximize** - Full screen
@@ -185,6 +191,7 @@ Every window has a title bar with:
 ### Menus
 
 Some applications have menus:
+
 - Click the menu name
 - Select an option
 - Or use keyboard shortcuts
@@ -192,6 +199,7 @@ Some applications have menus:
 ### Dialogs
 
 Dialogs are small windows that ask for input:
+
 - Read the message
 - Make your choice
 - Click OK or Cancel
@@ -241,6 +249,7 @@ Start with 5 shortcuts, add more each week.
 ### Save Your Work
 
 Always save before closing:
+
 - XEmacs: `Ctrl+X Ctrl+S`
 - Other apps: Check the File menu
 
@@ -298,24 +307,28 @@ Now that you know the basics:
 ## Learning Path
 
 ### Week 1: Basics
+
 - Learn to open/close applications
 - Try all applications once
 - Learn 5 keyboard shortcuts
 - Customize your theme
 
 ### Week 2: Productivity
+
 - Use multiple workspaces
 - Learn XEmacs basics
 - Complete 10 Terminal lessons
 - Organize your workflow
 
 ### Week 3: Mastery
+
 - Use keyboard shortcuts primarily
 - Complete all Terminal lessons
 - Customize everything
 - Develop your own workflow
 
 ### Week 4: Expert
+
 - Teach someone else
 - Contribute to the project
 - Share your setup

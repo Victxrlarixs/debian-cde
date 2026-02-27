@@ -43,15 +43,15 @@ Experience web browsing from 1994 with Netscape Navigator 1.0!
 
 ### Keyboard Shortcuts
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl+L` | Focus address bar |
-| `Enter` | Navigate to URL |
-| `Backspace` | Go back |
-| `Shift+Backspace` | Go forward |
-| `Ctrl+R` | Reload page |
-| `Ctrl+H` | Go to home |
-| `Esc` | Stop loading |
+| Shortcut          | Action            |
+| ----------------- | ----------------- |
+| `Ctrl+L`          | Focus address bar |
+| `Enter`           | Navigate to URL   |
+| `Backspace`       | Go back           |
+| `Shift+Backspace` | Go forward        |
+| `Ctrl+R`          | Reload page       |
+| `Ctrl+H`          | Go to home        |
+| `Esc`             | Stop loading      |
 
 ## Available Pages
 
@@ -77,6 +77,7 @@ Watch the Netscape logo animate while pages load!
 ### Status Messages
 
 The status bar shows:
+
 - "Loading..." - Page is loading
 - "Done" - Page loaded successfully
 - "Error" - Failed to load

@@ -17,18 +17,54 @@
       "min": 8,
       "max": 12,
       "messages": [
-        { "text": "Get:1 http://archive.debian.org/debian stable/main libxpm4 3.4k-12", "type": "download" },
-        { "text": "Get:2 http://archive.debian.org/debian stable/main libmotif3 2.1.30-11", "type": "download" },
-        { "text": "Get:3 http://archive.debian.org/debian stable/main cde-desktop 2.3.2-3", "type": "download" },
-        { "text": "Get:4 http://archive.debian.org/debian stable/main dtwm 2.3.2-3", "type": "download" },
-        { "text": "Get:5 http://archive.debian.org/debian stable/main dtfile 2.3.2-3", "type": "download" },
-        { "text": "Get:6 http://archive.debian.org/debian stable/main xemacs21 21.4.24-8", "type": "download" },
-        { "text": "Get:7 http://archive.debian.org/debian stable/main netscape-base 4.8-2", "type": "download" },
-        { "text": "Get:8 http://archive.debian.org/debian stable/main libxft2 2.1.14-2", "type": "download" },
-        { "text": "Get:9 http://archive.debian.org/debian stable/main x11-common 7.7+19", "type": "download" },
-        { "text": "Get:10 http://archive.debian.org/debian stable/main xfonts-base 1.0.4+nmu1", "type": "download" },
-        { "text": "Get:11 http://archive.debian.org/debian stable/main ttmkfdir 3.0.9-8", "type": "download" },
-        { "text": "Get:12 http://archive.debian.org/debian stable/main xfs 1.1.4-1", "type": "download" },
+        {
+          "text": "Get:1 http://archive.debian.org/debian stable/main libxpm4 3.4k-12",
+          "type": "download"
+        },
+        {
+          "text": "Get:2 http://archive.debian.org/debian stable/main libmotif3 2.1.30-11",
+          "type": "download"
+        },
+        {
+          "text": "Get:3 http://archive.debian.org/debian stable/main cde-desktop 2.3.2-3",
+          "type": "download"
+        },
+        {
+          "text": "Get:4 http://archive.debian.org/debian stable/main dtwm 2.3.2-3",
+          "type": "download"
+        },
+        {
+          "text": "Get:5 http://archive.debian.org/debian stable/main dtfile 2.3.2-3",
+          "type": "download"
+        },
+        {
+          "text": "Get:6 http://archive.debian.org/debian stable/main xemacs21 21.4.24-8",
+          "type": "download"
+        },
+        {
+          "text": "Get:7 http://archive.debian.org/debian stable/main netscape-base 4.8-2",
+          "type": "download"
+        },
+        {
+          "text": "Get:8 http://archive.debian.org/debian stable/main libxft2 2.1.14-2",
+          "type": "download"
+        },
+        {
+          "text": "Get:9 http://archive.debian.org/debian stable/main x11-common 7.7+19",
+          "type": "download"
+        },
+        {
+          "text": "Get:10 http://archive.debian.org/debian stable/main xfonts-base 1.0.4+nmu1",
+          "type": "download"
+        },
+        {
+          "text": "Get:11 http://archive.debian.org/debian stable/main ttmkfdir 3.0.9-8",
+          "type": "download"
+        },
+        {
+          "text": "Get:12 http://archive.debian.org/debian stable/main xfs 1.1.4-1",
+          "type": "download"
+        },
         { "text": "Fetched 4,892 kB in 2s (2,446 kB/s)", "type": "download" }
       ]
     },

@@ -31,66 +31,67 @@ XEmacs is a powerful text editor with authentic Emacs keybindings from the 1990s
 
 ### Navigation
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl+F` | Move forward one character |
+| Shortcut | Action                      |
+| -------- | --------------------------- |
+| `Ctrl+F` | Move forward one character  |
 | `Ctrl+B` | Move backward one character |
-| `Ctrl+N` | Move to next line |
-| `Ctrl+P` | Move to previous line |
-| `Ctrl+A` | Move to beginning of line |
-| `Ctrl+E` | Move to end of line |
-| `Alt+F` | Move forward one word |
-| `Alt+B` | Move backward one word |
-| `Alt+<` | Go to beginning of buffer |
-| `Alt+>` | Go to end of buffer |
+| `Ctrl+N` | Move to next line           |
+| `Ctrl+P` | Move to previous line       |
+| `Ctrl+A` | Move to beginning of line   |
+| `Ctrl+E` | Move to end of line         |
+| `Alt+F`  | Move forward one word       |
+| `Alt+B`  | Move backward one word      |
+| `Alt+<`  | Go to beginning of buffer   |
+| `Alt+>`  | Go to end of buffer         |
 
 ### Editing
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl+D` | Delete character forward |
-| `Backspace` | Delete character backward |
-| `Alt+D` | Delete word forward |
-| `Alt+Backspace` | Delete word backward |
-| `Ctrl+K` | Kill (cut) to end of line |
-| `Ctrl+Y` | Yank (paste) |
-| `Ctrl+W` | Kill region (cut selection) |
-| `Alt+W` | Copy region |
+| Shortcut        | Action                      |
+| --------------- | --------------------------- |
+| `Ctrl+D`        | Delete character forward    |
+| `Backspace`     | Delete character backward   |
+| `Alt+D`         | Delete word forward         |
+| `Alt+Backspace` | Delete word backward        |
+| `Ctrl+K`        | Kill (cut) to end of line   |
+| `Ctrl+Y`        | Yank (paste)                |
+| `Ctrl+W`        | Kill region (cut selection) |
+| `Alt+W`         | Copy region                 |
 
 ### Selection
 
-| Shortcut | Action |
-|----------|--------|
+| Shortcut     | Action                     |
+| ------------ | -------------------------- |
 | `Ctrl+Space` | Set mark (start selection) |
-| `Ctrl+X H` | Select all |
+| `Ctrl+X H`   | Select all                 |
 
 ### Search & Replace
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl+S` | Search forward |
+| Shortcut | Action          |
+| -------- | --------------- |
+| `Ctrl+S` | Search forward  |
 | `Ctrl+R` | Search backward |
-| `Alt+%` | Query replace |
+| `Alt+%`  | Query replace   |
 
 ### File Operations
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl+X Ctrl+F` | Find file (open) |
-| `Ctrl+X Ctrl+S` | Save file |
+| Shortcut        | Action               |
+| --------------- | -------------------- |
+| `Ctrl+X Ctrl+F` | Find file (open)     |
+| `Ctrl+X Ctrl+S` | Save file            |
 | `Ctrl+X Ctrl+W` | Write file (save as) |
-| `Ctrl+X Ctrl+C` | Exit XEmacs |
+| `Ctrl+X Ctrl+C` | Exit XEmacs          |
 
 ### Undo/Redo
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl+_` or `Ctrl+/` | Undo |
-| `Ctrl+G` | Cancel current command |
+| Shortcut             | Action                 |
+| -------------------- | ---------------------- |
+| `Ctrl+_` or `Ctrl+/` | Undo                   |
+| `Ctrl+G`             | Cancel current command |
 
 ## The Minibuffer
 
 The minibuffer is the small input area at the bottom of XEmacs. It's used for:
+
 - Entering commands
 - File names
 - Search terms
@@ -108,6 +109,7 @@ The minibuffer is the small input area at the bottom of XEmacs. It's used for:
 ### Syntax Highlighting
 
 XEmacs automatically detects file types and applies syntax highlighting:
+
 - `.js`, `.ts` - JavaScript/TypeScript
 - `.html`, `.css` - Web files
 - `.md` - Markdown
@@ -139,6 +141,7 @@ If you start a command by mistake, press `Ctrl+G` to cancel it.
 ### Repeat Commands
 
 Some commands can be repeated by pressing them multiple times:
+
 - `Ctrl+K` twice kills the entire line including newline
 - `Ctrl+D` multiple times deletes multiple characters
 
@@ -199,28 +202,31 @@ Press `Ctrl+G` to return to the main editor area.
 
 XEmacs uses classic Emacs keybindings which differ from modern editors:
 
-| Modern | XEmacs |
-|--------|--------|
-| `Ctrl+C` (copy) | `Alt+W` |
-| `Ctrl+V` (paste) | `Ctrl+Y` |
-| `Ctrl+X` (cut) | `Ctrl+W` |
-| `Ctrl+Z` (undo) | `Ctrl+_` or `Ctrl+/` |
-| `Ctrl+F` (find) | `Ctrl+S` |
-| `Ctrl+S` (save) | `Ctrl+X Ctrl+S` |
+| Modern           | XEmacs               |
+| ---------------- | -------------------- |
+| `Ctrl+C` (copy)  | `Alt+W`              |
+| `Ctrl+V` (paste) | `Ctrl+Y`             |
+| `Ctrl+X` (cut)   | `Ctrl+W`             |
+| `Ctrl+Z` (undo)  | `Ctrl+_` or `Ctrl+/` |
+| `Ctrl+F` (find)  | `Ctrl+S`             |
+| `Ctrl+S` (save)  | `Ctrl+X Ctrl+S`      |
 
 ## Learning Path
 
 ### Beginner (Day 1)
+
 - Learn basic navigation: `Ctrl+F`, `Ctrl+B`, `Ctrl+N`, `Ctrl+P`
 - Learn to save: `Ctrl+X Ctrl+S`
 - Learn to undo: `Ctrl+_`
 
 ### Intermediate (Week 1)
+
 - Master word movement: `Alt+F`, `Alt+B`
 - Learn selection: `Ctrl+Space`, `Ctrl+W`, `Alt+W`
 - Practice search: `Ctrl+S`
 
 ### Advanced (Month 1)
+
 - Use all shortcuts without thinking
 - Customize your workflow
 - Explore advanced features

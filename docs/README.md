@@ -9,6 +9,7 @@ Learn how to use CDE Time Capsule effectively.
 **Start Here:** [User Guide](user-guide/README.md)
 
 ### Quick Links
+
 - [Getting Started](user-guide/getting-started.md) - First steps
 - [Keyboard Shortcuts](user-guide/keyboard-shortcuts.md) - Essential shortcuts
 - [XEmacs Guide](user-guide/xemacs.md) - Text editor
@@ -22,6 +23,7 @@ Technical documentation for contributors and learners.
 **Start Here:** [Technical Documentation](technical/README.md)
 
 ### Quick Links
+
 - [Architecture](technical/architecture.md) - System design
 - [Storage & Cache](technical/storage.md) - Data persistence
 - [Performance](technical/performance.md) - Optimizations
@@ -86,6 +88,7 @@ docs/
 ## 📖 Documentation Philosophy
 
 ### User Guides
+
 - Written for end-users
 - Focus on "how to use"
 - Step-by-step instructions
@@ -93,6 +96,7 @@ docs/
 - No technical jargon
 
 ### Technical Docs
+
 - Written for developers
 - Focus on "how it works"
 - Code examples and architecture
@@ -100,6 +104,7 @@ docs/
 - Best practices
 
 ### API Reference
+
 - Complete function signatures
 - Parameter descriptions
 - Return types

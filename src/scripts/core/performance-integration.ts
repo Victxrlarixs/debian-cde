@@ -11,7 +11,7 @@ import { performanceMonitor } from './performance-monitor';
  */
 export async function initPerformanceOptimizations(): Promise<void> {
   logger.log('[Performance] Initializing optimizations...');
-  
+
   try {
     // 1. Start performance monitoring
     performanceMonitor.init();
@@ -24,7 +24,7 @@ export async function initPerformanceOptimizations(): Promise<void> {
 
     // 3. Initialize IndexedDB
     await indexedDBManager.init();
-    
+
     // 4. Migrate from localStorage if needed
     const migrated = localStorage.getItem('cde-indexeddb-migrated');
     if (!migrated) {
@@ -46,11 +46,7 @@ export async function initPerformanceOptimizations(): Promise<void> {
     await indexedDBManager.cleanupCache();
 
     performanceMonitor.mark('perf-init-end');
-    const duration = performanceMonitor.measure(
-      'perf-init',
-      'perf-init-start',
-      'perf-init-end'
-    );
+    const duration = performanceMonitor.measure('perf-init', 'perf-init-start', 'perf-init-end');
 
     logger.log(`[Performance] Optimizations initialized in ${duration.toFixed(2)}ms`);
 
@@ -59,7 +55,6 @@ export async function initPerformanceOptimizations(): Promise<void> {
     const usageMB = (estimate.usage / 1024 / 1024).toFixed(2);
     const quotaMB = (estimate.quota / 1024 / 1024).toFixed(2);
     logger.log(`[Performance] Storage: ${usageMB}MB / ${quotaMB}MB`);
-
   } catch (error) {
     logger.error('[Performance] Failed to initialize optimizations:', error);
   }
@@ -70,10 +65,9 @@ export async function initPerformanceOptimizations(): Promise<void> {
  */
 export function createXPMWorker(): Worker {
   try {
-    const worker = new Worker(
-      new URL('../workers/xpm-worker.ts', import.meta.url),
-      { type: 'module' }
-    );
+    const worker = new Worker(new URL('../workers/xpm-worker.ts', import.meta.url), {
+      type: 'module',
+    });
     logger.log('[Performance] XPM Worker created');
     return worker;
   } catch (error) {
@@ -87,10 +81,9 @@ export function createXPMWorker(): Worker {
  */
 export function createVFSWorker(): Worker {
   try {
-    const worker = new Worker(
-      new URL('../workers/vfs-worker.ts', import.meta.url),
-      { type: 'module' }
-    );
+    const worker = new Worker(new URL('../workers/vfs-worker.ts', import.meta.url), {
+      type: 'module',
+    });
     logger.log('[Performance] VFS Worker created');
     return worker;
   } catch (error) {
@@ -108,7 +101,7 @@ export async function parseXPMWithWorker(
 ): Promise<string | null> {
   return new Promise((resolve, reject) => {
     const worker = createXPMWorker();
-    
+
     const timeout = setTimeout(() => {
       worker.terminate();
       reject(new Error('XPM parsing timeout'));
@@ -117,7 +110,7 @@ export async function parseXPMWithWorker(
     worker.onmessage = (e) => {
       clearTimeout(timeout);
       worker.terminate();
-      
+
       if (e.data.type === 'result') {
         if (e.data.error) {
           reject(new Error(e.data.error));
@@ -150,7 +143,7 @@ export async function searchVFSWithWorker(
 ): Promise<string[]> {
   return new Promise((resolve, reject) => {
     const worker = createVFSWorker();
-    
+
     const timeout = setTimeout(() => {
       worker.terminate();
       reject(new Error('VFS search timeout'));
@@ -159,7 +152,7 @@ export async function searchVFSWithWorker(
     worker.onmessage = (e) => {
       clearTimeout(timeout);
       worker.terminate();
-      
+
       if (e.data.type === 'result') {
         if (e.data.error) {
           reject(new Error(e.data.error));
@@ -206,10 +199,10 @@ export async function logPerformanceReport(): Promise<void> {
   console.log('='.repeat(60));
   console.log('CDE PERFORMANCE REPORT');
   console.log('='.repeat(60));
-  
+
   // Metrics
   performanceMonitor.logSummary();
-  
+
   // Lazy Loading
   const lazyStats = lazyLoader.getStats();
   console.log('\n=== Lazy Loading ===');
@@ -217,14 +210,14 @@ export async function logPerformanceReport(): Promise<void> {
   console.log(`Loaded: ${lazyStats.loaded}`);
   console.log(`Loading: ${lazyStats.loading}`);
   console.log(`Pending: ${lazyStats.total - lazyStats.loaded - lazyStats.loading}`);
-  
+
   // Storage
   const storage = await indexedDBManager.getStorageEstimate();
   console.log('\n=== Storage ===');
   console.log(`Used: ${(storage.usage / 1024 / 1024).toFixed(2)} MB`);
   console.log(`Quota: ${(storage.quota / 1024 / 1024).toFixed(2)} MB`);
   console.log(`Available: ${((storage.quota - storage.usage) / 1024 / 1024).toFixed(2)} MB`);
-  
+
   // Memory
   const memory = performanceMonitor.getMemoryUsage();
   if (memory) {
@@ -233,7 +226,7 @@ export async function logPerformanceReport(): Promise<void> {
     console.log(`Total: ${(memory.total / 1024 / 1024).toFixed(2)} MB`);
     console.log(`Limit: ${(memory.limit / 1024 / 1024).toFixed(2)} MB`);
   }
-  
+
   console.log('='.repeat(60));
 }
 

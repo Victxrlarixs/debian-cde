@@ -11,6 +11,7 @@ Think of them as rooms in a house - you can be in one room at a time, but all yo
 ## The Workspace Switcher
 
 Located in the Front Panel, the workspace switcher shows 4 buttons:
+
 - **One** - Workspace 1
 - **Two** - Workspace 2
 - **Three** - Workspace 3
@@ -21,6 +22,7 @@ The active workspace is highlighted.
 ### Visual Preview
 
 Hover over any workspace button to see a miniature preview showing:
+
 - Application icons for open windows
 - Window positions and layout
 - Number of open windows
@@ -35,8 +37,8 @@ Click any workspace button to switch to that workspace.
 
 ### Using Keyboard
 
-| Shortcut | Workspace |
-|----------|-----------|
+| Shortcut     | Workspace   |
+| ------------ | ----------- |
 | `Ctrl+Alt+1` | Workspace 1 |
 | `Ctrl+Alt+2` | Workspace 2 |
 | `Ctrl+Alt+3` | Workspace 3 |
@@ -47,21 +49,25 @@ Click any workspace button to switch to that workspace.
 ### Organize by Task
 
 **Workspace 1: Main Work**
+
 - XEmacs for coding
 - Terminal for commands
 - File Manager for files
 
 **Workspace 2: Communication**
+
 - Email (future)
 - Chat (future)
 - Calendar
 
 **Workspace 3: Reference**
+
 - Documentation
 - Netscape Navigator
 - Notes
 
 **Workspace 4: Miscellaneous**
+
 - Process Monitor
 - System tools
 - Temporary work
@@ -69,34 +75,42 @@ Click any workspace button to switch to that workspace.
 ### Organize by Project
 
 **Workspace 1: Project A**
+
 - All files for Project A
 - Related applications
 
 **Workspace 2: Project B**
+
 - All files for Project B
 - Related applications
 
 **Workspace 3: Project C**
+
 - All files for Project C
 - Related applications
 
 **Workspace 4: General**
+
 - Email, calendar, etc.
 
 ### Organize by Context
 
 **Workspace 1: Focus**
+
 - Single application, full screen
 - No distractions
 
 **Workspace 2: Multitasking**
+
 - Multiple windows
 - Side-by-side work
 
 **Workspace 3: Research**
+
 - Browser, notes, references
 
 **Workspace 4: Admin**
+
 - System tools, settings
 
 ## Moving Windows Between Workspaces
@@ -122,6 +136,7 @@ Each workspace has its own set of windows. Opening an application in Workspace 1
 ### Shared Settings
 
 All workspaces share:
+
 - Color palette
 - Backdrop
 - Font size
@@ -178,12 +193,12 @@ Periodically check all workspaces and close unused windows.
 
 ## Keyboard Shortcuts
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl+Alt+1` | Switch to Workspace 1 |
-| `Ctrl+Alt+2` | Switch to Workspace 2 |
-| `Ctrl+Alt+3` | Switch to Workspace 3 |
-| `Ctrl+Alt+4` | Switch to Workspace 4 |
+| Shortcut     | Action                      |
+| ------------ | --------------------------- |
+| `Ctrl+Alt+1` | Switch to Workspace 1       |
+| `Ctrl+Alt+2` | Switch to Workspace 2       |
+| `Ctrl+Alt+3` | Switch to Workspace 3       |
+| `Ctrl+Alt+4` | Switch to Workspace 4       |
 | `Ctrl+Alt+D` | Show desktop (minimize all) |
 
 ## Troubleshooting
@@ -205,6 +220,7 @@ Make sure you're pressing all three keys: Ctrl+Alt+Number.
 ### Workspace Naming
 
 Remember what each workspace is for:
+
 - Write it down
 - Create a mental map
 - Be consistent

@@ -65,7 +65,7 @@ class PerformanceMonitor {
       const observer = new PerformanceObserver((list) => {
         const entries = list.getEntries();
         const lastEntry = entries[entries.length - 1];
-        
+
         this.metrics.lcp = lastEntry.startTime;
         logger.log(`[PerformanceMonitor] LCP: ${lastEntry.startTime.toFixed(2)}ms`);
         this.reportMetric('LCP', lastEntry.startTime);
@@ -105,7 +105,7 @@ class PerformanceMonitor {
   private observeCLS(): void {
     try {
       let clsValue = 0;
-      
+
       const observer = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           const layoutShift = entry as any;
@@ -113,7 +113,7 @@ class PerformanceMonitor {
             clsValue += layoutShift.value;
           }
         }
-        
+
         this.metrics.cls = clsValue;
         logger.log(`[PerformanceMonitor] CLS: ${clsValue.toFixed(4)}`);
         this.reportMetric('CLS', clsValue);
@@ -131,8 +131,10 @@ class PerformanceMonitor {
    */
   private measureTTFB(): void {
     try {
-      const navigationEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-      
+      const navigationEntry = performance.getEntriesByType(
+        'navigation'
+      )[0] as PerformanceNavigationTiming;
+
       if (navigationEntry) {
         this.metrics.ttfb = navigationEntry.responseStart - navigationEntry.requestStart;
         logger.log(`[PerformanceMonitor] TTFB: ${this.metrics.ttfb.toFixed(2)}ms`);
@@ -193,7 +195,7 @@ class PerformanceMonitor {
       `TTFB: ${this.metrics.ttfb?.toFixed(2) || 'N/A'}ms`,
       '========================',
     ];
-    
+
     return lines.join('\n');
   }
 

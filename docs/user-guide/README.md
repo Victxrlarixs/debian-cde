@@ -5,12 +5,14 @@ Welcome to CDE Time Capsule! This guide will help you get the most out of your 1
 ## Quick Start
 
 New to CDE? Start here:
+
 - [Getting Started](getting-started.md) - First steps and basic navigation
 - [Keyboard Shortcuts](keyboard-shortcuts.md) - Essential shortcuts for productivity
 
 ## Applications
 
 Learn how to use each application:
+
 - [XEmacs](xemacs.md) - Text editor with Emacs keybindings
 - [Terminal Lab](terminal-lab.md) - Interactive Unix terminal lessons
 - [File Manager](file-manager.md) - Browse and manage files

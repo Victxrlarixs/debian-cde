@@ -21,14 +21,14 @@ export class VirtualScroller {
   private data: any[];
   private overscan: number;
   private onScroll?: (scrollTop: number) => void;
-  
+
   private visibleStart = 0;
   private visibleEnd = 0;
   private renderedItems: Map<number, HTMLElement> = new Map();
   private scrollTop = 0;
   private viewportHeight = 0;
   private totalHeight = 0;
-  
+
   private rafId: number | null = null;
   private resizeObserver: ResizeObserver | null = null;
 
@@ -93,11 +93,11 @@ export class VirtualScroller {
     this.rafId = requestAnimationFrame(() => {
       this.scrollTop = this.viewport.scrollTop;
       this.render();
-      
+
       if (this.onScroll) {
         this.onScroll(this.scrollTop);
       }
-      
+
       this.rafId = null;
     });
   }
@@ -154,11 +154,11 @@ export class VirtualScroller {
   public setData(data: any[]): void {
     this.data = data;
     this.updateDimensions();
-    
+
     // Clear all rendered items
     this.renderedItems.forEach((element) => element.remove());
     this.renderedItems.clear();
-    
+
     this.render();
     logger.log('[VirtualScroller] Data updated:', data.length, 'items');
   }
@@ -218,9 +218,9 @@ export class VirtualScroller {
 
     this.renderedItems.forEach((element) => element.remove());
     this.renderedItems.clear();
-    
+
     this.viewport.remove();
-    
+
     logger.log('[VirtualScroller] Destroyed');
   }
 }
@@ -242,22 +242,22 @@ export function createFileListScroller(
       const item = document.createElement('div');
       item.className = 'fm-list-item';
       item.dataset.index = String(index);
-      
+
       const icon = file.type === 'folder' ? '📁' : '📄';
       const size = file.type === 'folder' ? '--' : formatFileSize(file.metadata?.size || 0);
-      const mtime = file.metadata?.mtime 
-        ? new Date(file.metadata.mtime).toLocaleString() 
+      const mtime = file.metadata?.mtime
+        ? new Date(file.metadata.mtime).toLocaleString()
         : 'Unknown';
-      
+
       item.innerHTML = `
         <span class="fm-icon">${icon}</span>
         <span class="fm-name">${file.name}</span>
         <span class="fm-size">${size}</span>
         <span class="fm-date">${mtime}</span>
       `;
-      
+
       item.addEventListener('click', () => onItemClick(file));
-      
+
       return item;
     },
   });
@@ -268,5 +268,5 @@ function formatFileSize(bytes: number): string {
   const k = 1024;
   const sizes = ['B', 'KB', 'MB', 'GB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+  return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
 }

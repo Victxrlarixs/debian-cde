@@ -113,7 +113,7 @@ async function syncDynamicContent(): Promise<void> {
     workspacesGuide,
     keyboardShortcuts,
     tipsAndTricks,
-    docsReadme
+    docsReadme,
   ] = await Promise.all([
     import('../../../README.md?raw'),
     // Documentation imports

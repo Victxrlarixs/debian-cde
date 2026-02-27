@@ -109,7 +109,7 @@ async function parseXpmToDataUrl(
 
     const blob = await canvas.convertToBlob({ type: 'image/png' });
     const reader = new FileReader();
-    
+
     return new Promise((resolve) => {
       reader.onloadend = () => resolve(reader.result as string);
       reader.readAsDataURL(blob);
