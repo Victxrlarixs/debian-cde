@@ -46,19 +46,19 @@ export function confirmExternalLink(url: string): void {
     <p class="external-link-question">
       Do you want to continue?
     </p>
+    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+      <button 
+        onclick="window.open('${url}', '_blank'); window.CDEModal.close();" 
+        class="cde-btn cde-btn-default"
+        style="padding: 8px 16px; font-size: 12px;"
+      >
+        <img src="/icons/konqueror.png" alt="" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;" />
+        Go GitHub
+      </button>
+    </div>
   `;
 
-  CDEModal.open('External Link', content, [
-    { label: 'Continue', value: true, isDefault: true },
-    { label: 'Cancel', value: false },
-  ]).then((confirmed: boolean) => {
-    if (confirmed) {
-      logger.log(`[ExternalLink] User confirmed, opening: ${url}`);
-      window.open(url, '_blank');
-    } else {
-      logger.log('[ExternalLink] User cancelled');
-    }
-  });
+  CDEModal.open('External Link', content, []);
 }
 
 // Expose globally for HTML onclick handlers

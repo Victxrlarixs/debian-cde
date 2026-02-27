@@ -78,7 +78,7 @@ export class BeepModule {
 
     const volumeSlider = panel.querySelector('input[data-key="volume"]') as HTMLInputElement;
     if (volumeSlider) {
-      volumeSlider.value = String(this.settings.volume);
+      volumeSlider.value = String(this.settings.volume * 100);
     }
 
     const freqSlider = panel.querySelector('input[data-key="frequency"]') as HTMLInputElement;
@@ -88,9 +88,19 @@ export class BeepModule {
 
     const durSlider = panel.querySelector('input[data-key="duration"]') as HTMLInputElement;
     if (durSlider) {
-      durSlider.value = String(this.settings.duration);
+      durSlider.value = String(this.settings.duration * 1000);
     }
 
     logger.log('[BeepModule] UI synchronized');
+  }
+
+  /**
+   * Test the current beep settings.
+   */
+  public testBeep(): void {
+    if (window.AudioManager) {
+      window.AudioManager.beep(this.settings.frequency, this.settings.duration);
+      logger.log('[BeepModule] Test beep played');
+    }
   }
 }
