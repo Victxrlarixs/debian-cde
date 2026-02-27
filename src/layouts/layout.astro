@@ -7,16 +7,23 @@ const { title } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content="Retro Debian CDE Desktop UI inspirado en Unix y Linux." />
-    <meta name="keywords" content="Debian, Linux, CDE, Retro Desktop, Unix" />
+    <meta name="description" content="A modern Progressive Web App that brings 1990s Unix to any device. Desktop, tablet, phone—the experience adapts. Touch gestures on mobile. Keyboard shortcuts on desktop. Always authentic." />
+    <meta name="keywords" content="CDE, Common Desktop Environment, Unix, Motif, Retro Computing, 90s Desktop, Workstation, XPM, Debian" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#4d648d" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Time Capsule" />
+    <meta property="og:description" content="A modern Progressive Web App that brings 1990s Unix to any device. Desktop, tablet, phone—the experience adapts. Touch gestures on mobile. Keyboard shortcuts on desktop. Always authentic." />
+    <meta property="og:image" content="/icons/computer.png" />
+    
     <title>{title}</title>
 
     <!-- Critical CSS for Boot Sequence - Inlined to prevent Render Blocking -->
@@ -58,9 +65,9 @@ const { title } = Astro.props;
       }
     </style>
 
-    <link rel="icon" type="image/png" href="/icons/Debian.png" />
+    <link rel="icon" type="image/png" href="/icons/computer.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
-    <link rel="apple-touch-icon" href="/icons/Debian.png" />
+    <link rel="apple-touch-icon" href="/icons/computer.png" />
 
     <!-- Defer non-critical CSS -->
     <link rel="stylesheet" href="/css/main.css" media="print" onload="this.media='all'" />

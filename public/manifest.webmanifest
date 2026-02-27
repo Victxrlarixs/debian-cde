@@ -1,13 +1,13 @@
 {
-  "name": "Debian CDE Desktop",
+  "name": "Time Capsule",
   "short_name": "Debian CDE",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
-  "description": "Retro Debian CDE Desktop UI inspirado en Unix y Linux.",
-  "lang": "es-MX",
+  "background_color": "#4d648d",
+  "theme_color": "#4d648d",
+  "description": "A modern Progressive Web App that brings 1990s Unix to any device. Desktop, tablet, phone—the experience adapts. Touch gestures on mobile. Keyboard shortcuts on desktop. Always authentic.",
+  "lang": "en-US",
   "icons": [
     {
       "src": "/icons/Debian.png",
