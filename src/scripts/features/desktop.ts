@@ -40,6 +40,14 @@ const SYSTEM_ICONS: any[] = [
       if ((window as any).Netscape?.open) (window as any).Netscape.open();
     },
   },
+  {
+    id: 'lynx-icon',
+    name: 'Lynx',
+    icon: '/icons/Lynx.svg',
+    action: () => {
+      if ((window as any).Lynx?.open) (window as any).Lynx.open();
+    },
+  },
 ];
 
 /**

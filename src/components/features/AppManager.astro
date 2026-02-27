@@ -71,11 +71,17 @@ import WindowMinimize from '../common/WindowMinimize.astro';
         <img src="/icons/netscape_classic.png" alt="Netscape Navigator" />
         <span>Netscape</span>
       </div>
+
+      <!-- Lynx Browser -->
+      <div class="app-item" onclick="window.Lynx?.open(); appManager.close()">
+        <img src="/icons/Lynx.svg" alt="Lynx Browser" />
+        <span>Lynx</span>
+      </div>
     </div>
   </div>
 
   <div class="cde-statusbar">
     <div class="cde-statusleft">Application Manager</div>
-    <div class="cde-statusright">10 Objects</div>
+    <div class="cde-statusright">11 Objects</div>
   </div>
 </div>

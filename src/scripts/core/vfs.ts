@@ -114,6 +114,7 @@ async function syncDynamicContent(): Promise<void> {
     keyboardShortcuts,
     tipsAndTricks,
     docsReadme,
+    lynxGuide,
   ] = await Promise.all([
     import('../../../README.md?raw'),
     // Documentation imports
@@ -127,6 +128,7 @@ async function syncDynamicContent(): Promise<void> {
     import('../../../docs/user-guide/keyboard-shortcuts.md?raw'),
     import('../../../docs/user-guide/tips-and-tricks.md?raw'),
     import('../../../docs/user-guide/README.md?raw'),
+    import('../../../docs/user-guide/lynx.md?raw'),
   ]);
 
   // README.md
@@ -144,6 +146,7 @@ async function syncDynamicContent(): Promise<void> {
     'Terminal-Lab.md': terminalLabGuide.default,
     'File-Manager.md': fileManagerGuide.default,
     'Netscape.md': netscapeGuide.default,
+    'Lynx.md': lynxGuide.default,
     'Style-Manager.md': styleManagerGuide.default,
     'Workspaces.md': workspacesGuide.default,
     'Keyboard-Shortcuts.md': keyboardShortcuts.default,

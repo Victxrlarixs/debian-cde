@@ -36,6 +36,7 @@
 @import './components/app-manager.css';
 @import './components/emacs.css';
 @import './components/netscape.css';
+@import './components/lynx.css';
 @import './components/misc.css';
 
 /* Responsive Styles */

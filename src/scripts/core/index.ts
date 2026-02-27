@@ -10,6 +10,7 @@ import '../features/lab';
 import '../features/appmanager';
 import '../features/timemanager';
 import '../features/netscape';
+import '../features/lynx';
 /*
 if (typeof window !== 'undefined') {
   if ('serviceWorker' in navigator) {

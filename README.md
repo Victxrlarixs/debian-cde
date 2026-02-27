@@ -27,6 +27,7 @@ Welcome to a pixel-perfect recreation of the Common Desktop Environment (CDE)—
 | **Terminal Lab**           | 41 interactive lessons. Watch commands type themselves. Learn Unix by doing—from `ls` to pipes                 | [Terminal Lab Guide →](docs/user-guide/terminal-lab.md)   |
 | **Virtual Filesystem**     | Create files, make directories, navigate with context menus. A real filesystem in your browser                 | [File Manager Guide →](docs/user-guide/file-manager.md)   |
 | **Netscape Navigator**     | Web browsing from 1994. Animated logo. That nostalgic "Loading..." message                                     | [Netscape Guide →](docs/user-guide/netscape.md)           |
+| **Lynx Browser**           | Text-based web browser from 1992. Keyboard-driven navigation. Pure terminal browsing experience                | [Lynx Guide →](docs/user-guide/lynx.md)                   |
 | **4 Virtual Workspaces**   | Just like real CDE. Organize across four desktops. Switch with `Ctrl+Alt+1-4`                                  | [Workspaces Guide →](docs/user-guide/workspaces.md)       |
 | **Authentic Updates**      | Version updates show real Debian package manager sequences. Watch `apt-get` download and install packages      | [Technical Docs →](docs/technical/version-updates.md)     |
 

@@ -453,10 +453,21 @@ class TerminalLabManager {
         [
           'Available commands (free mode):',
           '  ls, cd, pwd, cat, mkdir, touch, rm, echo, clear',
-          '  whoami, hostname, uname, date, help',
+          '  whoami, hostname, uname, date, help, lynx',
           '  history, man',
           'Type "tutorial" to return to guided mode.',
         ].join('\n'),
+
+      lynx: (args) => {
+        if (window.Lynx) {
+          window.Lynx.open();
+          if (args[0]) {
+            return `Lynx browser opened with URL: ${args[0]}`;
+          }
+          return 'Lynx browser opened';
+        }
+        return 'lynx: command not found';
+      },
 
       history: () =>
         this.history
