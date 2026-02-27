@@ -38,6 +38,10 @@
             "type": "file",
             "content": "[Dinamic content: docs/user-guide/lynx.md]"
           },
+          "Man-Viewer.md": {
+            "type": "file",
+            "content": "[Dinamic content: docs/user-guide/man-viewer.md]"
+          },
           "Style-Manager.md": {
             "type": "file",
             "content": "[Dinamic content: docs/user-guide/style-manager.md]"

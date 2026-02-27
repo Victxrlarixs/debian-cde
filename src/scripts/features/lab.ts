@@ -475,10 +475,15 @@ class TerminalLabManager {
           .map((c, i) => `  ${i + 1}  ${c}`)
           .join('\n'),
 
-      man: (args) =>
-        args[0]
+      man: (args) => {
+        if (window.ManViewer) {
+          window.ManViewer.open(args[0]);
+          return args[0] ? `Opening manual page for ${args[0]}...` : 'Opening man page viewer...';
+        }
+        return args[0]
           ? `No manual entry for ${args[0]} in this lab. Try --help.`
-          : 'What manual page do you want?',
+          : 'What manual page do you want?';
+      },
     };
   }
 

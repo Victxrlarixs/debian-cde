@@ -11,6 +11,7 @@ import '../features/appmanager';
 import '../features/timemanager';
 import '../features/netscape';
 import '../features/lynx';
+import '../features/manviewer';
 /*
 if (typeof window !== 'undefined') {
   if ('serviceWorker' in navigator) {

@@ -28,6 +28,7 @@ Welcome to a pixel-perfect recreation of the Common Desktop Environment (CDE)—
 | **Virtual Filesystem**     | Create files, make directories, navigate with context menus. A real filesystem in your browser                 | [File Manager Guide →](docs/user-guide/file-manager.md)   |
 | **Netscape Navigator**     | Web browsing from 1994. Animated logo. That nostalgic "Loading..." message                                     | [Netscape Guide →](docs/user-guide/netscape.md)           |
 | **Lynx Browser**           | Text-based web browser from 1992. Keyboard-driven navigation. Pure terminal browsing experience                | [Lynx Guide →](docs/user-guide/lynx.md)                   |
+| **Man Page Viewer**        | Unix manual pages with authentic formatting. 28 essential commands. Clickable examples and navigation          | [Man Viewer Guide →](docs/user-guide/man-viewer.md)       |
 | **4 Virtual Workspaces**   | Just like real CDE. Organize across four desktops. Switch with `Ctrl+Alt+1-4`                                  | [Workspaces Guide →](docs/user-guide/workspaces.md)       |
 | **Authentic Updates**      | Version updates show real Debian package manager sequences. Watch `apt-get` download and install packages      | [Technical Docs →](docs/technical/version-updates.md)     |
 
