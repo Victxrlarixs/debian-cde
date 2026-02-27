@@ -52,6 +52,9 @@ export class MouseModule extends StyleModuleBase<MouseSettings> {
     // Render mouse icon with current palette
     this.renderMouseIcon();
 
+    // Render mouse icon with current palette
+    this.renderMouseIcon();
+
     // Handedness
     this.syncRadio(panel, 'handedness', this.settings.handedness);
 
