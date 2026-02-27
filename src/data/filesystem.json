@@ -42,6 +42,10 @@
             "type": "file",
             "content": "[Dinamic content: docs/user-guide/man-viewer.md]"
           },
+          "PWA-Installation.md": {
+            "type": "file",
+            "content": "[Dinamic content: docs/user-guide/pwa-installation.md]"
+          },
           "Style-Manager.md": {
             "type": "file",
             "content": "[Dinamic content: docs/user-guide/style-manager.md]"

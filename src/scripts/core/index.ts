@@ -12,6 +12,12 @@ import '../features/timemanager';
 import '../features/netscape';
 import '../features/lynx';
 import '../features/manviewer';
+import { initPWAInstaller } from '../utilities/pwa-installer';
+
+// Initialize PWA installer
+if (typeof window !== 'undefined') {
+  initPWAInstaller();
+}
 /*
 if (typeof window !== 'undefined') {
   if ('serviceWorker' in navigator) {
