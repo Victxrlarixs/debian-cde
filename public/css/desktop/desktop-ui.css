@@ -32,9 +32,17 @@
 }
 
 .cde-desktop-icon img {
-  width: 32px;
-  height: 32px;
+  width: 48px;
+  height: 48px;
   filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.5));
+  padding: 8px;
+  background: var(--window-color);
+  border: 2px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
 }
 
 .cde-desktop-icon span {
@@ -62,4 +70,8 @@
 
 .cde-desktop-icon:active img {
   transform: translate(1px, 1px);
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
 }
