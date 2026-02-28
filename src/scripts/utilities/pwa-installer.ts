@@ -91,7 +91,7 @@ function showInstallIcon(): void {
     icon.style.left = foundX + 'px';
     icon.style.top = foundY + 'px';
     icon.innerHTML = `
-      <img src="/icons/floppy.png" alt="Install PWA" draggable="false" />
+      <img src="/icons/actions/system-software-install.png" alt="Install PWA" draggable="false" />
       <span>Install PWA</span>
     `;
 

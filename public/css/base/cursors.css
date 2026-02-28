@@ -3,7 +3,7 @@
 /* Base cursor: CDE arrow for everything */
 * {
   cursor:
-    url('/icons/cursor.svg') 0 0,
+    url('/icons/cursors/cursor.svg') 0 0,
     default;
 }
 
@@ -12,7 +12,7 @@
 [data-draggable='true'],
 .cde-menu-btn {
   cursor:
-    url('/icons/cursor-move.svg') 12 12,
+    url('/icons/cursors/cursor-move.svg') 12 12,
     move;
 }
 
@@ -22,7 +22,7 @@
 [data-resize='nw'],
 [data-resize='se'] {
   cursor:
-    url('/icons/cursor-resize-nw.svg') 12 12,
+    url('/icons/cursors/cursor-resize-nw.svg') 12 12,
     nw-resize;
 }
 
@@ -31,7 +31,7 @@
 .cde-loading,
 [data-state='loading'] {
   cursor:
-    url('/icons/cursor-wait.svg') 12 12,
+    url('/icons/cursors/cursor-wait.svg') 12 12,
     wait;
 }
 
@@ -53,6 +53,6 @@ button,
 .fm-item,
 .fm-file {
   cursor:
-    url('/icons/cursor.svg') 0 0,
+    url('/icons/cursors/cursor.svg') 0 0,
     default;
 }

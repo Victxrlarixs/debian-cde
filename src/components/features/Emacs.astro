@@ -124,7 +124,7 @@ import WindowMinimize from '../common/WindowMinimize.astro';
   <!-- ── XEmacs Toolbar ────────────────────────────────────────────────── -->
   <div class="xemacs-toolbar">
     <div class="xe-tool-btn" onclick="window.Emacs.openFile()" title="Open File">
-      <img src="/icons/filemanager.png" alt="Open" />
+      <img src="/icons/apps/filemanager.png" alt="Open" />
       <span>Open</span>
     </div>
     <div
@@ -132,41 +132,49 @@ import WindowMinimize from '../common/WindowMinimize.astro';
       onclick="window.openFileManager && window.openFileManager()"
       title="Dired"
     >
-      <img src="/icons/filemanager.png" alt="Dired" onerror="this.src='/icons/filemanager.png'" />
+      <img
+        src="/icons/apps/filemanager.png"
+        alt="Dired"
+        onerror="this.src='/icons/apps/filemanager.png'"
+      />
       <span>Dired</span>
     </div>
     <div class="xe-tool-btn" onclick="window.Emacs.save()" title="Save">
-      <img src="/icons/floppy.png" alt="Save" />
+      <img src="/icons/devices/floppy.png" alt="Save" />
       <span>Save</span>
     </div>
     <div class="xe-tool-btn" onclick="window.Emacs.printPage()" title="Print">
-      <img src="/icons/printer.png" alt="Print" />
+      <img src="/icons/devices/printer.png" alt="Print" />
       <span>Print</span>
     </div>
     <div class="te-separator" style="width:1px; height:30px; margin: 4px 8px;"></div>
     <div class="xe-tool-btn" onclick="window.Emacs.cut()" title="Cut">
-      <img src="/icons/edit-cut.png" alt="Cut" onerror="this.style.display='none'" />
+      <img src="/icons/actions/edit-cut.png" alt="Cut" onerror="this.style.display='none'" />
       <span>Cut</span>
     </div>
     <div class="xe-tool-btn" onclick="window.Emacs.copy()" title="Copy">
-      <img src="/icons/edit-copy.png" alt="Copy" onerror="this.style.display='none'" />
+      <img src="/icons/actions/edit-copy.png" alt="Copy" onerror="this.style.display='none'" />
       <span>Copy</span>
     </div>
     <div class="xe-tool-btn" onclick="window.Emacs.paste()" title="Paste">
-      <img src="/icons/edit-paste.png" alt="Paste" onerror="this.style.display='none'" />
+      <img src="/icons/actions/edit-paste.png" alt="Paste" onerror="this.style.display='none'" />
       <span>Paste</span>
     </div>
     <div class="xe-tool-btn" onclick="window.Emacs.undo()" title="Undo">
-      <img src="/icons/edit-undo.png" alt="Undo" onerror="this.src='/icons/previous.png'" />
+      <img
+        src="/icons/actions/edit-undo.png"
+        alt="Undo"
+        onerror="this.src='/icons/actions/previous.png'"
+      />
       <span>Undo</span>
     </div>
     <div class="te-separator" style="width:1px; height:30px; margin: 4px 8px;"></div>
     <div class="xe-tool-btn" onclick="window.Emacs.findDialog()" title="Search">
-      <img src="/icons/system-search.png" alt="Search" />
+      <img src="/icons/system/system-search.png" alt="Search" />
       <span>Search</span>
     </div>
     <div class="xe-tool-btn" onclick="window.Emacs.showHelp()" title="Info">
-      <img src="/icons/help.png" alt="Info" />
+      <img src="/icons/system/help.png" alt="Info" />
       <span>Info</span>
     </div>
   </div>

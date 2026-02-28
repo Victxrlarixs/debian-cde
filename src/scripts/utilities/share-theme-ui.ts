@@ -68,7 +68,7 @@ export async function shareThemeToDiscussions(): Promise<void> {
             class="cde-btn cde-btn-default"
             style="padding: 8px 16px; font-size: 12px;"
           >
-            <img src="/icons/konqueror.png" alt="" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;" />
+            <img src="/icons/apps/konqueror.png" alt="" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;" />
             Share on GitHub
           </button>
         </div>

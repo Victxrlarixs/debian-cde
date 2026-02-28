@@ -1,0 +1,50 @@
+/* ============================================================================
+   Motif/CDE Focus Indicators
+   Authentic dotted border focus highlighting as seen in classic Unix GUIs
+   ============================================================================ */
+
+/* Focus outline for interactive elements */
+button:focus-visible,
+.cde-btn:focus-visible,
+.cde-icon:focus-visible,
+.cde-icon-btn:focus-visible,
+.menu-item:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.fm-file:focus-visible,
+.fm-item:focus-visible,
+.cde-category:focus-visible {
+  outline: 2px dotted var(--text-color);
+  outline-offset: 2px;
+}
+
+/* Focus for window controls */
+.min-btn:focus-visible,
+.close-btn:focus-visible,
+.max-btn:focus-visible {
+  outline: 2px dotted var(--titlebar-text-color);
+  outline-offset: 1px;
+}
+
+/* Focus for workspace switcher */
+.pager-workspace:focus-visible {
+  outline: 2px dotted var(--titlebar-text-color);
+  outline-offset: 2px;
+}
+
+/* Focus for dropdown buttons */
+.dropdown-btn:focus-visible {
+  outline: 2px dotted var(--titlebar-text-color);
+  outline-offset: 1px;
+}
+
+/* Remove default browser focus styles */
+*:focus {
+  outline: none;
+}
+
+/* Only show custom focus on keyboard navigation */
+*:focus:not(:focus-visible) {
+  outline: none;
+}

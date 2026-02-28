@@ -16,6 +16,7 @@
   box-sizing: border-box;
   opacity: 1;
   transition: opacity 0.5s ease-out;
+  /* cursor-wait.svg is already defined in cursors.css */
 }
 
 /* Boot header: Debian version */

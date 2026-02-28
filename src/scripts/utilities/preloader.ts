@@ -7,21 +7,65 @@ import { logger } from './logger';
  */
 export const Preloader = (() => {
   const CRITICAL_ICONS = [
-    '/icons/shade-inactive.png',
-    '/icons/shade-toggled-inactive.png',
-    '/icons/maximize-inactive.png',
-    '/icons/maximize-toggled-inactive.png',
-    '/icons/window-close.png',
-    '/icons/filemanager.png',
-    '/icons/xemacs.png',
-    '/icons/konsole.png',
-    '/icons/computer.png',
-    '/icons/org.xfce.settings.appearance.png',
-    '/icons/multimedia-volume-control.png',
-    '/icons/org.xfce.taskmanager.png',
-    '/icons/calendar.png',
-    '/icons/gtkclocksetup.png',
-    '/icons/org.xfce.screenshooter.png',
+    // Window controls (always visible on any window)
+    '/icons/ui/shade-inactive.png',
+    '/icons/ui/shade-toggled-inactive.png',
+    '/icons/ui/maximize-inactive.png',
+    '/icons/ui/maximize-toggled-inactive.png',
+    '/icons/ui/window-close.png',
+    '/icons/ui/tab_close.png',
+
+    // Panel main icons (visible immediately on boot)
+    '/icons/system/Debian.png',
+    '/icons/actions/go-up.png',
+    '/icons/apps/filemanager.png',
+    '/icons/apps/xemacs.png',
+    '/icons/apps/konsole.png',
+    '/icons/apps/konqueror.png',
+    '/icons/apps/org.xfce.settings.manager.png',
+    '/icons/system/applications-other.png',
+    '/icons/apps/org.xfce.screenshooter.png',
+    '/icons/apps/org.xfce.PanelProfiles.png',
+    '/icons/apps/org.xfce.taskmanager.png',
+
+    // TopBar (visible immediately)
+    '/icons/devices/audio-volume-low.png',
+
+    // Desktop system icons (created on boot)
+    '/icons/apps/netscape_classic.png',
+    '/icons/apps/Lynx.svg',
+
+    // Panel dropdowns (frequently accessed)
+    '/icons/devices/computer.png',
+    '/icons/apps/man.png',
+    '/icons/system/calendar.png',
+    '/icons/system/gtkclocksetup.png',
+    '/icons/apps/org.xfce.settings.appearance.png',
+    '/icons/apps/org.xfce.settings.keyboard.png',
+    '/icons/apps/org.xfce.settings.mouse.png',
+    '/icons/devices/multimedia-volume-control.png',
+    '/icons/apps/org.xfce.xfwm4.png',
+    '/icons/devices/display.png',
+    '/icons/system/gcr-key.png',
+    '/icons/mimetypes/font-x-generic.png',
+
+    // FileManager (frequently opened, high priority)
+    '/icons/actions/previous.png',
+    '/icons/actions/right.png',
+    '/icons/actions/gohome.png',
+    '/icons/apps/org.xfce.catfish.png',
+    '/icons/places/desktop.png',
+    '/icons/places/user-trash-full.png',
+    '/icons/places/folder_open.png',
+    '/icons/devices/floppy.png',
+    '/icons/mimetypes/gtk-file.png',
+
+    // UI elements (modals, dialogs, scrollbars)
+    '/icons/status/dialog-question.png',
+    '/icons/ui/scrollbarArrowUp.png',
+    '/icons/ui/scrollbarArrowDown.png',
+    '/icons/ui/scrollbarArrowLeft.png',
+    '/icons/ui/scrollbarArrowRight.png',
   ];
 
   /**

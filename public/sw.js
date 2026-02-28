@@ -7,12 +7,12 @@ const PRECACHE_URLS = [
   '/',
   '/css/main.css',
   '/css/responsive.css',
-  '/icons/cursor.svg',
-  '/icons/cursor-wait.svg',
-  '/icons/cursor-move.svg',
-  '/icons/cursor-resize-nw.svg',
-  '/icons/view-refresh.png',
-  '/icons/folder_open.png',
+  '/icons/cursors/cursor.svg',
+  '/icons/cursors/cursor-wait.svg',
+  '/icons/cursors/cursor-move.svg',
+  '/icons/cursors/cursor-resize-nw.svg',
+  '/icons/actions/view-refresh.png',
+  '/icons/places/folder_open.png',
 ];
 
 self.addEventListener('install', (event) => {

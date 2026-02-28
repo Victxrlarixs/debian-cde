@@ -349,7 +349,7 @@ class AccessibilityManager {
         <span class="titlebar-text" id="shortcuts-title">Keyboard Shortcuts</span>
         <div class="titlebar-controls">
           <button class="close-btn" onclick="document.getElementById('shortcuts-help-modal').remove()">
-            <img src="/icons/window-close.png" alt="Close" />
+            <img src="/icons/ui/window-close.png" alt="Close" />
           </button>
         </div>
       </div>

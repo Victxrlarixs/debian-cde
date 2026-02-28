@@ -225,9 +225,9 @@ const WindowManager = (() => {
     // X11-style move cursor while dragging
     document.documentElement.style.setProperty(
       '--cde-cursor-override',
-      "url('/icons/cursor-move.svg') 12 12, move"
+      "url('/icons/cursors/cursor-move.svg') 12 12, move"
     );
-    document.body.style.cursor = `url('/icons/cursor-move.svg') 12 12, move`;
+    document.body.style.cursor = `url('/icons/cursors/cursor-move.svg') 12 12, move`;
 
     // Performance: Add will-change hint
     el.style.willChange = 'transform, left, top';
@@ -370,7 +370,7 @@ const WindowManager = (() => {
         const img = minBtn.querySelector('img');
         if (img) {
           const original = img.src;
-          img.src = '/icons/shade-toggled-inactive.png';
+          img.src = '/icons/ui/shade-toggled-inactive.png';
           const restore = () => {
             img.src = original;
             window.removeEventListener('pointerup', restore);
@@ -385,7 +385,7 @@ const WindowManager = (() => {
         if (img) {
           const original = img.src;
           // Use toggled icon while pressed
-          img.src = '/icons/maximize-toggled-inactive.png';
+          img.src = '/icons/ui/maximize-toggled-inactive.png';
           const restore = () => {
             // Note: maximizeWindow will update the icon permanently if state changes,
             // so we only restore here if the click wasn't completed or if we need a base state.
@@ -524,7 +524,7 @@ const WindowManager = (() => {
         if (session.maximized && !win.hasAttribute('data-no-maximize')) {
           win.classList.add('maximized');
           const maxBtnImg = win.querySelector('.max-btn img') as HTMLImageElement;
-          if (maxBtnImg) maxBtnImg.src = '/icons/maximize-toggled-inactive.png';
+          if (maxBtnImg) maxBtnImg.src = '/icons/ui/maximize-toggled-inactive.png';
         }
         logger.log(`[WindowManager] Restored session for: ${id}`);
       } else {
@@ -871,7 +871,7 @@ function maximizeWindow(id: string): void {
 
     // Icon update
     const maxBtnImg = win.querySelector('.max-btn img') as HTMLImageElement;
-    if (maxBtnImg) maxBtnImg.src = '/icons/maximize-inactive.png';
+    if (maxBtnImg) maxBtnImg.src = '/icons/ui/maximize-inactive.png';
 
     if (windowStates[id]) {
       win.style.left = windowStates[id].left || '';
@@ -896,7 +896,7 @@ function maximizeWindow(id: string): void {
 
     // Icon update
     const maxBtnImg = win.querySelector('.max-btn img') as HTMLImageElement;
-    if (maxBtnImg) maxBtnImg.src = '/icons/maximize-toggled-inactive.png';
+    if (maxBtnImg) maxBtnImg.src = '/icons/ui/maximize-toggled-inactive.png';
 
     WindowManager.focusWindow(id);
 

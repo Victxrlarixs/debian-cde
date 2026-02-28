@@ -140,7 +140,8 @@ function renderIconView(container: HTMLElement, items: { name: string; node: VFS
     setupFileEvents(div, name, node);
 
     const img = document.createElement('img');
-    img.src = node.type === 'folder' ? '/icons/filemanager.png' : '/icons/gtk-file.png';
+    img.src =
+      node.type === 'folder' ? '/icons/apps/filemanager.png' : '/icons/mimetypes/gtk-file.png';
     img.draggable = false;
 
     const span = document.createElement('span');
@@ -225,7 +226,7 @@ function setupFileEvents(div: HTMLElement, name: string, item: VFSNode): void {
       if (longPressTimer) clearTimeout(longPressTimer);
       if (item.type === 'folder') {
         const img = div.querySelector('img');
-        if (img) img.src = '/icons/folder_open.png';
+        if (img) img.src = '/icons/places/folder_open.png';
         setTimeout(() => openPath(currentPath + name + '/'), 50);
       } else {
         setTimeout(() => openTextWindow(name, (item as VFSFile).content), 50);
@@ -460,7 +461,7 @@ async function showProperties(fullPath: string): Promise<void> {
   const html = `
     <div class="fm-properties">
       <div style="display: flex; gap: 15px; margin-bottom: 10px;">
-        <img src="${node.type === 'folder' ? '/icons/filemanager.png' : '/icons/gtk-file.png'}" style="width: 48px; height: 48px;" />
+        <img src="${node.type === 'folder' ? '/icons/apps/filemanager.png' : '/icons/mimetypes/gtk-file.png'}" style="width: 48px; height: 48px;" />
         <div>
           <b style="font-size: 14px;">${name}</b><br/>
           <span style="color: #666;">Type: ${node.type}</span>
@@ -489,7 +490,7 @@ const fmMenus: Record<string, ContextMenuItem[]> = {
   File: [
     {
       label: 'New File',
-      icon: '/icons/gtk-file.png',
+      icon: '/icons/mimetypes/gtk-file.png',
       action: async () => {
         const name = await CDEModal.prompt('File name:');
         if (name) await touch(name);
@@ -497,7 +498,7 @@ const fmMenus: Record<string, ContextMenuItem[]> = {
     },
     {
       label: 'New Folder',
-      icon: '/icons/folder_open.png',
+      icon: '/icons/places/folder_open.png',
       action: async () => {
         const name = await CDEModal.prompt('Folder name:');
         if (name) await mkdir(name);
@@ -505,14 +506,14 @@ const fmMenus: Record<string, ContextMenuItem[]> = {
     },
     {
       label: 'Empty Trash',
-      icon: '/icons/user-trash-full.png',
+      icon: '/icons/places/user-trash-full.png',
       action: emptyTrash,
     },
   ],
   Edit: [
     {
       label: 'Copy',
-      icon: '/icons/edit-copy.png',
+      icon: '/icons/actions/edit-copy.png',
       action: async () => {
         if (!fmSelected) return;
         const fullPath =
@@ -522,7 +523,7 @@ const fmMenus: Record<string, ContextMenuItem[]> = {
     },
     {
       label: 'Cut',
-      icon: '/icons/edit-cut.png',
+      icon: '/icons/actions/edit-cut.png',
       action: async () => {
         if (!fmSelected) return;
         const fullPath =
@@ -532,14 +533,14 @@ const fmMenus: Record<string, ContextMenuItem[]> = {
     },
     {
       label: 'Paste',
-      icon: '/icons/edit-paste.png',
+      icon: '/icons/actions/edit-paste.png',
       action: async () => {
         await pasteFromClipboard(currentPath);
       },
     },
     {
       label: 'Rename',
-      icon: '/icons/edit-copy.png',
+      icon: '/icons/actions/edit-copy.png',
       action: async () => {
         if (!fmSelected) return;
         const newName = await CDEModal.prompt('New name:', fmSelected);
@@ -590,30 +591,30 @@ const fmMenus: Record<string, ContextMenuItem[]> = {
     },
     {
       label: 'Refresh',
-      icon: '/icons/view-refresh.png',
+      icon: '/icons/actions/view-refresh.png',
       action: () => renderFiles(),
     },
   ],
   Go: [
-    { label: 'Back', icon: '/icons/previous.png', action: goBack },
-    { label: 'Forward', icon: '/icons/right.png', action: goForward },
-    { label: 'Up', icon: '/icons/go-up.png', action: goUp },
-    { label: 'Home', icon: '/icons/gohome.png', action: goHome },
+    { label: 'Back', icon: '/icons/actions/previous.png', action: goBack },
+    { label: 'Forward', icon: '/icons/actions/right.png', action: goForward },
+    { label: 'Up', icon: '/icons/actions/go-up.png', action: goUp },
+    { label: 'Home', icon: '/icons/actions/gohome.png', action: goHome },
   ],
   Places: [
     {
       label: 'Settings',
-      icon: '/icons/org.xfce.settings.manager.png',
+      icon: '/icons/apps/org.xfce.settings.manager.png',
       action: () => openPath(CONFIG.FS.HOME + 'settings/'),
     },
     {
       label: 'Manual Pages',
-      icon: '/icons/help.png',
+      icon: '/icons/system/help.png',
       action: () => openPath(CONFIG.FS.HOME + 'man-pages/'),
     },
     {
       label: 'Desktop',
-      icon: '/icons/desktop.png',
+      icon: '/icons/places/desktop.png',
       action: () => openPath(CONFIG.FS.DESKTOP),
     },
   ],
@@ -697,7 +698,7 @@ function handleContextMenu(e: MouseEvent): void {
     items = [
       {
         label: isTrashDir ? 'Restore' : 'Open',
-        icon: '/icons/org.xfce.catfish.png',
+        icon: '/icons/apps/org.xfce.catfish.png',
         action: () => {
           if (isTrashDir) {
             restore(name);
@@ -714,7 +715,7 @@ function handleContextMenu(e: MouseEvent): void {
       },
       {
         label: 'Copy',
-        icon: '/icons/edit-copy.png',
+        icon: '/icons/actions/edit-copy.png',
         action: () => {
           const fullPath = currentPath + name + (VFS.getNode(currentPath + name + '/') ? '/' : '');
           copyToClipboard(fullPath);
@@ -722,7 +723,7 @@ function handleContextMenu(e: MouseEvent): void {
       },
       {
         label: 'Cut',
-        icon: '/icons/edit-cut.png',
+        icon: '/icons/actions/edit-cut.png',
         action: () => {
           const fullPath = currentPath + name + (VFS.getNode(currentPath + name + '/') ? '/' : '');
           cutToClipboard(fullPath);
@@ -730,7 +731,7 @@ function handleContextMenu(e: MouseEvent): void {
       },
       {
         label: 'Rename',
-        icon: '/icons/edit-text.png',
+        icon: '/icons/actions/edit-text.png',
         action: async () => {
           const newName = await CDEModal.prompt('New name:', name);
           if (newName) await rename(name, newName);
@@ -738,12 +739,12 @@ function handleContextMenu(e: MouseEvent): void {
       },
       {
         label: 'Properties',
-        icon: '/icons/system-search.png',
+        icon: '/icons/system/system-search.png',
         action: () => showProperties(currentPath + name),
       },
       {
         label: 'Delete',
-        icon: '/icons/edit-delete.png',
+        icon: '/icons/actions/edit-delete.png',
         action: () => rm(name),
       },
     ];
@@ -751,7 +752,7 @@ function handleContextMenu(e: MouseEvent): void {
     items = [
       {
         label: 'Paste',
-        icon: '/icons/edit-paste.png',
+        icon: '/icons/actions/edit-paste.png',
         disabled: !window.fmClipboard,
         action: async () => {
           await pasteFromClipboard(currentPath);
@@ -904,7 +905,7 @@ window.toggleFileManager = () => {
   const panelIcon = document.querySelector('.cde-icon[onclick="toggleFileManager()"] img');
   if (panelIcon instanceof HTMLImageElement) {
     const original = panelIcon.src;
-    panelIcon.src = '/icons/folder_open.png';
+    panelIcon.src = '/icons/places/folder_open.png';
     setTimeout(() => {
       panelIcon.src = original;
     }, 300);

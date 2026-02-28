@@ -1,0 +1,127 @@
+/* ============================================================================
+   Custom Motif/CDE Scrollbars (Cross-browser compatible)
+   Works in all browsers with authentic Unix scrollbar appearance
+   ============================================================================ */
+
+.motif-scrollbar {
+  display: flex;
+  background: var(--button-bg);
+  flex-shrink: 0;
+}
+
+.motif-scrollbar-vertical {
+  flex-direction: column;
+  width: 18px;
+}
+
+.motif-scrollbar-horizontal {
+  flex-direction: row;
+  height: 18px;
+}
+
+/* Scrollbar Buttons */
+.motif-scrollbar-btn {
+  background: var(--button-bg);
+  border: 3px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.motif-scrollbar-btn img {
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+}
+
+.motif-scrollbar-btn:hover {
+  background: var(--dock-icon-hover);
+}
+
+.motif-scrollbar-btn.active,
+.motif-scrollbar-btn:active {
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+  background: var(--button-active);
+}
+
+/* Scrollbar Track */
+.motif-scrollbar-track {
+  flex: 1;
+  background: var(--button-bg);
+  border: 2px solid;
+  border-top-color: var(--border-inset-dark);
+  border-left-color: var(--border-inset-dark);
+  border-right-color: var(--border-inset-light);
+  border-bottom-color: var(--border-inset-light);
+  position: relative;
+  cursor: pointer;
+}
+
+/* Scrollbar Thumb */
+.motif-scrollbar-thumb {
+  position: absolute;
+  background: var(--button-bg);
+  border: 3px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  user-select: none;
+}
+
+.motif-scrollbar-vertical .motif-scrollbar-thumb {
+  width: 100%;
+  min-height: 40px;
+  left: 0;
+}
+
+.motif-scrollbar-horizontal .motif-scrollbar-thumb {
+  height: 100%;
+  min-width: 40px;
+  top: 0;
+}
+
+.motif-scrollbar-thumb:hover {
+  background: var(--dock-icon-hover);
+}
+
+.motif-scrollbar-thumb:active {
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+  background: var(--button-active);
+}
+
+/* Content wrapper */
+.motif-scrollbar-content {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.motif-scrollbar-inner {
+  overflow: auto;
+  height: 100%;
+  width: 100%;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.motif-scrollbar-inner::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}

@@ -1,26 +1,154 @@
-/* Scrollbar (WebKit) */
+/* ============================================================================
+   Motif/CDE Authentic Scrollbars
+   Chrome/Edge/Opera: Full Motif scrollbars with arrow buttons
+   Firefox: Basic styled scrollbars (no arrows - browser limitation)
+   ============================================================================ */
+
+/* Vertical Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 18px;
+  background: var(--button-bg);
 }
 
 ::-webkit-scrollbar-track {
   background: var(--button-bg);
+  border: 2px solid;
+  border-top-color: var(--border-inset-dark);
+  border-left-color: var(--border-inset-dark);
+  border-right-color: var(--border-inset-light);
+  border-bottom-color: var(--border-inset-light);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--titlebar-color);
-  border: 1px solid var(--border-dark);
+  background: var(--button-bg);
+  border: 3px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  min-height: 40px;
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--separator-color);
+  background: var(--dock-icon-hover);
 }
 
-/* Custom scrollbar for terminal area */
-.terminal-body::-webkit-scrollbar {
-  width: 6px;
+::-webkit-scrollbar-thumb:active {
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+  background: var(--button-active);
 }
 
-.terminal-body::-webkit-scrollbar-thumb {
-  background: var(--scrollbar-color);
+/* Scrollbar Buttons (Arrows) - Only show single buttons at start/end */
+::-webkit-scrollbar-button {
+  background-color: var(--button-bg);
+  border: 3px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  height: 18px;
+  width: 18px;
+  background-size: 10px 10px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+::-webkit-scrollbar-button:active {
+  border-top-color: var(--border-dark);
+  border-left-color: var(--border-dark);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+  background-color: var(--button-active);
+}
+
+/* Up Arrow - Only at start */
+::-webkit-scrollbar-button:vertical:start:decrement {
+  display: block;
+  background-image: url('/icons/ui/scrollbarArrowUp.png');
+}
+
+::-webkit-scrollbar-button:vertical:start:decrement:active {
+  background-image: url('/icons/ui/scrollbarArrowUpPressed.png');
+}
+
+/* Hide second up button */
+::-webkit-scrollbar-button:vertical:start:increment {
+  display: none;
+}
+
+/* Down Arrow - Only at end */
+::-webkit-scrollbar-button:vertical:end:increment {
+  display: block;
+  background-image: url('/icons/ui/scrollbarArrowDown.png');
+}
+
+::-webkit-scrollbar-button:vertical:end:increment:active {
+  background-image: url('/icons/ui/scrollbarArrowDownPressed.png');
+}
+
+/* Hide second down button */
+::-webkit-scrollbar-button:vertical:end:decrement {
+  display: none;
+}
+
+/* Horizontal Scrollbar */
+::-webkit-scrollbar:horizontal {
+  height: 18px;
+}
+
+/* Left Arrow - Only at start */
+::-webkit-scrollbar-button:horizontal:start:decrement {
+  display: block;
+  background-image: url('/icons/ui/scrollbarArrowLeft.png');
+  width: 18px;
+}
+
+::-webkit-scrollbar-button:horizontal:start:decrement:active {
+  background-image: url('/icons/ui/scrollbarArrowLeftPressed.png');
+}
+
+/* Hide second left button */
+::-webkit-scrollbar-button:horizontal:start:increment {
+  display: none;
+}
+
+/* Right Arrow - Only at end */
+::-webkit-scrollbar-button:horizontal:end:increment {
+  display: block;
+  background-image: url('/icons/ui/scrollbarArrowRight.png');
+  width: 18px;
+}
+
+::-webkit-scrollbar-button:horizontal:end:increment:active {
+  background-image: url('/icons/ui/scrollbarArrowRightPressed.png');
+}
+
+/* Hide second right button */
+::-webkit-scrollbar-button:horizontal:end:decrement {
+  display: none;
+}
+
+/* Corner */
+::-webkit-scrollbar-corner {
+  background: var(--button-bg);
+  border: 2px solid;
+  border-top-color: var(--border-inset-dark);
+  border-left-color: var(--border-inset-dark);
+  border-right-color: var(--border-inset-light);
+  border-bottom-color: var(--border-inset-light);
+}
+
+/* ============================================================================
+   Firefox Scrollbar Styling
+   Firefox doesn't support arrow buttons - this is a browser limitation
+   ============================================================================ */
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: var(--button-bg) var(--window-color);
+  }
 }
