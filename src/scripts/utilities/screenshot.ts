@@ -113,7 +113,7 @@ export function captureFullPageScreenshot(): void {
             class="cde-btn cde-btn-default"
             style="padding: 8px 16px; font-size: 12px;"
           >
-            <img src="/icons/floppy.png" alt="" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;" />
+            <img src="/icons/devices/floppy.png" alt="" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;" />
             Save
           </button>
           <button 
@@ -121,7 +121,7 @@ export function captureFullPageScreenshot(): void {
             class="cde-btn"
             style="padding: 8px 16px; font-size: 12px;"
           >
-            <img src="/icons/konqueror.png" alt="" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;" />
+            <img src="/icons/apps/konqueror.png" alt="" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;" />
             Post to Discussions
           </button>
         </div>

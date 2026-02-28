@@ -17,12 +17,12 @@
   font-family: 'Lucida Sans', 'Helvetica', Arial, sans-serif;
   font-size: 11px;
   z-index: 9999;
-  border: 2px solid;
+  border: 3px solid;
   border-top-color: var(--border-light);
   border-left-color: var(--border-light);
   border-right-color: var(--border-dark);
   border-bottom-color: var(--border-dark);
-  box-shadow: 2px 2px 0 var(--shadow-color);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.4);
 }
 
 /* Motif-style separators */
@@ -45,7 +45,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid;
+  border: 3px solid;
   border-top-color: var(--border-light);
   border-left-color: var(--border-light);
   border-right-color: var(--border-dark);

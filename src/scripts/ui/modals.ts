@@ -126,7 +126,7 @@ class CDEModalClass {
       titlebar.innerHTML = `
         <span class="titlebar-text">CDE Dialog</span>
         <div class="close-btn">
-          <img src="/icons/tab_close.png">
+          <img src="/icons/ui/tab_close.png">
         </div>
       `;
 

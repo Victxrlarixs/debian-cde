@@ -7,6 +7,7 @@
 @import './base/utilities.css';
 @import './base/scrollbar.css';
 @import './base/cursors.css';
+@import './base/focus.css';
 @import './base/accessibility.css';
 
 /* Desktop */

@@ -34,7 +34,7 @@ const DEFAULT_BACKDROP = import.meta.env.DEFAULT_BACKDROP;
       property="og:description"
       content="A modern Progressive Web App that brings 1990s Unix to any device. Desktop, tablet, phone—the experience adapts. Touch gestures on mobile. Keyboard shortcuts on desktop. Always authentic."
     />
-    <meta property="og:image" content="/icons/computer.png" />
+    <meta property="og:image" content="/icons/devices/computer.png" />
 
     <title>{title}</title>
 
@@ -77,9 +77,9 @@ const DEFAULT_BACKDROP = import.meta.env.DEFAULT_BACKDROP;
       }
     </style>
 
-    <link rel="icon" type="image/png" href="/icons/computer.png" />
+    <link rel="icon" type="image/png" href="/icons/devices/computer.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
-    <link rel="apple-touch-icon" href="/icons/computer.png" />
+    <link rel="apple-touch-icon" href="/icons/devices/computer.png" />
 
     <!-- Preload default backdrop to eliminate first-load delay -->
     <link rel="preload" href={DEFAULT_BACKDROP} as="fetch" crossorigin />
@@ -98,7 +98,7 @@ const DEFAULT_BACKDROP = import.meta.env.DEFAULT_BACKDROP;
       import '/src/scripts/core/index.ts';
     </script>
   </head>
-  <body>
+  <body class="loading">
     <!-- Skip Links for Screen Readers -->
     <a href="#desktop-ui" class="skip-link">Skip to main content</a>
     <a href="#cde-panel" class="skip-link">Skip to panel</a>

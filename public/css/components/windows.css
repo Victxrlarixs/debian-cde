@@ -1,15 +1,15 @@
 /* CDE Windows
-   Classic style with 3D bevel, shadow, and draggable title. */
+   Classic style with pronounced 3D bevel, shadow, and draggable title. */
 .window {
   position: absolute;
   background: var(--window-color);
   z-index: 1000;
-  border: 2px solid;
+  border: 3px solid;
   border-top-color: var(--border-light);
   border-left-color: var(--border-light);
   border-right-color: var(--border-dark);
   border-bottom-color: var(--border-dark);
-  box-shadow: 4px 4px 0 var(--shadow-color);
+  box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.4);
   user-select: none;
   display: flex;
   flex-direction: column;
@@ -75,6 +75,12 @@
   max-width: 95vw !important;
   max-height: 90vh !important;
   overflow: hidden;
+  border: 3px solid;
+  border-top-color: var(--border-light);
+  border-left-color: var(--border-light);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.4);
 }
 
 .titlebar {
@@ -87,7 +93,7 @@
   font-size: var(--font-size-title);
   font-family: var(--font-family-base);
   font-weight: var(--font-weight-bold);
-  border-bottom: 2px solid var(--border-dark);
+  border-bottom: 3px solid var(--border-dark);
   height: 30px;
   user-select: none;
 }
@@ -113,7 +119,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid;
+  border: 3px solid;
   border-top-color: var(--border-light);
   border-left-color: var(--border-light);
   border-right-color: var(--border-dark);

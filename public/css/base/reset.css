@@ -29,6 +29,14 @@ body {
   text-rendering: optimizeSpeed;
 }
 
+/* Show wait cursor during initial load */
+body.loading,
+body.loading * {
+  cursor:
+    url('/icons/cursors/cursor-wait.svg') 12 12,
+    wait !important;
+}
+
 *,
 *::before,
 *::after {

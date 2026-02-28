@@ -256,6 +256,9 @@ class DebianRealBoot {
         this.bootScreen.style.transition = 'opacity 0.8s ease-out';
         this.bootScreen.style.opacity = '0';
 
+        // Remove loading cursor from body
+        document.body.classList.remove('loading');
+
         setTimeout(() => {
           this.bootScreen!.style.display = 'none';
           logger.log('[DebianRealBoot] Boot screen removed');

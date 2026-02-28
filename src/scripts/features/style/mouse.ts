@@ -43,7 +43,7 @@ export class MouseModule extends StyleModuleBase<MouseSettings> {
   public async renderMouseIcon(): Promise<void> {
     await renderXpmToCanvas({
       canvasId: 'mouse-icon-canvas',
-      xpmPath: '/icons/Mouse-Setup-Clicked.xpm',
+      xpmPath: '/icons/ui/Mouse-Setup-Clicked.xpm',
       logSuccess: true,
     });
   }

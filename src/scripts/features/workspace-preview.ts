@@ -136,27 +136,27 @@ export class WorkspacePreview {
   private getWindowIcon(windowId: string): string {
     // Map window IDs to their icons (using only existing icons)
     const iconMap: Record<string, string> = {
-      emacs: '/icons/xemacs.png',
-      'terminal-lab': '/icons/konsole.png',
-      fm: '/icons/filemanager.png',
-      netscape: '/icons/netscape_classic.png',
-      styleManagerMain: '/icons/org.xfce.settings.manager.png',
-      styleManagerColor: '/icons/org.xfce.settings.appearance.png',
-      styleManagerFont: '/icons/font-x-generic.png',
-      styleManagerBackdrop: '/icons/desktop.png',
-      styleManagerMouse: '/icons/org.xfce.settings.mouse.png',
-      styleManagerKeyboard: '/icons/org.xfce.settings.keyboard.png',
-      styleManagerWindow: '/icons/org.xfce.xfwm4.png',
-      styleManagerScreen: '/icons/display.png',
-      styleManagerBeep: '/icons/audio-volume-low.png',
-      styleManagerStartup: '/icons/org.xfce.session.png',
-      'process-monitor': '/icons/org.xfce.taskmanager.png',
-      'calendar-window': '/icons/calendar.png',
-      appManager: '/icons/applications-other.png',
-      timeManager: '/icons/gtkclocksetup.png',
+      emacs: '/icons/apps/xemacs.png',
+      'terminal-lab': '/icons/apps/konsole.png',
+      fm: '/icons/apps/filemanager.png',
+      netscape: '/icons/apps/netscape_classic.png',
+      styleManagerMain: '/icons/apps/org.xfce.settings.manager.png',
+      styleManagerColor: '/icons/apps/org.xfce.settings.appearance.png',
+      styleManagerFont: '/icons/mimetypes/font-x-generic.png',
+      styleManagerBackdrop: '/icons/places/desktop.png',
+      styleManagerMouse: '/icons/apps/org.xfce.settings.mouse.png',
+      styleManagerKeyboard: '/icons/apps/org.xfce.settings.keyboard.png',
+      styleManagerWindow: '/icons/apps/org.xfce.xfwm4.png',
+      styleManagerScreen: '/icons/devices/display.png',
+      styleManagerBeep: '/icons/devices/audio-volume-low.png',
+      styleManagerStartup: '/icons/apps/org.xfce.session.png',
+      'process-monitor': '/icons/apps/org.xfce.taskmanager.png',
+      'calendar-window': '/icons/system/calendar.png',
+      appManager: '/icons/system/applications-other.png',
+      timeManager: '/icons/system/gtkclocksetup.png',
     };
 
-    return iconMap[windowId] || '/icons/gtk-file.png';
+    return iconMap[windowId] || '/icons/mimetypes/gtk-file.png';
   }
 
   private getWindowTitle(element: HTMLElement): string {

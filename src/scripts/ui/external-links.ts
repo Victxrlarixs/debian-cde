@@ -35,7 +35,7 @@ export function confirmExternalLink(url: string): void {
 
   const content = `
     <div class="external-link-icon">
-      <img src="/icons/dialog-question.png" alt="Warning" width="48" height="48" />
+      <img src="/icons/status/dialog-question.png" alt="Warning" width="48" height="48" />
     </div>
     <p class="external-link-message">
       You are about to leave this site:
@@ -52,7 +52,7 @@ export function confirmExternalLink(url: string): void {
         class="cde-btn cde-btn-default"
         style="padding: 8px 16px; font-size: 12px;"
       >
-        <img src="/icons/konqueror.png" alt="" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;" />
+        <img src="/icons/apps/konqueror.png" alt="" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;" />
         Go GitHub
       </button>
     </div>
