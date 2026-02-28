@@ -89,11 +89,20 @@ import WindowMinimize from '../common/WindowMinimize.astro';
         <img src="/icons/apps/org.xfce.PanelProfiles.png" alt="Share Theme" />
         <span>Share Theme</span>
       </div>
+
+      <!-- Keyboard Shortcuts -->
+      <div class="app-item" onclick="AccessibilityManager.showShortcutsHelp(); appManager.close()">
+        <img
+          src="/icons/apps/preferences-desktop-keyboard-shortcuts.png"
+          alt="Keyboard Shortcuts"
+        />
+        <span>Keyboard shortcuts</span>
+      </div>
     </div>
   </div>
 
   <div class="cde-statusbar">
     <div class="cde-statusleft">Application Manager</div>
-    <div class="cde-statusright">13 Objects</div>
+    <div class="cde-statusright">14 Objects</div>
   </div>
 </div>

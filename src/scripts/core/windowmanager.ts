@@ -58,6 +58,30 @@ const WindowManager = (() => {
   let lastFocusedWindowId: string | null = null;
 
   /**
+   * Safe counters for keeping track of the top-most window across different layers
+   */
+  let highestWindowZIndex = CONFIG.WINDOW.BASE_Z_INDEX;
+  let highestModalZIndex = 90000;
+
+  /**
+   * Returns the next available highest z-index for a specific layer.
+   * @param isModal - Whether the request is for a modal dialog.
+   */
+  function getNextZIndex(isModal: boolean = false): number {
+    if (isModal) {
+      return ++highestModalZIndex;
+    }
+    return ++highestWindowZIndex;
+  }
+
+  /**
+   * Returns the current highest z-index across all window layers.
+   */
+  function getTopZIndex(): number {
+    return Math.max(highestWindowZIndex, highestModalZIndex);
+  }
+
+  /**
    * Helper to detect mobile viewport.
    */
   function isMobile(): boolean {
@@ -93,7 +117,7 @@ const WindowManager = (() => {
       win.classList.add('active');
       lastFocusedWindowId = id;
 
-      zIndex++;
+      zIndex = getNextZIndex();
       win.style.zIndex = String(zIndex);
 
       if (window.AudioManager) window.AudioManager.click();
@@ -781,7 +805,17 @@ const WindowManager = (() => {
     logger.log('[WindowManager] Titlebar shading initialized');
   }
 
-  return { init, drag, focusWindow, registerWindow, centerWindow, switchWorkspace, showWindow };
+  return {
+    init,
+    drag,
+    focusWindow,
+    registerWindow,
+    centerWindow,
+    switchWorkspace,
+    showWindow,
+    getNextZIndex,
+    getTopZIndex,
+  };
 })();
 
 function minimizeWindow(id: string): void {
