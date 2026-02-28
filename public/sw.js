@@ -1,5 +1,6 @@
 // Cache version is automatically updated from package.json version
 // This ensures cache is cleared when app version changes
+// Force update: 2025-02-27
 const CACHE_VERSION = 'v1.0.24';
 const STATIC_CACHE = `static-cache-${CACHE_VERSION}`;
 
