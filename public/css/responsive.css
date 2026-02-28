@@ -125,7 +125,7 @@
 
   /* Panel inferior (dock) */
   #cde-panel {
-    height: 75px;
+    height: 95px;
     padding: 2px 2px;
     font-size: 9px;
     gap: 1px;
@@ -528,7 +528,7 @@
 
   /* Panel inferior */
   #cde-panel {
-    height: 70px;
+    height: 75px;
     padding: 2px 3px;
   }
 
