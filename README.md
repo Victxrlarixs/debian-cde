@@ -1,4 +1,4 @@
-# 📟 CDE Time Capsule
+# 📟 Time Capsule
 
 ![Debian](https://img.shields.io/badge/Debian-A81D33?style=flat&logo=debian&logoColor=white)
 ![CDE](https://img.shields.io/badge/CDE-1990s-orange?style=flat)
@@ -113,11 +113,3 @@ Love nostalgia? Love code? **We'd love your help!**
 GPL License - see [LICENSE](LICENSE)
 
 ---
-
-<p align="center">
-  <b>Built for performance. Crafted for nostalgia. Engineered for the pixel.</b><br />
-  <br />
-  <a href="https://debian.com.mx">
-    <img src="https://img.shields.io/badge/Experience_the_Legend-debian.com.mx-blue?style=for-the-badge" alt="Experience CDE Time Capsule" />
-  </a>
-</p>
