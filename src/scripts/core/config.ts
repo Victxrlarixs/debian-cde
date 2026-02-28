@@ -334,7 +334,7 @@ export const CONFIG: Config = {
     LOGO: `#> 
 #>  _______________________________________________________
 #> /                                                       | 
-#> | Ready to explore Debian CDE project ?                  | 
+#> | Time travel initiated... Loading 1995 Unix experience  | 
 #> \\                                                      | 
 #>  -------------------------------------------------------
 #>                  \\
