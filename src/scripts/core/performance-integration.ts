@@ -4,7 +4,6 @@
 import { logger } from '../utilities/logger';
 import { indexedDBManager } from '../utilities/indexeddb-manager';
 import { performanceMonitor } from './performance-monitor';
-import { performanceOptimizer } from '../shared/performance-optimizer';
 import { moduleLoader } from '../shared/module-loader';
 
 /**
@@ -18,18 +17,15 @@ export async function initPerformanceOptimizations(): Promise<void> {
     performanceMonitor.init();
     performanceMonitor.mark('perf-init-start');
 
-    // 2. Initialize performance optimizer (includes module loading strategy)
-    performanceOptimizer.init();
-
-    // 3. Initialize storage adapter (IndexedDB with localStorage fallback)
+    // 2. Initialize storage adapter (IndexedDB with localStorage fallback)
     const { storageAdapter } = await import('../utilities/storage-adapter');
     await storageAdapter.init();
     logger.log('[Performance] Storage adapter initialized');
 
-    // 4. Initialize IndexedDB
+    // 3. Initialize IndexedDB
     await indexedDBManager.init();
 
-    // 5. Migrate from localStorage if needed
+    // 4. Migrate from localStorage if needed
     const migrated = localStorage.getItem('cde-indexeddb-migrated');
     if (!migrated) {
       await indexedDBManager.migrateFromLocalStorage();
@@ -37,10 +33,10 @@ export async function initPerformanceOptimizations(): Promise<void> {
       logger.log('[Performance] Migrated to IndexedDB');
     }
 
-    // 6. Optimize initial load with module loader
-    await performanceOptimizer.optimizeInitialLoad();
+    // 5. Optimize initial load with module loader
+    await performanceMonitor.optimizeInitialLoad();
 
-    // 7. Cleanup old cache entries
+    // 6. Cleanup old cache entries
     await indexedDBManager.cleanupCache();
 
     performanceMonitor.mark('perf-init-end');
@@ -48,134 +44,19 @@ export async function initPerformanceOptimizations(): Promise<void> {
 
     logger.log(`[Performance] Optimizations initialized in ${duration.toFixed(2)}ms`);
 
-    // 8. Log storage usage
+    // 7. Log storage usage
     const estimate = await indexedDBManager.getStorageEstimate();
     const usageMB = (estimate.usage / 1024 / 1024).toFixed(2);
     const quotaMB = (estimate.quota / 1024 / 1024).toFixed(2);
     logger.log(`[Performance] Storage: ${usageMB}MB / ${quotaMB}MB`);
 
-    // 9. Schedule performance report
+    // 8. Schedule performance report
     setTimeout(() => {
-      performanceOptimizer.logReport();
+      performanceMonitor.logReport();
     }, 10000);
   } catch (error) {
     logger.error('[Performance] Failed to initialize optimizations:', error);
   }
-}
-
-/**
- * Create XPM worker instance
- */
-export function createXPMWorker(): Worker {
-  try {
-    const worker = new Worker(new URL('../workers/xpm-worker.ts', import.meta.url), {
-      type: 'module',
-    });
-    logger.log('[Performance] XPM Worker created');
-    return worker;
-  } catch (error) {
-    logger.error('[Performance] Failed to create XPM Worker:', error);
-    throw error;
-  }
-}
-
-/**
- * Create VFS worker instance
- */
-export function createVFSWorker(): Worker {
-  try {
-    const worker = new Worker(new URL('../workers/vfs-worker.ts', import.meta.url), {
-      type: 'module',
-    });
-    logger.log('[Performance] VFS Worker created');
-    return worker;
-  } catch (error) {
-    logger.error('[Performance] Failed to create VFS Worker:', error);
-    throw error;
-  }
-}
-
-/**
- * Parse XPM using Web Worker
- */
-export async function parseXPMWithWorker(
-  xpmText: string,
-  themeColors: Record<string, string>
-): Promise<string | null> {
-  return new Promise((resolve, reject) => {
-    const worker = createXPMWorker();
-
-    const timeout = setTimeout(() => {
-      worker.terminate();
-      reject(new Error('XPM parsing timeout'));
-    }, 10000); // 10s timeout
-
-    worker.onmessage = (e) => {
-      clearTimeout(timeout);
-      worker.terminate();
-
-      if (e.data.type === 'result') {
-        if (e.data.error) {
-          reject(new Error(e.data.error));
-        } else {
-          resolve(e.data.dataUrl);
-        }
-      }
-    };
-
-    worker.onerror = (error) => {
-      clearTimeout(timeout);
-      worker.terminate();
-      reject(error);
-    };
-
-    worker.postMessage({
-      type: 'parse',
-      xpmText,
-      themeColors,
-    });
-  });
-}
-
-/**
- * Search VFS using Web Worker
- */
-export async function searchVFSWithWorker(
-  fsMap: Record<string, any>,
-  pattern: string
-): Promise<string[]> {
-  return new Promise((resolve, reject) => {
-    const worker = createVFSWorker();
-
-    const timeout = setTimeout(() => {
-      worker.terminate();
-      reject(new Error('VFS search timeout'));
-    }, 5000);
-
-    worker.onmessage = (e) => {
-      clearTimeout(timeout);
-      worker.terminate();
-
-      if (e.data.type === 'result') {
-        if (e.data.error) {
-          reject(new Error(e.data.error));
-        } else {
-          resolve(e.data.data);
-        }
-      }
-    };
-
-    worker.onerror = (error) => {
-      clearTimeout(timeout);
-      worker.terminate();
-      reject(error);
-    };
-
-    worker.postMessage({
-      type: 'search',
-      payload: { fsMap, pattern },
-    });
-  });
 }
 
 /**
@@ -205,25 +86,6 @@ export async function logPerformanceReport(): Promise<void> {
 
   // Metrics
   performanceMonitor.logSummary();
-
-  // Module Loading (new system)
-  const moduleStats = moduleLoader.getStats();
-  console.log('\n=== Module Loading (Advanced) ===');
-  console.log(`Total Modules: ${moduleStats.total}`);
-  console.log(`Loaded: ${moduleStats.loaded}`);
-  console.log(`Loading: ${moduleStats.loading}`);
-  console.log(`Pending: ${moduleStats.total - moduleStats.loaded - moduleStats.loading}`);
-  console.log(`Avg Load Time: ${moduleStats.avgLoadTime.toFixed(2)}ms`);
-  console.log('By Priority:', moduleStats.byPriority);
-
-  // Performance Optimizer Metrics
-  const perfMetrics = performanceOptimizer.getMetrics();
-  console.log('\n=== Performance Metrics ===');
-  console.log(`Boot Time: ${perfMetrics.bootTime.toFixed(2)}ms`);
-  console.log(`First Paint: ${perfMetrics.firstPaint.toFixed(2)}ms`);
-  console.log(`First Contentful Paint: ${perfMetrics.firstContentfulPaint.toFixed(2)}ms`);
-  console.log(`DOM Content Loaded: ${perfMetrics.domContentLoaded.toFixed(2)}ms`);
-  console.log(`Load Complete: ${perfMetrics.loadComplete.toFixed(2)}ms`);
 
   // Storage
   const storage = await indexedDBManager.getStorageEstimate();

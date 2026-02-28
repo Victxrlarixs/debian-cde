@@ -33,6 +33,9 @@ interface WindowState {
 
 const windowStates: Record<string, WindowState> = {};
 
+// Debounce timer for resize handling (module-scoped, avoids window pollution)
+let resizeTimer: ReturnType<typeof setTimeout> | undefined;
+
 const WindowManager = (() => {
   // Start z-index higher than TopBar (9998) to ensure focused windows are on top
   let zIndex = CONFIG.WINDOW.BASE_Z_INDEX;
@@ -50,14 +53,7 @@ const WindowManager = (() => {
   };
   const MIN_VISIBLE = CONFIG.WINDOW.MIN_VISIBLE;
 
-  // Workspace state
   let currentWorkspace = '1';
-  const workspaceWindows: Record<string, string[]> = {
-    '1': [],
-    '2': [],
-    '3': [],
-    '4': [],
-  };
 
   let lastFocusedWindowId: string | null = null;
 
@@ -417,10 +413,8 @@ const WindowManager = (() => {
     );
 
     window.addEventListener('resize', () => {
-      // @ts-ignore
-      clearTimeout(window.resizeTimer);
-      // @ts-ignore
-      window.resizeTimer = window.setTimeout(() => {
+      clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => {
         logger.log('[WindowManager] Viewport resized, normalizing window positions...');
         document.querySelectorAll('.window, .cde-retro-modal').forEach((win) => {
           if (win instanceof HTMLElement) {
@@ -908,7 +902,7 @@ function maximizeWindow(id: string): void {
 declare global {
   interface Window {
     drag: (e: PointerEvent, id: string) => void;
-    focusWindow?: (id: string) => void;
+    focusWindow: (id: string) => void;
     centerWindow: (win: HTMLElement) => void;
     minimizeWindow: typeof minimizeWindow;
     maximizeWindow: typeof maximizeWindow;

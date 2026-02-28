@@ -257,7 +257,7 @@ class NetscapeNavigator {
   }
 
   public goForward(): void {
-    if ((window as any).AudioManager) (window as any).AudioManager.click();
+    if (window.AudioManager) window.AudioManager.click();
     const next = this.history.forward();
     if (next) {
       this.renderPage(next, true);
@@ -265,12 +265,12 @@ class NetscapeNavigator {
   }
 
   public goHome(): void {
-    if ((window as any).AudioManager) (window as any).AudioManager.click();
+    if (window.AudioManager) window.AudioManager.click();
     this.navigate('welcome');
   }
 
   public reload(): void {
-    if ((window as any).AudioManager) (window as any).AudioManager.click();
+    if (window.AudioManager) window.AudioManager.click();
     this.renderPage(this.currentPage, true);
   }
 
@@ -383,7 +383,7 @@ class NetscapeNavigator {
   }
 
   public stop(): void {
-    if ((window as any).AudioManager) (window as any).AudioManager.click();
+    if (window.AudioManager) window.AudioManager.click();
     this.stopLoading();
     this.setStatus('Transfer interrupted.');
   }
