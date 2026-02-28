@@ -320,6 +320,11 @@ async function initDesktop(): Promise<void> {
       window.AudioManager.playStartupChime();
     }
 
+    // 3.5. APPLY PRELOADED BACKDROP (before WindowManager to ensure it's visible ASAP)
+    const { applyPreloadedBackdrop } = await import('../boot/backdrop-preloader');
+    await applyPreloadedBackdrop();
+    logger.log('[initDesktop] Preloaded backdrop applied');
+
     // 4. Load WindowManager module (CRITICAL priority)
     const wmModule = await moduleLoader.load('windowmanager');
     if (wmModule && wmModule.WindowManager) {

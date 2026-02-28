@@ -122,8 +122,8 @@ export async function loadSharedConfig(): Promise<boolean> {
     if (backdropPath) {
       logger.log('[ShareConfig] Applying backdrop:', backdropPath);
       if (window.styleManager?.backdrop?.update) {
-        const type = backdropPath.endsWith('.pm') ? 'xpm' : 'image';
-        window.styleManager.backdrop.update(type, backdropPath);
+        // Only XPM backdrops are supported
+        window.styleManager.backdrop.update('xpm', backdropPath);
         logger.log('[ShareConfig] Backdrop applied');
       } else {
         logger.error('[ShareConfig] Backdrop module not available');

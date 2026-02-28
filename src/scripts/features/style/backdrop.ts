@@ -2,6 +2,7 @@
 
 import { logger } from '../../utilities/logger';
 import { settingsManager } from '../../core/settingsmanager';
+import { CONFIG } from '../../core/config';
 import {
   loadXpmBackdropCached,
   clearXpmCache as clearGlobalXpmCache,
@@ -11,7 +12,7 @@ import {
  * Backdrop options for CDE.
  */
 export interface BackdropSettings {
-  type: 'image' | 'xpm';
+  type: 'xpm';
   value: string;
 }
 
@@ -23,7 +24,7 @@ export interface BackdropSettings {
 export class BackdropModule {
   private settings: BackdropSettings = {
     type: 'xpm',
-    value: '/backdrops/SkyDarkTall.pm',
+    value: CONFIG.BACKDROP.DEFAULT_BACKDROP,
   };
 
   /**
@@ -31,12 +32,8 @@ export class BackdropModule {
    */
   public load(): void {
     const saved = settingsManager.getSection('theme').backdrop;
-    if (saved && (saved.type === 'image' || saved.type === 'xpm')) {
+    if (saved && saved.type === 'xpm') {
       this.settings = saved;
-      // Migration: if the saved value is an old pattern we want to change, or PNG, reset to SkyDarkTall
-      if (this.settings.value.endsWith('.png') || this.settings.value.includes('Toronto')) {
-        this.settings = { type: 'xpm', value: '/backdrops/SkyDarkTall.pm' };
-      }
     }
     this.apply();
     logger.log('[BackdropModule] Loaded and applied:', this.settings);
@@ -55,20 +52,30 @@ export class BackdropModule {
     });
     body.style.backgroundColor = '';
 
-    if (this.settings.type === 'xpm' || this.settings.value.endsWith('.pm')) {
-      await this.applyXpm(body);
-    } else {
-      body.style.backgroundImage = `url('${this.settings.value}')`;
-      body.style.backgroundRepeat = 'repeat';
-      body.style.backgroundSize = 'auto';
-      body.style.backgroundPosition = 'top left';
-      body.style.backgroundAttachment = 'fixed';
-    }
+    await this.applyXpm(body);
   }
 
   /** Render and apply an XPM pattern file */
   private async applyXpm(body: HTMLElement): Promise<void> {
     const path = this.settings.value;
+
+    // Check if this is the default backdrop and preload is available
+    if (path === CONFIG.BACKDROP.DEFAULT_BACKDROP) {
+      const { getPreloadedBackdrop } = await import('../../boot/backdrop-preloader');
+      const preloadedDataUrl = await getPreloadedBackdrop();
+
+      if (preloadedDataUrl) {
+        body.style.backgroundImage = `url('${preloadedDataUrl}')`;
+        body.style.backgroundRepeat = 'repeat';
+        body.style.backgroundSize = 'auto';
+        body.style.backgroundPosition = 'top left';
+        body.style.backgroundAttachment = 'scroll';
+        logger.log('[BackdropModule] Applied default backdrop from preload cache');
+        return;
+      }
+    }
+
+    // Fallback to normal XPM loading for non-default or if preload failed
     const dataUrl = await loadXpmBackdropCached(path, true);
 
     if (dataUrl) {
@@ -122,11 +129,10 @@ export class BackdropModule {
    * Updates the backdrop settings and persists them.
    */
   public update(type: BackdropSettings['type'], value: string): void {
-    if (value.endsWith('.pm')) type = 'xpm';
-    this.settings = { type, value };
+    this.settings = { type: 'xpm', value };
     this.apply();
     this.save();
-    logger.log(`[BackdropModule] Updated to ${type}: ${value}`);
+    logger.log(`[BackdropModule] Updated to xpm: ${value}`);
   }
 
   /**
