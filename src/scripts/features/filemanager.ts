@@ -8,6 +8,7 @@ import { WindowManager } from '../core/windowmanager';
 import { copyToClipboard, cutToClipboard, pasteFromClipboard } from '../shared/clipboard';
 import { createContextMenu, type ContextMenuItem } from '../shared/context-menu';
 import { openWindow, closeWindow, createZIndexManager } from '../shared/window-helpers';
+import {} from '../shared/file-icons';
 
 declare global {
   interface Window {
@@ -140,8 +141,7 @@ function renderIconView(container: HTMLElement, items: { name: string; node: VFS
     setupFileEvents(div, name, node);
 
     const img = document.createElement('img');
-    img.src =
-      node.type === 'folder' ? '/icons/apps/filemanager.png' : '/icons/mimetypes/gtk-file.png';
+    img.src = getFileIcon(node, currentPath + name);
     img.draggable = false;
 
     const span = document.createElement('span');
@@ -152,6 +152,21 @@ function renderIconView(container: HTMLElement, items: { name: string; node: VFS
     fragment.appendChild(div);
   });
   container.replaceChildren(fragment);
+}
+/**
+ * Determines the appropriate icon for a file based on its type and content.
+ * Empty files show document.png, files with content show gtk-file.png
+ */
+function getFileIcon(node: VFSNode, fullPath: string): string {
+  if (node.type === 'folder') {
+    return '/icons/apps/filemanager.png';
+  }
+
+  // Check if file is empty
+  const fileNode = node as VFSFile;
+  const isEmpty = !fileNode.content || fileNode.content.trim() === '';
+
+  return isEmpty ? '/icons/mimetypes/document.png' : '/icons/mimetypes/gtk-file.png';
 }
 
 function formatSize(bytes: number): string {
@@ -461,7 +476,7 @@ async function showProperties(fullPath: string): Promise<void> {
   const html = `
     <div class="fm-properties">
       <div style="display: flex; gap: 15px; margin-bottom: 10px;">
-        <img src="${node.type === 'folder' ? '/icons/apps/filemanager.png' : '/icons/mimetypes/gtk-file.png'}" style="width: 48px; height: 48px;" />
+        <img src="${getFileIcon(node, fullPath)}" style="width: 48px; height: 48px;" />
         <div>
           <b style="font-size: 14px;">${name}</b><br/>
           <span style="color: #666;">Type: ${node.type}</span>
@@ -490,7 +505,7 @@ const fmMenus: Record<string, ContextMenuItem[]> = {
   File: [
     {
       label: 'New File',
-      icon: '/icons/mimetypes/gtk-file.png',
+      icon: '/icons/mimetypes/document.png',
       action: async () => {
         const name = await CDEModal.prompt('File name:');
         if (name) await touch(name);
@@ -936,6 +951,9 @@ window.saveFile = (path, content) => {
   if (node?.type === 'file') {
     node.content = content;
     logger.log(`[FileManager] Saved: ${path}`);
+
+    // Dispatch filesystem change event to update desktop icons
+    window.dispatchEvent(new CustomEvent('cde-fs-change', { detail: { path, action: 'update' } }));
   }
 };
 

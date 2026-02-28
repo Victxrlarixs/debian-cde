@@ -2,9 +2,10 @@
 import { CONFIG } from '../core/config';
 import { logger } from '../utilities/logger';
 import { settingsManager } from '../core/settingsmanager';
-import { VFS, type IVFS } from '../core/vfs';
+import { VFS, type IVFS, type VFSFile } from '../core/vfs';
 import { copyToClipboard, cutToClipboard, pasteFromClipboard } from '../shared/clipboard';
 import { createContextMenu, type ContextMenuItem } from '../shared/context-menu';
+import { getFileIconByPath, ICON_PATHS } from '../shared/file-icons';
 
 /**
  * Interface for stored icon positions.
@@ -164,7 +165,7 @@ export const DesktopManager = (() => {
     const img = document.createElement('img');
     img.src =
       customIcon ||
-      (type === 'folder' ? '/icons/apps/filemanager.png' : '/icons/mimetypes/gtk-file.png');
+      (type === 'folder' ? ICON_PATHS.FOLDER : getFileIconByPath(CONFIG.FS.DESKTOP + name));
     img.alt = name;
     if (name === 'Emacs') {
       img.classList.add('emacs-pixelated');
@@ -652,7 +653,7 @@ export const DesktopManager = (() => {
           },
           {
             label: 'New File',
-            icon: '/icons/mimetypes/gtk-file.png',
+            icon: '/icons/mimetypes/document.png',
             action: async () => {
               const name = await (window as any).CDEModal.prompt('File name:');
               if (name) await VFS.touch(CONFIG.FS.DESKTOP, name);

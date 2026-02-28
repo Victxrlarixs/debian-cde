@@ -3,232 +3,321 @@
 import { CONFIG } from '../../scripts/core/config';
 ---
 
-<div id="cde-panel" role="navigation" aria-label="Main panel">
-  <div class="cde-menu-btn" role="button" tabindex="0" aria-label="Main menu">
-    <img src="/icons/system/Debian.png" alt="Menu" />
+<div id="cde-panel" role="navigation" aria-label="Front Panel">
+  <!-- Handle izquierdo -->
+  <div class="cde-handle" role="button" tabindex="0" aria-label="Move Panel">
+    <div class="handle-grip"></div>
   </div>
-  <div class="cde-sep" role="separator"></div>
 
-  <div class="cde-icon-block">
-    <div class="cde-icon-buttons">
-      <div
-        class="cde-icon-btn dropdown-btn"
-        id="terminalBtn"
-        role="button"
-        tabindex="0"
-        aria-label="Terminal menu"
-        aria-haspopup="true"
-        aria-expanded="false"
-      >
-        <img src="/icons/actions/go-up.png" alt="arrow" class="arrow-icon" />
-      </div>
-      <div
-        class="cde-icon-btn cde-textured-btn"
-        id="fileManagerBtn"
-        role="button"
-        tabindex="0"
-        aria-label="File Manager"
-      >
-      </div>
-      <div
-        class="cde-icon-btn dropdown-btn"
-        id="browserBtn"
-        role="button"
-        tabindex="0"
-        aria-label="Browser menu"
-        aria-haspopup="true"
-        aria-expanded="false"
-      >
-        <img src="/icons/actions/go-up.png" alt="arrow" class="arrow-icon" />
-      </div>
-      <div
-        class="cde-icon-btn dropdown-btn"
-        id="styleManagerBtn"
-        role="button"
-        tabindex="0"
-        aria-label="Style Manager menu"
-        aria-haspopup="true"
-        aria-expanded="false"
-      >
-        <img src="/icons/actions/go-up.png" alt="arrow" class="arrow-icon" />
-      </div>
-      <div
-        class="cde-icon-btn dropdown-btn"
-        id="utilitiesBtn"
-        role="button"
-        tabindex="0"
-        aria-label="Utilities menu"
-        aria-haspopup="true"
-        aria-expanded="false"
-      >
-        <img src="/icons/actions/go-up.png" alt="arrow" class="arrow-icon" />
-      </div>
+  <!-- IZQUIERDA: 5 iconos -->
+
+  <!-- Utilities Control -->
+  <div class="cde-control-wrapper">
+    <div
+      class="subpanel-arrow dropdown-btn"
+      role="button"
+      tabindex="0"
+      aria-label="Utilities Menu"
+      id="utilitiesBtn"
+      aria-haspopup="true"
+      aria-expanded="false"
+    >
+      <img src="/icons/actions/go-up.png" alt="" />
     </div>
-
-    <div class="cde-icons" role="toolbar" aria-label="Quick launch icons">
-      <div
-        class="cde-icon"
-        onclick="TerminalLab.open()"
-        title="Terminal Lab (Ctrl+Alt+T)"
-        role="button"
-        tabindex="0"
-        aria-label="Open Terminal"
-        data-keyboard-hint="Ctrl+Alt+T"
-      >
-        <img src="/icons/apps/konsole.png" alt="Terminal Lab" />
-      </div>
-      <div
-        class="cde-icon"
-        onclick="toggleFileManager()"
-        title="File Manager"
-        role="button"
-        tabindex="0"
-        aria-label="File Manager"
-        data-keyboard-hint="Ctrl+Alt+F"
-      >
-        <img src="/icons/apps/filemanager.png" alt="File Manager" />
-      </div>
-      <div
-        class="cde-icon"
-        title="Github Repo"
-        role="button"
-        tabindex="0"
-        aria-label="Github Repository"
-      >
-        <div onclick={`confirmExternalLink('${CONFIG.META.GITHUB_REPO}')`} style="cursor: pointer;">
-          <img src="/icons/apps/konqueror.png" alt="Browser" />
+    <div class="cde-control" role="button" tabindex="0" aria-label="Utilities">
+      <div class="control-content">
+        <div class="control-icon">
+          <img src="/icons/system/applications-other.png" alt="Utilities" />
         </div>
+        <div class="control-label">Utilities</div>
       </div>
+    </div>
+  </div>
+
+  <!-- Man Pages Control -->
+  <div class="cde-control-wrapper">
+    <div class="subpanel-arrow-spacer"></div>
+    <div
+      class="cde-control"
+      role="button"
+      tabindex="0"
+      aria-label="Man Pages"
+      onclick="window.ManViewer?.open()"
+    >
+      <div class="control-content">
+        <div class="control-icon">
+          <img src="/icons/apps/man.png" alt="Man Pages" />
+        </div>
+        <div class="control-label">Man Pages</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- File Manager Control -->
+  <div class="cde-control-wrapper">
+    <div class="subpanel-arrow-spacer"></div>
+    <div
+      class="cde-control"
+      role="button"
+      tabindex="0"
+      aria-label="File Manager"
+      id="fileManagerBtn"
+      onclick="toggleFileManager()"
+      data-keyboard-hint="Ctrl+Alt+F"
+    >
+      <div class="control-content">
+        <div class="control-icon">
+          <img src="/icons/apps/filemanager.png" alt="File Manager" />
+        </div>
+        <div class="control-label">File<br />Manager</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Text Editor Control -->
+  <div class="cde-control-wrapper">
+    <div class="subpanel-arrow-spacer"></div>
+    <div
+      class="cde-control"
+      role="button"
+      tabindex="0"
+      aria-label="Text Editor"
+      onclick="window.Emacs?.openSplash()"
+      data-keyboard-hint="Ctrl+Alt+E"
+    >
+      <div class="control-content">
+        <div class="control-icon">
+          <img src="/icons/apps/xemacs.png" alt="Text Editor" class="emacs-pixelated" />
+        </div>
+        <div class="control-label">Text<br />Editor</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Style Manager Control -->
+  <div class="cde-control-wrapper">
+    <div
+      class="subpanel-arrow dropdown-btn"
+      role="button"
+      tabindex="0"
+      aria-label="Style Manager Menu"
+      id="styleManagerBtn"
+      aria-haspopup="true"
+      aria-expanded="false"
+    >
+      <img src="/icons/actions/go-up.png" alt="" />
+    </div>
+    <div
+      class="cde-control"
+      role="button"
+      tabindex="0"
+      aria-label="Style Manager"
+      onclick="styleManager.openMain()"
+      data-keyboard-hint="Ctrl+Alt+S"
+    >
+      <div class="control-content">
+        <div class="control-icon">
+          <img src="/icons/apps/org.xfce.settings.manager.png" alt="Style Manager" />
+        </div>
+        <div class="control-label">Style<br />Manager</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTRO: Workspace Switch Area -->
+  <div class="cde-workspace-area">
+    <!-- Lock (izquierda) -->
+    <div class="cde-side-controls">
       <div
-        class="cde-icon"
-        onclick="styleManager.openMain()"
-        title="Style Manager"
+        class="cde-small-btn"
         role="button"
         tabindex="0"
-        aria-label="Style Manager"
-        data-keyboard-hint="Ctrl+Alt+S"
+        aria-label="Lock"
+        onclick="CDEModal.alert('Feature not yet implemented')"
       >
-        <img src="/icons/apps/org.xfce.settings.manager.png" alt="Style Manager" />
+        <img src="/icons/actions/lock.png" alt="Lock" />
+      </div>
+    </div>
+
+    <!-- Workspace Switcher 2x2 Grid -->
+    <div class="cde-workspace-switch" role="tablist" aria-label="Workspaces">
+      <div
+        class="workspace-btn pager-workspace active"
+        data-workspace="1"
+        role="tab"
+        tabindex="0"
+        aria-label="Workspace One"
+        aria-selected="true"
+      >
+        One
       </div>
       <div
-        class="cde-icon"
-        id="utilitiesIcon"
-        title="Run"
+        class="workspace-btn pager-workspace"
+        data-workspace="2"
+        role="tab"
+        tabindex="0"
+        aria-label="Workspace Two"
+        aria-selected="false"
+      >
+        Two
+      </div>
+      <div
+        class="workspace-btn pager-workspace"
+        data-workspace="3"
+        role="tab"
+        tabindex="0"
+        aria-label="Workspace Three"
+        aria-selected="false"
+      >
+        Three
+      </div>
+      <div
+        class="workspace-btn pager-workspace"
+        data-workspace="4"
+        role="tab"
+        tabindex="0"
+        aria-label="Workspace Four"
+        aria-selected="false"
+      >
+        Four
+      </div>
+    </div>
+
+    <!-- Exit (derecha) -->
+    <div class="cde-side-controls">
+      <div
+        class="cde-small-btn"
         role="button"
         tabindex="0"
-        aria-label="Utilities"
+        aria-label="Exit"
+        onclick="CDEModal.alert('Feature not yet implemented')"
       >
-        <img src="/icons/system/applications-other.png" alt="Utilities" />
+        <img src="/icons/actions/exit.png" alt="Exit" />
       </div>
     </div>
   </div>
 
-  <div class="cde-sep" role="separator"></div>
+  <!-- DERECHA: 5 iconos -->
 
-  <div class="cde-pager" role="tablist" aria-label="Workspaces">
+  <!-- Apps (Debian) Control -->
+  <div class="cde-control-wrapper">
+    <div class="subpanel-arrow-spacer"></div>
     <div
-      class="pager-workspace active"
-      data-workspace="1"
-      role="tab"
+      class="cde-control"
+      role="button"
       tabindex="0"
-      aria-label="Workspace One"
-      aria-selected="true"
+      aria-label="Applications"
+      onclick="appManager.open()"
     >
-      One
+      <div class="control-content">
+        <div class="control-icon">
+          <img src="/icons/system/Debian.png" alt="Applications" />
+        </div>
+        <div class="control-label">Apps</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Terminal Control -->
+  <div class="cde-control-wrapper">
+    <div
+      class="subpanel-arrow dropdown-btn"
+      role="button"
+      tabindex="0"
+      aria-label="Terminal Menu"
+      id="terminalBtn"
+      aria-haspopup="true"
+      aria-expanded="false"
+    >
+      <img src="/icons/actions/go-up.png" alt="" />
     </div>
     <div
-      class="pager-workspace"
-      data-workspace="2"
-      role="tab"
+      class="cde-control"
+      role="button"
       tabindex="0"
-      aria-label="Workspace Two"
-      aria-selected="false"
+      aria-label="Terminal"
+      onclick="TerminalLab.open()"
+      data-keyboard-hint="Ctrl+Alt+T"
     >
-      Two
+      <div class="control-content">
+        <div class="control-icon">
+          <img src="/icons/apps/konsole.png" alt="Terminal" />
+        </div>
+        <div class="control-label">Terminal</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Browser Control -->
+  <div class="cde-control-wrapper">
+    <div
+      class="subpanel-arrow dropdown-btn"
+      role="button"
+      tabindex="0"
+      aria-label="Browser Menu"
+      id="browserBtn"
+      aria-haspopup="true"
+      aria-expanded="false"
+    >
+      <img src="/icons/actions/go-up.png" alt="" />
     </div>
     <div
-      class="pager-workspace"
-      data-workspace="3"
-      role="tab"
+      class="cde-control"
+      role="button"
       tabindex="0"
-      aria-label="Workspace Three"
-      aria-selected="false"
+      aria-label="Github Repository"
+      onclick="confirmExternalLink(CONFIG.META.GITHUB_REPO)"
     >
-      Three
+      <div class="control-content">
+        <div class="control-icon">
+          <img src="/icons/apps/konqueror.png" alt="Github Repository" />
+        </div>
+        <div class="control-label">Browser</div>
+      </div>
     </div>
+  </div>
+
+  <!-- Screenshot Control -->
+  <div class="cde-control-wrapper">
+    <div class="subpanel-arrow-spacer"></div>
     <div
-      class="pager-workspace"
-      data-workspace="4"
-      role="tab"
+      class="cde-control"
+      role="button"
       tabindex="0"
-      aria-label="Workspace Four"
-      aria-selected="false"
+      aria-label="Screenshot"
+      onclick="captureFullPageScreenshot()"
     >
-      Four
+      <div class="control-content">
+        <div class="control-icon">
+          <img src="/icons/apps/org.xfce.screenshooter.png" alt="Screenshot" />
+        </div>
+        <div class="control-label">Screenshot</div>
+      </div>
     </div>
   </div>
 
-  <div class="cde-scroll">
-    <div class="scroll-btn" role="button" tabindex="0" aria-label="Scroll up">
-      <img src="/icons/actions/go-up.png" alt="Up" style="width: 12px; height: 12px;" />
+  <!-- Process Monitor Control -->
+  <div class="cde-control-wrapper">
+    <div class="subpanel-arrow-spacer"></div>
+    <div
+      class="cde-control"
+      role="button"
+      tabindex="0"
+      aria-label="Process Monitor"
+      onclick="openTaskManagerInTerminal()"
+    >
+      <div class="control-content">
+        <div class="control-icon">
+          <img src="/icons/apps/org.xfce.taskmanager.png" alt="Process Monitor" />
+        </div>
+        <div class="control-label">Process Monitor</div>
+      </div>
     </div>
-    <div class="scroll-btn" role="button" tabindex="0" aria-label="Scroll down">
-      <img
-        src="/icons/actions/go-up.png"
-        alt="Down"
-        style="width: 12px; height: 12px; transform: rotate(180deg);"
-      />
-    </div>
   </div>
 
-  <div class="cde-sep" role="separator"></div>
-
-  <div
-    class="tray-icon"
-    id="screenshot-btn"
-    onclick="captureFullPageScreenshot()"
-    title="Take Screenshot"
-    role="button"
-    tabindex="0"
-    aria-label="Take Screenshot"
-  >
-    <img src="/icons/apps/org.xfce.screenshooter.png" alt="Camera" />
-  </div>
-
-  <div
-    class="tray-icon"
-    id="share-theme-btn"
-    onclick="shareThemeToDiscussions()"
-    title="Share Your Theme"
-    role="button"
-    tabindex="0"
-    aria-label="Share Your Theme"
-  >
-    <img src="/icons/apps/org.xfce.PanelProfiles.png" alt="Share" />
-  </div>
-
-  <div
-    class="tray-icon"
-    id="taskmanager-btn"
-    onclick="openTaskManagerInTerminal()"
-    title="Process Monitor (top)"
-    role="button"
-    tabindex="0"
-    aria-label="Process Monitor"
-  >
-    <img src="/icons/apps/org.xfce.taskmanager.png" alt="TaskManager" />
-  </div>
-
-  <div
-    class="tray-icon"
-    onclick="window.Emacs?.openSplash()"
-    title="XEmacs"
-    role="button"
-    tabindex="0"
-    aria-label="XEmacs"
-    data-keyboard-hint="Ctrl+Alt+E"
-  >
-    <img src="/icons/apps/xemacs.png" alt="XEmacs" class="emacs-pixelated" />
+  <!-- Handle derecho -->
+  <div class="cde-handle" role="button" tabindex="0" aria-label="Move Panel">
+    <div class="handle-grip"></div>
   </div>
 </div>
 
