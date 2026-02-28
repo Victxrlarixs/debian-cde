@@ -3,7 +3,6 @@
 
 /* Prevent any scrolling on mobile */
 @media (max-width: 767px) {
-
   html,
   body {
     overflow: hidden !important;
@@ -23,7 +22,6 @@
 
 /* Extra small screens (mobile, less than 480px) */
 @media (max-width: 479px) {
-
   /* Netscape Navigator Responsive */
   #netscape {
     width: 95vw !important;
@@ -204,7 +202,7 @@
   }
 
   /* Ensure nested divs don't break layout */
-  .cde-icon>div {
+  .cde-icon > div {
     width: 100%;
     height: 100%;
     display: flex;
@@ -519,7 +517,6 @@
 
 /* Small screens (large mobile, 480px - 767px) */
 @media (min-width: 480px) and (max-width: 767px) {
-
   /* Topbar */
   #topbar {
     padding: 0 6px;
@@ -632,7 +629,6 @@
 
 /* Medium screens (tablets, 768px - 1023px) */
 @media (min-width: 768px) and (max-width: 1023px) {
-
   /* Minor adjustments for tablets */
   .style-manager-main {
     min-width: 60vw !important;
@@ -647,7 +643,6 @@
 
 /* Landscape orientation on mobile */
 @media (max-height: 480px) and (orientation: landscape) {
-
   .window,
   .cde-retro-modal {
     max-height: 85vh !important;
@@ -713,7 +708,7 @@
   }
 
   /* Boot message lines */
-  #boot-log-container>div {
+  #boot-log-container > div {
     font-size: 9px;
     line-height: 1.2;
   }
@@ -736,7 +731,7 @@
     margin-bottom: 15px;
   }
 
-  #boot-log-container>div {
+  #boot-log-container > div {
     font-size: 10px;
   }
 }

@@ -61,6 +61,7 @@ declare global {
     AudioManager: typeof AudioManager;
     styleManager?: StyleManager;
     WindowManager: typeof WindowManager;
+    DesktopManager?: any; // To be imported or typed specifically
 
     // Boot System
     debianBoot: any;
@@ -91,15 +92,15 @@ declare global {
 
     // Screenshot Utilities
     captureFullPageScreenshot: () => void;
-    saveScreenshot: () => void;
-    shareToDiscussions: () => void;
+    saveScreenshot: (url: string) => void;
+    shareToDiscussions: (url: string) => void;
 
     // Calendar
-    calendarManager: CalendarManager;
+    calendarManager?: CalendarManager;
     openCalendar: () => void;
 
     // Process Monitor
-    ProcessMonitor: ProcessMonitor;
+    ProcessMonitor?: ProcessMonitor;
     openTaskManagerInTerminal: () => void;
 
     // Style Manager
@@ -117,13 +118,17 @@ declare global {
 
     // Share Config
     ShareConfig?: ShareConfig;
+    shareThemeToDiscussions?: () => void;
 
     // Performance Debugging
     getPerformanceReport?: () => any;
     logPerformanceReport?: () => Promise<void>;
 
+    // Emacs / Editor
+    openEmacs?: (name: string, content: string, path?: string) => Promise<void>;
+
     // CONFIG (debugging)
-    CONFIG?: any;
+    CONFIG?: import('../scripts/core/config').Config;
   }
 }
 

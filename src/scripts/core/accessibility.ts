@@ -97,6 +97,34 @@ class AccessibilityManager {
       category: 'Applications',
     });
 
+    // Terminal
+    this.registerShortcut({
+      key: 't',
+      ctrl: true,
+      alt: true,
+      action: () => {
+        if ((window as any).TerminalLab) {
+          (window as any).TerminalLab.open();
+        }
+      },
+      description: 'Open Terminal Laboratory',
+      category: 'Applications',
+    });
+
+    // Lynx
+    this.registerShortcut({
+      key: 'l',
+      ctrl: true,
+      alt: true,
+      action: () => {
+        if ((window as any).Lynx) {
+          (window as any).Lynx.open();
+        }
+      },
+      description: 'Open Lynx Browser',
+      category: 'Applications',
+    });
+
     // Netscape
     this.registerShortcut({
       key: 'n',
@@ -184,6 +212,35 @@ class AccessibilityManager {
         category: 'Workspaces',
       });
     }
+
+    // Common Desktop Shortcuts (Visual inclusion only)
+    this.registerShortcut({
+      key: 'c',
+      ctrl: true,
+      action: () => { }, // Handled by individual components
+      description: 'Copy Selected Item',
+      category: 'Common',
+    });
+    this.registerShortcut({
+      key: 'v',
+      ctrl: true,
+      action: () => { }, // Handled by individual components
+      description: 'Paste Item',
+      category: 'Common',
+    });
+    this.registerShortcut({
+      key: 'x',
+      ctrl: true,
+      action: () => { }, // Handled by individual components
+      description: 'Cut Selected Item',
+      category: 'Common',
+    });
+    this.registerShortcut({
+      key: 'Delete',
+      action: () => { }, // Handled by individual components
+      description: 'Delete Selected Item',
+      category: 'Common',
+    });
 
     // Listen for keyboard events
     document.addEventListener('keydown', this.handleKeyDown.bind(this));
@@ -320,53 +377,73 @@ class AccessibilityManager {
   /**
    * Show keyboard shortcuts help dialog
    */
-  private showShortcutsHelp(): void {
+  public async showShortcutsHelp(): Promise<void> {
     const categories = this.groupShortcutsByCategory();
 
     let html = '<div class="shortcuts-help">';
-    html += '<h2>Keyboard Shortcuts</h2>';
+    html += `
+      <div class="shortcuts-header">
+        <img src="/icons/apps/preferences-desktop-keyboard-shortcuts.png" alt="" />
+        <div class="shortcuts-header-text">
+          <h2>Keyboard Shortcuts</h2>
+          <p>Use these shortcuts to navigate the Debian CDE Desktop faster.</p>
+        </div>
+      </div>
+    `;
+
+    html += '<div class="shortcuts-list">';
 
     for (const [category, shortcuts] of Object.entries(categories)) {
-      html += `<h3>${category}</h3>`;
-      html += '<table>';
+      html += `<h3 class="shortcuts-category">${category}</h3>`;
+      html += '<table class="shortcuts-table">';
 
       for (const shortcut of shortcuts) {
         const keys = this.formatShortcut(shortcut);
-        html += `<tr><td><kbd>${keys}</kbd></td><td>${shortcut.description}</td></tr>`;
+        html += `
+          <tr>
+            <td><kbd>${keys}</kbd></td>
+            <td>${shortcut.description}</td>
+          </tr>
+        `;
       }
 
       html += '</table>';
     }
 
-    html += '</div>';
+    html += '</div></div>';
 
-    // Create modal
+    // Use the unified CDEModal system
+    if ((window as any).CDEModal) {
+      (window as any).CDEModal.open('Keyboard Shortcuts', html, [
+        { label: 'Accept', value: true, isDefault: true },
+      ]);
+    } else {
+      console.warn('[Accessibility] CDEModal not available, falling back to basic alert (unlikely)');
+      this.fallbackShowShortcuts(html);
+    }
+  }
+
+  /**
+   * Basic fallback for showing shortcuts if CDEModal is not ready
+   */
+  private fallbackShowShortcuts(html: string): void {
     const modal = document.createElement('div');
     modal.className = 'cde-retro-modal';
-    modal.id = 'shortcuts-help-modal';
+    modal.id = 'shortcuts-help-modal-fallback';
     modal.innerHTML = `
       <div class="titlebar">
-        <span class="titlebar-text" id="shortcuts-title">Keyboard Shortcuts</span>
-        <div class="titlebar-controls">
-          <button class="close-btn" onclick="document.getElementById('shortcuts-help-modal').remove()">
-            <img src="/icons/ui/window-close.png" alt="Close" />
-          </button>
+        <span class="titlebar-text">Keyboard Shortcuts</span>
+        <div class="close-btn" onclick="this.closest('.cde-retro-modal').remove()">
+          <img src="/icons/ui/tab_close.png" alt="Close" />
         </div>
       </div>
-      <div class="modal-body" style="padding: 20px; max-height: 500px; overflow-y: auto;">
+      <div class="modal-body" style="padding: 20px;">
         ${html}
       </div>
     `;
-
     document.body.appendChild(modal);
     modal.style.display = 'flex';
-
-    // Register and center on next frame to ensure proper dimensions
-    requestAnimationFrame(() => {
-      WindowManager.registerWindow(modal);
-      WindowManager.centerWindow(modal);
-      if (window.focusWindow) window.focusWindow('shortcuts-help-modal');
-    });
+    WindowManager.centerWindow(modal);
   }
 
   /**

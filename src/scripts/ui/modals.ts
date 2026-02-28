@@ -91,12 +91,13 @@ class CDEModalClass {
       this.modalElement.id = 'cde-modal-global';
       this.modalElement.classList.add('cde-modal-global');
 
-      // Remove Style Manager inherited elements
+      // Remove Style Manager and specialized artifacts
       this.modalElement.querySelector('.cde-sidepanel')?.remove();
       this.modalElement.querySelector('.cde-statusbar')?.remove();
+      this.modalElement.querySelector('.cde-menubar')?.remove();
       this.modalElement
         .querySelectorAll(
-          '.cde-controlgroup, .cde-controlpanel, .cde-presets, .cde-preset-row, .cde-subtitle'
+          '.cde-controlgroup, .cde-controlpanel, .cde-presets, .cde-preset-row, .cde-subtitle, .cde-menu-item'
         )
         .forEach((el) => el.remove());
 
@@ -215,7 +216,7 @@ class CDEModalClass {
       });
 
       modal.style.display = 'flex';
-      const newZIndex = ++this.zIndex;
+      const newZIndex = WindowManager.getNextZIndex(true);
       modal.style.zIndex = String(newZIndex);
 
       requestAnimationFrame(() => {

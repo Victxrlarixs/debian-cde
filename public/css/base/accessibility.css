@@ -106,59 +106,91 @@
 .shortcuts-help {
   font-family: var(--font-family-base, monospace);
   color: var(--text-color, #ffffff);
+  max-width: 600px;
 }
 
-.shortcuts-help h2 {
-  margin: 0 0 20px 0;
-  font-size: 18px;
+.shortcuts-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--border-dark, #354662);
+  padding-bottom: 15px;
+}
+
+.shortcuts-header img {
+  width: 48px;
+  height: 48px;
+  margin-right: 20px;
+  image-rendering: pixelated;
+}
+
+.shortcuts-header-text h2 {
+  margin: 0;
+  font-size: 16px;
   font-weight: bold;
-  border-bottom: 2px solid var(--border-light, #6f8fb8);
-  padding-bottom: 10px;
 }
 
-.shortcuts-help h3 {
-  margin: 20px 0 10px 0;
-  font-size: 14px;
+.shortcuts-header-text p {
+  margin: 5px 0 0 0;
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.shortcuts-list {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.shortcuts-category {
+  font-size: 13px;
   font-weight: bold;
   color: var(--titlebar-color, #faad49);
+  border-bottom: 1px solid var(--border-inset-dark, #3d4f70);
+  margin: 20px 0 10px 0;
+  padding-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.shortcuts-help table {
+.shortcuts-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 15px;
+  font-size: 11px;
+  margin-bottom: 10px;
 }
 
-.shortcuts-help tr {
-  border-bottom: 1px solid var(--separator-color, #354662);
+.shortcuts-table tr {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.shortcuts-help td {
-  padding: 8px 12px;
+.shortcuts-table td {
+  padding: 8px 0;
   vertical-align: middle;
 }
 
-.shortcuts-help td:first-child {
-  width: 40%;
-  font-weight: bold;
+.shortcuts-table td:first-child {
+  width: 45%;
 }
 
 .shortcuts-help kbd {
   display: inline-block;
   padding: 3px 8px;
   font-family: var(--font-family-mono, monospace);
-  font-size: 11px;
+  font-size: 10px;
+  font-weight: bold;
   color: var(--titlebar-text-color, #000000);
-  background-color: var(--titlebar-color, #faad49);
-  border: 2px solid var(--border-light, #6f8fb8);
+  background-color: var(--button-bg, #4d648d);
+  border: 1px solid var(--border-dark, #354662);
   border-radius: 3px;
-  box-shadow: 0 2px 0 var(--border-dark, #354662);
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.2), 0 1px 0 var(--border-dark, #354662);
   margin: 0 2px;
 }
 
 /* ── Reduced Motion ──────────────────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -172,6 +204,7 @@
 /* ── Touch Target Size (Mobile) ──────────────────────────────────────────── */
 
 @media (pointer: coarse) {
+
   .cde-icon,
   .menu-item,
   .cde-btn,
@@ -216,6 +249,7 @@ button:disabled:hover,
 /* ── Print Styles ────────────────────────────────────────────────────────── */
 
 @media print {
+
   .no-print,
   #topbar,
   #cde-panel,

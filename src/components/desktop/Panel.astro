@@ -337,6 +337,16 @@ import { CONFIG } from '../../scripts/core/config';
   <div class="menu-item" onclick="timeManager.open()" role="menuitem" tabindex="0">
     <img src="/icons/system/gtkclocksetup.png" alt="" /> Clock
   </div>
+  <div class="menu-separator" role="separator"></div>
+  <div
+    class="menu-item"
+    onclick="AccessibilityManager.showShortcutsHelp()"
+    role="menuitem"
+    tabindex="0"
+    data-keyboard-hint="Ctrl+Shift+?"
+  >
+    <img src="/icons/apps/preferences-desktop-keyboard-shortcuts.png" alt="" /> Shortcuts
+  </div>
 </div><div
   class="dropdown-menu"
   id="styleManagerDropdown"
