@@ -61,13 +61,24 @@ Post your themes in [GitHub Discussions](https://github.com/Victxrlarixs/debian-
 
 ## 📱 Works Everywhere
 
-**A modern Progressive Web App** that brings 1990s Unix to any device. Desktop, tablet, phone—the experience adapts. Touch gestures on mobile. Keyboard shortcuts on desktop. Always authentic.
+<table>
+<tr>
+<td width="45%" valign="top">
 
-- **Double-tap** to open
-- **Long-press** for context menus
-- **Pinch to zoom** (disabled for authenticity)
-- **Landscape mode** for full immersion
-- **Install as app** for offline access and native feel
+**A modern Progressive Web App** that brings 1990s Unix to any device.  
+Desktop, tablet, phone—the experience adapts. Touch gestures on mobile.  
+Keyboard shortcuts on desktop. Always authentic.
+
+<br>
+
+</td>
+<td width="55%">
+
+<img src="public/images/Install_PWA.png" width="100%" />
+
+</td>
+</tr>
+</table>
 
 ---
 
