@@ -1,47 +1,14 @@
 // Cache version is automatically updated from package.json version
 // This ensures cache is cleared when app version changes
-// Force update: 2025-02-27
-const CACHE_VERSION = 'v1.0.25';
+// Preloading disabled to fix icon caching issues
+const CACHE_VERSION = 'v1.0.26-no-preload';
 const STATIC_CACHE = `static-cache-${CACHE_VERSION}`;
 
-// CRITICAL: Precache essential assets for instant boot
-const PRECACHE_URLS = [
-  '/',
-  '/css/main.css',
-  '/css/responsive.css',
-
-  // Cursors (always visible)
-  '/icons/cursors/cursor.svg',
-  '/icons/cursors/cursor-wait.svg',
-  '/icons/cursors/cursor-move.svg',
-  '/icons/cursors/cursor-resize-nw.svg',
-
-  // Critical UI icons (used immediately on boot)
-  '/icons/actions/view-refresh.png',
-  '/icons/places/folder_open.png',
-  '/icons/system/Debian.png',
-  '/icons/actions/go-up.png',
-
-  // Panel icons (visible immediately)
-  '/icons/apps/filemanager.png',
-  '/icons/apps/xemacs.png',
-  '/icons/apps/konsole.png',
-  '/icons/apps/konqueror.png',
-  '/icons/apps/org.xfce.settings.manager.png',
-  '/icons/system/applications-other.png',
-  '/icons/apps/org.xfce.screenshooter.png',
-  '/icons/apps/org.xfce.PanelProfiles.png',
-  '/icons/apps/org.xfce.taskmanager.png',
-
-  // Window controls (always visible on any window)
-  '/icons/ui/shade-inactive.png',
-  '/icons/ui/maximize-inactive.png',
-  '/icons/ui/window-close.png',
-];
+// Minimal precache - only essential CSS
+const PRECACHE_URLS = ['/', '/css/main.css', '/css/responsive.css'];
 
 self.addEventListener('install', (event) => {
-  // CRITICAL: Skip waiting to activate immediately and force update
-  // This ensures old cached icons are replaced with new paths
+  // Skip waiting to activate immediately and force update
   self.skipWaiting();
 
   event.waitUntil(
@@ -106,36 +73,9 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Recursos estáticos propios: network-first para iconos (forzar actualización)
+  // Recursos estáticos propios: estrategia estándar
   if (url.origin === self.location.origin) {
-    // CRITICAL: Icons use network-first to ensure new paths are fetched
-    if (url.pathname.startsWith('/icons/')) {
-      event.respondWith(
-        fetch(request)
-          .then((response) => {
-            // Only cache successful responses
-            if (response.ok) {
-              const responseClone = response.clone();
-              caches.open(STATIC_CACHE).then((cache) => cache.put(request, responseClone));
-            }
-            return response;
-          })
-          .catch(() => {
-            // Fallback to cache only if network fails
-            return caches.match(request).then((cached) => {
-              if (cached) {
-                console.log('[SW] Using cached icon (offline):', url.pathname);
-                return cached;
-              }
-              // Return a placeholder or error response
-              return new Response('Icon not found', { status: 404 });
-            });
-          })
-      );
-      return;
-    }
-
-    // CSS, backdrops, palettes: cache-first (less critical)
+    // CSS, backdrops, palettes: cache-first
     if (
       url.pathname.startsWith('/css/') ||
       url.pathname.startsWith('/backdrops/') ||
