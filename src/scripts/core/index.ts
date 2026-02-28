@@ -8,6 +8,7 @@ import '../boot/init';
 import { initPWAInstaller } from '../utilities/pwa-installer';
 import '../utilities/share-config';
 import '../utilities/share-theme-ui';
+import '../features/panel';
 
 // Start backdrop preload IMMEDIATELY (before boot sequence)
 import { startBackdropPreload } from '../boot/backdrop-preloader';
