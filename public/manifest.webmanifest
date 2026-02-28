@@ -10,12 +10,12 @@
   "lang": "en-US",
   "icons": [
     {
-      "src": "/icons/Debian.png",
+      "src": "/icons/system/Debian.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/icons/Debian.png",
+      "src": "/icons/system/Debian.png",
       "sizes": "512x512",
       "type": "image/png"
     }
