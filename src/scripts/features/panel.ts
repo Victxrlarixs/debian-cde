@@ -1,33 +1,61 @@
 // src/scripts/features/panel.ts
-// CDE Front Panel functionality - Classic 90s Unix style
+import { moduleLoader } from '../shared/module-loader';
 
 /**
- * App Manager controller
+ * App Manager controller stub
  */
-const appManager = {
-  open() {
-    const modal = document.getElementById('appManager');
-    if (modal) {
-      modal.classList.add('show');
-      modal.style.display = 'block';
+const appManagerStub = {
+  async open() {
+    if (!(window as any).appManager || (window as any).appManager === appManagerStub) {
+      await moduleLoader.load('appmanager');
+    }
+    if (window.appManager && (window.appManager as any) !== appManagerStub) {
+      window.appManager.open();
     }
   },
-  close() {
-    const modal = document.getElementById('appManager');
-    if (modal) {
-      modal.classList.remove('show');
-      modal.style.display = 'none';
+  async close() {
+    if (window.appManager && (window.appManager as any) !== appManagerStub) {
+      window.appManager.close();
     }
   },
 };
 
-// Expose to window for global access
-(window as any).appManager = appManager;
+/**
+ * Generic feature loader stub factory
+ */
+function createStub(moduleName: string, globalName: string, method: string = 'open') {
+  return {
+    [method]: async (...args: any[]) => {
+      // If not yet loaded or still pointing to a stub
+      if (!(window as any)[globalName] || (window as any)[globalName].isStub) {
+        await moduleLoader.load(moduleName);
+      }
+      // Call the real method
+      if ((window as any)[globalName] && !(window as any)[globalName].isStub) {
+        return (window as any)[globalName][method](...args);
+      }
+    },
+    isStub: true,
+  };
+}
+
+// Initial stub exposure for all lazy modules
+(window as any).appManager = appManagerStub;
+(window as any).TerminalLab = createStub('terminal', 'TerminalLab');
+(window as any).CalendarManager = createStub('calendar', 'CalendarManager', 'init');
+(window as any).openCalendar = async () => {
+  await moduleLoader.load('calendar');
+  if (window.calendarManager) window.calendarManager.toggle();
+};
+(window as any).ManViewer = createStub('manviewer', 'ManViewer');
+(window as any).Netscape = createStub('netscape', 'Netscape');
+(window as any).Lynx = createStub('lynx', 'Lynx');
+(window as any).timeManager = createStub('timemanager', 'timeManager');
 
 /**
  * Initialize panel functionality
  */
-function initPanel() {
+function initPanel(): void {
   // Workspace switcher
   const workspaceBtns = document.querySelectorAll('.workspace-btn');
   workspaceBtns.forEach((btn) => {
@@ -46,12 +74,35 @@ function initPanel() {
   setupDropdown('styleManagerBtn', 'styleManagerDropdown');
   setupDropdown('terminalBtn', 'terminalDropdown');
   setupDropdown('browserBtn', 'browserDropdown');
+
+  // Single delegated listener for closing all dropdowns when clicking outside
+  document.addEventListener('click', (e) => {
+    const dropdownIds = [
+      'utilitiesDropdown',
+      'styleManagerDropdown',
+      'terminalDropdown',
+      'browserDropdown',
+    ];
+    const buttonIds = ['utilitiesBtn', 'styleManagerBtn', 'terminalBtn', 'browserBtn'];
+
+    dropdownIds.forEach((dropdownId, index) => {
+      const dropdown = document.getElementById(dropdownId);
+      const button = document.getElementById(buttonIds[index]);
+
+      if (dropdown && button) {
+        if (!button.contains(e.target as Node) && !dropdown.contains(e.target as Node)) {
+          dropdown.classList.remove('show');
+          button.setAttribute('aria-expanded', 'false');
+        }
+      }
+    });
+  });
 }
 
 /**
  * Setup dropdown menu for a button
  */
-function setupDropdown(buttonId: string, dropdownId: string) {
+function setupDropdown(buttonId: string, dropdownId: string): void {
   const button = document.getElementById(buttonId);
   const dropdown = document.getElementById(dropdownId);
 
@@ -76,14 +127,6 @@ function setupDropdown(buttonId: string, dropdownId: string) {
     dropdown.style.left = `${rect.left}px`;
     dropdown.style.bottom = `${window.innerHeight - rect.top + 5}px`;
   });
-
-  // Close dropdown when clicking outside
-  document.addEventListener('click', (e) => {
-    if (!button.contains(e.target as Node) && !dropdown.contains(e.target as Node)) {
-      dropdown.classList.remove('show');
-      button.setAttribute('aria-expanded', 'false');
-    }
-  });
 }
 
 // Initialize when DOM is ready
@@ -93,4 +136,4 @@ if (document.readyState === 'loading') {
   initPanel();
 }
 
-export { initPanel, appManager };
+export { initPanel, appManagerStub as appManager };

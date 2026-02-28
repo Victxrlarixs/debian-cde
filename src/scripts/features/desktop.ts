@@ -498,7 +498,7 @@ export const DesktopManager = (() => {
     const items: ContextMenuItem[] = targetIcon
       ? [
           {
-            label: isSystem ? 'Open' : 'Open',
+            label: 'Open',
             icon: '/icons/apps/org.xfce.catfish.png',
             action: async () => {
               const name = targetIcon.dataset.name || '';

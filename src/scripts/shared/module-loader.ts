@@ -5,6 +5,16 @@ import { logger } from '../utilities/logger';
 
 /**
  * Module loading priority levels
+ *
+ * The 5-tier system provides fine-grained control over module loading timing:
+ * - CRITICAL (0): Core systems loaded synchronously during boot (VFS, WindowManager)
+ * - HIGH (1): Essential UI loaded synchronously (Desktop, StyleManager)
+ * - MEDIUM (2): Features loaded on idle with no delay (FileManager, Emacs, Calendar, ProcessMonitor)
+ * - LOW (3): Secondary features loaded on idle after 2s (Netscape, Lynx, ManViewer, Terminal)
+ * - IDLE (4): Optional features loaded on idle after 5s (TimeManager, AppManager)
+ *
+ * This staggered loading prevents UI blocking and distributes network/CPU load.
+ * Simplifying to 2 tiers would change timing behavior and risk race conditions.
  */
 export enum LoadPriority {
   CRITICAL = 0, // Must load immediately (VFS, WindowManager)
@@ -34,8 +44,6 @@ interface ModuleMetadata {
  */
 class ModuleLoader {
   private modules: Map<string, ModuleMetadata> = new Map();
-  private loadQueue: string[] = [];
-  private isProcessingQueue: boolean = false;
 
   /**
    * Register a module for lazy loading
@@ -196,31 +204,6 @@ class ModuleLoader {
   }
 
   /**
-   * Load module when element becomes visible
-   */
-  loadOnVisible(name: string, element: HTMLElement): void {
-    if (!('IntersectionObserver' in window)) {
-      this.load(name);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            this.load(name);
-            observer.disconnect();
-          }
-        });
-      },
-      { rootMargin: '100px' }
-    );
-
-    observer.observe(element);
-    logger.log(`[ModuleLoader] Observing visibility for: ${name}`);
-  }
-
-  /**
    * Get loading statistics
    */
   getStats(): {
@@ -257,32 +240,6 @@ class ModuleLoader {
       avgLoadTime: loadedCount > 0 ? totalLoadTime / loadedCount : 0,
       byPriority,
     };
-  }
-
-  /**
-   * Check if module is loaded
-   */
-  isLoaded(name: string): boolean {
-    return this.modules.get(name)?.loaded ?? false;
-  }
-
-  /**
-   * Get loaded module
-   */
-  getModule(name: string): any {
-    return this.modules.get(name)?.module;
-  }
-
-  /**
-   * Unload module (for memory management)
-   */
-  unload(name: string): void {
-    const module = this.modules.get(name);
-    if (module) {
-      module.loaded = false;
-      module.module = undefined;
-      logger.log(`[ModuleLoader] Unloaded: ${name}`);
-    }
   }
 }
 

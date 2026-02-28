@@ -3,14 +3,13 @@ import { logger } from '../utilities/logger';
 
 export class TimeManager {
   private id = 'timeManager';
-  private updateInterval: any = null;
 
   constructor() {
     this.init();
   }
 
   private init(): void {
-    logger.log('[TimeManager] Initializing...');
+    logger.log('[TimeManager] Initializing UI module...');
   }
 
   public open(): void {
@@ -27,8 +26,6 @@ export class TimeManager {
         window.focusWindow(this.id);
       }
 
-      this.startTimeUpdate();
-
       if (window.AudioManager) {
         window.AudioManager.windowOpen();
       }
@@ -41,7 +38,6 @@ export class TimeManager {
     const win = document.getElementById(this.id);
     if (win) {
       win.style.display = 'none';
-      this.stopTimeUpdate();
 
       if (window.AudioManager) {
         window.AudioManager.windowClose();
@@ -49,22 +45,6 @@ export class TimeManager {
 
       logger.log('[TimeManager] Window closed');
     }
-  }
-
-  private startTimeUpdate(): void {
-    this.updateUI();
-    this.updateInterval = setInterval(() => this.updateUI(), 1000);
-  }
-
-  private stopTimeUpdate(): void {
-    if (this.updateInterval) {
-      clearInterval(this.updateInterval);
-      this.updateInterval = null;
-    }
-  }
-
-  private updateUI(): void {
-    // Current time display inside window is gone, nothing to update here
   }
 
   public updateFormat(): void {
@@ -80,8 +60,5 @@ export class TimeManager {
 
 // Global exposure
 if (typeof window !== 'undefined') {
-  const timeManager = new TimeManager();
-  (window as any).timeManager = timeManager;
+  window.timeManager = new TimeManager();
 }
-
-export const timeManagerInstance = (window as any).timeManager;

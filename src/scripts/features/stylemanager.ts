@@ -397,7 +397,6 @@ declare global {
 
 const manager = new StyleManager();
 window.styleManager = manager;
-window.updateMouseSetting = (k, v) => manager.mouse.update(k, v);
+window.updateMouseSetting = (k, v) =>
+  manager.mouse.update(k as keyof typeof manager.mouse.settings, v);
 window.syncMouseControls = () => manager.mouse.syncUI();
-
-export const mouseSettings = manager.mouse.settings;

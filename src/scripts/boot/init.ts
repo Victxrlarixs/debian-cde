@@ -4,15 +4,13 @@ import { CONFIG } from '../core/config';
 import { initClock } from '../utilities/clock';
 import type { StyleManager } from '../features/stylemanager';
 
-import { captureFullPageScreenshot } from '../utilities/screenshot';
+import '../utilities/screenshot'; // side-effect: registers window.captureFullPageScreenshot
 import '../ui/external-links';
 import { logger } from '../utilities/logger';
-import { Preloader } from '../utilities/preloader';
 import { AudioManager } from '../core/audiomanager';
 import VersionManager from '../core/version-manager';
 import { initPerformanceOptimizations } from '../core/performance-integration';
 import { registerModules, moduleLoader } from '../shared/module-loader';
-import { performanceOptimizer } from '../shared/performance-optimizer';
 import { initWorkspacePreview } from '../features/workspace-preview';
 
 /**
@@ -300,19 +298,11 @@ async function initDesktop(): Promise<void> {
     await initPerformanceOptimizations();
     logger.log('[initDesktop] Performance optimizations initialized');
 
-    // 2. Preload assets as early as possible
-    Preloader.init();
-
-    // 3. Load VFS module (CRITICAL priority)
+    // 2. Load VFS module (CRITICAL priority)
     const vfsModule = await moduleLoader.load('vfs');
     if (vfsModule && vfsModule.VFS) {
       vfsModule.VFS.init();
       logger.log('[initDesktop] Virtual Filesystem initialized');
-    } else {
-      // Fallback: dynamic import if module loader fails
-      const { VFS } = await import('../core/vfs');
-      VFS.init();
-      logger.log('[initDesktop] Virtual Filesystem initialized (fallback)');
     }
 
     initClock();
@@ -323,7 +313,7 @@ async function initDesktop(): Promise<void> {
       window.AudioManager.playStartupChime();
     }
 
-    // 3.5. APPLY PRELOADED BACKDROP (before WindowManager to ensure it's visible ASAP)
+    // 3. APPLY PRELOADED BACKDROP (before WindowManager to ensure it's visible ASAP)
     const { applyPreloadedBackdrop } = await import('../boot/backdrop-preloader');
     await applyPreloadedBackdrop();
     logger.log('[initDesktop] Preloaded backdrop applied');
@@ -333,11 +323,6 @@ async function initDesktop(): Promise<void> {
     if (wmModule && wmModule.WindowManager) {
       wmModule.WindowManager.init();
       logger.log('[initDesktop] Window manager initialized');
-    } else {
-      // Fallback: dynamic import if module loader fails
-      const { WindowManager } = await import('../core/windowmanager');
-      WindowManager.init();
-      logger.log('[initDesktop] Window manager initialized (fallback)');
     }
 
     // Initialize workspace preview (miniatures on hover)
@@ -349,11 +334,6 @@ async function initDesktop(): Promise<void> {
     if (desktopModule && desktopModule.DesktopManager) {
       desktopModule.DesktopManager.init();
       logger.log('[initDesktop] Desktop icons initialized');
-    } else {
-      // Fallback: dynamic import
-      const { DesktopManager } = await import('../features/desktop');
-      DesktopManager.init();
-      logger.log('[initDesktop] Desktop icons initialized (fallback)');
     }
 
     // 6. Load Calendar module (MEDIUM priority, but load now for immediate use)
@@ -361,11 +341,6 @@ async function initDesktop(): Promise<void> {
     if (calendarModule && calendarModule.CalendarManager) {
       calendarModule.CalendarManager.init();
       logger.log('[initDesktop] Calendar initialized');
-    } else {
-      // Fallback: dynamic import
-      const { CalendarManager } = await import('../features/calendar');
-      CalendarManager.init();
-      logger.log('[initDesktop] Calendar initialized (fallback)');
     }
 
     // 7. Load StyleManager module (HIGH priority)
@@ -373,10 +348,6 @@ async function initDesktop(): Promise<void> {
     if (styleModule && window.styleManager) {
       window.styleManager.init();
       logger.log('[initDesktop] Style manager initialized');
-    } else if (window.styleManager) {
-      // Fallback to direct initialization
-      window.styleManager.init();
-      logger.log('[initDesktop] Style manager initialized (fallback)');
     }
 
     // Load shared theme from URL if present (after StyleManager is ready)
@@ -431,4 +402,3 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Global exposure
 window.initDesktop = initDesktop;
-window.DebianRealBoot = DebianRealBoot;

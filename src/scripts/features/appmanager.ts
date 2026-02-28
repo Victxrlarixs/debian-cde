@@ -61,8 +61,5 @@ export class AppManager {
 
 // Global exposure
 if (typeof window !== 'undefined') {
-  const appManager = new AppManager();
-  (window as any).appManager = appManager;
+  window.appManager = new AppManager();
 }
-
-export const appManagerInstance = (window as any).appManager;
