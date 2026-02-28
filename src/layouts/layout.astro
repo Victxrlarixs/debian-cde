@@ -4,6 +4,9 @@ export interface Props {
   title: string;
 }
 const { title } = Astro.props;
+
+// Import default backdrop from Vite define (single source of truth)
+const DEFAULT_BACKDROP = import.meta.env.DEFAULT_BACKDROP;
 ---
 
 <!doctype html>
@@ -77,6 +80,9 @@ const { title } = Astro.props;
     <link rel="icon" type="image/png" href="/icons/computer.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="apple-touch-icon" href="/icons/computer.png" />
+
+    <!-- Preload default backdrop to eliminate first-load delay -->
+    <link rel="preload" href={DEFAULT_BACKDROP} as="fetch" crossorigin />
 
     <!-- Defer non-critical CSS -->
     <link rel="stylesheet" href="/css/main.css" media="print" onload="this.media='all'" />

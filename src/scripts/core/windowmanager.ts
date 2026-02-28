@@ -827,22 +827,35 @@ function shadeWindow(id: string): void {
   const titlebar = win.querySelector('.titlebar') as HTMLElement;
   if (!titlebar) return;
 
+  const isMaximized = win.classList.contains('maximized');
+
   if (win.classList.contains('shaded')) {
     // Unshade: restore original height
     win.classList.remove('shaded');
-    if (windowStates[id]?.height) {
+
+    if (isMaximized) {
+      // If maximized, remove inline height to let CSS handle it
+      win.style.height = '';
+    } else if (windowStates[id]?.height) {
+      // If not maximized, restore saved height
       win.style.height = windowStates[id].height!;
     }
+
     if (window.AudioManager) window.AudioManager.windowShade();
     logger.log(`[WindowManager] Window "${id}" unshaded`);
   } else {
     // Shade: collapse to titlebar only
-    windowStates[id] = {
-      ...windowStates[id],
-      height: win.style.height || getComputedStyle(win).height,
-    };
+    if (!isMaximized) {
+      // Only save height if not maximized
+      windowStates[id] = {
+        ...windowStates[id],
+        height: win.style.height || getComputedStyle(win).height,
+      };
+    }
+
     win.classList.add('shaded');
     win.style.height = titlebar.offsetHeight + 'px';
+
     if (window.AudioManager) window.AudioManager.windowShade();
     logger.log(`[WindowManager] Window "${id}" shaded`);
   }

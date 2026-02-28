@@ -128,6 +128,23 @@ export async function loadXpmBackdropCached(
     return xpmCache.get(path) || null;
   }
 
+  // Check if this is the default backdrop and preloader has it
+  if (path === '/backdrops/SkyDarkTall.pm') {
+    try {
+      const { getPreloadedBackdrop } = await import('../boot/backdrop-preloader');
+      const preloaded = await getPreloadedBackdrop();
+      if (preloaded) {
+        // Cache it for future use
+        if (useCache) {
+          xpmCache.set(path, preloaded);
+        }
+        return preloaded;
+      }
+    } catch (error) {
+      // Preloader not available, continue with normal loading
+    }
+  }
+
   const dataUrl = await loadXpmBackdrop(path);
 
   if (dataUrl && useCache) {

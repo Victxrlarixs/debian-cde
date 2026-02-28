@@ -48,7 +48,7 @@ export async function shareThemeToDiscussions(): Promise<void> {
             readonly 
             onclick="this.select()" 
             style="width: 100%; padding: 8px; font-family: monospace; font-size: 10px; 
-                   border: 2px inset; background: white; box-sizing: border-box;"
+                   border: 2px inset; background: white; color: black; box-sizing: border-box;"
           />
           <p style="font-size: 10px; color: #666; margin-top: 5px;">
             ${copied ? 'Copied to clipboard!' : 'Click to select and copy'}

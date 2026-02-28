@@ -115,6 +115,14 @@ export interface BootConfig {
 }
 
 /**
+ * Configuration interface for backdrop/wallpaper.
+ */
+export interface BackdropConfig {
+  /** Default backdrop file path */
+  DEFAULT_BACKDROP: string;
+}
+
+/**
  * Configuration interface for task manager.
  */
 export interface TaskManagerConfig {
@@ -204,6 +212,8 @@ export interface Config {
   TERMINAL: TerminalConfig;
   /** Boot sequence configuration */
   BOOT: BootConfig;
+  /** Backdrop/wallpaper configuration */
+  BACKDROP: BackdropConfig;
   /** Task manager configuration */
   TASK_MANAGER: TaskManagerConfig;
   /** Default style values */
@@ -349,6 +359,9 @@ export const CONFIG: Config = {
 #>       ,'  ,-----'   |        \\
 #>       \`--{__________)        \\/`,
     FINAL_DELAY: 443,
+  },
+  BACKDROP: {
+    DEFAULT_BACKDROP: import.meta.env.DEFAULT_BACKDROP || '/backdrops/SkyDarkTall.pm',
   },
   TASK_MANAGER: {
     BUTTON_ID: 'taskmanager-btn',

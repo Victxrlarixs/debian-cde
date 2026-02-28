@@ -261,6 +261,15 @@
   min-height: 0 !important; /* Override any min-height when shaded */
 }
 
+/* Shaded windows should use inline height even when maximized */
+.window.maximized.shaded,
+.cde-retro-modal.maximized.shaded {
+  width: 100% !important;
+  height: auto !important; /* Allow inline height to take precedence */
+  top: 0 !important;
+  left: 0 !important;
+}
+
 .window.shaded > *:not(.titlebar),
 .cde-retro-modal.shaded > *:not(.titlebar) {
   display: none !important;
