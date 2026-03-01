@@ -11,6 +11,25 @@ import { CONFIG } from '../../scripts/core/config';
 
   <!-- IZQUIERDA: 5 iconos -->
 
+  <!-- Apps (AppManager) Control -->
+  <div class="cde-control-wrapper">
+    <div class="subpanel-arrow-spacer"></div>
+    <div
+      class="cde-control"
+      role="button"
+      tabindex="0"
+      aria-label="Applications"
+      onclick="appManager.open()"
+    >
+      <div class="control-content">
+        <div class="control-icon">
+          <img src="/icons/apps/linux_penguin.png" alt="Applications" />
+        </div>
+        <div class="control-label">Apps</div>
+      </div>
+    </div>
+  </div>
+
   <!-- Utilities Control -->
   <div class="cde-control-wrapper">
     <div
@@ -30,66 +49,6 @@ import { CONFIG } from '../../scripts/core/config';
           <img src="/icons/system/applications-other.png" alt="Utilities" />
         </div>
         <div class="control-label">Utilities</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Man Pages Control -->
-  <div class="cde-control-wrapper">
-    <div class="subpanel-arrow-spacer"></div>
-    <div
-      class="cde-control"
-      role="button"
-      tabindex="0"
-      aria-label="Man Pages"
-      onclick="window.ManViewer?.open()"
-    >
-      <div class="control-content">
-        <div class="control-icon">
-          <img src="/icons/apps/man.png" alt="Man Pages" />
-        </div>
-        <div class="control-label">Man Pages</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- File Manager Control -->
-  <div class="cde-control-wrapper">
-    <div class="subpanel-arrow-spacer"></div>
-    <div
-      class="cde-control"
-      role="button"
-      tabindex="0"
-      aria-label="File Manager"
-      id="fileManagerBtn"
-      onclick="toggleFileManager()"
-      data-keyboard-hint="Ctrl+Alt+F"
-    >
-      <div class="control-content">
-        <div class="control-icon">
-          <img src="/icons/apps/filemanager.png" alt="File Manager" />
-        </div>
-        <div class="control-label">File<br />Manager</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Text Editor Control -->
-  <div class="cde-control-wrapper">
-    <div class="subpanel-arrow-spacer"></div>
-    <div
-      class="cde-control"
-      role="button"
-      tabindex="0"
-      aria-label="Text Editor"
-      onclick="window.Emacs?.openSplash()"
-      data-keyboard-hint="Ctrl+Alt+E"
-    >
-      <div class="control-content">
-        <div class="control-icon">
-          <img src="/icons/apps/xemacs.png" alt="Text Editor" class="emacs-pixelated" />
-        </div>
-        <div class="control-label">Text<br />Editor</div>
       </div>
     </div>
   </div>
@@ -120,6 +79,65 @@ import { CONFIG } from '../../scripts/core/config';
           <img src="/icons/apps/org.xfce.settings.manager.png" alt="Style Manager" />
         </div>
         <div class="control-label">Style<br />Manager</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Browser Control -->
+  <div class="cde-control-wrapper">
+    <div
+      class="subpanel-arrow dropdown-btn"
+      role="button"
+      tabindex="0"
+      aria-label="Browser Menu"
+      id="browserBtn"
+      aria-haspopup="true"
+      aria-expanded="false"
+    >
+      <img src="/icons/actions/go-up.png" alt="" />
+    </div>
+    <div
+      class="cde-control"
+      role="button"
+      tabindex="0"
+      aria-label="Github Repository"
+      onclick="confirmExternalLink(CONFIG.META.GITHUB_REPO)"
+    >
+      <div class="control-content">
+        <div class="control-icon">
+          <img src="/icons/apps/konqueror.png" alt="Github Repository" />
+        </div>
+        <div class="control-label">Browser</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Terminal Control -->
+  <div class="cde-control-wrapper">
+    <div
+      class="subpanel-arrow dropdown-btn"
+      role="button"
+      tabindex="0"
+      aria-label="Terminal Menu"
+      id="terminalBtn"
+      aria-haspopup="true"
+      aria-expanded="false"
+    >
+      <img src="/icons/actions/go-up.png" alt="" />
+    </div>
+    <div
+      class="cde-control"
+      role="button"
+      tabindex="0"
+      aria-label="Terminal"
+      onclick="TerminalLab.open()"
+      data-keyboard-hint="Ctrl+Alt+T"
+    >
+      <div class="control-content">
+        <div class="control-icon">
+          <img src="/icons/apps/konsole.png" alt="Terminal" />
+        </div>
+        <div class="control-label">Terminal</div>
       </div>
     </div>
   </div>
@@ -199,80 +217,62 @@ import { CONFIG } from '../../scripts/core/config';
 
   <!-- DERECHA: 5 iconos -->
 
-  <!-- Apps (Linux Penguin) Control -->
+  <!-- Man Pages Control -->
   <div class="cde-control-wrapper">
     <div class="subpanel-arrow-spacer"></div>
     <div
       class="cde-control"
       role="button"
       tabindex="0"
-      aria-label="Applications"
-      onclick="appManager.open()"
+      aria-label="Man Pages"
+      onclick="window.ManViewer?.open()"
     >
       <div class="control-content">
         <div class="control-icon">
-          <img src="/icons/apps/linux_penguin.png" alt="Applications" />
+          <img src="/icons/apps/man.png" alt="Man Pages" />
         </div>
-        <div class="control-label">Apps</div>
+        <div class="control-label">Man Pages</div>
       </div>
     </div>
   </div>
 
-  <!-- Terminal Control -->
+  <!-- File Manager Control -->
   <div class="cde-control-wrapper">
-    <div
-      class="subpanel-arrow dropdown-btn"
-      role="button"
-      tabindex="0"
-      aria-label="Terminal Menu"
-      id="terminalBtn"
-      aria-haspopup="true"
-      aria-expanded="false"
-    >
-      <img src="/icons/actions/go-up.png" alt="" />
-    </div>
+    <div class="subpanel-arrow-spacer"></div>
     <div
       class="cde-control"
       role="button"
       tabindex="0"
-      aria-label="Terminal"
-      onclick="TerminalLab.open()"
-      data-keyboard-hint="Ctrl+Alt+T"
+      aria-label="File Manager"
+      id="fileManagerBtn"
+      onclick="toggleFileManager()"
+      data-keyboard-hint="Ctrl+Alt+F"
     >
       <div class="control-content">
         <div class="control-icon">
-          <img src="/icons/apps/konsole.png" alt="Terminal" />
+          <img src="/icons/apps/filemanager.png" alt="File Manager" />
         </div>
-        <div class="control-label">Terminal</div>
+        <div class="control-label">File<br />Manager</div>
       </div>
     </div>
   </div>
 
-  <!-- Browser Control -->
+  <!-- Text Editor Control -->
   <div class="cde-control-wrapper">
-    <div
-      class="subpanel-arrow dropdown-btn"
-      role="button"
-      tabindex="0"
-      aria-label="Browser Menu"
-      id="browserBtn"
-      aria-haspopup="true"
-      aria-expanded="false"
-    >
-      <img src="/icons/actions/go-up.png" alt="" />
-    </div>
+    <div class="subpanel-arrow-spacer"></div>
     <div
       class="cde-control"
       role="button"
       tabindex="0"
-      aria-label="Github Repository"
-      onclick="confirmExternalLink(CONFIG.META.GITHUB_REPO)"
+      aria-label="Text Editor"
+      onclick="window.Emacs?.openSplash()"
+      data-keyboard-hint="Ctrl+Alt+E"
     >
       <div class="control-content">
         <div class="control-icon">
-          <img src="/icons/apps/konqueror.png" alt="Github Repository" />
+          <img src="/icons/apps/xemacs.png" alt="Text Editor" class="emacs-pixelated" />
         </div>
-        <div class="control-label">Browser</div>
+        <div class="control-label">Text<br />Editor</div>
       </div>
     </div>
   </div>
