@@ -135,26 +135,3 @@
   background: #cc4444;
   transition: width 0.25s steps(20, end);
 }
-
-/* Energy Star retro logo - simulating physical sticker on CRT bezel */
-#energy-star-logo {
-  position: fixed;
-  top: 8px;
-  right: 8px;
-  width: 70px;
-  height: auto;
-  opacity: 1;
-  z-index: 100001;
-  pointer-events: none;
-  /* Prevent any animation inheritance */
-  animation: none !important;
-}
-
-/* Responsive adjustments for Energy Star logo */
-@media (max-width: 768px) {
-  #energy-star-logo {
-    width: 55px;
-    top: 6px;
-    right: 6px;
-  }
-}

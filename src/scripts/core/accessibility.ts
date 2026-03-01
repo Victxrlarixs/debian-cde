@@ -217,27 +217,27 @@ class AccessibilityManager {
     this.registerShortcut({
       key: 'c',
       ctrl: true,
-      action: () => { }, // Handled by individual components
+      action: () => {}, // Handled by individual components
       description: 'Copy Selected Item',
       category: 'Common',
     });
     this.registerShortcut({
       key: 'v',
       ctrl: true,
-      action: () => { }, // Handled by individual components
+      action: () => {}, // Handled by individual components
       description: 'Paste Item',
       category: 'Common',
     });
     this.registerShortcut({
       key: 'x',
       ctrl: true,
-      action: () => { }, // Handled by individual components
+      action: () => {}, // Handled by individual components
       description: 'Cut Selected Item',
       category: 'Common',
     });
     this.registerShortcut({
       key: 'Delete',
-      action: () => { }, // Handled by individual components
+      action: () => {}, // Handled by individual components
       description: 'Delete Selected Item',
       category: 'Common',
     });
@@ -418,7 +418,9 @@ class AccessibilityManager {
         { label: 'Accept', value: true, isDefault: true },
       ]);
     } else {
-      console.warn('[Accessibility] CDEModal not available, falling back to basic alert (unlikely)');
+      console.warn(
+        '[Accessibility] CDEModal not available, falling back to basic alert (unlikely)'
+      );
       this.fallbackShowShortcuts(html);
     }
   }

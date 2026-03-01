@@ -183,14 +183,15 @@
   background-color: var(--button-bg, #4d648d);
   border: 1px solid var(--border-dark, #354662);
   border-radius: 3px;
-  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.2), 0 1px 0 var(--border-dark, #354662);
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.2),
+    0 1px 0 var(--border-dark, #354662);
   margin: 0 2px;
 }
 
 /* ── Reduced Motion ──────────────────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
-
   *,
   *::before,
   *::after {
@@ -204,7 +205,6 @@
 /* ── Touch Target Size (Mobile) ──────────────────────────────────────────── */
 
 @media (pointer: coarse) {
-
   .cde-icon,
   .menu-item,
   .cde-btn,
@@ -249,7 +249,6 @@ button:disabled:hover,
 /* ── Print Styles ────────────────────────────────────────────────────────── */
 
 @media print {
-
   .no-print,
   #topbar,
   #cde-panel,

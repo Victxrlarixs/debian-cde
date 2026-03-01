@@ -497,207 +497,207 @@ export const DesktopManager = (() => {
 
     const items: ContextMenuItem[] = targetIcon
       ? [
-        {
-          label: 'Open',
-          icon: '/icons/apps/org.xfce.catfish.png',
-          action: async () => {
-            const name = targetIcon.dataset.name || '';
-            const type = (targetIcon.dataset.type as 'file' | 'folder') || 'file';
-            await onIconDoubleClick(name, type);
+          {
+            label: 'Open',
+            icon: '/icons/apps/org.xfce.catfish.png',
+            action: async () => {
+              const name = targetIcon.dataset.name || '';
+              const type = (targetIcon.dataset.type as 'file' | 'folder') || 'file';
+              await onIconDoubleClick(name, type);
+            },
           },
-        },
-        {
-          label: 'Copy',
-          icon: '/icons/actions/edit-copy.png',
-          disabled: isSystem,
-          action: () => {
-            if (isSystem) return;
-            const name = targetIcon.dataset.name;
-            if (!name) return;
-            const fullPath =
-              CONFIG.FS.DESKTOP + name + (targetIcon.dataset.type === 'folder' ? '/' : '');
-            copyToClipboard(fullPath);
+          {
+            label: 'Copy',
+            icon: '/icons/actions/edit-copy.png',
+            disabled: isSystem,
+            action: () => {
+              if (isSystem) return;
+              const name = targetIcon.dataset.name;
+              if (!name) return;
+              const fullPath =
+                CONFIG.FS.DESKTOP + name + (targetIcon.dataset.type === 'folder' ? '/' : '');
+              copyToClipboard(fullPath);
+            },
           },
-        },
-        {
-          label: 'Cut',
-          icon: '/icons/actions/edit-cut.png',
-          disabled: isSystem,
-          action: () => {
-            if (isSystem) return;
-            const name = targetIcon.dataset.name;
-            if (!name) return;
-            const fullPath =
-              CONFIG.FS.DESKTOP + name + (targetIcon.dataset.type === 'folder' ? '/' : '');
-            cutToClipboard(fullPath);
+          {
+            label: 'Cut',
+            icon: '/icons/actions/edit-cut.png',
+            disabled: isSystem,
+            action: () => {
+              if (isSystem) return;
+              const name = targetIcon.dataset.name;
+              if (!name) return;
+              const fullPath =
+                CONFIG.FS.DESKTOP + name + (targetIcon.dataset.type === 'folder' ? '/' : '');
+              cutToClipboard(fullPath);
+            },
           },
-        },
-        {
-          label: 'Rename',
-          icon: '/icons/actions/edit-text.png',
-          disabled: isSystem,
-          action: async () => {
-            if (isSystem) return;
-            const name = targetIcon.dataset.name;
-            if (!name) return;
-            const newName = await (window as any).CDEModal.prompt('New name:', name);
-            if (newName) await VFS.rename(CONFIG.FS.DESKTOP, name, newName);
+          {
+            label: 'Rename',
+            icon: '/icons/actions/edit-text.png',
+            disabled: isSystem,
+            action: async () => {
+              if (isSystem) return;
+              const name = targetIcon.dataset.name;
+              if (!name) return;
+              const newName = await (window as any).CDEModal.prompt('New name:', name);
+              if (newName) await VFS.rename(CONFIG.FS.DESKTOP, name, newName);
+            },
           },
-        },
-        {
-          label: 'Properties',
-          icon: '/icons/system/system-search.png',
-          action: async () => {
-            const name = targetIcon.dataset.name;
-            if (!name) return;
-            if (isSystem) {
-              const sysId = targetIcon.dataset.id;
-              let path = '/usr/bin/unknown';
-              if (sysId === 'emacs-icon') path = '/usr/bin/emacs';
-              else if (sysId === 'share-theme-icon') path = '/usr/bin/share-theme';
-              else if (sysId === 'netscape-icon') path = '/usr/bin/netscape';
-              else if (sysId === 'lynx-icon') path = '/usr/bin/lynx';
+          {
+            label: 'Properties',
+            icon: '/icons/system/system-search.png',
+            action: async () => {
+              const name = targetIcon.dataset.name;
+              if (!name) return;
+              if (isSystem) {
+                const sysId = targetIcon.dataset.id;
+                let path = '/usr/bin/unknown';
+                if (sysId === 'emacs-icon') path = '/usr/bin/emacs';
+                else if (sysId === 'share-theme-icon') path = '/usr/bin/share-theme';
+                else if (sysId === 'netscape-icon') path = '/usr/bin/netscape';
+                else if (sysId === 'lynx-icon') path = '/usr/bin/lynx';
 
-              const { showProperties } = await import('./filemanager');
-              showProperties(path);
-            } else {
-              const { showProperties } = await import('./filemanager');
-              showProperties(CONFIG.FS.DESKTOP + name);
-            }
+                const { showProperties } = await import('./filemanager');
+                showProperties(path);
+              } else {
+                const { showProperties } = await import('./filemanager');
+                showProperties(CONFIG.FS.DESKTOP + name);
+              }
+            },
           },
-        },
-        {
-          label: 'Delete',
-          icon: '/icons/actions/edit-delete.png',
-          disabled: isSystem,
-          action: async () => {
-            if (isSystem) return;
-            const name = targetIcon.dataset.name;
-            if (!name) return;
-            await VFS.rm(CONFIG.FS.DESKTOP, name);
+          {
+            label: 'Delete',
+            icon: '/icons/actions/edit-delete.png',
+            disabled: isSystem,
+            action: async () => {
+              if (isSystem) return;
+              const name = targetIcon.dataset.name;
+              if (!name) return;
+              await VFS.rm(CONFIG.FS.DESKTOP, name);
+            },
           },
-        },
-      ]
+        ]
       : [
-        {
-          label: 'Paste',
-          icon: '/icons/actions/edit-paste.png',
-          disabled: !window.fmClipboard,
-          action: async () => {
-            await pasteFromClipboard(CONFIG.FS.DESKTOP);
+          {
+            label: 'Paste',
+            icon: '/icons/actions/edit-paste.png',
+            disabled: !window.fmClipboard,
+            action: async () => {
+              await pasteFromClipboard(CONFIG.FS.DESKTOP);
+            },
           },
-        },
-        {
-          label: '--- Programs ---',
-          header: true,
-          action: async () => { },
-        },
-        {
-          label: 'FileManager',
-          icon: '/icons/apps/filemanager.png',
-          action: async () => {
-            if (window.toggleFileManager) window.toggleFileManager();
+          {
+            label: '--- Programs ---',
+            header: true,
+            action: async () => {},
           },
-        },
-        {
-          label: 'XEmacs',
-          icon: '/icons/apps/xemacs.png',
-          action: async () => {
-            if (window.Emacs?.open) window.Emacs.open();
+          {
+            label: 'FileManager',
+            icon: '/icons/apps/filemanager.png',
+            action: async () => {
+              if (window.toggleFileManager) window.toggleFileManager();
+            },
           },
-        },
-        {
-          label: 'Netscape',
-          icon: '/icons/apps/netscape_classic.png',
-          action: async () => {
-            if ((window as any).Netscape?.open) (window as any).Netscape.open();
+          {
+            label: 'XEmacs',
+            icon: '/icons/apps/xemacs.png',
+            action: async () => {
+              if (window.Emacs?.open) window.Emacs.open();
+            },
           },
-        },
-        {
-          label: '--- Workspaces ---',
-          header: true,
-          action: async () => { },
-        },
-        {
-          label: 'Workspace 1',
-          icon: '/icons/system/system-workspaces-pages-manager.png',
-          action: async () => {
-            if (window.WindowManager?.switchWorkspace) window.WindowManager.switchWorkspace('1');
+          {
+            label: 'Netscape',
+            icon: '/icons/apps/netscape_classic.png',
+            action: async () => {
+              if ((window as any).Netscape?.open) (window as any).Netscape.open();
+            },
           },
-        },
-        {
-          label: 'Workspace 2',
-          icon: '/icons/system/system-workspaces-pages-manager.png',
-          action: async () => {
-            if (window.WindowManager?.switchWorkspace) window.WindowManager.switchWorkspace('2');
+          {
+            label: '--- Workspaces ---',
+            header: true,
+            action: async () => {},
           },
-        },
-        {
-          label: 'Workspace 3',
-          icon: '/icons/system/system-workspaces-pages-manager.png',
-          action: async () => {
-            if (window.WindowManager?.switchWorkspace) window.WindowManager.switchWorkspace('3');
+          {
+            label: 'Workspace 1',
+            icon: '/icons/system/system-workspaces-pages-manager.png',
+            action: async () => {
+              if (window.WindowManager?.switchWorkspace) window.WindowManager.switchWorkspace('1');
+            },
           },
-        },
-        {
-          label: 'Workspace 4',
-          icon: '/icons/system/system-workspaces-pages-manager.png',
-          action: async () => {
-            if (window.WindowManager?.switchWorkspace) window.WindowManager.switchWorkspace('4');
+          {
+            label: 'Workspace 2',
+            icon: '/icons/system/system-workspaces-pages-manager.png',
+            action: async () => {
+              if (window.WindowManager?.switchWorkspace) window.WindowManager.switchWorkspace('2');
+            },
           },
-        },
-        {
-          label: '--- Tools ---',
-          header: true,
-          action: async () => { },
-        },
-        {
-          label: 'New File',
-          icon: '/icons/mimetypes/document.png',
-          action: async () => {
-            const name = await (window as any).CDEModal.prompt('File name:');
-            if (name) await VFS.touch(CONFIG.FS.DESKTOP, name);
+          {
+            label: 'Workspace 3',
+            icon: '/icons/system/system-workspaces-pages-manager.png',
+            action: async () => {
+              if (window.WindowManager?.switchWorkspace) window.WindowManager.switchWorkspace('3');
+            },
           },
-        },
-        {
-          label: 'New Folder',
-          icon: '/icons/apps/filemanager.png',
-          action: async () => {
-            const name = await (window as any).CDEModal.prompt('Folder name:');
-            if (name) await VFS.mkdir(CONFIG.FS.DESKTOP, name);
+          {
+            label: 'Workspace 4',
+            icon: '/icons/system/system-workspaces-pages-manager.png',
+            action: async () => {
+              if (window.WindowManager?.switchWorkspace) window.WindowManager.switchWorkspace('4');
+            },
           },
-        },
-        {
-          label: 'Style Manager',
-          icon: '/icons/apps/org.xfce.settings.appearance.png',
-          action: async () => {
-            if (window.styleManager) window.styleManager.openMain();
+          {
+            label: '--- Tools ---',
+            header: true,
+            action: async () => {},
           },
-        },
-        {
-          label: 'Share Theme',
-          icon: '/icons/apps/org.xfce.PanelProfiles.png',
-          action: async () => {
-            if ((window as any).shareThemeToDiscussions)
-              (window as any).shareThemeToDiscussions();
+          {
+            label: 'New File',
+            icon: '/icons/mimetypes/document.png',
+            action: async () => {
+              const name = await (window as any).CDEModal.prompt('File name:');
+              if (name) await VFS.touch(CONFIG.FS.DESKTOP, name);
+            },
           },
-        },
-        {
-          label: 'Keyboard Shortcuts',
-          icon: '/icons/apps/preferences-desktop-keyboard-shortcuts.png',
-          action: async () => {
-            if ((window as any).AccessibilityManager)
-              (window as any).AccessibilityManager.showShortcutsHelp();
+          {
+            label: 'New Folder',
+            icon: '/icons/apps/filemanager.png',
+            action: async () => {
+              const name = await (window as any).CDEModal.prompt('Folder name:');
+              if (name) await VFS.mkdir(CONFIG.FS.DESKTOP, name);
+            },
           },
-        },
-        {
-          label: 'Refresh Desktop',
-          icon: '/icons/actions/view-refresh.png',
-          action: async () => {
-            window.location.reload();
+          {
+            label: 'Style Manager',
+            icon: '/icons/apps/org.xfce.settings.appearance.png',
+            action: async () => {
+              if (window.styleManager) window.styleManager.openMain();
+            },
           },
-        },
-      ];
+          {
+            label: 'Share Theme',
+            icon: '/icons/apps/org.xfce.PanelProfiles.png',
+            action: async () => {
+              if ((window as any).shareThemeToDiscussions)
+                (window as any).shareThemeToDiscussions();
+            },
+          },
+          {
+            label: 'Keyboard Shortcuts',
+            icon: '/icons/apps/preferences-desktop-keyboard-shortcuts.png',
+            action: async () => {
+              if ((window as any).AccessibilityManager)
+                (window as any).AccessibilityManager.showShortcutsHelp();
+            },
+          },
+          {
+            label: 'Refresh Desktop',
+            icon: '/icons/actions/view-refresh.png',
+            action: async () => {
+              window.location.reload();
+            },
+          },
+        ];
 
     activeContextMenu = createContextMenu(items, e.clientX, e.clientY);
   }
