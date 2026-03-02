@@ -4,202 +4,22 @@ import { logger } from '../utilities/logger';
 import { openWindow, closeWindow } from '../shared/window-helpers';
 import { HistoryManager } from '../shared/history-manager';
 
-// ─── Page content definitions ────────────────────────────────────────────────
+import netscapePages from '../../data/netscape-pages.json';
 
-const NS_PAGES: Record<string, { title: string; url: string; content: () => string }> = {
-  'whats-new': {
-    title: "What's New! - Netscape",
-    url: 'http://home.netscape.com/home/whats-new.html',
-    content: () => `
-      <div class="ns-page">
-        <img src="/images/NetScape.png" alt="What's New!" class="ns-banner" onerror="this.style.display='none'"/>
-        <h1>What's New!</h1>
-        <p>New information is available every day on the Internet -- how do you find out about it? One way is to start here. This is a monthly What's New listing that lists interesting Internet resources that first appeared today, last month.</p>
-        <ul class="ns-links">
-          <li><a class="ns-link" href="#" onclick="return false;">What's New This Month!</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">What's New for September 1994</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">What's New for August 1994</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">What's New for July 1994</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">What's New for June 1994</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">What's New for May 1994</a></li>
-        </ul>
-        <p>You can also retrieve just the <a class="ns-link" href="#" onclick="return false;">new Web announcements from today</a>.</p>
-        <h2>Other Sources of New Information</h2>
-        <ul class="ns-links">
-          <li><a class="ns-link" href="#" onclick="return false;">comp.infosystems.www.announce</a> - USENET announcements of new Web servers</li>
-          <li><a class="ns-link" href="#" onclick="return false;">NCSA's What's New</a> - Original What's New page from NCSA</li>
-          <li><a class="ns-link" href="#" onclick="return false;">Global Network Navigator</a> - GNN's daily news and features</li>
-          <li><a class="ns-link" href="#" onclick="return false;">The Scout Report</a> - Weekly publication for Internet users</li>
-        </ul>
-      </div>
-    `,
-  },
-  welcome: {
-    title: 'Welcome to Netscape - Netscape',
-    url: 'http://home.netscape.com/',
-    content: () => `
-      <div class="ns-page">
-        <div class="ns-welcome-header">
-          <span class="ns-welcome-logo">NETSCAPE NAVIGATOR</span>
-        </div>
-        <h1>Welcome to Netscape Navigator™</h1>
-        <p>You have embarked on a journey across the Internet, and Netscape Navigator is your vehicle. This welcome page has been set as your home page. As you explore, you'll soon discover that you can pick any page on the Internet as your home.</p>
-        <img src="/images/NetScape-Welcome.png" alt="What's New!" class="ns-banner" onerror="this.style.display='none'"/>
-        <h2>Explore the Internet</h2>
-        <ul class="ns-links">
-          <li><a class="ns-link" onclick="window.Netscape.navigate('whats-new')">What's New!</a> - New sites and resources</li>
-          <li><a class="ns-link" onclick="window.Netscape.navigate('whats-cool')">What's Cool!</a> - Cool sites on the Web</li>
-          <li><a class="ns-link" onclick="window.Netscape.navigate('net-search')">Net Search</a> - Search the Internet</li>
-          <li><a class="ns-link" onclick="window.Netscape.navigate('net-directory')">Net Directory</a> - Browse by subject</li>
-        </ul>
-      </div>
-    `,
-  },
-  'whats-cool': {
-    title: "What's Cool! - Netscape",
-    url: 'http://home.netscape.com/home/whats-cool.html',
-    content: () => `
-      <div class="ns-page">
-        <h1>What's Cool!</h1>
-        <img src="/images/NetScape-Feedback.png" alt="Feedback" class="ns-banner" onerror="this.style.display='none'"/>
-        <p>Someday, we'll all agree on what makes something cool. In the meantime, Netscape's staff is out there on the Internet and keeping an eye out for cool things. This list gets changed from time to time, so check back!</p>
-        <ul class="ns-links">
-          <li><a class="ns-link" href="#" onclick="return false;">The 1994 World Cup</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">Arctic Adventours</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">Bianca's Smut Shack</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">Consumer World</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">Dr. Fun</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">The Fish Cam</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">Hack the Planet</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">Interactive Patient</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">Internet Underground Music Archive</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">The Nando News Server</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">Project GeoSim</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">Rolling Stones Web Site</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">The Simpsons Archive</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">U.S. Census Bureau</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">The Vatican Exhibit</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">Weather World</a></li>
-        </ul>
-      </div>
-    `,
-  },
-  questions: {
-    title: 'Frequently Asked Questions - Netscape',
-    url: 'http://home.netscape.com/home/faq.html',
-    content: () => `
-      <div class="ns-page">
-        <h1>Frequently Asked Questions</h1>
-        <img src="/images/NetScape-FAQs.png" alt="FAQs" class="ns-banner" onerror="this.style.display='none'"/>
-        <h2>About Netscape Navigator</h2>
-        <p><strong>Q: What is Netscape Navigator?</strong></p>
-        <p>A: Netscape Navigator is a web browser application used to access and navigate the World Wide Web. It was developed by Netscape Communications Corporation.</p>
-        <p><strong>Q: Is Netscape Navigator free?</strong></p>
-        <p>A: Netscape Navigator is free for educational and non-profit use. Commercial users are asked to pay a license fee after an evaluation period.</p>
-        <p><strong>Q: What systems does Navigator run on?</strong></p>
-        <p>A: Netscape Navigator runs on: Windows (3.1, NT, 95), Macintosh (System 7+), and various Unix/X11 platforms including Sun, HP, SGI, Linux, and others.</p>
-        <p><strong>Q: How do I get the latest version?</strong></p>
-        <p>A: You can get the latest version at: <a class="ns-link" href="#" onclick="return false;">ftp.netscape.com</a>.</p>
-        <h2>Technical Questions</h2>
-        <p><strong>Q: What HTML does Navigator support?</strong></p>
-        <p>A: Navigator supports HTML 2.0 plus several Netscape extensions including CENTER, tables, frames, background colors, and more.</p>
-      </div>
-    `,
-  },
-  'net-search': {
-    title: 'Net Search - Netscape',
-    url: 'http://home.netscape.com/home/internet-search.html',
-    content: () => `
-      <div class="ns-page">
-        <h1>Net Search</h1>
-        <p>Searching the Internet is easy with these powerful services. Just click on one of the search engines below and follow their instructions.</p>
-        <img src="/images/NetScape-About.png" alt="About" class="ns-banner" onerror="this.style.display='none'"/>
-        <h2>Search Engines</h2>
-        <ul class="ns-links">
-          <li><a class="ns-link" href="https://www.google.com" target="_blank">Google</a> - The most popular search engine</li>
-          <li><a class="ns-link" href="https://www.yahoo.com" target="_blank">Yahoo!</a> - Search and browse the web</li>
-          <li><a class="ns-link" href="https://www.bing.com" target="_blank">Bing</a> - Microsoft's search engine</li>
-          <li><a class="ns-link" href="https://www.altavista.com" target="_blank">AltaVista</a> - Classic search engine</li>
-          <li><a class="ns-link" href="https://www.lycos.com" target="_blank">Lycos</a> - Web search and directory</li>
-          <li><a class="ns-link" href="https://www.excite.com" target="_blank">Excite</a> - Search the web</li>
-        </ul>
-        <h2>USENET Search</h2>
-        <ul class="ns-links">
-          <li><a class="ns-link" href="https://groups.google.com" target="_blank">Google Groups</a> - Search USENET newsgroups</li>
-        </ul>
-      </div>
-    `,
-  },
-  'net-directory': {
-    title: 'Net Directory - Netscape',
-    url: 'http://home.netscape.com/home/internet-directory.html',
-    content: () => `
-      <div class="ns-page">
-        <h1>Internet Directory</h1>
-        <p>The World Wide Web Virtual Library is distributed across the world. It is maintained by a dispersed collective of volunteers, who compile pages of key links for particular areas in which they are experts.</p>
-        <h2>Arts &amp; Humanities</h2>
-        <ul class="ns-links">
-          <li><a class="ns-link" href="#" onclick="return false;">Architecture</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">Art History</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">Classical Studies</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">Dance</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">Fine Arts</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">Literature</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">Museums</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">Music</a></li>
-        </ul>
-        <h2>Science</h2>
-        <ul class="ns-links">
-          <li><a class="ns-link" href="#" onclick="return false;">Astronomy</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">Biosciences</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">Chemistry</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">Computing</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">Earth Science</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">Mathematics</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">Physics</a></li>
-        </ul>
-      </div>
-    `,
-  },
-  about: {
-    title: 'About Netscape - Netscape',
-    url: 'about:',
-    content: () => `
-      <div class="ns-page ns-about-page">
-        <div class="ns-about-logo">
-          <img src="/images/NetScape_classic.png" style="width: 128px; height: 128px; margin-bottom: 10px;" />
-          <div class="ns-about-name">NETSCAPE NAVIGATOR™</div>
-          <div class="ns-about-version">Version 1.0 (X11; I; Linux 2.0.0 i686)</div>
-        </div>
-        <p>Netscape Navigator™</p>
-        <p>Copyright © 1994-1995 Netscape Communications Corporation. All rights reserved.</p>
-        <p>This software is subject to the license agreement provided with the Debian CDE system.</p>
-        <hr/>
-        <p><em>"The ship of the desert is the camel; the ship of the ocean is the browser."</em></p>
-      </div>
-    `,
-  },
-  'net-news': {
-    title: 'Newsgroups - Netscape',
-    url: 'news:',
-    content: () => `
-      <div class="ns-page">
-        <h1>Newsgroups</h1>
-        <p>USENET newsgroups are a collection of discussion forums. Netscape Navigator includes a built-in newsgroup reader. To use it, you need access to a news server.</p>
-        <h2>Popular Newsgroups</h2>
-        <ul class="ns-links">
-          <li><a class="ns-link" href="#" onclick="return false;">comp.infosystems.www.announce</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">comp.infosystems.www.browsers.x</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">comp.infosystems.www.misc</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">alt.internet.services</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">news.announce.newusers</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">rec.humor</a></li>
-          <li><a class="ns-link" href="#" onclick="return false;">sci.astro</a></li>
-        </ul>
-      </div>
-    `,
-  },
-};
+interface NSPage {
+  title: string;
+  url: string;
+  content: () => string;
+}
+
+const NS_PAGES: Record<string, NSPage> = {};
+Object.entries(netscapePages).forEach(([key, value]) => {
+  NS_PAGES[key] = {
+    title: value.title,
+    url: value.url,
+    content: () => value.content,
+  };
+});
 
 // ─── Netscape Navigator class ────────────────────────────────────────────────
 
@@ -241,13 +61,28 @@ class NetscapeNavigator {
 
   // ── Navigation ──────────────────────────────────────────────────────────
 
-  public navigate(pageKey: string): void {
-    if (pageKey === this.currentPage) return;
+  public navigate(path: string): void {
+    const target = this.normalizeUrl(path);
+    if (target === this.currentPage) return;
 
-    this.history.push(pageKey);
-    this.renderPage(pageKey, true);
+    this.history.push(target);
+    this.renderPage(target, true);
     this.updateHistoryMenu();
   }
+
+  private normalizeUrl(url: string): string {
+    if (!url) return '';
+    const target = url.trim();
+
+    if (NS_PAGES[target] || target.startsWith('about:')) return target;
+
+    if (!target.includes('.') || target.includes(' ')) {
+      return `https://duckduckgo.com/?q=${encodeURIComponent(target)}`;
+    }
+
+    return target.startsWith('http') ? target : `https://${target}`;
+  }
+
 
   public goBack(): void {
     const prev = this.history.back();
@@ -274,72 +109,84 @@ class NetscapeNavigator {
     this.renderPage(this.currentPage, true);
   }
 
-  private renderPage(pageKey: string, animate: boolean): void {
-    const page = NS_PAGES[pageKey];
-    if (!page) {
-      this.setStatus(`Error: Page not found — ${pageKey}`);
-      return;
-    }
-
-    this.currentPage = pageKey;
-
-    // Update URL bar
+  private renderPage(target: string, animate: boolean): void {
+    // Determine if we're loading an internal page or external URL
+    const internalKey = Object.keys(NS_PAGES).find((k) => k === target || NS_PAGES[k].url === target);
+    const nsContent = document.getElementById('nsContent');
+    const nsExternalView = document.getElementById('nsExternalView') as HTMLIFrameElement;
     const urlInput = document.getElementById('nsUrlInput') as HTMLInputElement;
-    if (urlInput) urlInput.value = page.url;
-
-    // Update title
     const title = document.getElementById('netscape-title');
-    if (title) title.textContent = page.title;
 
-    // Active dir button
-    const dirBtns = document.querySelectorAll('.ns-dir-btn');
-    dirBtns.forEach((btn) => btn.classList.remove('active'));
-    const activeBtn = document.querySelector(`.ns-dir-btn[onclick*="${pageKey}"]`);
-    if (activeBtn) activeBtn.classList.add('active');
+    this.currentPage = target;
+
+    if (internalKey) {
+      const page = NS_PAGES[internalKey];
+      if (urlInput) urlInput.value = page.url;
+      if (title) title.textContent = page.title;
+
+      // Toggle views
+      if (nsContent) nsContent.style.display = 'block';
+      if (nsExternalView) {
+        nsExternalView.style.display = 'none';
+        nsExternalView.src = 'about:blank';
+      }
+
+      // Active dir button
+      const dirBtns = document.querySelectorAll('.ns-dir-btn');
+      dirBtns.forEach((btn) => btn.classList.remove('active'));
+      const activeBtn = document.querySelector(`.ns-dir-btn[onclick*="${internalKey}"]`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      if (animate) {
+        this.startLoading(() => {
+          if (nsContent) {
+            nsContent.innerHTML = page.content();
+            nsContent.scrollTop = 0;
+          }
+        });
+      } else {
+        if (nsContent) nsContent.innerHTML = page.content();
+        this.setStatus('Document: Done');
+      }
+    } else {
+      if (urlInput) urlInput.value = target;
+      if (title) title.textContent = `${target} — Netscape`;
+
+      if (nsContent) nsContent.style.display = 'none';
+      if (nsExternalView) {
+        nsExternalView.style.display = 'block';
+      }
+
+      const dirBtns = document.querySelectorAll('.ns-dir-btn');
+      if (dirBtns) dirBtns.forEach((btn) => (btn as HTMLElement).classList.remove('active'));
+
+      // Restauramos el "Motor Invisible" que permite cargar Google/GNU
+      const engineUrl = `https://web.archive.org/web/2d_/${target}`;
+      this.setStatus(`Loading ${target}...`);
+
+      if (animate) {
+        this.startLoadingExternal(engineUrl);
+      } else {
+        if (nsExternalView) nsExternalView.src = engineUrl;
+        this.setStatus('Document: Done');
+      }
+    }
 
     // Update nav buttons state
     const backBtn = document.getElementById('ns-btn-back') as HTMLButtonElement | null;
     const fwdBtn = document.getElementById('ns-btn-forward') as HTMLButtonElement | null;
     if (backBtn) backBtn.disabled = !this.history.canGoBack();
     if (fwdBtn) fwdBtn.disabled = !this.history.canGoForward();
-
-    if (animate) {
-      this.startLoading(page.content);
-    } else {
-      const content = document.getElementById('nsContent');
-      if (content) content.innerHTML = page.content();
-      this.setStatus('Document: Done');
-    }
   }
 
-  private startLoading(contentFn: () => string): void {
+  private startLoading(onComplete: () => void): void {
     if (this.isLoading) this.stopLoading();
     this.isLoading = true;
 
-    const stopBtn = document.getElementById('ns-btn-stop') as HTMLButtonElement | null;
-    if (stopBtn) stopBtn.disabled = false;
-
-    const nsLogo = document.getElementById('nsNLogo');
-    if (nsLogo) nsLogo.classList.add('ns-loading');
-
-    // Spawn stars on the N logo
-    this.starInterval = setInterval(() => {
-      const starsContainer = document.getElementById('nsNStars');
-      if (!starsContainer || !this.isLoading) return;
-      const star = document.createElement('div');
-      star.className = 'ns-n-star';
-      star.style.left = `${Math.random() * 50}px`;
-      star.style.top = `${Math.random() * 10}px`;
-      star.style.width = `${Math.random() > 0.5 ? 3 : 2}px`;
-      star.style.height = star.style.width;
-      starsContainer.appendChild(star);
-      setTimeout(() => star.remove(), 800);
-    }, 100);
-
+    this.toggleLoadingUI(true);
     this.setStatus('Connecting...');
     this.animateProgress(0);
 
-    let progress = 0;
     const steps = [
       { delay: 100, status: 'Connecting to host...', prog: 10 },
       { delay: 250, status: 'Host contacted. Waiting for reply...', prog: 30 },
@@ -355,15 +202,92 @@ class NetscapeNavigator {
         this.setStatus(status);
         this.animateProgress(prog);
         if (prog === 100) {
-          const content = document.getElementById('nsContent');
-          if (content) {
-            content.innerHTML = contentFn();
-            content.scrollTop = 0;
-          }
+          onComplete();
           this.stopLoading();
         }
       }, delay);
     });
+  }
+
+  private startLoadingExternal(url: string): void {
+    if (this.isLoading) this.stopLoading();
+    this.isLoading = true;
+
+    this.toggleLoadingUI(true);
+    this.setStatus(`Looking for site: ${url}...`);
+    this.animateProgress(10);
+
+    const nsExternalView = document.getElementById('nsExternalView') as HTMLIFrameElement;
+
+    // Security Notice for Users
+    if (url.includes('google.com') || url.includes('github.com')) {
+      setTimeout(() => {
+        this.setStatus('NOTICE: Site may block vintage view. Try a search term instead.');
+      }, 1500);
+    }
+
+    if (nsExternalView) {
+      setTimeout(() => {
+        if (!this.isLoading) return;
+        this.setStatus('Connect: Contacting host...');
+        this.animateProgress(30);
+      }, 400);
+
+      setTimeout(() => {
+        if (!this.isLoading) return;
+        this.setStatus('Waiting for reply...');
+        this.animateProgress(50);
+        nsExternalView.src = url;
+      }, 800);
+
+      const onIframeLoad = () => {
+        if (!this.isLoading) return;
+        this.setStatus('Document: Done');
+        this.animateProgress(100);
+        setTimeout(() => this.stopLoading(), 200);
+        nsExternalView.removeEventListener('load', onIframeLoad);
+      };
+
+      nsExternalView.addEventListener('load', onIframeLoad);
+
+      // Safety stop
+      setTimeout(() => {
+        if (this.isLoading) {
+          this.setStatus('Document: Done');
+          this.animateProgress(100);
+          this.stopLoading();
+        }
+      }, 8000);
+    }
+  }
+
+  private toggleLoadingUI(active: boolean): void {
+    const stopBtn = document.getElementById('ns-btn-stop') as HTMLButtonElement | null;
+    if (stopBtn) stopBtn.disabled = !active;
+
+    const nsLogo = document.getElementById('nsNLogo');
+    if (nsLogo) {
+      if (active) nsLogo.classList.add('ns-loading');
+      else nsLogo.classList.remove('ns-loading');
+    }
+
+    if (active && !this.starInterval) {
+      this.starInterval = setInterval(() => {
+        const starsContainer = document.getElementById('nsNStars');
+        if (!starsContainer || !this.isLoading) return;
+        const star = document.createElement('div');
+        star.className = 'ns-n-star';
+        star.style.left = `${Math.random() * 50}px`;
+        star.style.top = `${Math.random() * 10}px`;
+        star.style.width = `${Math.random() > 0.5 ? 3 : 2}px`;
+        star.style.height = star.style.width;
+        starsContainer.appendChild(star);
+        setTimeout(() => star.remove(), 800);
+      }, 100);
+    } else if (!active && this.starInterval) {
+      clearInterval(this.starInterval);
+      this.starInterval = null;
+    }
   }
 
   private stopLoading(): void {
@@ -404,18 +328,8 @@ class NetscapeNavigator {
     if (e.key === 'Enter') {
       const input = e.target as HTMLInputElement;
       const url = input.value.trim();
-      // Internal pages
-      const internalMatch = Object.entries(NS_PAGES).find(([, p]) => p.url === url);
-      if (internalMatch) {
-        this.navigate(internalMatch[0]);
-      } else {
-        // Open external links in new tab if valid HTTP
-        if (url.startsWith('http')) {
-          window.open(url, '_blank');
-          this.setStatus(`Opening: ${url}`);
-        } else {
-          this.setStatus(`Cannot open: ${url}`);
-        }
+      if (url) {
+        this.navigate(url);
       }
     }
   }
@@ -560,14 +474,20 @@ class NetscapeNavigator {
 
     recentHistory.forEach((key, idx) => {
       const page = NS_PAGES[key];
-      if (!page) return;
       const item = document.createElement('div');
       item.className = 'ns-item ns-history-item';
       const actualIndex = totalLength - 1 - idx;
       if (actualIndex === currentIndex) {
         item.style.fontWeight = 'bold';
       }
-      item.textContent = page.title.replace(' - Netscape', '');
+
+      // If internal page, show its title. If URL, show the truncated URL.
+      if (page) {
+        item.textContent = page.title.replace(' - Netscape', '');
+      } else {
+        item.textContent = key.length > 30 ? key.substring(0, 27) + '...' : key;
+      }
+
       item.onclick = () => {
         const histItem = this.history.jumpTo(actualIndex);
         if (histItem) {
@@ -589,4 +509,4 @@ if (typeof window !== 'undefined') {
   (window as any).openNetscape = () => netscape.open();
 }
 
-export {};
+export { };

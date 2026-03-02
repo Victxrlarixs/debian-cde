@@ -4,7 +4,8 @@
 
 /* Window shell */
 #netscape {
-  display: none; /* Hidden by default, opened via Ctrl+Alt+N or menu */
+  display: none;
+  /* Hidden by default, opened via Ctrl+Alt+N or menu */
   flex-direction: column;
   background: #c0c0c0;
   width: 780px;
@@ -255,6 +256,7 @@
     opacity: 1;
     transform: translateY(-10px) scale(1.5);
   }
+
   100% {
     opacity: 0;
     transform: translateY(60px) scale(0.5);
@@ -265,6 +267,7 @@
   from {
     filter: brightness(1);
   }
+
   to {
     filter: brightness(1.3) drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
   }
@@ -291,7 +294,7 @@
 
 .ns-url-input {
   flex: 1;
-  height: 20px;
+  height: 22px;
   background: #fff;
   border: 2px solid;
   border-top-color: #808080;
@@ -303,6 +306,22 @@
   padding: 0 4px;
   color: #000;
   outline: none;
+}
+
+.ns-year-select {
+  height: 22px;
+  background: #c0c0c0;
+  border: 2px solid;
+  border-top-color: #ffffff;
+  border-left-color: #ffffff;
+  border-right-color: #404040;
+  border-bottom-color: #404040;
+  font-family: 'Helvetica', Arial, sans-serif;
+  font-size: 11px;
+  padding: 0 2px;
+  color: #000;
+  outline: none;
+  cursor: pointer;
 }
 
 .ns-url-input:focus {
@@ -369,6 +388,17 @@
   color: #000;
   line-height: 1.5;
   min-height: 0;
+}
+
+.ns-external-view {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #fff;
+  min-height: 0;
+  display: block;
+  /* Controlled via JS, but base style should allow flexing */
 }
 
 /* Scrollbar retro in content */
