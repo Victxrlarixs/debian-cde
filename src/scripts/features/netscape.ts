@@ -3,6 +3,7 @@ import { WindowManager } from '../core/windowmanager';
 import { logger } from '../utilities/logger';
 import { openWindow, closeWindow } from '../shared/window-helpers';
 import { HistoryManager } from '../shared/history-manager';
+import { getEngineUrl } from '../shared/browser-engine';
 
 import netscapePages from '../../data/netscape-pages.json';
 
@@ -160,8 +161,7 @@ class NetscapeNavigator {
       const dirBtns = document.querySelectorAll('.ns-dir-btn');
       if (dirBtns) dirBtns.forEach((btn) => (btn as HTMLElement).classList.remove('active'));
 
-      // Restauramos el "Motor Invisible" que permite cargar Google/GNU
-      const engineUrl = `https://web.archive.org/web/2d_/${target}`;
+      const engineUrl = getEngineUrl(target);
       this.setStatus(`Loading ${target}...`);
 
       if (animate) {
