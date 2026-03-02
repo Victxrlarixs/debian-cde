@@ -606,4 +606,4 @@ if (typeof window !== 'undefined') {
   (window as any).openLynx = () => lynx.open();
 }
 
-export {};
+export { };
