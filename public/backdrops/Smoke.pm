@@ -1,7 +1,7 @@
 /* XPM */
 /* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Smoke_pm[] = {
-"1920 1080 3 1",
+"200 200 3 1",
 "@   s topShadowColor m white c #bdbdbdbdbdbd",
 "+   s background m black c #949494949494",
 ".   s bottomShadowColor m black c #636363636363",
