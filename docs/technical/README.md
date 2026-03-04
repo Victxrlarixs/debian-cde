@@ -31,6 +31,7 @@ Welcome to the internal engine of the Debian Time Capsule. This project is built
 ## 🚀 Performance Targets
 
 We aim for a "snappy" 1990s feel with 2020s performance:
+
 - **Zero CLS**: Layout stability is paramount for the desktop feel.
 - **Off-Main-Thread**: Heavy parsing (XPM, Man pages) happens in Web Workers.
 - **Lazy Hydration**: Only the components you use are loaded into memory.
@@ -63,4 +64,4 @@ src/
 
 ---
 
-*For API specifics, please refer to the source code comments. We are working on auto-generating full API docs.*
+_For API specifics, please refer to the source code comments. We are working on auto-generating full API docs._

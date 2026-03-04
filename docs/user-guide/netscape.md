@@ -58,9 +58,10 @@ Experience web browsing from 1994 with Netscape Navigator 1.0!
 Netscape Navigator in Debian CDE is now capable of browsing the modern web.
 
 1. **Enter URL**: Click the address bar and type any domain (e.g., `google.com` or `gnu.org`).
-2. **Navigate**: Press Enter. 
+2. **Navigate**: Press Enter.
 
 #### Compatibility Engine
+
 Netscape uses an advanced transparency engine to ensure that modern sites, which often block simplified embedding, display correctly and fluidly within the retro interface.
 
 ## Features
@@ -73,16 +74,16 @@ Watch the Netscape logo animate while pages load!
 
 The status bar shows:
 
--   "Loading..." - Page is loading
--   "Done" - Page loaded successfully
--   "Error" - Failed to load
+- "Loading..." - Page is loading
+- "Done" - Page loaded successfully
+- "Error" - Failed to load
 
 ### Authentic 1990s Experience
 
--   Classic Netscape interface
--   Period-appropriate design
--   Nostalgic loading animation
--   Retro status messages
+- Classic Netscape interface
+- Period-appropriate design
+- Nostalgic loading animation
+- Retro status messages
 
 ## Available Pages
 
@@ -90,10 +91,10 @@ The status bar shows:
 
 Netscape includes several built-in pages:
 
--   **Welcome** - Introduction to Netscape
--   **About** - Version information
--   **FAQs** - Frequently asked questions
--   **Feedback** - How to provide feedback
+- **Welcome** - Introduction to Netscape
+- **About** - Version information
+- **FAQs** - Frequently asked questions
+- **Feedback** - How to provide feedback
 
 ### Accessing Internal Pages
 
@@ -117,9 +118,9 @@ Navigate faster with keyboard shortcuts.
 
 Netscape Navigator 1.0 is a recreation for nostalgia:
 
--   **Bypass Blocks**: Automatically uses a compatibility engine to show sites that normally block standard iframes.
--   **Authentic 1994 interface**: Real period-appropriate buttons and menus.
--   **Classic Speed**: Includes simulated loading progress and status messages for authenticity.
+- **Bypass Blocks**: Automatically uses a compatibility engine to show sites that normally block standard iframes.
+- **Authentic 1994 interface**: Real period-appropriate buttons and menus.
+- **Classic Speed**: Includes simulated loading progress and status messages for authenticity.
 
 ## Troubleshooting
 

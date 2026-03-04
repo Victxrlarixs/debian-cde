@@ -288,7 +288,7 @@ cat file1 file2      Combine files
 - [ ] Have consistent workspace layout
 - [ ] Know 20+ keyboard shortcuts
 - [ ] Customize theme to your liking
-- [ ] Complete all Terminal lessons
+- [ ] Complete all 22 Terminal Lab lessons
 - [ ] Organize files systematically
 - [ ] Use all 4 workspaces
 - [ ] Minimize mouse usage

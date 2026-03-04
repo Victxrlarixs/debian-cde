@@ -1,5 +1,5 @@
 // Cache version is automatically updated from package.json version
-const CACHE_VERSION = 'v1.0.26-no-preload';
+const CACHE_VERSION = 'v0.0.9';
 const STATIC_CACHE = `static-cache-${CACHE_VERSION}`;
 
 const PRECACHE_URLS = ['/', '/css/main.css', '/css/responsive.css'];

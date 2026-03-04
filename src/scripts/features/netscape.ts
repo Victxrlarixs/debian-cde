@@ -86,7 +86,6 @@ class NetscapeNavigator {
     return target.startsWith('http') ? target : `https://${target}`;
   }
 
-
   public goBack(): void {
     const prev = this.history.back();
     if (prev) {
@@ -114,7 +113,9 @@ class NetscapeNavigator {
 
   private renderPage(target: string, animate: boolean): void {
     // Determine if we're loading an internal page or external URL
-    const internalKey = Object.keys(NS_PAGES).find((k) => k === target || NS_PAGES[k].url === target);
+    const internalKey = Object.keys(NS_PAGES).find(
+      (k) => k === target || NS_PAGES[k].url === target
+    );
     const nsContent = document.getElementById('nsContent');
     const nsExternalView = document.getElementById('nsExternalView') as HTMLIFrameElement;
     const urlInput = document.getElementById('nsUrlInput') as HTMLInputElement;
@@ -511,4 +512,4 @@ if (typeof window !== 'undefined') {
   (window as any).openNetscape = () => netscape.open();
 }
 
-export { };
+export {};

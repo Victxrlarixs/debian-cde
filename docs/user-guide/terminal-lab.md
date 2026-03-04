@@ -1,6 +1,6 @@
 # Terminal Lab User Guide
 
-Terminal Lab is an interactive learning environment for Unix commands. Complete 41 lessons to master the command line!
+Terminal Lab is an interactive learning environment for Unix/Linux commands. Complete 22 lessons to master the command line!
 
 ## What is Terminal Lab?
 
@@ -22,17 +22,35 @@ Terminal Lab teaches you Unix/Linux commands through hands-on practice. Each les
 ### Main Components
 
 1. **Terminal Window** - Where you type commands
-2. **Lesson Panel** - Instructions and explanations
-3. **Progress Bar** - Your completion status
+2. **Lesson Progress** - Shows current lesson and progress
+3. **Hint Banner** - Instructions and tips
 4. **Command Prompt** - Shows `$` when ready for input
 
 ### The Prompt
 
 ```
-$ _
+victxrlarixs@debian:~$ _
 ```
 
 The `$` symbol means the terminal is ready for your command. The cursor (`_`) shows where you'll type.
+
+## Two Modes
+
+### Tutorial Mode (Default)
+
+- Follow guided lessons step by step
+- Type the exact command shown
+- Get instant feedback
+- Progress through 22 lessons
+- Tab autocompletes the current lesson command
+
+### Free Mode
+
+- Practice any Unix/Linux command
+- Full bash-like environment
+- Use pipes, wildcards, aliases
+- Tab autocompletes all available commands
+- Type `tutorial` to return to guided mode
 
 ## How Lessons Work
 
@@ -40,79 +58,53 @@ The `$` symbol means the terminal is ready for your command. The cursor (`_`) sh
 
 Each lesson follows this pattern:
 
-1. **Introduction** - What you'll learn
-2. **Explanation** - How the command works
-3. **Example** - See it in action
-4. **Practice** - Try it yourself
-5. **Verification** - Check if you got it right
+1. **Command Display** - See what command to type
+2. **Practice** - Type the command
+3. **Verification** - Instant feedback
+4. **Advance** - Move to next step automatically
 
 ### Typing Commands
 
-1. Read the lesson instructions
-2. Type the command exactly as shown
+1. Read the command shown
+2. Type it (or press Tab to autocomplete)
 3. Press `Enter` to execute
 4. See the result
-5. Move to the next lesson
+5. Move to the next step
 
 ### Getting Help
 
-- Read the lesson text carefully
-- Look at the examples
-- Try the command step by step
-- If stuck, try again
+- **hint** - Shows the expected command
+- **skip** - Skip current step
+- **free** - Switch to free exploration mode
+- **tutorial** - Return to guided mode
+- **clear** - Clear screen (free mode only)
 
 ## Lesson Categories
 
-### Basics (Lessons 1-10)
+### 22 Unix/Linux Pure Lessons
 
-Learn fundamental commands:
-
-- `pwd` - Print working directory
-- `ls` - List files
-- `cd` - Change directory
-- `mkdir` - Make directory
-- `touch` - Create file
-- `cat` - View file contents
-- `echo` - Print text
-- `clear` - Clear screen
-
-### File Operations (Lessons 11-20)
-
-Work with files:
-
-- `cp` - Copy files
-- `mv` - Move/rename files
-- `rm` - Remove files
-- `rmdir` - Remove directories
-- `find` - Search for files
-- `grep` - Search in files
-- `wc` - Word count
-- `head` - View file start
-- `tail` - View file end
-
-### Text Processing (Lessons 21-30)
-
-Manipulate text:
-
-- `sort` - Sort lines
-- `uniq` - Remove duplicates
-- `cut` - Extract columns
-- `paste` - Merge files
-- `tr` - Translate characters
-- `sed` - Stream editor
-- `awk` - Text processing
-
-### Advanced (Lessons 31-41)
-
-Master advanced topics:
-
-- Pipes and redirection
-- File permissions
-- Process management
-- Environment variables
-- Shell scripting basics
-- Command chaining
-- Wildcards and patterns
+1. **Navigation Basics** - pwd, ls, whoami, date
+2. **Working with Directories** - cd, mkdir, touch
+3. **File Operations** - echo, cat, cp, mv, rm
+4. **Permissions & Search** - chmod, find, grep
+5. **Processes & Resources** - ps, top, free, df
+6. **Package Management & Networking** - apt, ping, curl
+7. **Shell Tricks & History** - history, alias, clear
+8. **System Information** - uname, hostname, uptime, who, last
+9. **User Management (Part 1)** - useradd, passwd, groupadd, usermod, id
+10. **User Management (Part 2)** - cat, grep, sudo, su
+11. **Getting Help** - man, whereis, locate
+12. **Archiving Files** - tar, gzip, zip, unzip
+13. **Process Signals** - systemctl, journalctl, crontab
+14. **Network Interfaces** - ps, kill, pkill, top
+15. **DNS & Remote Files** - ifconfig, ip, ss, traceroute
+16. **Disk & Filesystem** - nslookup, dig, wget
+17. **Text Processing (Part 1)** - df, fdisk, mount, du
+18. **Text Processing (Part 2)** - head, tail, wc, sort, cut
+19. **Environment Variables** - sed, awk, tr
+20. **Symbolic Links & File Info** - env, export, echo, set
+21. **Advanced Permissions (ACL)** - ln, ls, readlink, file
+22. **Utilities & Job Control** - chown, setfacl, getfacl
 
 ## Essential Commands
 
@@ -152,9 +144,6 @@ $ mv old.txt new.txt
 
 # Delete file
 $ rm file.txt
-
-# Delete directory
-$ rmdir emptyfolder
 ```
 
 ### Viewing Files
@@ -168,9 +157,6 @@ $ head file.txt
 
 # View last 10 lines
 $ tail file.txt
-
-# View file page by page
-$ less file.txt
 ```
 
 ### Searching
@@ -194,26 +180,106 @@ $ wc -l file.txt
 | -------- | ---------------------- |
 | `Ctrl+C` | Cancel current command |
 | `Ctrl+L` | Clear screen           |
-| `Ctrl+D` | Exit terminal          |
+| `Ctrl+U` | Clear line             |
+| `Ctrl+A` | Move to line start     |
+| `Ctrl+E` | Move to line end       |
 | `Tab`    | Auto-complete          |
 | `↑`      | Previous command       |
 | `↓`      | Next command           |
 
-### Editing
+## Bash-like Features (Free Mode)
 
-| Shortcut | Action                |
-| -------- | --------------------- |
-| `Ctrl+A` | Move to line start    |
-| `Ctrl+E` | Move to line end      |
-| `Ctrl+U` | Clear line            |
-| `Ctrl+K` | Delete to end of line |
-| `Ctrl+W` | Delete previous word  |
+### Aliases
+
+```bash
+# Create alias
+$ alias ll='ls -la'
+
+# Use alias
+$ ll
+
+# List all aliases
+$ alias
+
+# Remove alias
+$ unalias ll
+```
+
+### Environment Variables
+
+```bash
+# Use predefined variables
+$ echo $HOME
+/home/victxrlarixs
+
+$ echo $USER
+victxrlarixs
+
+# Set new variable
+$ export MY_VAR='Hello'
+
+# Use variable
+$ echo $MY_VAR
+Hello
+
+# List all variables
+$ env
+```
+
+### Pipes
+
+```bash
+# Combine commands
+$ ls | grep txt
+
+# Chain multiple commands
+$ cat file.txt | grep error | wc -l
+```
+
+### Wildcards
+
+```bash
+# Match all .txt files
+$ ls *.txt
+
+# Match files starting with test
+$ rm test*
+```
+
+### Text Processing Commands
+
+```bash
+# Search pattern
+$ grep "error" log.txt
+
+# First 5 lines
+$ head -n 5 file.txt
+
+# Last 10 lines
+$ tail -n 10 file.txt
+
+# Count lines, words, chars
+$ wc file.txt
+```
+
+## Tab Completion
+
+### Tutorial Mode
+
+- Press `Tab` to autocomplete the current lesson command
+- Completes the entire command for you
+
+### Free Mode
+
+- Press `Tab` after typing part of a command name
+- Shows all matching commands if multiple options
+- Press `Tab` after command to autocomplete file/directory names
 
 ## Tips for Success
 
 ### Read Carefully
 
-Each lesson explains exactly what to do. Read the instructions before typing.
+Each lesson shows exactly what to type. Use Tab to autocomplete!
 
 ### Type Exactly
 
@@ -221,15 +287,15 @@ Commands are case-sensitive. `ls` works, `LS` doesn't.
 
 ### Use Tab Completion
 
-Start typing a filename and press `Tab` to auto-complete.
+Press `Tab` to autocomplete commands and avoid typos.
 
 ### Practice Makes Perfect
 
-Repeat commands until they feel natural.
+Switch to free mode to practice without guidance.
 
-### Take Notes
+### Experiment
 
-Write down commands you find useful.
+Try combining commands with pipes and wildcards.
 
 ## Common Mistakes
 
@@ -263,142 +329,47 @@ $ cdDocuments
 $ cd Documents
 ```
 
-### Wrong Directory
-
-```bash
-# Check where you are
-$ pwd
-
-# Go to the right place
-$ cd /path/to/directory
-```
-
 ## Progress Tracking
 
-### Completion Status
+Your progress through the 22 lessons is shown in the progress bar at the top of Terminal Lab.
 
-- **Green checkmark** - Lesson completed
-- **Current lesson** - Highlighted
-- **Locked lessons** - Complete previous lessons first
+## Meta Commands
 
-### Viewing Progress
+Available in both modes:
 
-Your progress is saved automatically. You can:
+- `hint` - Show the expected command (tutorial mode)
+- `skip` - Skip current step (tutorial mode)
+- `free` - Switch to free exploration mode
+- `tutorial` - Return to guided lessons
+- `clear` - Clear screen (free mode only)
 
-- See completed lessons
-- Resume where you left off
-- Repeat any lesson
-
-## Advanced Features
-
-### Command History
-
-Use arrow keys to navigate through previous commands:
-
-- `↑` - Previous command
-- `↓` - Next command
-
-### Auto-completion
-
-Press `Tab` to auto-complete:
-
-- File names
-- Directory names
-- Commands
-
-### Copy & Paste
-
-- **Copy**: Select text, then `Ctrl+C`
-- **Paste**: `Ctrl+V` or right-click
-
-## Lesson Highlights
-
-### Lesson 1: pwd
-
-Learn where you are in the filesystem.
-
-```bash
-$ pwd
-/home/user
-```
-
-### Lesson 5: mkdir
-
-Create your first directory.
-
-```bash
-$ mkdir my_project
-$ ls
-my_project
-```
-
-### Lesson 10: cat
-
-View file contents.
-
-```bash
-$ cat hello.txt
-Hello, World!
-```
-
-### Lesson 20: grep
-
-Search for text in files.
-
-```bash
-$ grep "error" log.txt
-Error: File not found
-```
-
-### Lesson 30: pipes
-
-Combine commands with pipes.
-
-```bash
-$ ls | grep ".txt"
-file1.txt
-file2.txt
-```
-
-### Lesson 41: Graduation
-
-You've mastered the terminal!
-
-## Practice Exercises
+## Practice Exercises (Free Mode)
 
 ### Exercise 1: File Organization
 
 ```bash
-# Create project structure
 $ mkdir project
 $ cd project
 $ mkdir src docs tests
 $ touch README.md
 $ ls
-docs  README.md  src  tests
 ```
 
-### Exercise 2: Finding Files
+### Exercise 2: Using Pipes
 
 ```bash
-# Find all .txt files
-$ find . -name "*.txt"
-
-# Search for "TODO" in files
-$ grep -r "TODO" .
+$ ls | grep txt
+$ cat file.txt | head -5
+$ env | grep HOME
 ```
 
-### Exercise 3: Text Processing
+### Exercise 3: Aliases
 
 ```bash
-# Count lines in all .txt files
-$ wc -l *.txt
-
-# Sort file contents
-$ sort names.txt
-
-# Remove duplicates
-$ sort names.txt | uniq
+$ alias ll='ls -la'
+$ alias home='cd ~'
+$ ll
+$ home
 ```
 
 ## Troubleshooting
@@ -410,66 +381,47 @@ $ xyz
 bash: xyz: command not found
 ```
 
-**Solution**: Check spelling, or the command doesn't exist.
+**Solution**: Check spelling, or the command doesn't exist in this environment.
 
-### Permission Denied
+### Lost Focus After Tab
 
-```bash
-$ rm system_file
-Permission denied
-```
+If Tab completion removes focus, this is a known issue. Click back in the terminal or it should refocus automatically.
 
-**Solution**: You don't have permission for this operation.
+### Lesson Not Advancing
 
-### No Such File or Directory
-
-```bash
-$ cd nonexistent
-No such file or directory
-```
-
-**Solution**: Check the path, or create the directory first.
-
-### Terminal Frozen
-
-**Solution**: Press `Ctrl+C` to cancel the current command.
+Make sure you're typing the exact command shown. Use `hint` to see it again, or `skip` to move forward.
 
 ## Completion Rewards
 
-### After 10 Lessons
+### After 22 Lessons
 
-You understand basic navigation and file operations.
+You've mastered fundamental Unix/Linux commands! 🎓
 
-### After 20 Lessons
+Switch to free mode to practice and experiment with:
 
-You can manage files and search effectively.
-
-### After 30 Lessons
-
-You're proficient with text processing.
-
-### After 41 Lessons
-
-You're a terminal master! 🎓
+- Pipes and command chaining
+- Aliases for shortcuts
+- Environment variables
+- Wildcards for file matching
 
 ## Next Steps
 
 After completing Terminal Lab:
 
-1. **Practice Daily**
-   - Use terminal commands regularly
-   - Try them in real projects
-   - Experiment with combinations
+1. **Practice in Free Mode**
+   - Experiment with pipes
+   - Create useful aliases
+   - Combine commands creatively
 
 2. **Learn More**
    - Explore shell scripting
    - Study advanced commands
-   - Read Unix documentation
+   - Read man pages
 
-3. **Share Knowledge**
-   - Teach others
-   - Write about your experience
-   - Contribute to projects
+3. **Apply Knowledge**
+   - Use terminal in real projects
+   - Automate repetitive tasks
+   - Share what you learned
 
 ## Quick Reference
 
@@ -487,26 +439,27 @@ mv      # Move/rename
 rm      # Remove
 grep    # Search
 find    # Find files
+man     # Manual pages
 ```
 
-### Command Patterns
+### Bash Features
 
 ```bash
-command              # Simple command
-command file         # Command with argument
-command -option      # Command with flag
-command file1 file2  # Multiple arguments
-command1 | command2  # Pipe commands
+alias name='command'  # Create alias
+export VAR=value      # Set variable
+echo $VAR             # Use variable
+cmd1 | cmd2           # Pipe commands
+ls *.txt              # Wildcards
 ```
 
 ## Resources
 
 - [Keyboard Shortcuts](keyboard-shortcuts.md) - Terminal shortcuts
 - [Tips & Tricks](tips-and-tricks.md) - Advanced terminal usage
-- [XEmacs Guide](xemacs.md) - Edit files you create
+- [Man Viewer](man-viewer.md) - Read manual pages
 
 ## Happy Learning!
 
-Terminal Lab makes learning Unix fun and interactive. Take your time, practice regularly, and you'll master the command line!
+Terminal Lab makes learning Unix/Linux fun and interactive. Complete the 22 lessons, then explore freely with bash-like features!
 
 Questions? Check our [GitHub repository](https://github.com/Victxrlarixs/debian-cde).

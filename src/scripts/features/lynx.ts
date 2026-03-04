@@ -5,7 +5,6 @@ import { openWindow, closeWindow } from '../shared/window-helpers';
 import { HistoryManager } from '../shared/history-manager';
 import { fetchExternalContent } from '../shared/browser-engine';
 
-
 interface LynxLink {
   num: number;
   text: string;
@@ -24,9 +23,7 @@ interface HistoryEntry {
   title: string;
 }
 
-
 const LYNX_PAGES: Record<string, LynxPage> = lynxPagesData as Record<string, LynxPage>;
-
 
 class LynxBrowser {
   private id = 'lynx';
@@ -52,7 +49,6 @@ class LynxBrowser {
     this.setStatus('Lynx ready');
   }
 
-
   public open(): void {
     openWindow({
       id: this.id,
@@ -73,7 +69,6 @@ class LynxBrowser {
     closeWindow(this.id);
     logger.log('[Lynx] Window closed');
   }
-
 
   public async navigate(url: string, addToHistory = true): Promise<void> {
     if (this.isLoading) return;
@@ -147,7 +142,6 @@ class LynxBrowser {
     this.navigate(link.url);
   }
 
-
   private render(): void {
     if (!this.currentPage) return;
 
@@ -197,7 +191,6 @@ class LynxBrowser {
       content.scrollTop = 0;
     }
   }
-
 
   private setupKeyboard(): void {
     document.addEventListener('keydown', (e) => {
@@ -370,7 +363,6 @@ class LynxBrowser {
     }
   }
 
-
   public openLocation(): void {
     this.showPrompt('URL to open: ', (url) => {
       if (!url) {
@@ -401,7 +393,9 @@ class LynxBrowser {
           const tagName = el.tagName.toLowerCase();
 
           // Skip non-content tags
-          if (['script', 'style', 'head', 'meta', 'link', 'svg', 'canvas', 'iframe'].includes(tagName)) {
+          if (
+            ['script', 'style', 'head', 'meta', 'link', 'svg', 'canvas', 'iframe'].includes(tagName)
+          ) {
             return '';
           }
 
@@ -415,7 +409,7 @@ class LynxBrowser {
               let absoluteUrl = href;
               try {
                 absoluteUrl = new URL(href, url).href;
-              } catch (e) { }
+              } catch (e) {}
 
               links.push({ num, text: linkText, url: absoluteUrl });
               return ` [${num}]${linkText} `;
@@ -435,7 +429,22 @@ class LynxBrowser {
           });
 
           // Block level elements add spacing
-          if (['p', 'div', 'h1', 'h2', 'h3', 'h4', 'li', 'tr', 'header', 'footer', 'nav', 'section'].includes(tagName)) {
+          if (
+            [
+              'p',
+              'div',
+              'h1',
+              'h2',
+              'h3',
+              'h4',
+              'li',
+              'tr',
+              'header',
+              'footer',
+              'nav',
+              'section',
+            ].includes(tagName)
+          ) {
             return `\n${childrenText}\n`;
           }
 
@@ -452,8 +461,8 @@ class LynxBrowser {
       // Clean up whitespace and newlines for Lynx-like look
       const cleanContent = rawContent
         .split('\n')
-        .map(line => line.trim())
-        .filter((line, i, arr) => line !== '' || (arr[i - 1] !== '')) // Max 1 empty line
+        .map((line) => line.trim())
+        .filter((line, i, arr) => line !== '' || arr[i - 1] !== '') // Max 1 empty line
         .join('\n');
 
       return {
@@ -519,11 +528,13 @@ class LynxBrowser {
     const currentIndex = this.history.getCurrentIndex();
 
     // Authentic Lynx History Page Layout
-    let content = '<div style="float: right; color: #ff00ff; font-weight: bold;">History Page</div>\n';
+    let content =
+      '<div style="float: right; color: #ff00ff; font-weight: bold;">History Page</div>\n';
     content += '<div style="clear: both;"></div>\n';
 
     content += '<div style="text-align: center; margin: 10px 0;">\n';
-    content += '  <span style="background: #00aaaa; color: #000; padding: 0 15px; font-weight: bold;">History Page (Lynx Version 2.8.9rel.1)</span>\n';
+    content +=
+      '  <span style="background: #00aaaa; color: #000; padding: 0 15px; font-weight: bold;">History Page (Lynx Version 2.8.9rel.1)</span>\n';
     content += '</div>\n\n';
 
     content += 'You selected:\n';
@@ -548,11 +559,13 @@ class LynxBrowser {
     });
 
     // Right-aligned status messages placeholder (authentic look)
-    content += '\n<div style="float: right; color: #00aaaa; font-weight: bold;">[Your recent statusline messages]</div>\n';
+    content +=
+      '\n<div style="float: right; color: #00aaaa; font-weight: bold;">[Your recent statusline messages]</div>\n';
     content += '<div style="clear: both;"></div>\n';
 
     // Status bar at bottom (integrated into content for authenticity)
-    content += '\n<div style="background: #00aaaa; color: #000; padding: 2px 5px; width: 100%; position: sticky; bottom: 0;">Commands: Use arrow keys to move, \'?\' for help, \'q\' to quit, \'&lt;-\' to go back.</div>';
+    content +=
+      "\n<div style=\"background: #00aaaa; color: #000; padding: 2px 5px; width: 100%; position: sticky; bottom: 0;\">Commands: Use arrow keys to move, '?' for help, 'q' to quit, '&lt;-' to go back.</div>";
 
     const historyPage: LynxPage = {
       title: 'History Page',
@@ -593,7 +606,6 @@ class LynxBrowser {
     });
   }
 
-
   private focus(): void {
     const content = document.getElementById('lynxContent');
     if (content) content.focus();
@@ -611,11 +623,10 @@ class LynxBrowser {
   }
 }
 
-
 if (typeof window !== 'undefined') {
   const lynx = new LynxBrowser();
   (window as any).Lynx = lynx;
   (window as any).openLynx = () => lynx.open();
 }
 
-export { };
+export {};

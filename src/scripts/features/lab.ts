@@ -3,42 +3,9 @@ import { VFS, type VFSNode, type VFSFile, type VFSFolder } from '../core/vfs';
 import { WindowManager } from '../core/windowmanager';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
-type Lesson = Array<{ user: string; command: string; output: string }>;
-
-// ─── LESSON METADATA ─────────────────────────────────────────────────────────
-const LESSON_TITLES: string[] = [
-  'Navigation Basics',
-  'Working with Directories',
-  'File Operations',
-  'Permissions & Search',
-  'Processes & Resources',
-  'Package Management & Networking',
-  'Git Basics',
-  'Docker Basics',
-  'Shell Tricks & History',
-  'System Information',
-  'User Management (Part 1)',
-  'User Management (Part 2)',
-  'Getting Help',
-  'Archiving Files',
-  'System Services & Logs',
-  'Process Signals',
-  'Network Interfaces',
-  'DNS & Remote Files',
-  'Disk & Filesystem',
-  'Text Processing (Part 1)',
-  'Text Processing (Part 2)',
-  'Environment Variables',
-  'Symbolic Links & File Info',
-  'Advanced Permissions (ACL)',
-  'Utilities & Job Control',
-  'SSH Keys',
-  'File Sync & Downloads',
-  'Git Branching',
-  'Docker Advanced',
-  'Web Server Setup',
-  'Monitoring & Firewall',
-];
+type Step = { user: string; command: string; output: string };
+type Lesson = { title: string; steps: Step[] };
+type TutorialData = { lessons: Lesson[] };
 
 // ─── CLASS ───────────────────────────────────────────────────────────────────
 class TerminalLabManager {
@@ -49,7 +16,7 @@ class TerminalLabManager {
   private lessonLabel!: HTMLElement;
   private progressFill!: HTMLElement;
 
-  private lessons: Lesson[] = tutorialData as Lesson[];
+  private lessons: Lesson[] = (tutorialData as TutorialData).lessons;
   private lessonIndex = 0;
   private stepIndex = 0;
   private freeMode = false;
@@ -59,7 +26,14 @@ class TerminalLabManager {
   private cwd: string;
   private user = 'victxrlarixs';
 
-  // Commands map for free mode
+  private aliases: Record<string, string> = {};
+  private variables: Record<string, string> = {
+    HOME: '/home/victxrlarixs',
+    USER: 'victxrlarixs',
+    PATH: '/usr/local/bin:/usr/bin:/bin',
+    SHELL: '/bin/bash',
+  };
+
   private commandMap: Record<string, (args: string[]) => string | Promise<string>>;
 
   constructor() {
@@ -114,7 +88,9 @@ class TerminalLabManager {
     const banner = document.getElementById('lab-hint-banner');
     if (banner) {
       if (this.freeMode) {
-        this.setHint('[FREE MODE] Type any command. Type "tutorial" to return to guided mode.');
+        this.setHint(
+          '[FREE MODE] Type any command. Type "tutorial" to return to guided mode or "help".'
+        );
       } else {
         this.setHint('Type the command shown below to proceed. Type "hint" or "skip" for help.');
         this.showCurrentPrompt();
@@ -165,7 +141,7 @@ class TerminalLabManager {
   }
 
   private currentStep() {
-    return this.currentLesson()?.[this.stepIndex];
+    return this.currentLesson()?.steps[this.stepIndex];
   }
 
   private showCurrentPrompt(): void {
@@ -202,8 +178,7 @@ class TerminalLabManager {
 
     this.stepIndex++;
 
-    if (this.stepIndex >= lesson.length) {
-      // Lesson complete
+    if (this.stepIndex >= lesson.steps.length) {
       this.lessonIndex++;
       this.stepIndex = 0;
       this.updateUI();
@@ -222,7 +197,8 @@ class TerminalLabManager {
   }
 
   private printLessonIntro(): void {
-    const title = LESSON_TITLES[this.lessonIndex] ?? `Lesson ${this.lessonIndex + 1}`;
+    const lesson = this.currentLesson();
+    const title = lesson?.title ?? `Lesson ${this.lessonIndex + 1}`;
     this.print(``);
     this.print(`<span class="lab-header">-------------------------------------------</span>`);
     this.print(
@@ -247,7 +223,8 @@ class TerminalLabManager {
     const total = this.lessons.length;
     const current = Math.min(this.lessonIndex + 1, total);
     const pct = Math.round((this.lessonIndex / total) * 100);
-    const title = LESSON_TITLES[this.lessonIndex] ?? `Lesson ${current}`;
+    const lesson = this.currentLesson();
+    const title = lesson?.title ?? `Lesson ${current}`;
 
     if (this.lessonLabel) this.lessonLabel.textContent = `LESSON ${current} / ${total} — ${title}`;
     if (this.progressFill) this.progressFill.style.width = `${pct}%`;
@@ -262,6 +239,38 @@ class TerminalLabManager {
   // ── Input handling ─────────────────────────────────────────────────────────
 
   private onKeyDown(e: KeyboardEvent): void {
+    if (e.ctrlKey && e.key === 'c') {
+      e.preventDefault();
+      this.input.value = '';
+      this
+        .print(`<span class="lab-prompt-str">${this.user}@debian:~<file name="src/scripts/features/lab.ts" language="typescript" >
+<content>
+</span> ${this.escHtml(this.input.value)}^C`);
+      this.print(``);
+      return;
+    }
+    if (e.ctrlKey && e.key === 'l') {
+      e.preventDefault();
+      this.body.innerHTML = '';
+      return;
+    }
+    if (e.ctrlKey && e.key === 'u') {
+      e.preventDefault();
+      this.input.value = '';
+      return;
+    }
+    if (e.ctrlKey && e.key === 'a') {
+      e.preventDefault();
+      this.input.selectionStart = 0;
+      this.input.selectionEnd = 0;
+      return;
+    }
+    if (e.ctrlKey && e.key === 'e') {
+      e.preventDefault();
+      this.input.selectionStart = this.input.value.length;
+      this.input.selectionEnd = this.input.value.length;
+      return;
+    }
     if (e.key === 'Enter') {
       const raw = this.input.value.trim();
       this.input.value = '';
@@ -278,6 +287,66 @@ class TerminalLabManager {
       this.input.value = this.historyPos >= 0 ? (this.history[this.historyPos] ?? '') : '';
     } else if (e.key === 'Tab') {
       e.preventDefault();
+      this.handleTabCompletion();
+    }
+  }
+
+  private handleTabCompletion(): void {
+    const input = this.input.value;
+    const cursorPos = this.input.selectionStart ?? input.length;
+    const beforeCursor = input.substring(0, cursorPos);
+    const parts = beforeCursor.split(' ');
+    const lastPart = parts[parts.length - 1];
+
+    if (parts.length === 1) {
+      if (this.freeMode) {
+        const commands = Object.keys(this.commandMap);
+        const matches = commands.filter((cmd) => cmd.startsWith(lastPart));
+
+        if (matches.length === 1) {
+          this.input.value = matches[0] + ' ';
+          this.input.selectionStart = this.input.selectionEnd = this.input.value.length;
+          requestAnimationFrame(() => this.focus());
+        } else if (matches.length > 1) {
+          this.print(`<span class="lab-dim">${matches.join('  ')}</span>`);
+          this.scrollBottom();
+          requestAnimationFrame(() => this.focus());
+        }
+      } else {
+        const step = this.currentStep();
+        if (step && step.command.startsWith(lastPart)) {
+          this.input.value = step.command;
+          this.input.selectionStart = this.input.selectionEnd = this.input.value.length;
+          requestAnimationFrame(() => this.focus());
+        }
+      }
+    } else {
+      this.completeFilePath(lastPart, parts);
+    }
+  }
+
+  private completeFilePath(partial: string, parts: string[]): void {
+    const node = VFS.getNode(this.cwd);
+    if (!node || node.type !== 'folder') return;
+
+    const children = Object.keys(node.children);
+    const matches = children.filter((name) => name.startsWith(partial));
+
+    if (matches.length === 1) {
+      parts[parts.length - 1] = matches[0];
+      const childNode = node.children[matches[0]];
+      if (childNode && childNode.type === 'folder') {
+        parts[parts.length - 1] += '/';
+      } else {
+        parts[parts.length - 1] += ' ';
+      }
+      this.input.value = parts.join(' ');
+      this.input.selectionStart = this.input.selectionEnd = this.input.value.length;
+      requestAnimationFrame(() => this.focus());
+    } else if (matches.length > 1) {
+      this.print(`<span class="lab-dim">${matches.join('  ')}</span>`);
+      this.scrollBottom();
+      requestAnimationFrame(() => this.focus());
     }
   }
 
@@ -291,10 +360,6 @@ class TerminalLabManager {
         : `${this.user}@debian:~$`;
     this.print(`<span class="lab-prompt-str">${promptStr}</span> ${this.escHtml(raw)}`);
 
-    if (raw === 'clear') {
-      this.body.innerHTML = '';
-      return;
-    }
     if (raw === 'hint') {
       this.showHint();
       return;
@@ -314,6 +379,10 @@ class TerminalLabManager {
     }
 
     if (this.freeMode) {
+      if (raw === 'clear') {
+        this.body.innerHTML = '';
+        return;
+      }
       await this.runFreeModeCommand(raw);
     } else {
       this.runTutorialCommand(raw);
@@ -347,8 +416,18 @@ class TerminalLabManager {
   }
 
   private async runFreeModeCommand(raw: string): Promise<void> {
-    const [cmd, ...argParts] = raw.split(' ');
-    const args = argParts.filter(Boolean);
+    let processed = this.expandVariables(raw);
+    processed = this.expandAliases(processed);
+
+    if (processed.includes('|')) {
+      await this.executePipeline(processed);
+      return;
+    }
+
+    const [cmd, ...argParts] = processed.split(' ');
+    let args = argParts.filter(Boolean);
+
+    args = this.expandWildcards(args);
 
     const handler = this.commandMap[cmd ?? ''];
     if (handler) {
@@ -362,6 +441,80 @@ class TerminalLabManager {
         `<span class="lab-error">bash: ${this.escHtml(cmd ?? '')}: command not found</span>`
       );
       if (window.AudioManager) window.AudioManager.error();
+    }
+    this.print(``);
+  }
+
+  private expandVariables(cmd: string): string {
+    return cmd.replace(/\$(\w+)/g, (match, varName) => {
+      return this.variables[varName] ?? match;
+    });
+  }
+
+  private expandAliases(cmd: string): string {
+    const parts = cmd.split(' ');
+    const firstCmd = parts[0];
+    if (firstCmd && this.aliases[firstCmd]) {
+      parts[0] = this.aliases[firstCmd];
+      return parts.join(' ');
+    }
+    return cmd;
+  }
+
+  private expandWildcards(args: string[]): string[] {
+    const expanded: string[] = [];
+    for (const arg of args) {
+      if (arg.includes('*')) {
+        const matches = this.matchWildcard(arg);
+        if (matches.length > 0) {
+          expanded.push(...matches);
+        } else {
+          expanded.push(arg);
+        }
+      } else {
+        expanded.push(arg);
+      }
+    }
+    return expanded;
+  }
+
+  private matchWildcard(pattern: string): string[] {
+    const node = VFS.getNode(this.cwd);
+    if (!node || node.type !== 'folder') return [];
+
+    const regex = new RegExp('^' + pattern.replace(/\*/g, '.*').replace(/\?/g, '.') + '$');
+    return Object.keys(node.children).filter((name) => regex.test(name));
+  }
+
+  private async executePipeline(cmd: string): Promise<void> {
+    const commands = cmd.split('|').map((c) => c.trim());
+    let output = '';
+
+    for (let i = 0; i < commands.length; i++) {
+      const [cmdName, ...argParts] = commands[i].split(' ');
+      const args = argParts.filter(Boolean);
+
+      if (i > 0) {
+        args.unshift(output);
+      }
+
+      const handler = this.commandMap[cmdName ?? ''];
+      if (handler) {
+        output = await handler(args);
+      } else {
+        this.print(
+          `<span class="lab-error">bash: ${this.escHtml(cmdName ?? '')}: command not found</span>`
+        );
+        if (window.AudioManager) window.AudioManager.error();
+        this.print(``);
+        return;
+      }
+    }
+
+    if (output) {
+      output
+        .split('\n')
+        .forEach((l) => this.print(`<span class="lab-output">${this.escHtml(l)}</span>`));
     }
     this.print(``);
   }
@@ -380,6 +533,76 @@ class TerminalLabManager {
       clear: () => {
         this.body.innerHTML = '';
         return '';
+      },
+
+      alias: (args) => {
+        if (args.length === 0) {
+          return Object.entries(this.aliases)
+            .map(([k, v]) => `alias ${k}='${v}'`)
+            .join('\n');
+        }
+        const match = args.join(' ').match(/^(\w+)=['"]?(.+?)['"]?$/);
+        if (match) {
+          this.aliases[match[1]] = match[2];
+          return '';
+        }
+        return 'alias: invalid format. Use: alias name=command';
+      },
+
+      unalias: (args) => {
+        if (!args[0]) return 'unalias: missing operand';
+        delete this.aliases[args[0]];
+        return '';
+      },
+
+      export: (args) => {
+        if (args.length === 0) {
+          return Object.entries(this.variables)
+            .map(([k, v]) => `export ${k}="${v}"`)
+            .join('\n');
+        }
+        const match = args.join(' ').match(/^(\w+)=['"]?(.+?)['"]?$/);
+        if (match) {
+          this.variables[match[1]] = match[2];
+          return '';
+        }
+        return 'export: invalid format. Use: export VAR=value';
+      },
+
+      env: () => {
+        return Object.entries(this.variables)
+          .map(([k, v]) => `${k}=${v}`)
+          .join('\n');
+      },
+
+      grep: (args) => {
+        if (args.length < 2) return 'grep: missing operand';
+        const pattern = args[0];
+        const input = args.slice(1).join(' ');
+        const lines = input.split('\n');
+        const regex = new RegExp(pattern, 'i');
+        return lines.filter((line) => regex.test(line)).join('\n');
+      },
+
+      head: (args) => {
+        const n = args.includes('-n') ? parseInt(args[args.indexOf('-n') + 1] || '10') : 10;
+        const input = args.filter((a) => a !== '-n' && !a.match(/^\d+$/)).join(' ');
+        return input.split('\n').slice(0, n).join('\n');
+      },
+
+      tail: (args) => {
+        const n = args.includes('-n') ? parseInt(args[args.indexOf('-n') + 1] || '10') : 10;
+        const input = args.filter((a) => a !== '-n' && !a.match(/^\d+$/)).join(' ');
+        const lines = input.split('\n');
+        return lines.slice(-n).join('\n');
+      },
+
+      wc: (args) => {
+        const input = args.join(' ');
+        const lines = input.split('\n').length;
+        const words = input.split(/\s+/).filter(Boolean).length;
+        const chars = input.length;
+        return `${lines} ${words} ${chars}`;
       },
 
       ls: (args) => {
@@ -453,7 +676,14 @@ class TerminalLabManager {
           'Available commands (free mode):',
           '  ls, cd, pwd, cat, mkdir, touch, rm, echo, clear',
           '  whoami, hostname, uname, date, help, lynx',
-          '  history, man',
+          '  history, man, alias, unalias, export, env',
+          '  grep, head, tail, wc',
+          'Bash features:',
+          '  Pipes: command1 | command2',
+          '  Variables: $HOME, $USER, $PATH',
+          '  Wildcards: ls *.txt',
+          '  Aliases: alias ll="ls -la"',
+          '  Shortcuts: Ctrl+C, Ctrl+L, Ctrl+U, Ctrl+A, Ctrl+E',
           'Type "tutorial" to return to guided mode.',
         ].join('\n'),
 
@@ -525,3 +755,16 @@ class TerminalLabManager {
 const TerminalLab = new TerminalLabManager();
 (window as unknown as Record<string, unknown>)['TerminalLab'] = TerminalLab;
 export { TerminalLab };
+
+// ─── Global type declarations ────────────────────────────────────────────────
+declare global {
+  interface Window {
+    TerminalLab: typeof TerminalLab;
+    Lynx?: {
+      open: () => void;
+    };
+    ManViewer?: {
+      open: (page?: string) => void;
+    };
+  }
+}

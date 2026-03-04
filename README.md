@@ -34,7 +34,7 @@ You can also customize it.
 Change color palettes.  
 Swap backdrops.  
 Adjust fonts.  
-Make it feel like *your* workstation.
+Make it feel like _your_ workstation.
 
 And if you build something great, share it.
 
@@ -56,7 +56,7 @@ Post it in [GitHub Discussions](https://github.com/Victxrlarixs/debian-cde/discu
   Real Emacs keybindings (`C-x C-s`, `M-x`, `C-k`), interactive minibuffer, GNU splash screen.
 
 - **Terminal Lab**  
-  41 interactive lessons. Learn Unix by doing—from `ls` to pipes.
+  22 interactive lessons. Learn Unix by doing—from `ls` to pipes.
 
 - **Virtual Filesystem**  
   Create files, make directories, navigate with context menus. A real filesystem in your browser.
@@ -91,7 +91,6 @@ Post it in [GitHub Discussions](https://github.com/Victxrlarixs/debian-cde/discu
 - **Sound Synthesis**  
   Authentic system beeps via Web Audio API.
 
-
 ## Works everywhere
 
 <img src="public/images/Install_PWA.png" width="200" align="left" style="margin-right: 24px; margin-bottom: 12px;" />
@@ -117,20 +116,24 @@ It was experience authenticity.
 The desktop is fun to explore.  
 But if you want to understand how it works under the hood, start here:
 
-### Getting Started  
+### Getting Started
+
 Installation, PWA setup, first launch experience, and basic navigation.  
 → **[docs/user-guide/getting-started.md](https://github.com/Victxrlarixs/debian-cde/blob/main/docs/user-guide/getting-started.md)**
 
-### User Guide  
+### User Guide
+
 Shortcuts, window behavior, workspaces, customization, and daily usage.  
 → **[docs/user-guide/keyboard-shortcuts.md](https://github.com/Victxrlarixs/debian-cde/blob/main/docs/user-guide/keyboard-shortcuts.md)**
 
-### Architecture  
+### Architecture
+
 How the desktop is structured internally.  
 Window manager model, virtual filesystem layer, state persistence, and IndexedDB usage.  
 → **[docs/technical/architecture.md](https://github.com/Victxrlarixs/debian-cde/blob/main/docs/technical/architecture.md)**
 
-### Full Documentation Index  
+### Full Documentation Index
+
 Everything organized in one place.  
 → **[docs/README.md](https://github.com/Victxrlarixs/debian-cde/blob/main/docs/README.md)**
 
@@ -141,11 +144,12 @@ Everything organized in one place.
 If you like weird frontend projects, you’ll probably enjoy this one.
 
 You can:
-- Add new themes  
-- Create backdrops  
-- Improve accessibility  
-- Refactor things I overengineered  
-- Or just open issues  
+
+- Add new themes
+- Create backdrops
+- Improve accessibility
+- Refactor things I overengineered
+- Or just open issues
 
 PRs are welcome.
 

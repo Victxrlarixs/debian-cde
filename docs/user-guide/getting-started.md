@@ -134,7 +134,7 @@ The desktop is your main work area. You can:
 1. Open **Terminal Lab**
 2. Follow the lessons
 3. Practice commands
-4. Complete all 41 lessons!
+4. Complete all 22 lessons!
 
 ## Keyboard Shortcuts
 
@@ -295,7 +295,7 @@ Now that you know the basics:
    - Find your favorite combination
 
 4. **Complete Terminal Lab**
-   - Work through all 41 lessons
+   - Work through all 22 lessons
    - Practice Unix commands
    - Become a terminal pro
 
@@ -317,13 +317,13 @@ Now that you know the basics:
 
 - Use multiple workspaces
 - Learn XEmacs basics
-- Complete 10 Terminal lessons
+- Complete 10 Terminal Lab lessons
 - Organize your workflow
 
 ### Week 3: Mastery
 
 - Use keyboard shortcuts primarily
-- Complete all Terminal lessons
+- Complete all 22 Terminal Lab lessons
 - Customize everything
 - Develop your own workflow
 
