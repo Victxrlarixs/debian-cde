@@ -16,6 +16,9 @@ Welcome to the internal engine of the Debian Time Capsule. This project is built
 - **[Storage & Cache](storage.md)**
   Deep dive into data persistence using IndexedDB and localStorage, and our multi-layered caching strategy.
 
+- **[Mintlify Proxy](mintlify-proxy.md)**
+  Technical implementation of the documentation proxy that serves Mintlify docs from the main domain without exposing external URLs.
+
 ---
 
 ## 💻 Tech Stack

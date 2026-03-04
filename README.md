@@ -93,19 +93,12 @@ Post it in [GitHub Discussions](https://github.com/Victxrlarixs/debian-cde/discu
 
 ## Works everywhere
 
-<img src="public/images/Install_PWA.png" width="200" align="left" style="margin-right: 24px; margin-bottom: 12px;" />
+<img src="public/images/Install_PWA.png" width="190" align="left" style="margin-right: 24px; margin-bottom: 12px;" />
 
 Desktop feels native.  
 Mobile adapts with touch gestures.  
 Keyboard shortcuts still work.
 It behaves like a real system — not a responsive layout pretending to be one.
-
-You can even install it.
-Click the icon labeled **Install PWA** and the browser handles the rest.  
-No custom installer. Just native installation.
-
-The goal wasn’t pixel perfection.  
-It was experience authenticity.
 
 <br clear="left"/>
 
@@ -116,26 +109,38 @@ It was experience authenticity.
 The desktop is fun to explore.  
 But if you want to understand how it works under the hood, start here:
 
-### Getting Started
+---
 
+### 🌐 Documentation Portal
+
+Want the full experience? Explore the interactive documentation.
+
+→ **[debian.com.mx/docs](https://debian.com.mx/docs)**
+
+A structured, navigable version of the documentation — designed to feel like part of the system.
+
+---
+
+### 📘 Repository Documentation
+
+Prefer reading directly from the source?
+
+#### Getting Started  
 Installation, PWA setup, first launch experience, and basic navigation.  
-→ **[docs/user-guide/getting-started.md](https://github.com/Victxrlarixs/debian-cde/blob/main/docs/user-guide/getting-started.md)**
+→ **[Getting Started](https://github.com/Victxrlarixs/debian-cde/blob/main/docs/user-guide/getting-started.md)**
 
-### User Guide
-
+#### User Guide  
 Shortcuts, window behavior, workspaces, customization, and daily usage.  
-→ **[docs/user-guide/keyboard-shortcuts.md](https://github.com/Victxrlarixs/debian-cde/blob/main/docs/user-guide/keyboard-shortcuts.md)**
+→ **[User Guide](https://github.com/Victxrlarixs/debian-cde/blob/main/docs/user-guide/keyboard-shortcuts.md)**
 
-### Architecture
-
+#### Architecture  
 How the desktop is structured internally.  
 Window manager model, virtual filesystem layer, state persistence, and IndexedDB usage.  
-→ **[docs/technical/architecture.md](https://github.com/Victxrlarixs/debian-cde/blob/main/docs/technical/architecture.md)**
+→ **[Architecture](https://github.com/Victxrlarixs/debian-cde/blob/main/docs/technical/architecture.md)**
 
-### Full Documentation Index
-
+#### Full Documentation Index  
 Everything organized in one place.  
-→ **[docs/README.md](https://github.com/Victxrlarixs/debian-cde/blob/main/docs/README.md)**
+→ **[Documentation Index](https://github.com/Victxrlarixs/debian-cde/blob/main/docs/README.md)**
 
 ---
 

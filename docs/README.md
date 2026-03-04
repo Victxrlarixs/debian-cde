@@ -60,6 +60,7 @@ docs/
 └── technical/          # Developer documentation
     ├── architecture.md
     ├── storage.md
+    ├── mintlify-proxy.md
     └── version-updates.md
 ```
 
@@ -81,5 +82,6 @@ docs/
 
 - [Official Repository](https://github.com/Victxrlarixs/debian-cde)
 - [Live Experience](https://debian.com.mx)
+- [Documentation Portal](https://debian.com.mx/docs) 
 
 ---
