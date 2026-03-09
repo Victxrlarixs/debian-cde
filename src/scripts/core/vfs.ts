@@ -8,6 +8,9 @@ import { VFSTrashManager } from './vfs/vfs-trash-manager';
 import { VFSSearch } from './vfs/vfs-search';
 import { VFSEventDispatcher } from './vfs/vfs-event-dispatcher';
 import { VFSInitializer } from './vfs/vfs-initializer';
+import { container } from './container';
+import { SystemEvent } from './system-events';
+import type { EventBus } from './event-bus';
 
 export type { VFSNode, VFSFolder, VFSFile, VFSMetadata, IVFS } from './vfs/types';
 
@@ -19,6 +22,14 @@ declare global {
 
 const fsMap: Record<string, VFSNode> = {};
 let rootNode: VFSFolder | null = null;
+
+const getEventBus = (): EventBus | null => {
+  try {
+    return container.has('eventBus') ? container.get<EventBus>('eventBus') : null;
+  } catch {
+    return null;
+  }
+};
 
 const eventDispatcher = new VFSEventDispatcher();
 const pathResolver = new VFSPathResolver();
@@ -59,14 +70,61 @@ export const VFS: IVFS = {
   getChildren: (path: string) => nodeAccessor.getChildren(path),
   exists: (path: string) => nodeAccessor.exists(path),
   getSize: (path: string) => nodeAccessor.getSize(path),
-  touch: (path: string, name: string) => fileOps.touch(path, name),
-  writeFile: (path: string, content: string) => fileOps.writeFile(path, content),
-  rm: (path: string, name: string) => fileOps.rm(path, name),
-  mkdir: (path: string, name: string) => folderOps.mkdir(path, name),
-  rename: (path: string, oldName: string, newName: string) =>
-    transferOps.rename(path, oldName, newName),
-  move: (oldPath: string, newPath: string) => transferOps.move(oldPath, newPath),
-  copy: (sourcePath: string, destPath: string) => transferOps.copy(sourcePath, destPath),
+  touch: async (path: string, name: string) => {
+    await fileOps.touch(path, name);
+    const eventBus = getEventBus();
+    if (eventBus) {
+      eventBus.emitSync(SystemEvent.FILE_CREATED, { path: path + name, name });
+    }
+  },
+  writeFile: async (path: string, content: string) => {
+    await fileOps.writeFile(path, content);
+    const eventBus = getEventBus();
+    if (eventBus) {
+      eventBus.emitSync(SystemEvent.FILE_SAVED, { path, content });
+    }
+  },
+  rm: async (path: string, name: string) => {
+    const result = await fileOps.rm(path, name);
+    if (result) {
+      const eventBus = getEventBus();
+      if (eventBus) {
+        eventBus.emitSync(SystemEvent.FILE_DELETED, { path: path + name, name });
+      }
+    }
+    return result;
+  },
+  mkdir: async (path: string, name: string) => {
+    await folderOps.mkdir(path, name);
+    const eventBus = getEventBus();
+    if (eventBus) {
+      eventBus.emitSync(SystemEvent.FOLDER_CREATED, { path: path + name + '/', name });
+    }
+  },
+  rename: async (path: string, oldName: string, newName: string) => {
+    await transferOps.rename(path, oldName, newName);
+    const eventBus = getEventBus();
+    if (eventBus) {
+      eventBus.emitSync(SystemEvent.FILE_RENAMED, {
+        path: path + newName,
+        name: newName,
+      });
+    }
+  },
+  move: async (oldPath: string, newPath: string) => {
+    await transferOps.move(oldPath, newPath);
+    const eventBus = getEventBus();
+    if (eventBus) {
+      eventBus.emitSync(SystemEvent.FILE_MOVED, { path: newPath });
+    }
+  },
+  copy: async (sourcePath: string, destPath: string) => {
+    await transferOps.copy(sourcePath, destPath);
+    const eventBus = getEventBus();
+    if (eventBus) {
+      eventBus.emitSync(SystemEvent.FILE_COPIED, { path: destPath });
+    }
+  },
   moveToTrash: (path: string) => trashManager.moveToTrash(path),
   restoreFromTrash: (name: string) => trashManager.restoreFromTrash(name),
   search: (basePath: string, query: string, recursive?: boolean) =>

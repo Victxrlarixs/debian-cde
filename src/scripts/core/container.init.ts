@@ -5,6 +5,7 @@ import { VFSAdapter } from './adapters/vfs.adapter';
 import { AudioManagerAdapter } from './adapters/audiomanager.adapter';
 import { settingsManager } from './settingsmanager';
 import { logger } from '../utilities/logger';
+import { EventBus } from './event-bus';
 
 // Window management classes
 import { ZIndexManager } from './window-management/z-index-manager';
@@ -18,6 +19,9 @@ import { DropdownManager } from './window-management/dropdown-manager';
  */
 export function initializeContainer(): void {
   logger.log('[Container] Initializing services...');
+
+  // Register event bus (singleton)
+  container.registerInstance('eventBus', new EventBus());
 
   // Register filesystem services
   container.registerInstance('fs', new VFSAdapter());

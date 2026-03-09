@@ -3,6 +3,10 @@ import { VFS } from '../core/vfs';
 import { CDEModal } from '../ui/modals';
 import { WindowManager } from '../core/windowmanager';
 import { openWindow, closeWindow, createZIndexManager } from '../shared/window-helpers';
+import { container } from '../core/container';
+import { SystemEvent } from '../core/system-events';
+import type { EventBus } from '../core/event-bus';
+import type { FileEventData } from '../core/system-events';
 
 /**
  * Emacs-style Editor Manager (Rebranded)
@@ -10,7 +14,6 @@ import { openWindow, closeWindow, createZIndexManager } from '../shared/window-h
  */
 declare global {
   interface Window {
-    openEmacs?: (filename: string, content: string, path?: string) => Promise<void>;
     closeEmacs: () => void;
     Emacs: {
       open: (filename?: string, content?: string) => Promise<void>;
@@ -47,6 +50,8 @@ class EmacsManager {
   private minibufferMsg: HTMLElement | null = null;
   private splash: HTMLElement | null = null;
   private editorArea: HTMLElement | null = null;
+  private eventBus: EventBus | null = null;
+  private unsubscribe: (() => void)[] = [];
 
   private isMinibufferActive: boolean = false;
   private minibufferResolver: ((val: string | null) => void) | null = null;
@@ -63,7 +68,30 @@ class EmacsManager {
 
   constructor() {
     this.init();
+    this.subscribeToEvents();
   }
+
+  private subscribeToEvents(): void {
+    try {
+      this.eventBus = container.has('eventBus') ? container.get<EventBus>('eventBus') : null;
+      if (this.eventBus) {
+        const unsub = this.eventBus.on<FileEventData>(
+          SystemEvent.FILE_OPENED,
+          this.handleFileOpened
+        );
+        this.unsubscribe.push(unsub);
+        logger.log('[Emacs] Subscribed to FILE_OPENED events');
+      }
+    } catch (error) {
+      logger.error('[Emacs] Failed to subscribe to events:', error);
+    }
+  }
+
+  private handleFileOpened = async (data: FileEventData): Promise<void> => {
+    if (data.name && data.content !== undefined) {
+      await this.open(data.name, data.content, data.path);
+    }
+  };
 
   private init(): void {
     if (typeof document === 'undefined') return;
@@ -227,6 +255,8 @@ class EmacsManager {
     this.currentFilePath = '';
     this.ctrlXPressed = false;
     this.closeFindBar();
+    this.unsubscribe.forEach((fn) => fn());
+    this.unsubscribe = [];
   }
 
   private updateTitle(text: string): void {
@@ -780,16 +810,11 @@ function getInstance(): EmacsManager {
   return editorInstance;
 }
 
-export async function openEmacs(filename: string, content: string, path = ''): Promise<void> {
-  await getInstance().open(filename, content, path);
-}
-
 export function closeEmacs(): void {
   getInstance().close();
 }
 
 if (typeof window !== 'undefined') {
-  (window as any).openEmacs = openEmacs;
   (window as any).closeEmacs = closeEmacs;
   (window as any).Emacs = {
     // Splash / lifecycle

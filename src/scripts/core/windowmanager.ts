@@ -3,6 +3,8 @@ import { logger } from '../utilities/logger';
 import { container } from './container';
 import type { ISessionStorage } from './interfaces/window-manager.interface';
 import { AudioManager } from './audiomanager';
+import { SystemEvent } from './system-events';
+import type { EventBus } from './event-bus';
 
 // Specialized managers
 import { ZIndexManager } from './window-management/z-index-manager';
@@ -17,6 +19,7 @@ let resizeTimer: ReturnType<typeof setTimeout> | undefined;
 
 const WindowManagerV2 = (() => {
   let sessionStorage: ISessionStorage;
+  let eventBus: EventBus | null = null;
 
   // Initialize specialized managers (lazy)
   let zIndexManager: ZIndexManager;
@@ -30,6 +33,11 @@ const WindowManagerV2 = (() => {
   function ensureInitialized(): void {
     if (!sessionStorage) {
       sessionStorage = container.get<ISessionStorage>('sessionStorage');
+      try {
+        eventBus = container.has('eventBus') ? container.get<EventBus>('eventBus') : null;
+      } catch {
+        eventBus = null;
+      }
       zIndexManager = new ZIndexManager();
       workspaceManager = new WorkspaceManager();
       positionManager = new WindowPositionManager();
@@ -50,6 +58,9 @@ const WindowManagerV2 = (() => {
 
   function focusWindow(id: string): void {
     focusManager.focusWindow(id);
+    if (eventBus) {
+      eventBus.emitSync(SystemEvent.WINDOW_FOCUSED, { id });
+    }
   }
 
   function centerWindow(win: HTMLElement): void {
@@ -273,8 +284,18 @@ const WindowManagerV2 = (() => {
     getNextZIndex: (isModal?: boolean) => zIndexManager.getNextZIndex(isModal),
     getTopZIndex: () => zIndexManager.getTopZIndex(),
     // Expose state manager methods
-    minimizeWindow: (id: string) => stateManager.minimizeWindow(id),
-    maximizeWindow: (id: string) => stateManager.maximizeWindow(id),
+    minimizeWindow: (id: string) => {
+      stateManager.minimizeWindow(id);
+      if (eventBus) {
+        eventBus.emitSync(SystemEvent.WINDOW_MINIMIZED, { id });
+      }
+    },
+    maximizeWindow: (id: string) => {
+      stateManager.maximizeWindow(id);
+      if (eventBus) {
+        eventBus.emitSync(SystemEvent.WINDOW_MAXIMIZED, { id });
+      }
+    },
     shadeWindow: (id: string) => stateManager.shadeWindow(id),
   };
 })();

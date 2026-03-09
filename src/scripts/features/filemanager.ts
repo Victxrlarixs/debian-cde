@@ -1,11 +1,10 @@
 // src/scripts/features/filemanager.ts
 
 import { CONFIG } from '../core/config';
-import { VFS, type VFSNode, type VFSFile } from '../core/vfs';
+import { VFS, type VFSFile } from '../core/vfs';
 import { CDEModal } from '../ui/modals';
 import { logger } from '../utilities/logger';
 import { copyToClipboard, cutToClipboard, pasteFromClipboard } from '../shared/clipboard';
-import { createContextMenu, type ContextMenuItem } from '../shared/context-menu';
 import { openWindow, closeWindow, createZIndexManager } from '../shared/window-helpers';
 import {} from '../shared/file-icons';
 import { FileSorter } from './file-manager/file-sorter';
@@ -13,7 +12,10 @@ import { NavigationManager } from './file-manager/navigation-manager';
 import { FileOperations } from './file-manager/file-operations';
 import { FileRenderer } from './file-manager/file-renderer';
 import { MenuManager } from './file-manager/menu-manager';
-import { formatSize, getFileIcon, showProperties } from './file-manager/file-utils';
+import { formatSize, showProperties } from './file-manager/file-utils';
+import { container } from '../core/container';
+import { SystemEvent } from '../core/system-events';
+import type { EventBus } from '../core/event-bus';
 
 declare global {
   interface Window {
@@ -44,6 +46,8 @@ const fileSorter = new FileSorter();
 const navigationManager = new NavigationManager();
 const fileOperations = new FileOperations(VFS);
 const fileRenderer = new FileRenderer();
+let eventBus: EventBus | null = null;
+
 const menuManager = new MenuManager(
   () => navigationManager.getCurrentPath(),
   () => fmSelected,
@@ -86,6 +90,24 @@ window.addEventListener('cde-fs-change', (e: any) => {
   }
 });
 
+function subscribeToEvents(): void {
+  try {
+    if (!eventBus) {
+      eventBus = container.has('eventBus') ? container.get<EventBus>('eventBus') : null;
+    }
+    if (eventBus) {
+      eventBus.on(SystemEvent.FOLDER_OPENED, (data: any) => {
+        if (data.path) {
+          openPath(data.path);
+        }
+      });
+      logger.log('[FileManager] Subscribed to FOLDER_OPENED events');
+    }
+  } catch (error) {
+    logger.error('[FileManager] Failed to subscribe to events:', error);
+  }
+}
+
 function renderFiles(): void {
   const container = document.getElementById('fmFiles');
   const status = document.getElementById('fmStatus');
@@ -115,7 +137,8 @@ function renderFiles(): void {
       if (node.type === 'folder') {
         openPath(currentPath + name + '/');
       } else {
-        openTextWindow(name, (node as VFSFile).content);
+        const fullPath = currentPath + name;
+        openTextWindow(name, (node as VFSFile).content, fullPath);
       }
     },
     (e, name) => {
@@ -204,9 +227,19 @@ async function rename(oldName: string, newName: string): Promise<void> {
   fmSelected = null;
 }
 
-async function openTextWindow(name: string, content: string): Promise<void> {
-  if (window.openEmacs) {
-    await window.openEmacs(name, content);
+async function openTextWindow(name: string, content: string, path?: string): Promise<void> {
+  if (!eventBus) {
+    try {
+      eventBus = container.has('eventBus') ? container.get<EventBus>('eventBus') : null;
+    } catch {
+      eventBus = null;
+    }
+  }
+
+  if (eventBus) {
+    await eventBus.emit(SystemEvent.FILE_OPENED, { path: path || name, name, content });
+  } else {
+    logger.warn('[FileManager] EventBus not available, cannot open file in editor');
   }
 }
 
@@ -217,6 +250,7 @@ function handleContextMenu(e: MouseEvent): void {
 function initFileManager(): void {
   if (initialized) return;
 
+  subscribeToEvents();
   menuManager.setupMenuBar();
   const fmFiles = document.getElementById('fmFiles');
   if (fmFiles) {

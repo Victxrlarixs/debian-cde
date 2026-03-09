@@ -7,6 +7,8 @@ import { VFS, type IVFS, type VFSFile } from '../core/vfs';
 import { copyToClipboard, cutToClipboard, pasteFromClipboard } from '../shared/clipboard';
 import { createContextMenu, type ContextMenuItem } from '../shared/context-menu';
 import { getFileIconByPath, ICON_PATHS } from '../shared/file-icons';
+import { SystemEvent } from '../core/system-events';
+import type { EventBus } from '../core/event-bus';
 
 /**
  * Interface for stored icon positions.
@@ -62,6 +64,7 @@ export const DesktopManager = (() => {
   let icons: HTMLElement[] = [];
   let selectedIcon: HTMLElement | null = null;
   const settingsManager = container.get<ISettingsManager>('settings');
+  let eventBus: EventBus | null = null;
 
   // Drag state
   let isDragging = false;
@@ -85,6 +88,12 @@ export const DesktopManager = (() => {
     if (!container) {
       logger.warn('[DesktopManager] Container #desktop-icons-container not found.');
       return;
+    }
+
+    try {
+      eventBus = container.has('eventBus') ? container.get<EventBus>('eventBus') : null;
+    } catch {
+      eventBus = null;
     }
 
     logger.log('[DesktopManager] Initializing desktop icons...');
@@ -356,19 +365,21 @@ export const DesktopManager = (() => {
     const path = CONFIG.FS.DESKTOP + name + (type === 'folder' ? '/' : '');
 
     if (type === 'folder') {
+      if (eventBus) {
+        eventBus.emitSync(SystemEvent.FOLDER_OPENED, { path, name });
+      }
       if (window.openFileManager) {
         window.openFileManager();
         if (window.openPath) window.openPath(path);
       }
     } else {
-      if ((window as any).openEmacs) {
-        const node = VFS.getNode(path);
-        const content = node && node.type === 'file' ? node.content : '';
-        await (window as any).openEmacs(name, content, path);
+      const node = VFS.getNode(path);
+      const content = node && node.type === 'file' ? node.content : '';
+      if (eventBus) {
+        await eventBus.emit(SystemEvent.FILE_OPENED, { path, name, content });
       }
     }
   }
-
   function deselectAll(): void {
     document.querySelectorAll('.cde-desktop-icon').forEach((el) => el.classList.remove('selected'));
     selectedIcon = null;

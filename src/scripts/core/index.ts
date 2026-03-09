@@ -10,6 +10,21 @@ import '../utilities/share-config';
 import '../utilities/share-theme-ui';
 import '../features/panel';
 
+// Export event system for features
+export { EventBus, eventBus } from './event-bus';
+export { SystemEvent } from './system-events';
+export type {
+  FileEventData,
+  FolderEventData,
+  WindowEventData,
+  WorkspaceEventData,
+  ThemeEventData,
+  BackdropEventData,
+  SettingsEventData,
+  AppEventData,
+  ProcessEventData,
+} from './system-events';
+
 // Start backdrop preload IMMEDIATELY (before boot sequence)
 import { startBackdropPreload } from '../boot/backdrop-preloader';
 if (typeof window !== 'undefined') {
