@@ -13,11 +13,22 @@ Welcome to the internal engine of the Debian Time Capsule. This project is built
   - **Web Workers**: Offloading heavy tasks like XPM parsing and filesystem operations.
   - **Lazy Loading**: Dynamic hydration of applications on demand.
 
+- **[Dependency Injection](dependency-injection.md)**
+  Modern DI architecture with SOLID principles. Includes:
+  - **Interface Segregation**: Small, focused interfaces instead of monolithic ones.
+  - **DI Container**: Service registration and resolution.
+  - **Adapters**: Wrapping legacy code with new interfaces.
+  - **Migration Guide**: Step-by-step guide to migrate components.
+
 - **[Storage & Cache](storage.md)**
   Deep dive into data persistence using IndexedDB and localStorage, and our multi-layered caching strategy.
 
-- **[Mintlify Proxy](mintlify-proxy.md)**
-  Technical implementation of the documentation proxy that serves Mintlify docs from the main domain without exposing external URLs.
+- **[Error Handling](error-handling.md)**
+  Centralized error handling system with severity levels, context tracking, and user-friendly error messages.
+
+- **[Event Bus](event-bus.md)**
+  Type-safe event system for decoupled component communication with wildcard support and error handling integration.
+
 
 ---
 
