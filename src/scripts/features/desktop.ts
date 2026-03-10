@@ -31,6 +31,24 @@ const SYSTEM_ICONS: any[] = [
     },
   },
   {
+    id: 'vim-icon',
+    name: 'Vim',
+    icon: '/icons/apps/vim.png',
+    action: async () => {
+      logger.log('[DesktopManager] Vim icon clicked, loading module...');
+      if ((window as any).moduleLoader) {
+        await (window as any).moduleLoader.load('vim');
+        logger.log('[DesktopManager] Vim module loaded');
+      }
+      if ((window as any).Vim?.open) {
+        logger.log('[DesktopManager] Opening Vim...');
+        (window as any).Vim.open();
+      } else {
+        logger.warn('[DesktopManager] window.Vim.open not available');
+      }
+    },
+  },
+  {
     id: 'share-theme-icon',
     name: 'Share Theme',
     icon: '/icons/apps/org.xfce.PanelProfiles.png',
@@ -352,7 +370,7 @@ export const DesktopManager = (() => {
       if (sys) {
         logger.log(`[DesktopManager] Launching system icon: ${sys.name}`);
         if (window.AudioManager) window.AudioManager.click();
-        sys.action();
+        await sys.action();
         return;
       }
     }

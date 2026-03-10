@@ -97,6 +97,23 @@ class AccessibilityManager {
       category: 'Applications',
     });
 
+    // Vim
+    this.registerShortcut({
+      key: 'v',
+      ctrl: true,
+      alt: true,
+      action: async () => {
+        if ((window as any).moduleLoader) {
+          await (window as any).moduleLoader.load('vim');
+        }
+        if (window.Vim) {
+          window.Vim.open();
+        }
+      },
+      description: 'Open Vim',
+      category: 'Applications',
+    });
+
     // Terminal
     this.registerShortcut({
       key: 't',

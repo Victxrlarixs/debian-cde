@@ -209,24 +209,6 @@ import { CONFIG } from '../../scripts/core/config';
       class="cde-control"
       role="button"
       tabindex="0"
-      aria-label="Man Pages"
-      onclick="window.ManViewer?.open()"
-    >
-      <div class="control-content">
-        <div class="control-icon">
-          <img src="/icons/apps/man.png" alt="Man Pages" />
-        </div>
-        <div class="control-label">Man Pages</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="cde-control-wrapper">
-    <div class="subpanel-arrow-spacer"></div>
-    <div
-      class="cde-control"
-      role="button"
-      tabindex="0"
       aria-label="File Manager"
       id="fileManagerBtn"
       onclick="toggleFileManager()"
@@ -256,6 +238,25 @@ import { CONFIG } from '../../scripts/core/config';
           <img src="/icons/apps/xemacs.png" alt="Text Editor" class="emacs-pixelated" />
         </div>
         <div class="control-label">Text<br />Editor</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cde-control-wrapper">
+    <div class="subpanel-arrow-spacer"></div>
+    <div
+      class="cde-control"
+      role="button"
+      tabindex="0"
+      aria-label="Vim"
+      onclick="(async () => { await window.moduleLoader?.load('vim'); window.Vim?.open(); })()"
+      data-keyboard-hint="Ctrl+Alt+V"
+    >
+      <div class="control-content">
+        <div class="control-icon">
+          <img src="/icons/apps/vim.png" alt="Vim" />
+        </div>
+        <div class="control-label">Vim</div>
       </div>
     </div>
   </div>
@@ -308,8 +309,8 @@ import { CONFIG } from '../../scripts/core/config';
   <div class="menu-item" onclick="window.Emacs?.openSplash()" role="menuitem" tabindex="0">
     <img src="/icons/apps/xemacs.png" alt="" class="emacs-pixelated" /> XEmacs
   </div>
-  <div class="menu-item" onclick="window.ManViewer?.open()" role="menuitem" tabindex="0">
-    <img src="/icons/apps/man.png" alt="" /> Man Pages
+  <div class="menu-item" onclick="(async () => { await window.moduleLoader?.load('vim'); window.Vim?.open(); })()" role="menuitem" tabindex="0">
+    <img src="/icons/apps/vim.png" alt="" /> Vim
   </div>
   <div class="menu-item" onclick="openCalendar()" role="menuitem" tabindex="0">
     <img src="/icons/system/calendar.png" alt="" /> Calendar
