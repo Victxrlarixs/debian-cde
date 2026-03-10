@@ -1,0 +1,168 @@
+/* Vim Editor Styles - Authentic 90s Vi IMproved */
+
+#vim {
+  width: 640px;
+  height: 480px;
+  min-width: 400px;
+  min-height: 300px;
+}
+
+/* Editor Area */
+.vim-editor {
+  width: 100%;
+  height: calc(100% - 30px - 40px); /* titlebar + status + command */
+  background: #000000;
+  overflow: hidden;
+  position: relative;
+}
+
+#vim-textarea {
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  color: #00ff00;
+  font-family: 'Courier New', 'DejaVu Sans Mono', monospace;
+  font-size: 13px;
+  line-height: 1.4;
+  padding: 8px;
+  border: none;
+  outline: none;
+  resize: none;
+  box-sizing: border-box;
+  caret-color: #00ff00;
+}
+
+/* Normal mode - block cursor simulation */
+#vim-textarea.vim-normal-mode {
+  caret-color: transparent;
+  background-image: 
+    linear-gradient(to right, #00ff00 0%, #00ff00 8px, transparent 8px),
+    linear-gradient(to bottom, #000000 0%, #000000 100%);
+  background-size: 8px 1.4em;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+}
+
+/* Insert mode - line cursor */
+#vim-textarea.vim-insert-mode {
+  caret-color: #00ff00;
+  caret-shape: bar;
+}
+
+/* Visual mode - selection highlight */
+#vim-textarea.vim-visual-mode {
+  caret-color: #00ff00;
+}
+
+#vim-textarea.vim-visual-mode::selection {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Visual Line mode - line selection highlight */
+#vim-textarea.vim-visual-line-mode {
+  caret-color: #00ff00;
+}
+
+#vim-textarea.vim-visual-line-mode::selection {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Status Line */
+.vim-status {
+  width: 100%;
+  height: 20px;
+  background: #ffffff;
+  color: #000000;
+  font-family: 'Courier New', 'DejaVu Sans Mono', monospace;
+  font-size: 12px;
+  line-height: 20px;
+  padding: 0 8px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  border-top: 1px solid #808080;
+}
+
+#vim-mode {
+  flex-shrink: 0;
+  margin-right: 8px;
+  min-width: 120px;
+}
+
+#vim-file-info {
+  flex-grow: 1;
+  text-align: center;
+}
+
+#vim-position {
+  flex-shrink: 0;
+  text-align: right;
+  min-width: 60px;
+}
+
+/* Command Line */
+.vim-command {
+  width: 100%;
+  height: 20px;
+  background: #000000;
+  color: #00ff00;
+  font-family: 'Courier New', 'DejaVu Sans Mono', monospace;
+  font-size: 13px;
+  line-height: 20px;
+  padding: 0 8px;
+  box-sizing: border-box;
+  border-top: 1px solid #333333;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+#vim-command-prefix {
+  color: #00ff00;
+  flex-shrink: 0;
+}
+
+#vim-command-input {
+  flex-grow: 1;
+  background: transparent;
+  color: #00ff00;
+  border: none;
+  outline: none;
+  font-family: 'Courier New', 'DejaVu Sans Mono', monospace;
+  font-size: 13px;
+  padding: 0;
+  margin: 0;
+}
+
+/* Authentic cursor blinking animation */
+@keyframes vim-cursor-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+#vim-textarea.vim-normal-mode {
+  animation: vim-cursor-blink 1s infinite;
+}
+
+/* Search highlighting */
+#vim-textarea.vim-search-highlight {
+  background-color: #ffff00;
+  color: #000000;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #vim {
+    width: 100%;
+    height: 100%;
+  }
+
+  #vim-textarea {
+    font-size: 11px;
+    line-height: 1.3;
+  }
+}

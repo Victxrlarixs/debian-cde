@@ -331,13 +331,6 @@ const ProcessMonitor = (() => {
   return { open, close };
 })();
 
-declare global {
-  interface Window {
-    ProcessMonitor: typeof ProcessMonitor;
-    openTaskManagerInTerminal: () => void;
-  }
-}
-
 window.ProcessMonitor = ProcessMonitor;
 window.openTaskManagerInTerminal = () => ProcessMonitor.open();
 

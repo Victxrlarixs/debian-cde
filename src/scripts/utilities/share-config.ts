@@ -60,14 +60,13 @@ export function encodeConfigToURL(): string {
  * Supports both compact format (palette.backdrop) and legacy JSON format
  */
 export async function loadSharedConfig(): Promise<boolean> {
-  return (
-    errorHandler.wrapAsync(
-      async () => {
-        const params = new URLSearchParams(window.location.search);
-        const themeParam = params.get('t') || params.get('theme');
+  const result = await errorHandler.wrapAsync(
+    async () => {
+      const params = new URLSearchParams(window.location.search);
+      const themeParam = params.get('t') || params.get('theme');
 
-        if (!themeParam) {
-          return false;
+      if (!themeParam) {
+        return false;
         }
 
         let paletteId: string | undefined;
@@ -155,28 +154,29 @@ export async function loadSharedConfig(): Promise<boolean> {
         action: 'loadSharedConfig',
         severity: ErrorSeverity.MEDIUM,
       }
-    ) ?? false
-  );
+    );
+  
+  return result ?? false;
 }
 /**
  * Copy theme URL to clipboard
  */
 export async function copyThemeURL(): Promise<boolean> {
-  return (
-    errorHandler.wrapAsync(
-      async () => {
-        const url = encodeConfigToURL();
-        await navigator.clipboard.writeText(url);
-        logger.log('[ShareConfig] Theme URL copied to clipboard');
-        return true;
-      },
-      {
-        module: 'ShareConfig',
-        action: 'copyThemeURL',
-        severity: ErrorSeverity.LOW,
-      }
-    ) ?? false
+  const result = await errorHandler.wrapAsync(
+    async () => {
+      const url = encodeConfigToURL();
+      await navigator.clipboard.writeText(url);
+      logger.log('[ShareConfig] Theme URL copied to clipboard');
+      return true;
+    },
+    {
+      module: 'ShareConfig',
+      action: 'copyThemeURL',
+      severity: ErrorSeverity.LOW,
+    }
   );
+  
+  return result ?? false;
 }
 
 /**

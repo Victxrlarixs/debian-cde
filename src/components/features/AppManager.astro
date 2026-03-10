@@ -132,6 +132,12 @@ import { CONFIG } from '../../scripts/core/config';
         <img src="/icons/apps/xemacs.png" alt="XEmacs" class="action-icon" />
         <span>Text Editor</span>
       </div>
+
+      <div class="app-action-item" onclick="(async () => { await window.moduleLoader?.load('vim'); window.Vim?.open(); })()"
+>
+        <img src="/icons/apps/vim.png" alt="Vim" class="action-icon" />
+        <span>Vim</span>
+      </div>
     </div>
 
     <!-- System group content -->

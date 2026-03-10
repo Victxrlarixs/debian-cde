@@ -21,6 +21,10 @@
             "type": "file",
             "content": "[Dinamic content: docs/user-guide/xemacs.md]"
           },
+          "Vim-Guide.md": {
+            "type": "file",
+            "content": "[Dinamic content: docs/user-guide/vim.md]"
+          },
           "Terminal-Lab.md": {
             "type": "file",
             "content": "[Dinamic content: docs/user-guide/terminal-lab.md]"

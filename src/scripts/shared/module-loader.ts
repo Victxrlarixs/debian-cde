@@ -285,6 +285,11 @@ export function registerModules(): void {
     dependencies: ['vfs', 'windowmanager'],
   });
 
+  moduleLoader.register('vim', () => import('../features/vim'), {
+    priority: LoadPriority.MEDIUM,
+    dependencies: ['vfs', 'windowmanager'],
+  });
+
   moduleLoader.register('calendar', () => import('../features/calendar'), {
     priority: LoadPriority.MEDIUM,
     dependencies: ['windowmanager'],

@@ -1,0 +1,28 @@
+---
+// src/components/features/Vim.astro
+import WindowControls from '../common/WindowControls.astro';
+import WindowMinimize from '../common/WindowMinimize.astro';
+---
+
+<div class="window" id="vim" style="display: none;">
+  <div class="titlebar" id="vimTitlebar" onmousedown="drag(event, 'vim')">
+    <WindowMinimize windowId="vim" />
+    <span class="titlebar-text" id="vim-title">Vi IMproved</span>
+    <WindowControls windowId="vim" closeFunction="window.Vim.close" />
+  </div>
+
+  <div id="vim-editor" class="vim-editor">
+    <textarea id="vim-textarea" spellcheck="false" autocomplete="off"></textarea>
+  </div>
+
+  <div id="vim-status" class="vim-status">
+    <span id="vim-mode">-- NORMAL --</span>
+    <span id="vim-file-info"></span>
+    <span id="vim-position">1,1</span>
+  </div>
+
+  <div id="vim-command" class="vim-command" style="display: none;">
+    <span id="vim-command-prefix">:</span>
+    <input id="vim-command-input" type="text" autocomplete="off" spellcheck="false" />
+  </div>
+</div>
