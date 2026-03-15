@@ -1,4 +1,4 @@
-# 📟 Debian Time Capsule
+# Debian Time Capsule
 
 ![Debian](https://img.shields.io/badge/Debian-A81D33?style=flat&logo=debian&logoColor=white)
 ![CDE](https://img.shields.io/badge/CDE-1990s-orange?style=flat)
@@ -7,6 +7,10 @@
 ![Astro](https://img.shields.io/badge/Astro-BC52EE?style=flat&logo=astro&logoColor=white)
 ![PWA](https://img.shields.io/badge/PWA-5A0FC8?style=flat&logo=pwa&logoColor=white)
 ![GitHub stars](https://img.shields.io/github/stars/Victxrlarixs/debian-cde?style=flat&logo=github)
+
+<p>
+  <img src="/public/icons/system/debian-computer.png" width="150" alt="Debian Computer"/>
+</p>
 
 > You’re not visiting a website.  
 > You just logged into a Unix workstation.
