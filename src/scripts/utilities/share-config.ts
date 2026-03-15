@@ -67,95 +67,95 @@ export async function loadSharedConfig(): Promise<boolean> {
 
       if (!themeParam) {
         return false;
-        }
-
-        let paletteId: string | undefined;
-        let backdropPath: string | undefined;
-
-        if (!themeParam.includes('%') && !themeParam.includes('{')) {
-          const parts = themeParam.split('.');
-          paletteId = parts[0] || undefined;
-          const backdropName = parts[1] || undefined;
-          if (backdropName) {
-            backdropPath = `/backdrops/${backdropName}.pm`;
-          }
-          logger.log('[ShareConfig] Decoded compact format:', { paletteId, backdropPath });
-        } else {
-          const result = errorHandler.wrapSync(
-            () => {
-              const json = decodeURIComponent(atob(themeParam));
-              const config: SharedConfig = JSON.parse(json);
-              return {
-                paletteId: config.p || (config as any).palette,
-                backdropPath: config.b || (config as any).backdrop,
-              };
-            },
-            {
-              module: 'ShareConfig',
-              action: 'decodeLegacyFormat',
-              severity: ErrorSeverity.LOW,
-            }
-          );
-
-          if (!result) return false;
-          paletteId = result.paletteId;
-          backdropPath = result.backdropPath;
-          logger.log('[ShareConfig] Decoded legacy format:', result);
-        }
-
-        if (!window.styleManager) {
-          logger.warn('[ShareConfig] StyleManager not ready yet');
-          return false;
-        }
-
-        if (paletteId) {
-          logger.log('[ShareConfig] Applying palette:', paletteId);
-
-          if (window.styleManager?.theme?.applyCdePalette) {
-            window.styleManager.theme.applyCdePalette(paletteId);
-            window.styleManager.theme.applyColor();
-            window.styleManager.theme.updateUI();
-            window.styleManager.saveColor();
-
-            if (window.styleManager?.backdrop) {
-              window.styleManager.backdrop.clearCache();
-              window.styleManager.backdrop.apply();
-            }
-            if ((window as any).clearBackdropThumbnailCache) {
-              (window as any).clearBackdropThumbnailCache();
-            }
-            logger.log('[ShareConfig] Palette applied successfully');
-          } else {
-            logger.error('[ShareConfig] StyleManager or theme not available');
-          }
-        }
-
-        if (backdropPath) {
-          logger.log('[ShareConfig] Applying backdrop:', backdropPath);
-          if (window.styleManager?.backdrop?.update) {
-            window.styleManager.backdrop.update('xpm', backdropPath);
-            logger.log('[ShareConfig] Backdrop applied');
-          } else {
-            logger.error('[ShareConfig] Backdrop module not available');
-          }
-        }
-
-        if (window.CDEModal) {
-          setTimeout(() => {
-            window.CDEModal.alert('Shared theme loaded successfully!');
-          }, 1000);
-        }
-
-        logger.log('[ShareConfig] Shared theme applied successfully');
-        return true;
-      },
-      {
-        module: 'ShareConfig',
-        action: 'loadSharedConfig',
-        severity: ErrorSeverity.MEDIUM,
       }
-    );
-  
+
+      let paletteId: string | undefined;
+      let backdropPath: string | undefined;
+
+      if (!themeParam.includes('%') && !themeParam.includes('{')) {
+        const parts = themeParam.split('.');
+        paletteId = parts[0] || undefined;
+        const backdropName = parts[1] || undefined;
+        if (backdropName) {
+          backdropPath = `/backdrops/${backdropName}.pm`;
+        }
+        logger.log('[ShareConfig] Decoded compact format:', { paletteId, backdropPath });
+      } else {
+        const result = errorHandler.wrapSync(
+          () => {
+            const json = decodeURIComponent(atob(themeParam));
+            const config: SharedConfig = JSON.parse(json);
+            return {
+              paletteId: config.p || (config as any).palette,
+              backdropPath: config.b || (config as any).backdrop,
+            };
+          },
+          {
+            module: 'ShareConfig',
+            action: 'decodeLegacyFormat',
+            severity: ErrorSeverity.LOW,
+          }
+        );
+
+        if (!result) return false;
+        paletteId = result.paletteId;
+        backdropPath = result.backdropPath;
+        logger.log('[ShareConfig] Decoded legacy format:', result);
+      }
+
+      if (!window.styleManager) {
+        logger.warn('[ShareConfig] StyleManager not ready yet');
+        return false;
+      }
+
+      if (paletteId) {
+        logger.log('[ShareConfig] Applying palette:', paletteId);
+
+        if (window.styleManager?.theme?.applyCdePalette) {
+          window.styleManager.theme.applyCdePalette(paletteId);
+          window.styleManager.theme.applyColor();
+          window.styleManager.theme.updateUI();
+          window.styleManager.saveColor();
+
+          if (window.styleManager?.backdrop) {
+            window.styleManager.backdrop.clearCache();
+            window.styleManager.backdrop.apply();
+          }
+          if ((window as any).clearBackdropThumbnailCache) {
+            (window as any).clearBackdropThumbnailCache();
+          }
+          logger.log('[ShareConfig] Palette applied successfully');
+        } else {
+          logger.error('[ShareConfig] StyleManager or theme not available');
+        }
+      }
+
+      if (backdropPath) {
+        logger.log('[ShareConfig] Applying backdrop:', backdropPath);
+        if (window.styleManager?.backdrop?.update) {
+          window.styleManager.backdrop.update('xpm', backdropPath);
+          logger.log('[ShareConfig] Backdrop applied');
+        } else {
+          logger.error('[ShareConfig] Backdrop module not available');
+        }
+      }
+
+      if (window.CDEModal) {
+        setTimeout(() => {
+          window.CDEModal.alert('Shared theme loaded successfully!');
+        }, 1000);
+      }
+
+      logger.log('[ShareConfig] Shared theme applied successfully');
+      return true;
+    },
+    {
+      module: 'ShareConfig',
+      action: 'loadSharedConfig',
+      severity: ErrorSeverity.MEDIUM,
+    }
+  );
+
   return result ?? false;
 }
 /**
@@ -175,7 +175,7 @@ export async function copyThemeURL(): Promise<boolean> {
       severity: ErrorSeverity.LOW,
     }
   );
-  
+
   return result ?? false;
 }
 

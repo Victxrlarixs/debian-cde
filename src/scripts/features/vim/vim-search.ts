@@ -17,7 +17,7 @@ export class VimSearchManager {
     this.commandLine.style.display = 'flex';
     this.commandInput.value = '';
     this.commandInput.placeholder = 'Search: ';
-    
+
     const handleSearch = (e: KeyboardEvent) => {
       if (e.key === 'Enter') {
         e.preventDefault();
@@ -34,7 +34,7 @@ export class VimSearchManager {
         this.onModeChange('normal');
       }
     };
-    
+
     this.commandInput.addEventListener('keydown', handleSearch);
     this.commandInput.focus();
   }
@@ -59,15 +59,16 @@ export class VimSearchManager {
 
   private performSearch(): void {
     if (!this.searchTerm) return;
-    
+
     const text = this.textarea.value;
     const currentPos = this.textarea.selectionStart;
     let searchPos = this.searchDirection === 'forward' ? currentPos + 1 : currentPos - 1;
-    
-    const index = this.searchDirection === 'forward' 
-      ? text.indexOf(this.searchTerm, searchPos)
-      : text.lastIndexOf(this.searchTerm, searchPos);
-    
+
+    const index =
+      this.searchDirection === 'forward'
+        ? text.indexOf(this.searchTerm, searchPos)
+        : text.lastIndexOf(this.searchTerm, searchPos);
+
     if (index !== -1) {
       this.textarea.setSelectionRange(index, index + this.searchTerm.length);
       this.onMessage(`/${this.searchTerm}`);

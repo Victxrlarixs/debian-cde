@@ -7,11 +7,15 @@ import { container } from '../core/container';
 import { SystemEvent } from '../core/system-events';
 import type { EventBus } from '../core/event-bus';
 import type { FileEventData } from '../core/system-events';
-import { ErrorSeverity } from '../core/error-handler';
+
+import type { EmacsElements, EmacsState } from './emacs/emacs-types';
+import { EmacsEditorEngine } from './emacs/emacs-editor-engine';
+import { EmacsFileManager } from './emacs/emacs-file-manager';
+import { EmacsMinibufferManager } from './emacs/emacs-minibuffer-manager';
+import { EmacsKeyboardHandler } from './emacs/emacs-keyboard-handler';
+import { EmacsSearchManager } from './emacs/emacs-search-manager';
 
 /**
- * Emacs-style Editor Manager (Rebranded)
- * Supports a splash screen and full editing mode with keybindings, mode line, and minibuffer.
  */
 declare global {
   interface Window {
@@ -42,30 +46,26 @@ declare global {
 }
 
 class EmacsManager {
-  private win: HTMLElement | null = null;
-  private textarea: HTMLTextAreaElement | null = null;
-  private minibuffer: HTMLElement | null = null;
-  private minibufferContent: HTMLElement | null = null;
-  private minibufferLabel: HTMLElement | null = null;
-  private minibufferInput: HTMLInputElement | null = null;
-  private minibufferMsg: HTMLElement | null = null;
-  private splash: HTMLElement | null = null;
-  private editorArea: HTMLElement | null = null;
+  private elements!: EmacsElements;
+  private state: EmacsState = {
+    currentFilePath: '',
+    isModified: false,
+    ctrlXPressed: false,
+    wordWrap: false,
+    findIndex: 0,
+    lastQuery: '',
+    isMinibufferActive: false,
+  };
+
+  private editor!: EmacsEditorEngine;
+  private fs!: EmacsFileManager;
+  private minibuffer!: EmacsMinibufferManager;
+  private keyboard!: EmacsKeyboardHandler;
+  private search!: EmacsSearchManager;
+
   private eventBus: EventBus | null = null;
   private unsubscribe: (() => void)[] = [];
-
-  private isMinibufferActive: boolean = false;
-  private minibufferResolver: ((val: string | null) => void) | null = null;
-
-  private currentFilePath: string = '';
-  private isModified: boolean = false;
   private zIndexManager = createZIndexManager(20000);
-  private ctrlXPressed: boolean = false;
-  private wordWrap: boolean = false;
-
-  // Find state
-  private findIndex: number = 0;
-  private lastQuery: string = '';
 
   constructor() {
     this.init();
@@ -90,47 +90,73 @@ class EmacsManager {
   private init(): void {
     if (typeof document === 'undefined') return;
 
-    this.win = document.getElementById('emacs');
-    this.textarea = document.getElementById('emacs-textarea') as HTMLTextAreaElement;
-    this.minibuffer = document.getElementById('emacs-minibuffer');
-    this.minibufferContent = document.getElementById('emacs-minibuffer-content');
-    this.minibufferLabel = document.getElementById('emacs-minibuffer-label');
-    this.minibufferInput = document.getElementById('emacs-minibuffer-input') as HTMLInputElement;
-    this.minibufferMsg = document.getElementById('emacs-minibuffer-msg');
-    this.splash = document.getElementById('emacs-splash');
-    this.editorArea = document.getElementById('emacs-editor-area');
+    this.elements = {
+      win: document.getElementById('emacs'),
+      textarea: document.getElementById('emacs-textarea') as HTMLTextAreaElement,
+      minibuffer: document.getElementById('emacs-minibuffer'),
+      minibufferContent: document.getElementById('emacs-minibuffer-content'),
+      minibufferLabel: document.getElementById('emacs-minibuffer-label'),
+      minibufferInput: document.getElementById('emacs-minibuffer-input') as HTMLInputElement,
+      minibufferMsg: document.getElementById('emacs-minibuffer-msg'),
+      splash: document.getElementById('emacs-splash'),
+      editorArea: document.getElementById('emacs-editor-area'),
+      title: document.getElementById('emacs-title'),
+      fileName: document.getElementById('emacs-file-name'),
+      fileStatus: document.getElementById('emacs-file-status'),
+      line: document.getElementById('emacs-line'),
+      col: document.getElementById('emacs-col'),
+      findBar: document.getElementById('te-find-bar'),
+      findInput: document.getElementById('te-find-input') as HTMLInputElement,
+    };
 
-    if (!this.win || !this.textarea || !this.minibufferInput) return;
+    if (!this.elements.win || !this.elements.textarea) return;
 
-    this.win.addEventListener('keydown', (e) => this.handleKeydown(e));
-    this.textarea.addEventListener('input', () => this.onInput());
-    this.textarea.addEventListener('keyup', () => this.updateModeLine());
-    this.textarea.addEventListener('click', () => {
-      this.textarea?.focus();
+    // Initialize Managers
+    this.editor = new EmacsEditorEngine(this.elements.textarea);
+    this.fs = new EmacsFileManager();
+    this.minibuffer = new EmacsMinibufferManager(this.elements);
+    this.search = new EmacsSearchManager(this.elements, (msg) => this.minibuffer.showMessage(msg));
+    this.keyboard = new EmacsKeyboardHandler({
+      onSave: () => this.save(),
+      onSaveAs: () => this.saveAs(),
+      onOpenFile: () => this.openFile(),
+      onClose: () => this.close(),
+      onSelectAll: () => this.editor.selectAll(),
+      onMove: (dir) => this.editor.moveCursor(dir),
+      onDelete: () => this.editor.deleteChar(),
+      onSearch: () => this.search.toggleDialog(),
+      onKillLine: () => this.editor.killLine(),
+      onUndo: () => this.editor.undo(),
+      onRecenter: () => this.recenter(),
+      onExecuteCommand: () => this.executeCommand(),
+      onMessage: (msg: string) => this.minibuffer.showMessage(msg),
+      onUpdateUI: () => this.updateModeLine(),
+    });
+
+    this.setupEventListeners();
+    logger.log('[Emacs] Initialized with SOLID architecture');
+  }
+
+  private setupEventListeners(): void {
+    this.elements.win?.addEventListener('keydown', (e) =>
+      this.keyboard.handleKeydown(e, this.minibuffer.isBusy)
+    );
+    this.elements.textarea?.addEventListener('input', () => this.onInput());
+    this.elements.textarea?.addEventListener('keyup', () => this.updateModeLine());
+    this.elements.textarea?.addEventListener('click', () => {
+      this.elements.textarea?.focus();
       this.updateModeLine();
     });
 
-    // Minibuffer input listeners
-    this.minibufferInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        const val = this.minibufferInput?.value ?? '';
-        this.resolveMinibuffer(val);
-      } else if (e.key === 'Escape' || (e.ctrlKey && e.key === 'g')) {
-        e.preventDefault();
-        this.resolveMinibuffer(null);
-      }
+    this.elements.findInput?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') this.search.find(1);
+      if (e.key === 'Escape') this.search.close();
     });
 
-    // Find bar enter / escape
-    const findInput = document.getElementById('te-find-input') as HTMLInputElement | null;
-    if (findInput) {
-      findInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') this.findNext();
-        if (e.key === 'Escape') this.closeFindBar();
-      });
-    }
+    this.setupMenus();
+  }
 
-    // ── Menubar dropdown toggle ────────────────────────────────────────
+  private setupMenus(): void {
     document.querySelectorAll('#emacs .te-menu-label').forEach((lbl) => {
       lbl.addEventListener('click', () => {
         const menu = lbl.parentElement as HTMLElement | null;
@@ -162,41 +188,28 @@ class EmacsManager {
           .forEach((m) => m.classList.remove('open'));
       });
     });
-
-    logger.log('[Emacs] Initialized');
   }
 
-  // ── Show / hide splash vs editing area ───────────────────────────────────
+  // ── Lifecycle ─────────────────────────────────────────────────────────────
 
-  private showSplash(): void {
-    this.splash?.classList.remove('emacs-hidden');
-    this.editorArea?.classList.add('emacs-hidden');
-  }
-
-  private showEditor(): void {
-    this.splash?.classList.add('emacs-hidden');
-    this.editorArea?.classList.remove('emacs-hidden');
-  }
-
-  // ── Open / Close ─────────────────────────────────────────────────────────
-
-  /** Opens the splash screen (no file). */
   public openSplash(): void {
-    if (!this.win) return;
-    this.currentFilePath = '';
-    this.isModified = false;
-    this.showSplash();
+    if (!this.elements.win) return;
+    this.state.currentFilePath = '';
+    this.state.isModified = false;
+    this.toggleUI('splash');
     this.updateTitle('XEmacs');
-    this.updateModeLineName('*scratch*');
+    this.setModeLineName('*scratch*');
 
-    // Set scratch buffer content
-    if (this.textarea) {
-      this.textarea.value =
+    if (this.elements.textarea) {
+      this.elements.textarea.value =
         ';; This buffer is for text that is not saved, and for Lisp evaluation.\n;; To create a file, visit it with C-x C-f and enter text in its buffer.\n\n';
-      this.textarea.setSelectionRange(this.textarea.value.length, this.textarea.value.length);
+      this.elements.textarea.setSelectionRange(
+        this.elements.textarea.value.length,
+        this.elements.textarea.value.length
+      );
     }
 
-    this.message('Welcome to XEmacs');
+    this.minibuffer.showMessage('Welcome to XEmacs');
 
     openWindow({
       id: 'emacs',
@@ -205,541 +218,142 @@ class EmacsManager {
       playSound: true,
       focus: true,
       onOpen: () => {
-        // Reset size to defaults if they were messed up, but respecting viewport
-        if (this.win) {
-          this.win.style.width = 'min(800px, 90vw)';
-          this.win.style.height = 'min(600px, 80vh)';
-          WindowManager.centerWindow(this.win);
-          this.win.focus();
+        if (this.elements.win) {
+          this.elements.win.style.width = 'min(800px, 90vw)';
+          this.elements.win.style.height = 'min(600px, 80vh)';
+          WindowManager.centerWindow(this.elements.win);
+          this.elements.win.focus();
         }
       },
     });
   }
 
-  /** Opens a specific file for editing. */
   public async open(filename: string, content: string = '', path: string = ''): Promise<void> {
-    if (!this.win || !this.textarea) return;
+    if (!this.elements.win || !this.elements.textarea) return;
 
-    this.currentFilePath = path || filename;
-    this.textarea.value = content;
-    this.isModified = false;
+    this.state.currentFilePath = path || filename;
+    this.elements.textarea.value = content;
+    this.state.isModified = false;
 
-    this.showEditor();
+    this.toggleUI('editor');
     this.updateTitle(`XEmacs: ${filename}`);
-    this.updateModeLineName(filename);
+    this.setModeLineName(filename);
     this.updateModeLine();
-    this.message(`Loaded: ${filename}`);
+    this.minibuffer.showMessage(`Loaded: ${filename}`);
 
     WindowManager.showWindow('emacs');
-    // Don't set z-index manually - WindowManager.showWindow() already calls focusWindow() which handles it
-
-    // Reset size to defaults
-    this.win.style.width = 'min(900px, 95vw)';
-    this.win.style.height = 'min(700px, 85vh)';
-
-    WindowManager.centerWindow(this.win);
-    // Don't call focusWindow again - already called by showWindow()
-    this.textarea.focus();
+    this.elements.win.style.width = 'min(900px, 95vw)';
+    this.elements.win.style.height = 'min(700px, 85vh)';
+    WindowManager.centerWindow(this.elements.win);
+    this.elements.textarea.focus();
   }
 
   public close(): void {
-    if (!this.win) return;
+    if (!this.elements.win) return;
     closeWindow('emacs');
-    this.currentFilePath = '';
-    this.ctrlXPressed = false;
-    this.closeFindBar();
-    this.unsubscribe.forEach((fn) => fn());
-    this.unsubscribe = [];
+    this.state.currentFilePath = '';
+    this.search.close();
   }
 
-  private updateTitle(text: string): void {
-    const titleEl = document.getElementById('emacs-title');
-    if (titleEl) titleEl.textContent = text;
-  }
+  // ── Actions ───────────────────────────────────────────────────────────────
 
-  private updateModeLineName(name: string): void {
-    const fileNameEl = document.getElementById('emacs-file-name');
-    if (fileNameEl) fileNameEl.textContent = name;
-  }
-
-  // ── Minibuffer Prompter ──────────────────────────────────────────────────
-
-  private promptMinibuffer(label: string, defaultValue: string = ''): Promise<string | null> {
-    if (!this.minibufferContent || !this.minibufferLabel || !this.minibufferInput)
-      return Promise.resolve(null);
-
-    this.isMinibufferActive = true;
-
-    // Hide messages
-    if (this.minibufferMsg) this.minibufferMsg.style.display = 'none';
-
-    this.minibufferLabel.textContent = label;
-    this.minibufferInput.value = defaultValue;
-    this.minibufferContent.style.display = 'flex';
-    this.minibufferInput.focus();
-
-    return new Promise((resolve) => {
-      this.minibufferResolver = resolve;
-    });
-  }
-
-  private resolveMinibuffer(val: string | null): void {
-    if (!this.isMinibufferActive) return;
-
-    this.isMinibufferActive = false;
-    if (this.minibufferContent) this.minibufferContent.style.display = 'none';
-    if (this.minibufferLabel) this.minibufferLabel.textContent = '';
-
-    // Show messages space again
-    if (this.minibufferMsg) {
-      this.minibufferMsg.style.display = 'inline';
-      this.minibufferMsg.textContent = '';
-    }
-
-    if (this.minibufferInput) {
-      this.minibufferInput.value = '';
-      this.minibufferInput.blur();
-    }
-
-    if (this.minibufferResolver) {
-      this.minibufferResolver(val);
-      this.minibufferResolver = null;
-    }
-
-    if (!this.editorArea?.classList.contains('emacs-hidden')) {
-      this.textarea?.focus();
-    } else {
-      this.win?.focus();
-    }
-  }
-
-  // ── File Menu ─────────────────────────────────────────────────────────────
-
-  /** Called from splash "Open a File" link or File→Open */
   public async openFile(): Promise<void> {
-    const input = await this.promptMinibuffer('Visit file: ', '');
+    const input = await this.minibuffer.prompt('Visit file: ', '');
     if (!input) {
-      this.message('Quit');
-      return;
-    }
-
-    let fullPath: string;
-    if (input.startsWith('/')) {
-      fullPath = input;
-    } else {
-      fullPath = `/home/victxrlarixs/Desktop/${input}`;
-    }
-
-    const node = VFS.getNode(fullPath);
-    if (!node) {
-      // New file
-      const parts = fullPath.split('/');
-      const filename = parts.pop()!;
-      const parentDir = parts.join('/') + '/';
-      if (!VFS.getNode(parentDir)) {
-        this.message(`No such directory: ${parentDir}`);
-        return;
-      }
-      await VFS.touch(parentDir, filename);
-      await this.open(filename, '', fullPath);
-      this.message(`(New file) ${fullPath}`);
-      return;
-    }
-
-    if (node.type !== 'file') {
-      this.message(`${fullPath} is a directory.`);
-      if (window.AudioManager) window.AudioManager.error();
-      return;
-    }
-
-    const filename = fullPath.split('/').pop()!;
-    await this.open(filename, node.content, fullPath);
-  }
-
-  public async save(): Promise<void> {
-    if (!this.currentFilePath) {
-      await this.saveAs();
-      return;
-    }
-
-    const { errorHandler } = await import('../core/error-handler');
-    const result = await errorHandler.wrapAsync(
-      async () => {
-        const existing = VFS.getNode(this.currentFilePath);
-        if (!existing) {
-          const parts = this.currentFilePath.split('/');
-          const filename = parts.pop()!;
-          const parentDir = parts.join('/') + '/';
-          await VFS.touch(parentDir, filename);
-        }
-        await VFS.writeFile(this.currentFilePath, this.textarea!.value);
-        this.isModified = false;
-        this.updateModeLine();
-        this.message(`Wrote ${this.currentFilePath}`);
-        if (window.AudioManager) window.AudioManager.success();
-      },
-      {
-        module: 'Emacs',
-        action: 'save',
-        severity: ErrorSeverity.HIGH,
-        data: { path: this.currentFilePath },
-      }
-    );
-
-    if (!result) {
-      this.message('Error: could not save file.');
-      if (window.AudioManager) window.AudioManager.error();
-    }
-  }
-
-  public async saveAs(): Promise<void> {
-    const defaultPath = this.currentFilePath || 'untitled.txt';
-    const input = await this.promptMinibuffer('Write file: ', defaultPath);
-    if (!input) {
-      this.message('Quit');
+      this.minibuffer.showMessage('Quit');
       return;
     }
 
     const fullPath = input.startsWith('/') ? input : `/home/victxrlarixs/Desktop/${input}`;
-    const parts = fullPath.split('/');
-    const filename = parts.pop()!;
-    const parentDir = parts.join('/') + '/';
+    const node = await this.fs.getNode(fullPath);
 
-    if (!VFS.getNode(parentDir)) {
-      this.message(`No such directory: ${parentDir}`);
-      if (window.AudioManager) window.AudioManager.error();
+    if (!node) {
+      const parts = fullPath.split('/');
+      const filename = parts.pop()!;
+      const parentDir = parts.join('/') + '/';
+      if (!(await this.fs.getNode(parentDir))) {
+        this.minibuffer.showMessage(`No such directory: ${parentDir}`);
+        return;
+      }
+      await this.fs.touch(parentDir, filename);
+      await this.open(filename, '', fullPath);
+      this.minibuffer.showMessage(`(New file) ${fullPath}`);
       return;
     }
 
-    const existing = VFS.getNode(fullPath);
-    if (!existing) await VFS.touch(parentDir, filename);
+    if (node.type !== 'file') {
+      this.minibuffer.showMessage(`${fullPath} is a directory.`);
+      return;
+    }
 
-    this.currentFilePath = fullPath;
-    this.updateTitle(`XEmacs: ${filename}`);
-    this.updateModeLineName(filename);
+    await this.open(fullPath.split('/').pop()!, node.content, fullPath);
+  }
+
+  public async save(): Promise<void> {
+    if (!this.state.currentFilePath) {
+      await this.saveAs();
+      return;
+    }
+
+    const ok = await this.fs.save(this.state.currentFilePath, this.elements.textarea!.value);
+    if (ok) {
+      this.state.isModified = false;
+      this.updateModeLine();
+      this.minibuffer.showMessage(`Wrote ${this.state.currentFilePath}`);
+    } else {
+      this.minibuffer.showMessage('Error: could not save file.');
+    }
+  }
+
+  public async saveAs(): Promise<void> {
+    const defaultPath = this.state.currentFilePath || 'untitled.txt';
+    const input = await this.minibuffer.prompt('Write file: ', defaultPath);
+    if (!input) {
+      this.minibuffer.showMessage('Quit');
+      return;
+    }
+
+    const fullPath = input.startsWith('/') ? input : `/home/victxrlarixs/Desktop/${input}`;
+    this.state.currentFilePath = fullPath;
+    this.updateTitle(`XEmacs: ${fullPath.split('/').pop()}`);
+    this.setModeLineName(fullPath.split('/').pop()!);
     await this.save();
   }
 
   public async newFile(): Promise<void> {
-    if (this.isModified) {
+    if (this.state.isModified) {
       const ok = await CDEModal.confirm('Discard unsaved changes and open a new buffer?');
       if (!ok) return;
     }
-    this.currentFilePath = '';
-    this.textarea!.value = '';
-    this.isModified = false;
-    this.showEditor();
+    this.state.currentFilePath = '';
+    this.elements.textarea!.value = '';
+    this.state.isModified = false;
+    this.toggleUI('editor');
     this.updateTitle('XEmacs: untitled.txt');
-    this.updateModeLineName('untitled.txt');
+    this.setModeLineName('untitled.txt');
     this.updateModeLine();
-    this.message('New file.');
-    this.textarea!.focus();
-  }
-
-  // ── Edit Menu ─────────────────────────────────────────────────────────────
-
-  public undo(): void {
-    document.execCommand('undo');
-    this.onInput();
-  }
-  public cut(): void {
-    document.execCommand('cut');
-    this.onInput();
-  }
-  public copy(): void {
-    document.execCommand('copy');
-    this.message('Copied.');
-  }
-
-  public paste(): void {
-    navigator.clipboard
-      .readText()
-      .then((text) => {
-        const ta = this.textarea!;
-        const s = ta.selectionStart,
-          e = ta.selectionEnd;
-        ta.value = ta.value.substring(0, s) + text + ta.value.substring(e);
-        ta.selectionStart = ta.selectionEnd = s + text.length;
-        this.onInput();
-      })
-      .catch(() => this.message('Yank: clipboard unavailable.'));
-  }
-
-  public selectAll(): void {
-    this.textarea!.select();
-  }
-
-  // ── Format / Options ──────────────────────────────────────────────────────
-
-  public wrapToggle(): void {
-    this.wordWrap = !this.wordWrap;
-    this.textarea!.style.whiteSpace = this.wordWrap ? 'pre-wrap' : 'pre';
-    this.message(`Visual Line mode: ${this.wordWrap ? 'enabled' : 'disabled'}`);
-  }
-
-  public setFont(size: string): void {
-    this.textarea!.style.fontSize = size;
-    this.message(`Default font size: ${size}`);
+    this.minibuffer.showMessage('New file.');
+    this.elements.textarea!.focus();
   }
 
   public async clearBuffer(): Promise<void> {
     const ok = await CDEModal.confirm('Clear the entire buffer?');
     if (!ok) return;
-    this.textarea!.value = '';
+    this.elements.textarea!.value = '';
     this.onInput();
-    this.message('Buffer cleared.');
+    this.minibuffer.showMessage('Buffer cleared.');
   }
 
   public showHelp(): void {
-    this.message('Bindings: C-x C-s Save  C-x C-c Quit  C-s Search  C-k Kill  C-_ Undo  C-g Abort');
-  }
-
-  // ── Find ──────────────────────────────────────────────────────────────────
-
-  public findDialog(): void {
-    const bar = document.getElementById('te-find-bar');
-    if (!bar) return;
-    const hidden = bar.classList.contains('te-find-hidden');
-    bar.classList.toggle('te-find-hidden', !hidden);
-    if (hidden) {
-      const input = document.getElementById('te-find-input') as HTMLInputElement | null;
-      if (input) {
-        input.value = '';
-        input.focus();
-      }
-    }
-  }
-
-  public closeFindBar(): void {
-    document.getElementById('te-find-bar')?.classList.add('te-find-hidden');
-    this.textarea?.focus();
-  }
-
-  public findNext(): void {
-    this.find(1);
-  }
-  public findPrev(): void {
-    this.find(-1);
-  }
-
-  private find(dir: 1 | -1): void {
-    const query =
-      (document.getElementById('te-find-input') as HTMLInputElement | null)?.value ?? '';
-    if (!query) return;
-
-    const text = this.textarea!.value.toLowerCase();
-    const q = query.toLowerCase();
-    const matches: number[] = [];
-    let i = text.indexOf(q);
-    while (i !== -1) {
-      matches.push(i);
-      i = text.indexOf(q, i + 1);
-    }
-
-    if (!matches.length) {
-      this.message(`Search failed: ${query}`);
-      if (window.AudioManager) window.AudioManager.error();
-      return;
-    }
-
-    if (query !== this.lastQuery) {
-      this.findIndex = 0;
-      this.lastQuery = query;
-    } else {
-      this.findIndex = (this.findIndex + dir + matches.length) % matches.length;
-    }
-
-    const pos = matches[this.findIndex];
-    this.textarea!.setSelectionRange(pos, pos + query.length);
-    this.textarea!.focus();
-    this.message(`${this.findIndex + 1}/${matches.length}: ${query}`);
-  }
-
-  // ── Keybindings ───────────────────────────────────────────────────────────
-
-  private handleKeydown(e: KeyboardEvent): void {
-    if (this.isMinibufferActive) return; // Ignore main shortcuts when minibuffer is busy
-
-    const isCtrl = e.ctrlKey;
-    const key = e.key.toLowerCase();
-
-    if (isCtrl && key === 'x') {
-      e.preventDefault();
-      this.ctrlXPressed = true;
-      this.message('C-x-');
-      return;
-    }
-
-    if (this.ctrlXPressed) {
-      this.ctrlXPressed = false;
-      this.message('');
-      if (isCtrl && key === 's') {
-        e.preventDefault();
-        this.save();
-        return;
-      }
-      if (isCtrl && key === 'c') {
-        e.preventDefault();
-        this.close();
-        return;
-      }
-      if (isCtrl && key === 'f') {
-        e.preventDefault();
-        this.openFile();
-        return;
-      }
-      if (isCtrl && key === 'w') {
-        e.preventDefault();
-        this.saveAs();
-        return;
-      }
-      if (key === 'h') {
-        e.preventDefault();
-        this.selectAll();
-        return;
-      }
-    }
-
-    // M-x (Alt+x)
-    if (e.altKey && key === 'x') {
-      e.preventDefault();
-      this.executeCommand();
-      return;
-    }
-
-    if (isCtrl) {
-      switch (key) {
-        case 'a':
-          e.preventDefault();
-          this.moveCursor('home');
-          break;
-        case 'e':
-          e.preventDefault();
-          this.moveCursor('end');
-          break;
-        case 'p':
-          e.preventDefault();
-          this.moveCursor('up');
-          break;
-        case 'n':
-          e.preventDefault();
-          this.moveCursor('down');
-          break;
-        case 'f':
-          e.preventDefault();
-          this.moveCursor('right');
-          break;
-        case 'b':
-          e.preventDefault();
-          this.moveCursor('left');
-          break;
-        case 'd':
-          e.preventDefault();
-          this.deleteChar();
-          break;
-        case 's':
-          e.preventDefault();
-          this.findDialog();
-          break;
-        case 'k':
-          e.preventDefault();
-          this.killLine();
-          break;
-        case 'g':
-          e.preventDefault();
-          this.ctrlXPressed = false;
-          this.message('Quit');
-          break;
-        case '_':
-          e.preventDefault();
-          this.undo();
-          break;
-        case 'l':
-          e.preventDefault();
-          this.recenter();
-          break;
-      }
-    } else if (isCtrl || e.altKey) {
-    } else if (
-      document.activeElement !== this.textarea &&
-      this.editorArea &&
-      !this.editorArea.classList.contains('emacs-hidden')
-    ) {
-      // If the window is focused but not the textarea, and we are in editor mode, redirect focus
-      this.textarea?.focus();
-    }
-
-    this.updateModeLine();
-  }
-
-  private onInput(): void {
-    if (!this.isModified) {
-      this.isModified = true;
-      this.updateModeLine();
-    }
-  }
-
-  private moveCursor(dir: 'home' | 'end' | 'up' | 'down' | 'left' | 'right'): void {
-    if (!this.textarea) return;
-    const ta = this.textarea;
-    let pos = ta.selectionStart;
-    const text = ta.value;
-
-    switch (dir) {
-      case 'home':
-        const lineStart = text.lastIndexOf('\n', pos - 1) + 1;
-        ta.setSelectionRange(lineStart, lineStart);
-        break;
-      case 'end':
-        const nextNL = text.indexOf('\n', pos);
-        const lineEnd = nextNL === -1 ? text.length : nextNL;
-        ta.setSelectionRange(lineEnd, lineEnd);
-        break;
-      case 'up':
-      case 'down':
-        const event = new KeyboardEvent('keydown', {
-          key: dir === 'up' ? 'ArrowUp' : 'ArrowDown',
-          bubbles: true,
-        });
-        ta.dispatchEvent(event);
-        break;
-      case 'left':
-        ta.setSelectionRange(Math.max(0, pos - 1), Math.max(0, pos - 1));
-        break;
-      case 'right':
-        ta.setSelectionRange(Math.min(text.length, pos + 1), Math.min(text.length, pos + 1));
-        break;
-    }
-    this.updateModeLine();
-  }
-
-  private deleteChar(): void {
-    if (!this.textarea) return;
-    const ta = this.textarea;
-    const s = ta.selectionStart,
-      e = ta.selectionEnd;
-    if (s === e) {
-      ta.value = ta.value.substring(0, s) + ta.value.substring(s + 1);
-      ta.setSelectionRange(s, s);
-    } else {
-      ta.value = ta.value.substring(0, s) + ta.value.substring(e);
-      ta.setSelectionRange(s, s);
-    }
-    this.onInput();
-  }
-
-  private recenter(): void {
-    this.message('Recentering locally...');
-    if (this.textarea) {
-      this.textarea.blur();
-      this.textarea.focus();
-    }
+    this.minibuffer.showMessage(
+      'Bindings: C-x C-s Save  C-x C-c Quit  C-s Search  C-k Kill  C-_ Undo  C-g Abort'
+    );
   }
 
   private async executeCommand(): Promise<void> {
-    const cmd = await this.promptMinibuffer('M-x ', '');
+    const cmd = await this.minibuffer.prompt('M-x ', '');
     if (!cmd) {
-      this.message('Quit');
+      this.minibuffer.showMessage('Quit');
       return;
     }
 
@@ -757,57 +371,87 @@ class EmacsManager {
         this.close();
         break;
       case 'eval-buffer':
-        this.message('Lisp evaluation not implemented in this workstation.');
+        this.minibuffer.showMessage('Lisp evaluation not implemented.');
         break;
       default:
-        this.message(`[M-x] [No match]: ${cmd}`);
+        this.minibuffer.showMessage(`[M-x] [No match]: ${cmd}`);
         break;
     }
   }
 
-  private killLine(): void {
-    const ta = this.textarea!;
-    const s = ta.selectionStart,
-      text = ta.value;
-    const next = text.indexOf('\n', s);
-    const end = s === next ? s + 1 : next === -1 ? text.length : next;
-    ta.value = text.substring(0, s) + text.substring(end);
-    ta.setSelectionRange(s, s);
-    this.onInput();
-  }
-
-  // ── Mode Line & Minibuffer ────────────────────────────────────────────────
-
-  private updateModeLine(): void {
-    if (!this.textarea) return;
-    const statusEl = document.getElementById('emacs-file-status');
-    if (statusEl) statusEl.textContent = this.isModified ? '**' : '%%';
-
-    const text = this.textarea.value;
-    const pos = this.textarea.selectionStart;
-    const textBefore = text.substring(0, pos);
-    const lines = textBefore.split('\n');
-    const lineNum = lines.length;
-    const colNum = lines[lines.length - 1].length;
-
-    const lineEl = document.getElementById('emacs-line');
-    const colEl = document.getElementById('emacs-col');
-    if (lineEl) lineEl.textContent = String(lineNum);
-    if (colEl) colEl.textContent = String(colNum);
-  }
-
-  private message(msg: string): void {
-    if (!this.minibufferMsg) return;
-    this.minibufferMsg.textContent = msg;
-    if (msg && !msg.endsWith('-')) {
-      setTimeout(() => {
-        if (this.minibufferMsg?.textContent === msg) this.minibufferMsg.textContent = '';
-      }, 5000);
+  private recenter(): void {
+    if (this.elements.textarea) {
+      this.elements.textarea.blur();
+      this.elements.textarea.focus();
+      this.minibuffer.showMessage('Recently focused.');
     }
   }
+
+  // ── UI Helpers ────────────────────────────────────────────────────────────
+
+  private toggleUI(mode: 'splash' | 'editor'): void {
+    if (mode === 'splash') {
+      this.elements.splash?.classList.remove('emacs-hidden');
+      this.elements.editorArea?.classList.add('emacs-hidden');
+    } else {
+      this.elements.splash?.classList.add('emacs-hidden');
+      this.elements.editorArea?.classList.remove('emacs-hidden');
+    }
+  }
+
+  private updateTitle(text: string): void {
+    if (this.elements.title) this.elements.title.textContent = text;
+  }
+
+  private setModeLineName(name: string): void {
+    if (this.elements.fileName) this.elements.fileName.textContent = name;
+  }
+
+  private updateModeLine(): void {
+    if (this.elements.fileStatus)
+      this.elements.fileStatus.textContent = this.state.isModified ? '**' : '%%';
+    const pos = this.editor.getCursorPosition();
+    if (this.elements.line) this.elements.line.textContent = String(pos.line);
+    if (this.elements.col) this.elements.col.textContent = String(pos.col);
+  }
+
+  private onInput(): void {
+    if (!this.state.isModified) {
+      this.state.isModified = true;
+      this.updateModeLine();
+    }
+  }
+
+  // ── Global Proxies (for Menubar) ──────────────────────────────────────────
+
+  public undo = () => this.editor.undo();
+  public cut = () => this.editor.cut();
+  public copy = () => this.editor.copy();
+  public paste = () => {
+    navigator.clipboard
+      .readText()
+      .then((text) => {
+        this.editor.paste(text);
+        this.onInput();
+      })
+      .catch(() => this.minibuffer.showMessage('Yank: clipboard unavailable.'));
+  };
+  public selectAll = () => this.editor.selectAll();
+  public wrapToggle = () => {
+    this.state.wordWrap = !this.state.wordWrap;
+    this.editor.setWordWrap(this.state.wordWrap);
+    this.minibuffer.showMessage(
+      `Visual Line mode: ${this.state.wordWrap ? 'enabled' : 'disabled'}`
+    );
+  };
+  public setFont = (s: string) => this.editor.setFontSize(s);
+  public findDialog = () => this.search.toggleDialog();
+  public closeFindBar = () => this.search.close();
+  public findNext = () => this.search.find(1);
+  public findPrev = () => this.search.find(-1);
 }
 
-// ── Singleton & Global Exposure ───────────────────────────────────────────────
+// ── Singleton & Interface ───────────────────────────────────────────────────
 
 let editorInstance: EmacsManager | null = null;
 function getInstance(): EmacsManager {
@@ -815,37 +459,26 @@ function getInstance(): EmacsManager {
   return editorInstance;
 }
 
-export function closeEmacs(): void {
-  getInstance().close();
-}
-
 if (typeof window !== 'undefined') {
-  // Initialize Emacs immediately when module loads to ensure event subscription
   getInstance();
-  
-  (window as any).closeEmacs = closeEmacs;
+  (window as any).closeEmacs = () => getInstance().close();
   (window as any).Emacs = {
-    // Splash / lifecycle
     open: (f?: string, c?: string) => getInstance().open(f || 'untitled.txt', c || ''),
     openSplash: () => getInstance().openSplash(),
     openFile: () => getInstance().openFile(),
     close: () => getInstance().close(),
-    // File menu
     save: () => getInstance().save(),
     saveAs: () => getInstance().saveAs(),
     newFile: () => getInstance().newFile(),
-    // Edit menu
     undo: () => getInstance().undo(),
     cut: () => getInstance().cut(),
     copy: () => getInstance().copy(),
     paste: () => getInstance().paste(),
     selectAll: () => getInstance().selectAll(),
-    // Options
     wrapToggle: () => getInstance().wrapToggle(),
     setFont: (s: string) => getInstance().setFont(s),
     clearBuffer: () => getInstance().clearBuffer(),
     showHelp: () => getInstance().showHelp(),
-    // Find
     findDialog: () => getInstance().findDialog(),
     closeFindBar: () => getInstance().closeFindBar(),
     findNext: () => getInstance().findNext(),

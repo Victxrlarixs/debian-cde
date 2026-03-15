@@ -69,7 +69,7 @@ export class VimCursorManager {
       }
       return newPos + targetCol;
     }
-    
+
     return pos;
   }
 
@@ -118,7 +118,7 @@ export class VimCursorManager {
     const lines = textBefore.split('\n');
     return {
       line: lines.length,
-      column: lines[lines.length - 1].length + 1
+      column: lines[lines.length - 1].length + 1,
     };
   }
 

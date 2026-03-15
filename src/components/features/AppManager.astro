@@ -39,7 +39,11 @@ import { CONFIG } from '../../scripts/core/config';
       </div>
 
       <div class="app-group-item" data-group="Development">
-        <img src="/icons/categories/applications-development.png" alt="Development" class="folder-icon" />
+        <img
+          src="/icons/categories/applications-development.png"
+          alt="Development"
+          class="folder-icon"
+        />
         <span>Development</span>
       </div>
 
@@ -122,7 +126,11 @@ import { CONFIG } from '../../scripts/core/config';
     </div>
 
     <!-- Development group content -->
-    <div class="app-manager-view app-group-content" id="appGroup_Development" style="display: none;">
+    <div
+      class="app-manager-view app-group-content"
+      id="appGroup_Development"
+      style="display: none;"
+    >
       <div class="app-action-item go-up-item" onclick="appManager.goBack()">
         <img src="/icons/actions/go-up.png" alt="Go Up" class="action-icon" />
         <span>.. (go up)</span>
@@ -133,8 +141,10 @@ import { CONFIG } from '../../scripts/core/config';
         <span>Text Editor</span>
       </div>
 
-      <div class="app-action-item" onclick="(async () => { await window.moduleLoader?.load('vim'); window.Vim?.open(); })()"
->
+      <div
+        class="app-action-item"
+        onclick="(async () => { await window.moduleLoader?.load('vim'); window.Vim?.open(); })()"
+      >
         <img src="/icons/apps/vim.png" alt="Vim" class="action-icon" />
         <span>Vim</span>
       </div>

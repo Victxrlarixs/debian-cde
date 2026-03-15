@@ -16,9 +16,9 @@ export class VimModeManager {
 
     // Remove all mode classes
     this.elements.textarea.classList.remove(
-      'vim-normal-mode', 
-      'vim-insert-mode', 
-      'vim-visual-mode', 
+      'vim-normal-mode',
+      'vim-insert-mode',
+      'vim-visual-mode',
       'vim-visual-line-mode'
     );
 
@@ -91,7 +91,7 @@ export class VimModeManager {
     const lineStart = text.lastIndexOf('\n', pos - 1) + 1;
     const lineEnd = text.indexOf('\n', pos);
     const end = lineEnd === -1 ? text.length : lineEnd + 1;
-    
+
     this.visualStartPos = lineStart;
     ta.setSelectionRange(lineStart, end);
   }

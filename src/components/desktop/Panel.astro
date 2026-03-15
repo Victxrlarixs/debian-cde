@@ -309,7 +309,12 @@ import { CONFIG } from '../../scripts/core/config';
   <div class="menu-item" onclick="window.Emacs?.openSplash()" role="menuitem" tabindex="0">
     <img src="/icons/apps/xemacs.png" alt="" class="emacs-pixelated" /> XEmacs
   </div>
-  <div class="menu-item" onclick="(async () => { await window.moduleLoader?.load('vim'); window.Vim?.open(); })()" role="menuitem" tabindex="0">
+  <div
+    class="menu-item"
+    onclick="(async () => { await window.moduleLoader?.load('vim'); window.Vim?.open(); })()"
+    role="menuitem"
+    tabindex="0"
+  >
     <img src="/icons/apps/vim.png" alt="" /> Vim
   </div>
   <div class="menu-item" onclick="openCalendar()" role="menuitem" tabindex="0">

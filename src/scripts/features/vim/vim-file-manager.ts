@@ -94,7 +94,9 @@ export class VimFileManager {
     return result;
   }
 
-  async openFile(filename: string): Promise<{ path: string; content: string; isNew: boolean } | null> {
+  async openFile(
+    filename: string
+  ): Promise<{ path: string; content: string; isNew: boolean } | null> {
     let fullPath: string;
     if (filename.startsWith('/')) {
       fullPath = filename;
@@ -156,7 +158,7 @@ export class VimFileManager {
     const files: string[] = [];
 
     if (node.type === 'folder' && node.children) {
-      Object.keys(node.children).forEach(name => {
+      Object.keys(node.children).forEach((name) => {
         const child = node.children![name];
         if (child.type === 'folder') {
           dirs.push(name + '/');
@@ -166,8 +168,8 @@ export class VimFileManager {
       });
     }
 
-    dirs.sort().forEach(dir => listing += dir + '\n');
-    files.sort().forEach(file => listing += file + '\n');
+    dirs.sort().forEach((dir) => (listing += dir + '\n'));
+    files.sort().forEach((file) => (listing += file + '\n'));
 
     return listing;
   }

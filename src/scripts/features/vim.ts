@@ -34,7 +34,7 @@ class VimManager {
     positionDisplay: null,
     fileInfoDisplay: null,
     commandLine: null,
-    commandInput: null
+    commandInput: null,
   };
 
   private state: VimState = {
@@ -47,7 +47,7 @@ class VimManager {
     lastCommand: '',
     searchTerm: '',
     searchDirection: 'forward',
-    showLineNumbers: false
+    showLineNumbers: false,
   };
 
   private eventBus: EventBus | null = null;
@@ -141,12 +141,12 @@ class VimManager {
       this.showMessage("E21: Cannot make changes, 'modifiable' is off", true);
       return;
     }
-    
+
     // Only clear splash for modes that actually modify content
     if (['insert', 'visual', 'visual-line'].includes(mode)) {
       this.clearSplashIfNeeded();
     }
-    
+
     this.modeManager.setMode(mode);
     this.state.mode = mode;
     this.updatePosition();
@@ -245,10 +245,10 @@ class VimManager {
     } else if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
       e.preventDefault();
       const direction = {
-        'ArrowLeft': 'left',
-        'ArrowRight': 'right', 
-        'ArrowUp': 'up',
-        'ArrowDown': 'down'
+        ArrowLeft: 'left',
+        ArrowRight: 'right',
+        ArrowUp: 'up',
+        ArrowDown: 'down',
       }[e.key];
       this.cursorManager.moveCursor(direction!);
     }
@@ -259,8 +259,16 @@ class VimManager {
 
     if (['h', 'j', 'k', 'l', 'arrowleft', 'arrowdown', 'arrowup', 'arrowright'].includes(key)) {
       e.preventDefault();
-      const direction = { h: 'left', j: 'down', k: 'up', l: 'right', 
-                         arrowleft: 'left', arrowdown: 'down', arrowup: 'up', arrowright: 'right' }[key];
+      const direction = {
+        h: 'left',
+        j: 'down',
+        k: 'up',
+        l: 'right',
+        arrowleft: 'left',
+        arrowdown: 'down',
+        arrowup: 'up',
+        arrowright: 'right',
+      }[key];
       this.cursorManager.extendSelection(direction!, this.modeManager.getVisualStartPos());
     } else if (['d', 'x'].includes(key)) {
       e.preventDefault();
@@ -269,7 +277,9 @@ class VimManager {
     } else if (key === 'y') {
       e.preventDefault();
       this.editor.yankSelection();
-      this.showMessage(`${this.elements.textarea!.selectionEnd - this.elements.textarea!.selectionStart} characters yanked`);
+      this.showMessage(
+        `${this.elements.textarea!.selectionEnd - this.elements.textarea!.selectionStart} characters yanked`
+      );
       this.handleModeChange('normal');
     }
   }
@@ -364,7 +374,7 @@ class VimManager {
 
   private waitForReplaceChar(): void {
     if (!this.elements.textarea) return;
-    
+
     this.showMessage('-- REPLACE --');
     const handleReplace = (e: KeyboardEvent) => {
       e.preventDefault();
@@ -374,7 +384,7 @@ class VimManager {
       this.elements.textarea!.removeEventListener('keydown', handleReplace);
       this.showMessage('');
     };
-    
+
     this.elements.textarea.addEventListener('keydown', handleReplace);
   }
 
@@ -383,7 +393,7 @@ class VimManager {
       this.showMessage('No previous command', true);
       return;
     }
-    
+
     if (this.state.lastCommand === 'dd') {
       this.editor.deleteLine();
     } else if (this.state.lastCommand === 'yy') {
@@ -440,7 +450,7 @@ class VimManager {
       this.showMessage('E37: No write since last change (add ! to override)', true);
       return;
     }
-    
+
     this.cleanup();
   }
 
@@ -487,7 +497,9 @@ class VimManager {
   private updateFileInfo(): void {
     if (!this.elements.fileInfoDisplay) return;
     const modified = this.state.isModified ? '[+]' : '';
-    const filename = this.state.currentFilePath ? this.state.currentFilePath.split('/').pop() : '[No Name]';
+    const filename = this.state.currentFilePath
+      ? this.state.currentFilePath.split('/').pop()
+      : '[No Name]';
     this.elements.fileInfoDisplay.textContent = `${filename} ${modified}`.trim();
   }
 
@@ -495,12 +507,12 @@ class VimManager {
     if (this.elements.modeDisplay) {
       const originalText = this.elements.modeDisplay.textContent;
       const originalColor = this.elements.modeDisplay.style.color;
-      
+
       this.elements.modeDisplay.textContent = msg;
       if (isError) {
         this.elements.modeDisplay.style.color = '#ff0000';
       }
-      
+
       setTimeout(() => {
         if (this.elements.modeDisplay) {
           this.elements.modeDisplay.textContent = originalText;
@@ -663,9 +675,10 @@ function getInstance(): VimManager {
 
 if (typeof window !== 'undefined') {
   (window as any).Vim = {
-    open: (filename?: string, content?: string, path?: string) => getInstance().open(filename, content, path),
+    open: (filename?: string, content?: string, path?: string) =>
+      getInstance().open(filename, content, path),
     close: () => getInstance().close(),
   };
-  
+
   logger.log('[Vim] Exposed globally');
 }

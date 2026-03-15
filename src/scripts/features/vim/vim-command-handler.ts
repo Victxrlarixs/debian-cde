@@ -32,11 +32,26 @@ export class VimCommandHandler {
     this.commandMap.set('G', () => this.onMoveCursor('fileEnd'));
 
     this.commandMap.set('i', () => this.onModeChange('insert'));
-    this.commandMap.set('I', () => { this.onMoveCursor('home'); this.onModeChange('insert'); });
-    this.commandMap.set('a', () => { this.onMoveCursor('right'); this.onModeChange('insert'); });
-    this.commandMap.set('A', () => { this.onMoveCursor('end'); this.onModeChange('insert'); });
-    this.commandMap.set('o', () => { this.onEdit('newLineBelow'); this.onModeChange('insert'); });
-    this.commandMap.set('O', () => { this.onEdit('newLineAbove'); this.onModeChange('insert'); });
+    this.commandMap.set('I', () => {
+      this.onMoveCursor('home');
+      this.onModeChange('insert');
+    });
+    this.commandMap.set('a', () => {
+      this.onMoveCursor('right');
+      this.onModeChange('insert');
+    });
+    this.commandMap.set('A', () => {
+      this.onMoveCursor('end');
+      this.onModeChange('insert');
+    });
+    this.commandMap.set('o', () => {
+      this.onEdit('newLineBelow');
+      this.onModeChange('insert');
+    });
+    this.commandMap.set('O', () => {
+      this.onEdit('newLineAbove');
+      this.onModeChange('insert');
+    });
     this.commandMap.set('v', () => this.onModeChange('visual'));
     this.commandMap.set('V', () => this.onModeChange('visual-line'));
     this.commandMap.set(':', () => this.onModeChange('command'));
@@ -60,7 +75,7 @@ export class VimCommandHandler {
 
   handleCommand(key: string, shiftKey: boolean = false): boolean {
     const command = shiftKey && key.length === 1 ? key.toUpperCase() : key.toLowerCase();
-    
+
     if (command === 'g' && this.lastCommand === 'g') {
       this.executeDoubleCommand('gg');
       return true;
@@ -94,11 +109,11 @@ export class VimCommandHandler {
 
   private setLastCommand(command: string): void {
     this.lastCommand = command;
-    
+
     if (this.commandTimeout) {
       clearTimeout(this.commandTimeout);
     }
-    
+
     this.commandTimeout = window.setTimeout(() => {
       this.lastCommand = '';
     }, 1000);

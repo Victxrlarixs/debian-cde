@@ -58,54 +58,65 @@ Vim operates in different modes:
 ### Movement (Normal Mode)
 
 #### Basic Movement
+
 - `h` - Move left
 - `j` - Move down
 - `k` - Move up
 - `l` - Move right
 
 #### Line Movement
+
 - `0` - Move to start of line
 - `$` - Move to end of line
 
 #### Word Movement
+
 - `w` - Move to next word
 - `b` - Move to previous word
 - `e` - Move to end of current word
 
 #### File Movement
+
 - `gg` - Move to start of file
 - `G` - Move to end of file
 
 ### Editing (Normal Mode)
 
 #### Character Operations
+
 - `x` - Delete character under cursor
 - `r` + char - Replace character under cursor
 
 #### Line Operations
+
 - `dd` - Delete current line
 - `yy` - Yank (copy) current line
 - `D` - Delete to end of line
 
 #### Word Operations
+
 - `cw` - Change word (delete word and enter insert mode)
 
 #### Paste Operations
+
 - `p` - Paste after cursor/line
 - `P` - Paste before cursor/line
 
 #### Undo/Redo
+
 - `u` - Undo last change
 - `.` - Repeat last command
 
 ### Visual Mode Operations
 
 #### Visual Selection (v)
+
 - `v` - Enter character-wise visual mode
 - `y` - Yank (copy) selection
 - `d` or `x` - Delete selection
 
 #### Visual Line Selection (V)
+
 - `V` - Enter line-wise visual mode
 - `j`/`k` - Extend selection up/down by lines
 - `y` - Yank selected lines
@@ -151,6 +162,7 @@ Vim operates in different modes:
 ### Editing an Existing File
 
 **Method 1 - From Vim:**
+
 1. Open Vim
 2. Press `:` to enter command mode
 3. Type `e filename.txt` and press Enter
@@ -158,6 +170,7 @@ Vim operates in different modes:
 5. Save with `:w`
 
 **Method 2 - From File Manager:**
+
 1. Open File Manager
 2. Navigate to your file
 3. Double-click a `.txt` or `.md` file
@@ -175,6 +188,7 @@ Vim operates in different modes:
 ### File Paths
 
 All files are saved in the Virtual File System (VFS):
+
 - Default location: `/home/victxrlarixs/Desktop/`
 - Files persist in browser localStorage
 - Use full paths like `/home/victxrlarixs/Desktop/notes.txt`
@@ -223,6 +237,7 @@ All files are saved in the Virtual File System (VFS):
 ## Common Workflows
 
 ### Quick Edit Workflow
+
 ```
 1. Open Vim (Ctrl+Alt+V or click panel button)
 2. :e myfile.txt
@@ -233,6 +248,7 @@ All files are saved in the Virtual File System (VFS):
 ```
 
 ### Copy/Paste Between Lines
+
 ```
 1. Position cursor on line to copy
 2. yy (yank line)
@@ -241,6 +257,7 @@ All files are saved in the Virtual File System (VFS):
 ```
 
 ### Search and Edit
+
 ```
 1. /searchterm (find text)
 2. n (go to next occurrence)
@@ -252,6 +269,7 @@ All files are saved in the Virtual File System (VFS):
 ```
 
 ### Visual Selection Edit
+
 ```
 1. v (enter visual mode)
 2. hjkl or arrow keys (select text)
@@ -263,38 +281,40 @@ All files are saved in the Virtual File System (VFS):
 ## Keyboard Reference
 
 ### Normal Mode Commands
-| Key | Action |
-|-----|--------|
-| `h j k l` | Move left, down, up, right |
-| `w b e` | Next word, previous word, end word |
-| `0 $` | Start of line, end of line |
-| `gg G` | Start of file, end of file |
-| `i a o` | Insert before, after, new line |
-| `I A O` | Insert line start, end, line above |
-| `x` | Delete character |
-| `dd yy` | Delete line, yank line |
-| `p P` | Paste after, before |
-| `r` | Replace character |
-| `cw` | Change word |
-| `u` | Undo |
-| `.` | Repeat command |
-| `v V` | Visual mode, Visual line mode |
-| `/` | Search |
-| `n N` | Next, previous search result |
-| `:` | Command mode |
+
+| Key       | Action                             |
+| --------- | ---------------------------------- |
+| `h j k l` | Move left, down, up, right         |
+| `w b e`   | Next word, previous word, end word |
+| `0 $`     | Start of line, end of line         |
+| `gg G`    | Start of file, end of file         |
+| `i a o`   | Insert before, after, new line     |
+| `I A O`   | Insert line start, end, line above |
+| `x`       | Delete character                   |
+| `dd yy`   | Delete line, yank line             |
+| `p P`     | Paste after, before                |
+| `r`       | Replace character                  |
+| `cw`      | Change word                        |
+| `u`       | Undo                               |
+| `.`       | Repeat command                     |
+| `v V`     | Visual mode, Visual line mode      |
+| `/`       | Search                             |
+| `n N`     | Next, previous search result       |
+| `:`       | Command mode                       |
 
 ### Command Mode
-| Command | Action |
-|---------|--------|
-| `:w` | Save |
-| `:q` | Quit |
-| `:wq` | Save and quit |
-| `:q!` | Quit without saving |
-| `:e file` | Edit file |
-| `:help` | Show help |
-| `:version` | Show version |
-| `:set number` | Show line numbers |
-| `:E` | File explorer |
+
+| Command       | Action              |
+| ------------- | ------------------- |
+| `:w`          | Save                |
+| `:q`          | Quit                |
+| `:wq`         | Save and quit       |
+| `:q!`         | Quit without saving |
+| `:e file`     | Edit file           |
+| `:help`       | Show help           |
+| `:version`    | Show version        |
+| `:set number` | Show line numbers   |
+| `:E`          | File explorer       |
 
 ## Authentic 90s Experience
 
