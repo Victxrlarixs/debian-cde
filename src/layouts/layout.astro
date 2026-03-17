@@ -98,11 +98,16 @@ const DEFAULT_BACKDROP = import.meta.env.DEFAULT_BACKDROP;
       import '/src/scripts/core/index.ts';
     </script>
   </head>
-  <body class="loading">
+  <body class="loading crt-enabled">
     <!-- Skip Links for Screen Readers -->
     <a href="#desktop-ui" class="skip-link">Skip to main content</a>
     <a href="#cde-panel" class="skip-link">Skip to panel</a>
 
     <slot />
+
+    <!-- CRT Effect Layers -->
+    <div class="crt-overlay"></div>
+    <div class="crt-flicker"></div>
+    <div class="crt-screen"></div>
   </body>
 </html>
