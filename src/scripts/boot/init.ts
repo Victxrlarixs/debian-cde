@@ -65,6 +65,31 @@ class DebianRealBoot {
     }
   }
 
+  private fakeSequenceResolve: (() => void) | null = null;
+  
+  public getSequencePromise(): Promise<void> {
+    return new Promise((resolve) => {
+      this.fakeSequenceResolve = resolve;
+    });
+  }
+  
+  public pushRealMessage(text: string, type: string = 'systemd'): void {
+    if (!this.container) return;
+    const line = document.createElement('div');
+    line.className = this.getLineClass(type);
+    line.style.cssText = `
+      opacity: 0;
+      animation: bootLineAppear 0.1s forwards;
+      white-space: pre-wrap;
+    `;
+    // Add real timestamp using performance.now()
+    const timestamp = (performance.now() / 1000).toFixed(6).padStart(12, ' ');
+    line.textContent = `[ ${timestamp} ] [ OK ] ${text}`;
+
+    this.container.appendChild(line);
+    this.container.scrollTop = this.container.scrollHeight;
+  }
+
   /**
    * Generates a randomized boot sequence based on phases.
    */
@@ -180,7 +205,7 @@ class DebianRealBoot {
     const showNextStep = () => {
       if (this.currentStep >= this.bootSequence.length) {
         if (this.progressBar) this.progressBar.style.width = '100%';
-        setTimeout(() => this.completeBoot(), CONFIG.BOOT.FINAL_DELAY);
+        if (this.fakeSequenceResolve) this.fakeSequenceResolve();
         return;
       }
 
@@ -228,42 +253,27 @@ class DebianRealBoot {
   }
 
   /**
-   * Finalizes the boot process.
-   * @private
+   * Finalizes the boot process visually once all promises resolve.
+   * @public
    */
-  private async completeBoot(): Promise<void> {
+  public finishAndHide(): void {
     logger.log('[DebianRealBoot] Completing boot process');
 
-    // If this was an update sequence, clear the pending flag
     if (this.isUpdateMode) {
       VersionManager.clearPendingUpdate();
       logger.log('[DebianRealBoot] Update sequence completed, flag cleared');
     }
 
-    // 1. Reveal desktop behind the boot screen (it has lower z-index)
     const desktop = document.getElementById('desktop-ui');
     if (desktop) {
       desktop.style.display = 'block';
     }
 
-    // 2. Initialize asynchronous settings
-    try {
-      await settingsManager.init();
-      logger.log('[DebianRealBoot] Asynchronous settings initialized');
-    } catch (error) {
-      logger.error('[DebianRealBoot] Failed to initialize settings:', error);
-    }
-
-    // 3. Initialize all desktop modules (including backdrop rendering)
-    await initDesktop();
-
-    // 4. Wait a small cushion to let the initial backdrop render start
     setTimeout(() => {
       if (this.bootScreen) {
         this.bootScreen.style.transition = 'opacity 0.8s ease-out';
         this.bootScreen.style.opacity = '0';
 
-        // Remove loading cursor from body
         document.body.classList.remove('loading');
 
         setTimeout(() => {
@@ -271,7 +281,7 @@ class DebianRealBoot {
           logger.log('[DebianRealBoot] Boot screen removed');
         }, 800);
       }
-    }, 400); // 400ms is enough for most XPM renders to start seeing content
+    }, 400);
   }
 }
 
@@ -302,6 +312,7 @@ async function initDesktop(): Promise<void> {
     // 0. Initialize Dependency Injection Container
     initializeContainer();
     logger.log('[initDesktop] DI Container initialized');
+    window.debianBoot?.pushRealMessage('Started Dependency Injection Container', 'service');
 
     // 0.1. Initialize CDE Namespace
     initializeCDENamespace();
@@ -310,6 +321,7 @@ async function initDesktop(): Promise<void> {
     // 0.1.1. Initialize Application Registry
     initializeAppRegistry();
     logger.log('[initDesktop] Application Registry initialized');
+    window.debianBoot?.pushRealMessage('Started Application Registry', 'service');
 
     // 0.2. Register all modules for lazy loading
     registerModules();
@@ -318,12 +330,14 @@ async function initDesktop(): Promise<void> {
     // 1. Initialize performance optimizations and load critical modules
     await initPerformanceOptimizations();
     logger.log('[initDesktop] Performance optimizations initialized');
+    window.debianBoot?.pushRealMessage('Started Performance Integrations', 'service');
 
     // 2. Load VFS module (CRITICAL priority)
     const vfsModule = await moduleLoader.load('vfs');
     if (vfsModule && vfsModule.VFS) {
       vfsModule.VFS.init();
       logger.log('[initDesktop] Virtual Filesystem initialized');
+      window.debianBoot?.pushRealMessage('Mounted Virtual Filesystem (/vfs)', 'fs');
     }
 
     initClock();
@@ -337,12 +351,14 @@ async function initDesktop(): Promise<void> {
     const { applyPreloadedBackdrop } = await import('../boot/backdrop-preloader');
     await applyPreloadedBackdrop();
     logger.log('[initDesktop] Preloaded backdrop applied');
+    window.debianBoot?.pushRealMessage('Started DRM XPM Backdrop Renderer', 'drm');
 
     // 4. Load WindowManager module (CRITICAL priority)
     const wmModule = await moduleLoader.load('windowmanager');
     if (wmModule && wmModule.WindowManager) {
       wmModule.WindowManager.init();
       logger.log('[initDesktop] Window manager initialized');
+      window.debianBoot?.pushRealMessage('Started X11 Window Manager', 'desktop');
     }
 
     // Initialize workspace preview (miniatures on hover)
@@ -354,6 +370,7 @@ async function initDesktop(): Promise<void> {
     if (desktopModule && desktopModule.DesktopManager) {
       desktopModule.DesktopManager.init();
       logger.log('[initDesktop] Desktop icons initialized');
+      window.debianBoot?.pushRealMessage('Started Desktop Environment Icons', 'desktop');
     }
 
     // 6. Load Calendar module (MEDIUM priority, but load now for immediate use)
@@ -368,6 +385,7 @@ async function initDesktop(): Promise<void> {
     if (styleModule && window.styleManager) {
       window.styleManager.init();
       logger.log('[initDesktop] Style manager initialized');
+      window.debianBoot?.pushRealMessage('Applied Motif Style Tokens', 'service');
     }
 
     // Load shared theme from URL if present (after StyleManager is ready)
@@ -408,8 +426,27 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   try {
     window.debianBoot = new DebianRealBoot(isUpdateMode);
+    const fakeSeqPromise = window.debianBoot.getSequencePromise();
     window.debianBoot.start();
     logger.log(`[Boot] ${isUpdateMode ? 'Update' : 'Boot'} sequence initiated`);
+
+    // In parallel, do the REAL asynchronous initialization
+    const realInitPromise = (async () => {
+      try {
+        await settingsManager.init();
+        window.debianBoot?.pushRealMessage('Initialized Async Storage Adapter', 'fs');
+        await initDesktop();
+        window.debianBoot?.pushRealMessage('System Desktop Initialization Complete', 'desktop');
+      } catch (e) {
+        console.error('[Boot] Error during real init:', e);
+      }
+    })();
+
+    // Wait for BOTH the simulated loading text AND the real initialization
+    await Promise.all([fakeSeqPromise, realInitPromise]);
+
+    window.debianBoot.finishAndHide();
+
   } catch (error) {
     console.error('[Boot] Failed to start boot sequence:', error);
     // Fallback: try to initialize desktop directly
