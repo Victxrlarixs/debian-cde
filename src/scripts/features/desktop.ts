@@ -133,12 +133,23 @@ export const DesktopManager = (() => {
     ) as HTMLElement[];
     const existingNames = new Set(currentIconElements.map((el) => el.dataset.name));
 
+    const getValidPos = (id: string) => {
+      const pos = savedPositions[id];
+      if (pos) {
+        const snapped = snapToGrid(pos.left, pos.top);
+        if (!isSlotOccupied(snapped.x, snapped.y, id)) {
+          return { left: snapped.x, top: snapped.y };
+        }
+      }
+      return findNextAvailableSlot();
+    };
+
     // 2. Add or update icons from VFS
     const newNames = Object.keys(desktopChildren);
     newNames.forEach((name, index) => {
       const node = desktopChildren[name];
       if (!existingNames.has(name)) {
-        const pos = savedPositions[name] || findNextAvailableSlot();
+        const pos = getValidPos(name);
         createIcon(name, node.type, pos.left, pos.top);
       }
     });
@@ -154,7 +165,7 @@ export const DesktopManager = (() => {
 
     SYSTEM_ICONS.forEach((sys) => {
       if (!container.querySelector(`[data-id="${sys.id}"]`)) {
-        const pos = savedPositions[sys.id] || findNextAvailableSlot();
+        const pos = getValidPos(sys.id);
         createIcon(sys.name, 'file', pos.left, pos.top, true, sys.id, sys.icon);
       }
     });
@@ -249,21 +260,66 @@ export const DesktopManager = (() => {
     const container = document.getElementById('desktop-icons-container');
     if (!container) return false;
 
+    const gridSize = CONFIG.DESKTOP_ICONS.GRID_SIZE;
+    const threshold = gridSize / 2;
+
     const currentIcons = container.querySelectorAll('.cde-desktop-icon');
     for (const icon of Array.from(currentIcons)) {
       const el = icon as HTMLElement;
       const id = el.dataset.id || el.dataset.name;
       if (id === excludeId) continue;
 
-      const iconX = parseInt(el.style.left);
-      const iconY = parseInt(el.style.top);
+      const iconX = parseInt(el.style.left || '0');
+      const iconY = parseInt(el.style.top || '0');
 
-      // Simple coordinate match (with small tolerance)
-      if (Math.abs(iconX - x) < 5 && Math.abs(iconY - y) < 5) {
+      // Check distance against threshold to prevent overlap
+      if (Math.abs(iconX - x) < threshold && Math.abs(iconY - y) < threshold) {
         return true;
       }
     }
     return false;
+  }
+
+  /**
+   * Finds the nearest empty slot radiating from a target position.
+   */
+  function findNearestEmptySlot(
+    targetX: number,
+    targetY: number,
+    excludeId?: string
+  ): { x: number; y: number } | null {
+    const container = document.getElementById('desktop-icons-container');
+    if (!container) return null;
+
+    const gridSize = CONFIG.DESKTOP_ICONS.GRID_SIZE;
+    const padding = 20;
+    const width = container.offsetWidth || window.innerWidth;
+    const height = container.offsetHeight || window.innerHeight;
+
+    // Search outward in rings (radius in terms of grid cells)
+    for (let r = 1; r < 20; r++) {
+      for (let dx = -r; dx <= r; dx++) {
+        for (let dy = -r; dy <= r; dy++) {
+          if (Math.abs(dx) !== r && Math.abs(dy) !== r) continue;
+
+          const x = targetX + dx * gridSize;
+          const y = targetY + dy * gridSize;
+
+          // Check bounds
+          if (
+            x >= padding &&
+            x <= width - gridSize / 2 &&
+            y >= padding &&
+            y <= height - gridSize / 2
+          ) {
+            if (!isSlotOccupied(x, y, excludeId)) {
+              return { x, y };
+            }
+          }
+        }
+      }
+    }
+    return null;
   }
 
   /**
@@ -275,10 +331,11 @@ export const DesktopManager = (() => {
 
     const gridSize = CONFIG.DESKTOP_ICONS.GRID_SIZE;
     const padding = 20;
-    const height = container.offsetHeight;
+    const width = container.offsetWidth || window.innerWidth;
+    const height = container.offsetHeight || window.innerHeight;
 
     // Iterate through grid (Columns first: left-to-right, then top-to-bottom within column)
-    for (let x = padding; x < container.offsetWidth - gridSize; x += gridSize) {
+    for (let x = padding; x < width - gridSize; x += gridSize) {
       for (let y = padding; y < height - gridSize; y += gridSize) {
         if (!isSlotOccupied(x, y)) {
           return { left: x, top: y };
@@ -338,11 +395,14 @@ export const DesktopManager = (() => {
     // Collision Detection: If occupied, try to find nearest empty space
     if (isSlotOccupied(snappedX, snappedY, id)) {
       logger.log(`[DesktopManager] Slot ${snappedX},${snappedY} occupied. Finding nearest...`);
-      const savedPositions = (settingsManager.getSection('desktop') as IconPositions) || {};
-      const prev = savedPositions[id || ''];
-      if (prev) {
-        snappedX = prev.left;
-        snappedY = prev.top;
+      const nearest = findNearestEmptySlot(snappedX, snappedY, id);
+      if (nearest) {
+        snappedX = nearest.x;
+        snappedY = nearest.y;
+      } else {
+        const next = findNextAvailableSlot();
+        snappedX = next.left;
+        snappedY = next.top;
       }
     }
 

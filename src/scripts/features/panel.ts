@@ -56,16 +56,17 @@ function createStub(moduleName: string, globalName: string, method: string = 'op
  * Initialize panel functionality
  */
 function initPanel(): void {
-  // Workspace switcher
+  // Workspace switcher — delegates to WindowManager which updates the NanoStore,
+  // which in turn triggers WorkspacePreview to update the pager highlight reactively.
   const workspaceBtns = document.querySelectorAll('.workspace-btn');
   workspaceBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
-      workspaceBtns.forEach((b) => {
-        b.classList.remove('active');
-        b.setAttribute('aria-selected', 'false');
-      });
-      btn.classList.add('active');
-      btn.setAttribute('aria-selected', 'true');
+      const workspaceId = (btn as HTMLElement).dataset.workspace;
+      if (!workspaceId) return;
+
+      if (window.WindowManager?.switchWorkspace) {
+        window.WindowManager.switchWorkspace(workspaceId);
+      }
     });
   });
 

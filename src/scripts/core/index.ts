@@ -29,7 +29,7 @@ export type {
 
 // Start backdrop preload IMMEDIATELY (before boot sequence)
 if (typeof window !== 'undefined') {
-  import('../boot/backdrop-preloader').then(module => {
+  import('../boot/backdrop-preloader').then((module) => {
     module.startBackdropPreload();
   });
 }

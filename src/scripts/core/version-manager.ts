@@ -85,11 +85,11 @@ export class VersionManager {
 
     // Keys that should survive version updates
     const preserveKeys: string[] = [
-      'cde-system-settings', 
-      'cde-session', 
+      'cde-system-settings',
+      'cde-session',
       'cde-indexeddb-migrated',
       'dtmail-mailboxes',
-      'cde-workspace-config'
+      'cde-workspace-config',
     ];
 
     // Get all keys from localStorage

@@ -138,7 +138,7 @@ class SettingsManager implements ISettingsManager, ISessionStorage {
   }
 
   public save(): void {
-    storageAdapter.setItem(STORAGE_KEY, JSON.stringify(this.settings)).catch(e => {
+    storageAdapter.setItem(STORAGE_KEY, JSON.stringify(this.settings)).catch((e) => {
       console.error('[SettingsManager] Failed to save settings to storage:', e);
     });
   }

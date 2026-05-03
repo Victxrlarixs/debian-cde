@@ -1,7 +1,7 @@
 {
   "name": "debian-time-capsule",
   "type": "module",
-  "version": "1.0.32",
+  "version": "1.0.33",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "astro": "^6.1.1",
+    "astro": "^6.2.1",
     "marked": "^17.0.3",
     "nanostores": "^1.2.0"
   },

@@ -66,13 +66,13 @@ class DebianRealBoot {
   }
 
   private fakeSequenceResolve: (() => void) | null = null;
-  
+
   public getSequencePromise(): Promise<void> {
     return new Promise((resolve) => {
       this.fakeSequenceResolve = resolve;
     });
   }
-  
+
   public pushRealMessage(text: string, type: string = 'systemd'): void {
     if (!this.container) return;
     const line = document.createElement('div');
@@ -119,9 +119,9 @@ class DebianRealBoot {
           const timestamp = totalTime.toFixed(6).padStart(12, ' ');
           text =
             phase.name === 'kernel' ||
-              phase.name === 'cpu' ||
-              phase.name === 'fs' ||
-              phase.name === 'memory'
+            phase.name === 'cpu' ||
+            phase.name === 'fs' ||
+            phase.name === 'memory'
               ? `[ ${timestamp} ] ${msg.text}`
               : msg.text;
         }
@@ -446,7 +446,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     await Promise.all([fakeSeqPromise, realInitPromise]);
 
     window.debianBoot.finishAndHide();
-
   } catch (error) {
     console.error('[Boot] Failed to start boot sequence:', error);
     // Fallback: try to initialize desktop directly

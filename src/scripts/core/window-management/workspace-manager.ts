@@ -57,9 +57,7 @@ export class WorkspaceManager {
     // Update pager UI
     this.updatePagerUI(id);
 
-    logger.log(
-      `[WorkspaceManager] Workspace switch complete: ${previousWorkspace} -> ${id}`
-    );
+    logger.log(`[WorkspaceManager] Workspace switch complete: ${previousWorkspace} -> ${id}`);
   }
 
   public assignWorkspaceToWindow(win: HTMLElement): void {
@@ -73,11 +71,10 @@ export class WorkspaceManager {
   private updatePagerUI(activeWorkspace: string): void {
     const pagerItems = document.querySelectorAll('.pager-workspace');
     pagerItems.forEach((item) => {
-      if ((item as HTMLElement).dataset.workspace === activeWorkspace) {
-        item.classList.add('active');
-      } else {
-        item.classList.remove('active');
-      }
+      const el = item as HTMLElement;
+      const isActive = el.dataset.workspace === activeWorkspace;
+      el.classList.toggle('active', isActive);
+      el.setAttribute('aria-selected', String(isActive));
     });
   }
 

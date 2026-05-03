@@ -31,24 +31,40 @@ const WindowManagerV2 = (() => {
   let focusManager: WindowFocusManager;
 
   function ensureInitialized(): void {
-    if (!sessionStorage) {
+    if (!zIndexManager) {
+      zIndexManager = new ZIndexManager();
+    }
+    if (!workspaceManager) {
+      workspaceManager = new WorkspaceManager();
+    }
+    if (!positionManager) {
+      positionManager = new WindowPositionManager();
+    }
+    if (!dropdownManager) {
+      dropdownManager = new DropdownManager();
+    }
+
+    if (!sessionStorage && container.has('sessionStorage')) {
       sessionStorage = container.get<ISessionStorage>('sessionStorage');
       try {
         eventBus = container.has('eventBus') ? container.get<EventBus>('eventBus') : null;
       } catch {
         eventBus = null;
       }
-      zIndexManager = new ZIndexManager();
-      workspaceManager = new WorkspaceManager();
-      positionManager = new WindowPositionManager();
-      dropdownManager = new DropdownManager();
-      dragManager = new DragManager(
-        sessionStorage,
-        (id: string) => focusWindow(id),
-        (win: HTMLElement) => positionManager.normalizeWindowPosition(win)
-      );
-      stateManager = new WindowStateManager(sessionStorage, (id: string) => focusWindow(id));
-      focusManager = new WindowFocusManager(zIndexManager, () => dragManager.isDragging());
+      
+      if (!dragManager) {
+        dragManager = new DragManager(
+          sessionStorage,
+          (id: string) => focusWindow(id),
+          (win: HTMLElement) => positionManager.normalizeWindowPosition(win)
+        );
+      }
+      if (!stateManager) {
+        stateManager = new WindowStateManager(sessionStorage, (id: string) => focusWindow(id));
+      }
+      if (!focusManager) {
+        focusManager = new WindowFocusManager(zIndexManager, () => dragManager.isDragging());
+      }
     }
   }
 
@@ -57,6 +73,8 @@ const WindowManagerV2 = (() => {
   }
 
   function focusWindow(id: string): void {
+    ensureInitialized();
+    if (!focusManager) return;
     focusManager.focusWindow(id);
     if (eventBus) {
       eventBus.emitSync(SystemEvent.WINDOW_FOCUSED, { id });
@@ -64,10 +82,13 @@ const WindowManagerV2 = (() => {
   }
 
   function centerWindow(win: HTMLElement): void {
+    ensureInitialized();
     positionManager.centerWindow(win);
   }
 
   function drag(e: PointerEvent, id: string): void {
+    ensureInitialized();
+    if (!dragManager) return;
     dragManager.startDrag(e, id);
   }
 
@@ -95,6 +116,7 @@ const WindowManagerV2 = (() => {
   }
 
   function registerWindow(win: HTMLElement): void {
+    ensureInitialized();
     if (win.hasAttribute('data-cde-registered')) return;
 
     const id = win.id;
@@ -163,6 +185,7 @@ const WindowManagerV2 = (() => {
   }
 
   function switchWorkspace(id: string): void {
+    ensureInitialized();
     workspaceManager.switchWorkspace(id);
   }
 
@@ -190,6 +213,7 @@ const WindowManagerV2 = (() => {
   }
 
   function showWindow(id: string): void {
+    ensureInitialized();
     const win = document.getElementById(id);
     if (!win) return;
 
@@ -281,22 +305,33 @@ const WindowManagerV2 = (() => {
     centerWindow,
     switchWorkspace,
     showWindow,
-    getNextZIndex: (isModal?: boolean) => zIndexManager.getNextZIndex(isModal),
-    getTopZIndex: () => zIndexManager.getTopZIndex(),
+    getNextZIndex: (isModal?: boolean) => {
+      ensureInitialized();
+      return zIndexManager.getNextZIndex(isModal);
+    },
+    getTopZIndex: () => {
+      ensureInitialized();
+      return zIndexManager.getTopZIndex();
+    },
     // Expose state manager methods
     minimizeWindow: (id: string) => {
+      ensureInitialized();
       stateManager.minimizeWindow(id);
       if (eventBus) {
         eventBus.emitSync(SystemEvent.WINDOW_MINIMIZED, { id });
       }
     },
     maximizeWindow: (id: string) => {
+      ensureInitialized();
       stateManager.maximizeWindow(id);
       if (eventBus) {
         eventBus.emitSync(SystemEvent.WINDOW_MAXIMIZED, { id });
       }
     },
-    shadeWindow: (id: string) => stateManager.shadeWindow(id),
+    shadeWindow: (id: string) => {
+      ensureInitialized();
+      stateManager.shadeWindow(id);
+    },
   };
 })();
 
